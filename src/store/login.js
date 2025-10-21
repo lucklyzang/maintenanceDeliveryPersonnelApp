@@ -1,139 +1,105 @@
-import { setStore, getStore } from '@/common/js/utils'
-import { getDefaultLoginState } from '@/common/js/resetStore'
-export default {
-    state: getDefaultLoginState(),
-
-    getters: {
-        userInfo: (state) => {
-            state.userInfo = JSON.parse(getStore('userInfo')) ? JSON.parse(getStore('userInfo')) : null;
-            return state.userInfo
-        },
-
-        token: (state) => {
-            state.token = getStore('token') ? getStore('token') : null;
-            return state.token
-        },
-
-        permissionInfo: (state) => {
-            state.permissionInfo = JSON.parse(getStore('permissionInfo')) ? JSON.parse(getStore('permissionInfo')) : [];
-            return state.permissionInfo
-        },
-
-        chooseProject: (state) => {
-            state.chooseProject = JSON.parse(getStore('chooseProject')) ? JSON.parse(getStore('chooseProject')) : [];
-            return state.chooseProject
-        },
-
-        roleNameList: (state) => {
-            state.roleNameList = JSON.parse(getStore('roleNameList')) ? JSON.parse(getStore('roleNameList')) : [];
-            return state.roleNameList
-        },
-
-        timeMessage: (state) => {
-            state.timeMessage = JSON.parse(getStore('timeMessage')) ? JSON.parse(getStore('timeMessage')) : {};
-            return state.timeMessage
-        },
-        
-        ossMessage: (state) => {
-            state.ossMessage = JSON.parse(getStore('ossMessage')) ? JSON.parse(getStore('ossMessage')) : {};
-            return state.ossMessage
-        },
-        
-
-        isLogin: (state) => {
-            state.isLogin = getStore('isLogin') ? getStore('isLogin') === 'false' ? false : true : false;
-            return state.isLogin
-        },
-
-        overDueWay: (state) => {
-            state.overDueWay = getStore('overDueWay') ? getStore('overDueWay') === 'false' ? false : true : false;
-            return state.overDueWay
-        }
-    },
-
-    mutations: {
-
-        // 保存用户信息
-        storeUserInfo(state, playLoad) {
-            if (playLoad && playLoad != 'null') {
-                setStore('userInfo', playLoad);
-                state.userInfo = playLoad
-            }
-        },
-
-        // 保存token
-        changeToken(state, playLoad) {
-            if (playLoad && playLoad != 'null') {
-                setStore('token', playLoad);
-                state.token = playLoad
-            }
-        },
-
-        // 保存用户登录状态
-        changeIsLogin(state, playLoad) {
-            if (playLoad != 'null') {
-                setStore('isLogin', playLoad);
-                state.isLogin = playLoad
-            }
-        },
-
-        // 保存权限列表
-		changePermissionInfo(state, playLoad) {
-            if (playLoad && playLoad != 'null') {
-                setStore('permissionInfo', playLoad);
-                state.permissionInfo = playLoad
-            }
+import { setCache, getCache } from '@/common/js/utils'
+import { getDefaultLoginState } from '@/common/js/resetStore.js'
+export default {	
+	state: getDefaultLoginState(),
+	getters: {
+		userInfo:(state) => {
+			state.userInfo = getCache('userInfo') ? getCache('userInfo') : {};
+			return state.userInfo
 		},
-
-        // 保存角色列表
-		changeRoleNameList(state, playLoad) {
-            if (playLoad && playLoad != 'null') {
-                setStore('roleNameList', playLoad);
-                state.roleNameList = playLoad
-            }
+		isMedicalMan:(state) => {
+			state.userInfo = getCache('isMedicalMan') ? getCache('isMedicalMan') === 'false' ? false : true : false;
+			return state.isMedicalMan
 		},
-
-        // 保存过期方式
+		chooseHospitalArea:(state) => {
+			state.userInfo = getCache('chooseHospitalArea') ? getCache('chooseHospitalArea') : {};
+			return state.chooseHospitalArea
+		},
+		isLogin: (state) => {
+			state.isLogin = getCache('isLogin') ? getCache('isLogin') === 'false' ? false : true : false;
+			return state.isLogin
+		},
+		socketOpen: (state) => {
+			state.socketOpen = getCache('socketOpen') ? getCache('socketOpen') === 'false' ? false : true : false;
+			return state.socketOpen
+		},
+		templateType:  (state) => {
+			state.templateType = getCache('templateType') ? getCache('templateType') : '';
+			return state.templateType
+		},
+		token:(state) => {
+			state.token = getCache('token') ? getCache('token') : null;
+			return state.token
+		},
+		affairToken:(state) => {
+			state.affairToken = getCache('affairToken') ? getCache('affairToken') : null;
+			return state.affairToken
+		},
+		overDueWay: state => state.overDueWay
+	},
+	mutations: {
+		changeIsMedicalMan (state, playLoad) {
+		  state.isMedicalMan = playLoad
+		},
+		storeUserInfo(state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setCache('userInfo', playLoad);
+				state.userInfo = playLoad
+			}
+		},
+		storeChooseHospitalArea(state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setCache('chooseHospitalArea', playLoad);
+				state.chooseHospitalArea = playLoad
+			}
+		},
+		// 修改模板状态
+		changeTemplateType(state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setCache('templateType', playLoad);
+				state.templateType = playLoad
+			}
+		},
+		// 修改token状态
+		changeToken(state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setCache('token', playLoad);
+				state.token = playLoad
+			}
+		},
+		// 修改事务接口token状态
+		changeAffairToken(state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setCache('affairToken', playLoad);
+				state.affairToken = playLoad
+			}
+		},
+		// 修改socken是否打开
+		changeSocketOpen(state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setCache('socketOpen', playLoad);
+				state.socketOpen = playLoad
+			}
+		},
+		// 修改是否登录状态
+		changeIsLogin(state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setCache('isLogin', playLoad);
+				state.isLogin = playLoad
+			}
+		},
+		// 修改过期方式
 		changeOverDueWay(state, playLoad) {
-            if (playLoad != 'null') {
-                setStore('overDueWay', playLoad);
-                state.overDueWay = playLoad
-            }
+			state.overDueWay = playLoad
 		},
-
-        //保存阿里云签名过期日期
-        changeTimeMessage (state, playLoad) {
-            if (playLoad != 'null') {
-                setStore('timeMessage', playLoad);
-                state.timeMessage = playLoad
-            }
-		},
-
-         //保存阿里云签名信息
-         changeOssMessage (state, playLoad) {
-            if (playLoad != 'null') {
-                setStore('ossMessage', playLoad);
-                state.ossMessage = playLoad
-            }
-		},
-
-        //保存选择的项目
-        changeChooseProject (state, playLoad) {
-            if (playLoad != 'null') {
-                setStore('chooseProject', playLoad);
-                state.chooseProject = playLoad
-            }
-		},
-
-        //重置login的store
-        resetState(state) {
-            Object.assign(state, getDefaultLoginState())
-        }
-    },    
-
-    actions: {
-        resetLoginState({ commit }) {
-            commit('resetState')
-        }
-    }
+		//重置登录信息的状态
+		resetLoginInfoState(state) {
+				Object.assign(state, getDefaultLoginState())
+		}
+	},
+	actions: {
+		resetLoginState({ commit }) {
+			commit('resetLoginInfoState')
+		}
+	}
 }

@@ -1,275 +1,335 @@
 <template>
-  <div class="container">
-    <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">登录中...</van-loading>
-    <van-overlay :show="overlayShow" />
-    <div class="container-content">
-      <img :src="loginBackgroundPng" />
-      <div class="title">
-        <div>
-          <img :src="projectLogoPng" />
-        </div>
-        <div>
-          <span>环 境 管 理 系 统</span>
-        </div>
-      </div>
-      <div class="form-box">
-        <van-field
-          v-model="username"
-          placeholder="请输入账号"
-          left-icon="contact"
-        />
-        <van-field
-          v-model="password"
-          placeholder="请输入密码"
-          type="password"
-          left-icon="bag-o"
-          clearable
-        />
-      </div>
+	<div class="container">
+    <van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+		<van-dialog v-model="modalShow" :title="modalContent"
+		 show-cancel-button @confirm="sureCancel" @cancel="cancelSure">
+		</van-dialog>
+		<!-- 院区 -->
+		<div class="transport-rice-box" v-if="showHospitalCampus">
+			<ScrollSelection buttonLocation='top' v-model="showHospitalCampus" :pickerValues="hospitalCampusDefaultIndex" :isShowSearch="false" :columns="hospitalCampusOption" @sure="hospitalCampusSureEvent" @cancel="hospitalCampusCancelEvent" @close="hospitalCampusCloseEvent" />
+		</div>
+		<div class="top-background-area">
+			<img src="@/common/img/login-background-image.png" />
+			<div class="title-area">
+				<img src="@/common/img/login-icon.png" />
+				<span>智 慧 后 勤 服 务 平 台</span>
+			</div>
+		</div>
+		<div class="container-content">
+			<div class="form-box">
+				<van-field
+					left-icon="contact"
+          :border="false"
+					placeholder="请输入账号"
+					v-model="form.username"
+					type="text"
+					clearable
+				>
+				</van-field>
+				<van-field
+					left-icon="lock"
+          :border="false"
+					placeholder="请输入密码"
+					v-model="form.password"
+					type="password"
+					clearable
+				>
+				</van-field>
+			</div>
       <div class="remember-password">
         <div class="remember-password-content">
-          <van-checkbox v-model="checked" checked-color="#289E8E"
-            >记住账号密码</van-checkbox
-          >
-        </div>
+          <van-checkbox v-model="checked" checked-color="#1864FF">记住账户密码</van-checkbox>
+         </div>
       </div>
-      <div class="form-btn" @click="loginEvent">登 录</div>
-    </div>
-  </div>
+			<div class="form-btn">
+        <div @click="sure">登 录</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
-import {logIn} from '@/api/login.js'
-import { IsPC, setStore,  getStore, removeStore} from "@/common/js/utils";
-import qs from 'qs'
-export default {
-  name: "Login",
-  data() {
-    return {
-      username: "",
-      password: "",
-      loadingShow: false,
-      overlayShow: false,
-      checked: false,
-      hospitalList: [],
-			selectHospitalList: [],
-      loginBackgroundPng: require("@/common/images/login/login-background.png"),
-      projectLogoPng: require("@/common/images/login/project-logo.png"),
-    };
-  },
+	import { mapGetters, mapMutations } from 'vuex'
+	import { logIn, getTemplateType } from '@/api/login.js'
+	import { setCache, getCache, removeCache } from '@/common/js/utils'
+	import ScrollSelection from "@/components/scrollSelection";
+	export default {
+	components: {
+		ScrollSelection,
+	},
+		data() {
+			return {
+				showLoadingHint: false,
+				infoText: '登录中···',
+				form: {
+					username: '',
+					password: ''
+				},
+        checked: false,
+				hospitalCampusDefaultIndex: [0],
+				hospitalCampusOption: [],
+				showHospitalCampus: true,
+				currentHospitalCampusSpaces: '请选择',
+				
+				rememberAccountMessage: false,
+				modalShow: false,
+				modalContent: ''
+			}
+		},
+		onReady () {
+		},
+		computed: {
+			...mapGetters([
+				'chooseHospitalArea'
+			])
+		},
+		onShow () {
+			 this.form.username = getCache('userName') ? getCache('userName') : '';
+			 this.form.password = getCache('userPassword') ? getCache('userPassword') : '';
+		},
+		methods: {
+			...mapMutations([
+				'storeUserInfo',
+				'changeOverDueWay',
+				'changeTemplateType',
+				'changeToken',
+				'changeIsLogin',
+				'storeChooseHospitalArea',
+				'changeIsMedicalMan'
+			]),
+      
+			// 院区下拉选择框确认事件
+			hospitalCampusSureEvent (val,value,id) {
+				if (val) {
+					this.hospitalCampusDefaultIndex = [id]
+					this.currentHospitalCampusSpaces =  val;
+					this.storeChooseHospitalArea({
+						span: val,
+						value,
+						id
+					});
+					this.queryTemplateType(this.chooseHospitalArea['value'])
+				} else {
+					this.currentGoalSpaces = '请选择'
+				};
+				this.showHospitalCampus = false
+			},
+			
+			// 院区下拉选择框取消事件
+			hospitalCampusCancelEvent () {
+				this.showHospitalCampus = false
+			},
+			
+			// 院区下拉选择框关闭事件
+			hospitalCampusCloseEvent () {
+				this.showHospitalCampus = false
+			},
+          
+			// 账号密码事件
+			sure () {
+				if (this.form.username === '' || this.form.password === '') {
+					this.$toast({
+						message: '账号或密码不能为空'
+					});
+					return;
+				};
+				let loginMessage = {
+				  username: this.form.username,
+				  password: this.form.password,
+					logType: 0
+				};
+				this.showLoadingHint = true;
+				logIn(loginMessage).then((res) => {
+					this.showLoadingHint = false;
+					if (res) {
+					  if (res.data.code == 200) {
+						   this.changeOverDueWay(false);
+						   setCache('storeOverDueWay',false); 
+							// 登录用户名密码及用户信息存入Locastorage
+              // 判断是否勾选记住用户名密码
+              if (this.checked) {
+                setCache('userName', this.form.username);
+                setCache('userPassword', this.form.password);
+              } else {
+                removeCache('userName', this.form.username);
+                removeCache('userPassword', this.form.password);
+              };
+							// 登录用户信息存入store
+							this.changeIsLogin(true);
+							this.storeUserInfo(res.data.data);
+							if (res.data.data['extendData']['user_type_id'] == 1) {
+							  this.changeIsMedicalMan(true)
+							} else {
+							  this.changeIsMedicalMan(false)
+							};
+							// 保存模板类型
+							if (res.data.data.mobile) {
+								this.changeTemplateType(res.data.data.mobile);
+							};
+							uni.switchTab({
+								url: '/pages/index/index'
+							})
+					  } else {
+						 this.modalShow = true;
+						 this.modalContent = `${res.data.msg}`
+					  }
+					};
+				  })
+				  .catch((err) => {
+						this.showLoadingHint = false;
+					  this.modalShow = true;
+					  this.modalContent = err;
+				  })
+			},
+			
+			// 查询模板类型
+			queryTemplateType (data) {
+			  this.showLoadingHint = true;
+				this.infoText = '查询中···';
+			  getTemplateType(data).then((res) => {
+				this.showLoadingHint = false;
+					if (res && res.data.code == 200) {
+						// 保存模板类型
+						if (res.data.data) {
+							this.changeTemplateType(res.data.data);
+						};
+						uni.switchTab({
+							url: '/pages/index/index'
+						})
+					} else {
+						this.modalShow = true;
+						this.modalContent = `${res.data.msg}`
+					}
+			  })
+			  .catch((err) => {
+					this.showLoadingHint = false;
+					this.modalShow = true;
+					this.modalContent = err.message;
+			  })
+			},
+			
+			// 弹框确定事件
+			sureCancel () {
+				this.modalShow = false;
+			},
+			
+			// 弹框取消事件
+			cancelSure () {
+				this.modalShow = false;
+			}
+		}
+	}
+</script>
 
-  computed: {
-    ...mapGetters(['userInfo']),
-  },
-
-  mounted() {
-    // 控制设备物理返回按键
-    if (!IsPC()) {
-      let that = this;
-      pushHistory();
-      that.gotoURL(() => {
-        pushHistory();
-        this.$router.push({ path: "/" })
-      })
-    };
-    this.username = getStore('username') ? getStore('username') : '';
-		this.password = getStore('password') ? getStore('password') : '';
-    // 监控键盘弹起
-    let originalHeight =
-      document.documentElement.clientHeight || document.body.clientHeight;
-    window.onresize = () => {};
-  },
-
-  methods: {
-    ...mapMutations(["storeUserInfo","changeIsLogin","changePermissionInfo","changeRoleNameList","changeOverDueWay"]),
-
-    // 登录事件
-    loginEvent () {
-      let loginMessage = {
-        username: this.username,
-        password: this.password
-      };
-      this.loadingShow = true;
-      this.overlayShow = true;
-			logIn(qs.stringify(loginMessage)).then((res) => {
-        this.loadingShow = false;
-        this.overlayShow = false;
-        if (res && res.data.code == 200) {
-          // 登录用户名密码及用户信息存入Locastorage
-          // 判断是否勾选记住用户名密码
-          if (this.checked) {
-            setStore('username',this.username);
-            setStore('password',this.password)
-          } else {
-            removeStore('username');
-            removeStore('password')
-          };
-          this.changeOverDueWay(false);
-          this.changeIsLogin(true);
-          this.storeUserInfo(res.data.data.worker);
-          this.changePermissionInfo(res.data.data.authorities);
-          this.changeRoleNameList(res.data.data.roleNameList);
-          if (this.userInfo.hospitalList.length > 1) {
-            this.hospitalList = [];
-            this.selectHospitalList = [];
-            for (let item of this.userInfo.hospitalList) {
-              this.hospitalList.push({
-                value: item.hospitalName,
-                id: item.id
-              })
+<style lang="less">
+  @import "~@/common/stylus/variable.less";
+  @import "~@/common/stylus/mixin.less";
+  @import "~@/common/stylus/modifyUi.less";
+	.container {
+		.content-wrapper();
+		font-size: 14px;
+		padding-top: 50vh;
+		box-sizing: border-box;
+		.top-background-area {
+			width: 100%;
+			height: 50vh;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 10;
+			>img {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+        height: 100%;
+			};
+			.title-area {
+				width: 100%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				>img {
+					width: 64px;
+				};
+				>span {
+					margin-top: 22px;
+					font-size: 20px;
+					color: #fff
+				}
+			}
+		};
+		.container-content {
+			height: 50vh;
+			background: #fff;
+			position: relative;
+			padding-top: 40px;
+			box-sizing: border-box;
+			.form-box {
+        width: 80%;
+        margin: 0 auto;
+				/deep/ .van-cell {
+          height: 40px;
+          padding: 0 10px;
+          box-sizing: border-box;
+          border-bottom: 1px solid #B6B6B6;
+          .van-field__left-icon {
+            margin-right: 10px;
+            .van-icon {
+              font-size: 22px;
+              color: #B6B6B6;
             }
           };
-          this.$router.push({ path: "/home" })
-        } else {
-          this.$toast({
-            type: 'fail',
-            message: res.msg
-          })
-        }
-      })
-      .catch((err) => {
-        this.loadingShow = false;
-        this.overlayShow = false;
-        this.$toast({
-          type: 'fail',
-          message: err
-        })
-      })
-    }  
-  }
-}
-</script>
-<style lang="less" scoped>
-@import "~@/common/stylus/variable.less";
-@import "~@/common/stylus/mixin.less";
-@import "~@/common/stylus/modifyUi.less";
-.container {
-  .content-wrapper();
-  .container-content {
-    flex: 1;
-    background: #fff;
-    position: relative;
-    > img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 80vh;
-    }
-    .title {
-      width: 100%;
-      height: 58vh;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      color: black;
-      font-size: 26px;
-      color: #fff;
-      font-weight: bold;
-      > div {
-        z-index: 1000;
-        &:first-child {
-          margin-top: -80px;
-          margin-bottom: 8px;
-          width: 135px;
-          height: 30px;
-          img {
-            width: 100%;
-            height: 100%;
+          .van-cell__value {
+            font-size: 16px;
+            color: #B6B6B6;
+            .van-field__control {
+              color: #B6B6B6 !important;
+            }
+          };
+          &:first-child {
+            margin-bottom: 20px;
           }
         }
-        &:last-child {
-          margin-left: -6px;
-          font-size: 16px;
-        }
-      }
-    }
-    .form-box {
-      width: 70%;
-      margin: 0 auto;
-      padding: 10px;
-      /deep/ .van-cell {
-        position: relative;
-        border: none;
-        &:before {
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: 0;
-          width: 100%;
-          height:1px;
-          background-color: #cccaca;
-          transform: scaleY(0.5)
-        }
-        .van-field__left-icon {
-          .van-icon {
-            font-size: 18px !important
-          }
-        }
-        &:last-child {
-          margin: 20px 0 10px 0
-        }
-      }
-    }
-    .remember-password {
-      width: 70%;
-      margin: 0 auto;
-      height: 40px;
-      position: relative;
-      .remember-password-content {
-        position: absolute;
-        top: 0;
-        right: 0;
-        /deep/ .van-checkbox {
-          .van-checkbox__label {
-            color: #565656 !important;
-            font-weight: 14px !important;
-          }
-        }
-      }
-    }
-    .form-btn {
-      width: 70%;
-      margin: 0 auto;
-      font-size: 18px;
-      color: #fff;
-      text-align: center;
-      margin-top: 30px;
-      background-image: linear-gradient(to right, #6ed3f7, #218fff);
-      box-shadow: 0px 2px 6px 0 rgba(36, 149, 213, 1);
-      line-height: 48px;
-      border-radius: 30px;
-    }
-    .weixin-login {
-      width: 100%;
-      margin: 0 auto;
-      margin-top: 40px;
-      .image-wrapper {
-        width: 60px;
-        height: 50px;
+			};
+      .remember-password {
+        width: 80%;
         margin: 0 auto;
-        img {
-          width: 100%;
-          height: 100%;
+        height: 20px;
+				margin-top: 20px;
+        position: relative;
+        .remember-password-content {
+          position: absolute;
+          top: 0;
+          right: 0;
+          /deep/ .van-checkbox {
+            .van-checkbox__label {
+              font-size: 14px;
+              color: #565656;
+            }
+          }
         }
-      }
-    }
-    .bottom-character {
-      width: 100%;
-      text-align: center;
-      position: absolute;
-      left: 0;
-      bottom: 10px;
-      color: #333;
-      span {
-        font-size: 12px;
-        border-left: 1px solid #333;
-        border-right: 1px solid #333;
-        padding: 0 6px;
-      }
-    }
-  }
-}
+      };
+			.form-btn {
+        width: 75%;
+        margin: 0 auto;
+        margin-top: 50px;
+				>div {
+					height: 48px;
+					line-height: 48px;
+          text-align: center;
+					font-size: 16px;
+          color: #fff;
+          background: linear-gradient(to right, #6ED3F7,#218FFF);
+          border-radius: 26px;
+					box-shadow: 0pt 2pt 6pt 0pt rgba(36,149,213,1);
+				}
+			}
+		}
+	}
 </style>

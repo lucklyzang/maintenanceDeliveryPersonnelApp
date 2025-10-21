@@ -1,251 +1,343 @@
 <template>
-  <div class="page-box" ref="wrapper">
-    <div class="content">
-        <div class="hospital-select-box">
-            <img :src="myLocationPng" alt="">
-            <van-dropdown-menu active-color="#1965FF">
-                <van-dropdown-item v-model="currentHospitaiName" :options="hospitalOption" @change="dropdownItemChangeEvent" />
-            </van-dropdown-menu>
-        </div>
-        <div class="tabs-box">
-            <van-tabs v-model="activeObjectName" color="#101010" sticky>
-                <van-tab title="环境管理" name="environmentalManagement">
-                    <div class="banner-box">
-                        <img :src="environmentBannerPng" alt="">
-                    </div>
-                    <div class="subproject">
-                        <h2>保洁管理</h2>
-                        <div class="subproject-list-box">
-                            <div class="subproject-list" v-for="(item,index) in cleaningManagementList" 
-                                :key="index"
-                                @click="cleanManagementEvent(item,index)"
-                            >
-                                <img :src="item.imgUrl" alt="">
-                                <span>{{ item.name }}</span>
-                            </div> 
-                        </div>
-                    </div>
-                </van-tab>
-                <van-tab title="中央运送" name="centralTransport"></van-tab>
-            </van-tabs>
-        </div>
-    </div>
-    <FooterBottom></FooterBottom>
-  </div>
+	<view class="content" :style="{ 'padding-top': statusBarHeight + 'px' }">
+		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 'px' }"></view>
+		<u-toast ref="uToast" />
+    <!-- 顶部标题 -->
+    <view class="topTabbar" :style="{ 'height': navigationBarHeight + 'px', 'lineHeight': navigationBarHeight + 'px', 'paddingRight': capsuleMessage.width + 10 + 'px' }">
+			<view class="title-left">
+				<img :src="homeIconPng" />
+				<text>新茂医信</text>
+			</view>
+			<view class="title-center">
+				智慧后勤服务平台
+			</view>
+    </view>
+		<view class="home-banner-area">
+            <img :src="homeBannerPng" />
+		</view>
+		<view class="content-box">
+			<view class="service-management">
+				<view class="service-management-title">
+					服务管理
+				</view>
+				<view class="service-management-content">
+					<view class="service-list" v-for="(item,index) in serviceList" :key="index" @click="serviceManagementEvent(item,index)">
+						<view class="list-top">
+							<image :src="item.url"></image>
+						</view>
+						<view class="list-bottom">{{ item.text }}</view>
+					</view>
+				</view>
+			</view>
+			<view class="department-box">
+				{{ depName }} - {{ depNum }}
+			</view>
+		</view>
+		<u-transition :show="showLoadingHint" mode="fade-down">
+			<view class="loading-box" v-if="showLoadingHint">
+				<u-loading-icon :show="showLoadingHint" text="加载中···" size="18" textSize="16"></u-loading-icon>
+			</view>
+		</u-transition>
+	</view>
 </template>
 <script>
-    import FooterBottom from '@/components/FooterBottom'
-    import {
-    } from '@/api/environmentalManagement.js'
-    import {
-        mapGetters,
-        mapMutations
-    } from 'vuex'
-    import {
-        IsPC,
-        removeExceptLoginMessageLocalStorage
-    } from '@/common/js/utils'
-    export default {
-        name: 'Home',
-        components: {
-            FooterBottom
-        },
-        data() {
-            return {
-                activeObjectName: 'environmentalManagement',
-                cleaningManagementList: [
-                    {
-                        name: '任务列表',
-                        imgUrl: require("@/common/images/home/task-list.png")
-                    },
-                    {
-                        name: '考勤管理',
-                        imgUrl: require("@/common/images/home/attendance-management.png")
-                    },
-                    {
-                        name: '考勤统计',
-                        imgUrl: require("@/common/images/home/attendance-statistics.png")
-                    }
-                ],
-                currentHospitaiName: '',
-                hospitalOption: [],
-                myLocationPng: require("@/common/images/home/my-location.png"),
-                environmentBannerPng: require("@/common/images/home/environment-banner.png")
-            }
-        },
-
-        mounted() {
-            // 控制设备物理返回按键
-            if (!IsPC()) {
-                pushHistory();
-                this.gotoURL(() => {
-                    pushHistory();
-					this.$router.push({
-						path: '/home'
+	import {
+		mapGetters,
+		mapMutations
+	} from 'vuex'
+	import store from '@/store'
+	export default{
+		data() {
+			return {
+				showLoadingHint: false,
+				triangleRectListInfoShow: false,
+				infoText: '加载中···',
+				loadingText: '加载中···',
+                homeIconPng: require("@/common/img/home-icon.png"),
+                homeBannerPng: require("@/common/img/home-banner.png"),
+				serviceList: [
+					{
+						text: '中央运送',
+						value: 'trans',
+						url: '@/common/img/trans-icon.png'
+					},
+					{
+						text: '工程维修',
+						value: 'project',
+						url: '@/common/img/project-icon.png'
+					},
+					{
+						text: '保洁管理',
+						value: 'clean',
+						url: '@/common/img/clean-icon.png'
+					}
+				]
+			}
+		},
+		updated() {},
+		computed: {
+			...mapGetters([
+				'userInfo',
+				'socketOpen',
+				'statusBarHeight',
+				'navigationBarHeight',
+				'capsuleMessage',
+				'chooseHospitalArea'
+			]),
+			userName() {
+				return this.userInfo['name']
+			},
+			proName () {
+			  return this.userInfo['proName']
+			},
+			proId() {
+				return this.userInfo['proId']
+			},
+			workerId() {
+				return this.userInfo['user']['id']
+			},
+			depId() {
+				return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
+			},
+			depName() {
+				return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
+			},
+			depNum() {
+				if (this.userInfo.hasOwnProperty('depNum')) {
+					return this.userInfo['depNum'] === null ? '' : this.userInfo['depNum']
+				} else {
+					return ''
+				}
+			}
+		},
+		
+		onShow() {
+			this.controlServiceManageModuleShowEvent()
+		},
+		
+		methods: {
+			...mapMutations([
+				'changeSocketOpen',
+				'storeCurrentIndex',
+				'storeLocationMessage'
+			]),
+			
+			// 控制服务管理模块显示隐藏
+			controlServiceManageModuleShowEvent () {
+				if (this.userInfo['extendData'].hasOwnProperty('systems')) {
+					this.serviceList.map((value,index,arr) => {
+						if (this.userInfo['extendData']['systems'].indexOf(value['value']) == -1) {
+							arr.splice(index,1)
+						}
 					})
-                })
-            };
-
-            // 获取医院列表
-            this.currentHospitaiName = this.userInfo.hospitalList[0]['hospitalId'];
-            for (let item of this.userInfo.hospitalList) {
-                this.hospitalOption.push({
-                    text: item.hospitalName,
-                    value: item.hospitalId
-                })
-            }
-        },
-
-        watch: {},
-
-        computed: {
-            ...mapGetters([
-                'userInfo',
-                'isLogin'
-            ])
-        },
-
-        methods: {
-            ...mapMutations([
-                "changeChooseProject"
-            ]),
-
-            // 医院下拉菜单值变化事件
-            dropdownItemChangeEvent (value) {
-                // 清空除登录信息之外的store和localStorage
-                removeExceptLoginMessageLocalStorage();
-                this.$store.dispatch('resetCleanManagementStore');
-                //存储选择的项目
-                this.changeChooseProject(this.hospitalOption.filter((item) => { return item.value == value}))
-            },
-
-            // 保洁管理子项点击事件
-            cleanManagementEvent (item, index) {
-                if (item.name == '任务列表') {
-                    this.$router.push({ path: "/cleanTaskList" })
-                } else if (item.name == '考勤管理') {
-                    this.$router.push({ path: "/attendanceManagement" })
-                } else if (item.name == '考勤统计') {
-                    this.$router.push({ path: "/attendanceStatistics" })
-                }
-            }
-        }
-    }
+				}
+			},
+			
+			// 格式化时间
+			getNowFormatDate(currentDate,type) {
+				// type:1(只显示小时分钟秒),2(只显示年月日)3(只显示年月)4(显示年月日小时分钟秒)5(显示月日)
+				let currentdate;
+				let strDate = currentDate.getDate();
+				let seperator1 = "-";
+				let seperator2 = ":";
+				let seperator3 = " ";
+				let month = currentDate.getMonth() + 1;
+				let hour = currentDate.getHours();
+				let minutes = currentDate.getMinutes();
+				let seconds = currentDate.getSeconds();
+				if (month >= 1 && month <= 9) {
+					month = "0" + month;
+				};
+				if (hour >= 0 && hour <= 9) {
+					hour = "0" + hour;
+				};
+				if (minutes >= 0 && minutes <= 9) {
+					minutes = "0" + minutes;
+				};
+				if (seconds >= 0 && seconds <= 9) {
+					seconds = "0" + seconds;
+				};
+				if (strDate >= 0 && strDate <= 9) {
+					strDate = "0" + strDate;
+				};
+				if (type == 1) {
+					currentdate = hour + seperator2 + minutes + seperator2 + seconds
+				};
+				if (type == 2) {
+					currentdate = currentDate.getFullYear() + seperator1 + month + seperator1 + strDate
+				};
+				if (type == 3) {
+					currentdate = currentDate.getFullYear() + seperator1 + month
+				};
+				if (type == 4) {
+					currentdate = currentDate.getFullYear() + seperator1 + month + seperator1 + strDate + seperator3 + hour + seperator2 + minutes + seperator2 + seconds
+				};
+				if (type == 5) {
+					currentdate = month + seperator1 + strDate
+				};
+				return currentdate
+			},
+			
+			// px转换成rpx
+			rpxTopx(px){
+				let deviceWidth = uni.getSystemInfoSync().windowWidth;
+				let rpx = ( 750 / deviceWidth ) * Number(px);
+				return Math.floor(rpx)
+			},
+			
+			// 服务管理项点击事件
+			serviceManagementEvent (item,index) {
+				if (item.text == '中央运送') {
+					uni.redirectTo({
+						url: '/transManagementPackage/pages/index/index'
+					})
+				} else if (item.text == '工程维修') {
+					uni.redirectTo({
+						url: '/projectManagementPackage/pages/callTask/callTask'
+					})
+				} else if (item.text == '保洁管理') {
+					uni.redirectTo({
+						url: '/cleanManagementPackage/pages/callTask/callTask'
+					})
+				}
+			}
+		}
+	}
 </script>
-<style lang='less' scoped>
-    @import "~@/common/stylus/variable.less";
+<style lang="less" scoped>
+	@import "~@/common/stylus/variable.less";
     @import "~@/common/stylus/mixin.less";
     @import "~@/common/stylus/modifyUi.less";
-    .page-box {
-        background: #F8F8F8;
-        .content-wrapper();
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            .hospital-select-box {
-                width: 98%;
-                margin: 0 auto;
-                height: 40px;
-                background: #fff;
-                border-radius: 20px;
-                box-shadow: 0px 3px 4px -1px rgba(24, 100, 255, 0.31);
-                display: flex;
-                align-items: center;
-                padding: 0 10px;
-                box-sizing: border-box;
-                > img {
-                    width: 22px;
-                    height: 22px
-                };
-                /deep/ .van-dropdown-menu {
-                    .van-dropdown-menu__bar {
-                        height: 40px !important;
-                        background: transparent !important;
-                        box-shadow: none !important;
-                        .van-dropdown-menu__title {
-                            font-size: 16px !important;
-                            color: #1965FF !important
-                        }
-                    }
-                }
-            };
-            .tabs-box {
-                width: 98%;
-                margin: 0 auto;
-                display: flex;
-                align-items: center;
-                /deep/ .van-tabs {
-                    width: 100%;
-                    .van-tabs__wrap {
-                        height: 40px !important;
-                        .van-tabs__nav {
-                            background: transparent !important;
-                            .van-tab {
-                                flex: none !important
-                            }
-                        };
-                        .van-tabs__nav--line {
-                            box-sizing: border-box;
-                            padding-bottom: 0 !important;
-                            .van-tabs__line {
-                                bottom: 2px !important
-                            }
-                        }
-                    };
-                    .van-tabs__content {
-                        margin-top: 4px;
-                        .banner-box {
-                            width: 100%;
-                            height: 145px;
-                            img {
-                                width: 100%;
-                                height: 100%
-                            }
-                        };
-                        .subproject {
-                            width: 100%;
-                            height: 160px;
-                            background: #fff;
-                            border-radius: 8px;
-                            margin-top: 10px;
-                            padding: 10px 12px;
-                            box-sizing: border-box;
-                            display: flex;
-                            flex-direction: column;
-                            h2 {
-                                width: 100%;
-                                height: 24px;
-                                font-size: 16px;
-                                color: #242424;
-                                font-weight: bold;
-                            };
-                            .subproject-list-box {
-                                width: 100%;
-                                display: flex;
-                                height: 100px;
-                                .subproject-list {
-                                    flex: 1;
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: center;
-                                    align-items: flex-start;
-                                    >img {
-                                        width: 50px;
-                                        height: 50px;
-                                        margin-left: 6px;
-                                    };
-                                    >span {
-                                        margin-top: 10px;
-                                        font-size: 16px;
-                                        color: #101010
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+	page {
+		width: 100%;
+		height: 100%;
+	};
+	view,button,text,input,textarea {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	};
+	.content {
+		.content-wrapper();
+		height: 100vh !important;
+		padding: 0 2px;
+		box-sizing: border-box;
+		position: relative;
+		background: #F8F8F8;
+		::v-deep .u-popup {
+			flex: none !important
+		};
+		.top-background-area {
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0
+		};
+    .topTabbar {
+			width: 100%;
+			display: flex;
+			box-sizing: border-box;
+			align-items: center;
+			position: relative;
+			.title-left {
+				padding-left: 8px;
+				box-sizing: border-box;
+				>image {
+					width: 23px;
+					margin-right: 2px;
+					vertical-align: middle;
+				};
+				>text {
+					font-size: 12px;
+					color: #3370FF;
+					vertical-align: middle;
+				}
+			};
+			.title-center {
+				flex: 1;
+				text-align: center;
+				font-size: 14px;
+				color: #101010;
+			}
+		};
+		.home-banner-area {
+			margin-top: 10px;
+			height: 150px;
+			>image {
+				width: 100%;
+				height: 100%;
+			}
+		};
+		.content-box {
+			position: relative;
+			flex: 1;
+			margin-top: 10px;
+			.department-box {
+				position: absolute;
+				bottom: 10px;
+				right: 10px;
+				font-size: 16px;
+				color: #ACADAF;
+			};
+			.service-management {
+				padding: 10px 10px 20px 10px;
+				box-sizing: border-box;
+				width: 98%;
+				margin: 0 auto;
+				background: #fff;
+				border-radius: 10px;
+				.service-management-title {
+					font-size: 16px;
+					color: #242424;
+					font-weight: bold;
+					margin-bottom: 16px;
+				};
+				.service-management-content {
+					display: flex;
+					flex-wrap: wrap;
+					.service-list {
+						width: 25%;
+						display: flex;
+						flex-direction: column;
+						.list-top {
+							width: 50px;
+							height: 50px;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							background: #3370FF;
+							border-radius: 12px;
+							>image {
+								width: 32px;
+								height: 32px;
+							}
+						};
+						.list-bottom {
+							margin-top: 10px;
+							font-size: 12px;
+							color: #101010;
+						}
+					};
+					>view {
+						&:nth-child(2) {
+							.list-top {
+								background: #FC8F66 !important;
+							} 
+						};
+						&:nth-child(3) {
+							.list-top {
+								background: #4CC9E4 !important;
+							} 
+						}
+					}
+				}
+			}
+		};
+		.loading-box {
+			height: 35px;
+			display: flex;
+			align-items: center;
+			justify-content: center
+		};
+	}
 </style>

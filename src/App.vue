@@ -84,7 +84,6 @@
   },false)
 </script>
 <style lang="less" scoped>
-  @import "~@/common/stylus/reset.less";
   @import "~@/common/stylus/variable.less";
   #app {
     position: relative;

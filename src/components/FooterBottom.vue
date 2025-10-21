@@ -27,12 +27,10 @@ export default {
     return {
       active: 0,
       icon: {
-        homeActive: require("@/common/images/home/home-current.png"),
-        homeInactive: require("@/common/images/home/home.png"),
-        objectActive: require("@/common/images/home/object-current.png"),
-        objectInactive: require("@/common/images/home/object.png"),
-        mineActive: require("@/common/images/home/mine-current.png"),
-        mineInactive: require("@/common/images/home/mine.png")
+        homeActive: require("@/common/img/index-current.png"),
+        homeInactive: require("@/common/img/index.png"),
+        mineActive: require("@/common/img/my-current.png"),
+        mineInactive: require("@/common/img/my.png")
       }
     }
   },

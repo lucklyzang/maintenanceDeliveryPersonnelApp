@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import { getStore } from '@/common/js/utils.js'
+import { getCache } from '@/common/js/utils.js'
 import store from '@/store'
 const Home = () =>
     import ('@/pages/Home')   
@@ -39,7 +39,7 @@ let router = new Router({
     }
 });
 router.beforeEach((to, from, next) => {
-    let login = getStore('isLogin');
+    let login = getCache('isLogin');
     let name = to.name;
     if (name === 'login') {
         if (login) {

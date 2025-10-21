@@ -11,7 +11,7 @@ export const formatTime = (formatType) => {
  * @param{String} name key值
  * @param{String} content value值
 */
-export const setStore = (name, content) => {
+export const setCache = (name, content) => {
   if (!name) return;
   if (typeof content !== 'string') {
     content = JSON.stringify(content);
@@ -23,7 +23,7 @@ export const setStore = (name, content) => {
  * 获取localStorage
  * @param{String} name key值
 */
-export const getStore = name => {
+export const getCache = name => {
   if (!name) return;
   return window.localStorage.getItem(name);
 }
@@ -32,7 +32,7 @@ export const getStore = name => {
  * 删除localStorage
  * @param{String} name key值
 */
-export const removeStore = name => {
+export const removeCache = name => {
   if (!name) return;
   window.localStorage.removeItem(name);
 }

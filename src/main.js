@@ -3,10 +3,12 @@ import router from './router'
 import store from './store'
 import VueClipboard from 'vue-clipboard2'
 import Vant from 'vant';
+import { Toast } from 'vant';
 import 'vant/lib/index.css';
 import moment from 'moment'
 import Create from '@/common/js/create.js';
 import Alert from '@/components/LightHint.vue';
+Vue.use(Toast);
 Vue.config.productionTip = false;
 Vue.prototype.$Alert= ((obj) => {//挂载在原型上
     return Create(Alert,obj).show() //返回组件实例

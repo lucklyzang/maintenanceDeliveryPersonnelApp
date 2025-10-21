@@ -12,10 +12,10 @@
     </div>
     <div class="content">
         <div class="content-top-area">
-			<img :src="statusBackgroundPng" />
+			<!-- <img :src="statusBackgroundPng" /> -->
 			<div class="content-top-content">
 				<div class="user-photo">
-					<img :src="defaultPersonPng" />
+					<!-- <img :src="defaultPersonPng" /> -->
 				</div>
 				<div class="user-message">
 					<div class="user-name">
@@ -31,7 +31,7 @@
 			<div class="content-top-other">
 				<div class="left">
 					<span>
-						<img :src="hiredatePng" />
+						<!-- <img :src="hiredatePng" /> -->
 					</span>
 					<span>入职时间</span>
 				</div>
@@ -44,7 +44,7 @@
 			<div class="content-top-other">
 				<div class="left">
 					<span>
-						<img :src="phoneNumberPng" />
+						<!-- <img :src="phoneNumberPng" /> -->
 					</span>
 					<span>手机号码</span>
 				</div>
@@ -57,7 +57,7 @@
 			<div class="content-top-other">
 				<div class="left">
 					<span>
-						<img :src="accountExpirationTimePng" />
+						<!-- <img :src="accountExpirationTimePng" /> -->
 					</span>
 					<span>账号过期时间</span>
 				</div>
@@ -70,7 +70,7 @@
 			<div class="content-top-other">
 				<div class="left">
 					<span>
-						<img :src="userRolePng" />
+						<!-- <img :src="userRolePng" /> -->
 					</span>
 					<span>用户角色</span>
 				</div>
@@ -97,7 +97,6 @@
 <script>
 import FooterBottom from "@/components/FooterBottom";
 import NavBar from "@/components/NavBar";
-import {} from "@/api/environmentalManagement.js";
 import {
 	userSignOut
 } from '@/api/login.js'
@@ -114,13 +113,13 @@ export default {
       quitDialogShow: false,
       loadingShow: false,
       overlayShow: false,
-      versionNumber: '2.6',
-      statusBackgroundPng: require("@/common/images/home/status-background.png"),
-      accountExpirationTimePng: require("@/common/images/home/account-expiration-time.png"),
-      hiredatePng: require("@/common/images/home/hiredate.png"),
-      phoneNumberPng: require("@/common/images/home/phone-number.png"),
-      userRolePng: require("@/common/images/home/user-role.png"),
-      defaultPersonPng: require("@/common/images/home/default-person.png")
+      versionNumber: '2.6'
+      // statusBackgroundPng: require("@/common/images/home/status-background.png"),
+      // accountExpirationTimePng: require("@/common/images/home/account-expiration-time.png"),
+      // hiredatePng: require("@/common/images/home/hiredate.png"),
+      // phoneNumberPng: require("@/common/images/home/phone-number.png"),
+      // userRolePng: require("@/common/images/home/user-role.png"),
+      // defaultPersonPng: require("@/common/images/home/default-person.png")
     }
   },
 
