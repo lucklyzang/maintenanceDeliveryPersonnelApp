@@ -53,6 +53,7 @@
 	import { logIn, getTemplateType } from '@/api/login.js'
 	import { setCache, getCache, removeCache } from '@/common/js/utils'
 	import ScrollSelection from "@/components/scrollSelection";
+  	import Qs from 'qs'
 	export default {
 	components: {
 		ScrollSelection,
@@ -68,7 +69,7 @@
         checked: false,
 				hospitalCampusDefaultIndex: [0],
 				hospitalCampusOption: [],
-				showHospitalCampus: true,
+				showHospitalCampus: false,
 				currentHospitalCampusSpaces: '请选择',
 				
 				rememberAccountMessage: false,
@@ -133,11 +134,11 @@
 					});
 					return;
 				};
-				let loginMessage = {
+				let loginMessage = Qs.stringify({
 				  username: this.form.username,
 				  password: this.form.password,
-					logType: 0
-				};
+					logType: 1
+				});
 				this.showLoadingHint = true;
 				logIn(loginMessage).then((res) => {
 					this.showLoadingHint = false;
@@ -166,9 +167,7 @@
 							if (res.data.data.mobile) {
 								this.changeTemplateType(res.data.data.mobile);
 							};
-							uni.switchTab({
-								url: '/pages/index/index'
-							})
+						  this.$router.push({ path: "/home" })
 					  } else {
 						 this.modalShow = true;
 						 this.modalContent = `${res.data.msg}`
@@ -193,9 +192,7 @@
 						if (res.data.data) {
 							this.changeTemplateType(res.data.data);
 						};
-						uni.switchTab({
-							url: '/pages/index/index'
-						})
+					  this.$router.push({ path: "/home" })
 					} else {
 						this.modalShow = true;
 						this.modalContent = `${res.data.msg}`
