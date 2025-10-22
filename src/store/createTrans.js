@@ -5,7 +5,7 @@ export default {
 
   getters:{
 		transTaskMessage:(state) => {
-			state.transTaskMessage = getCache('transTaskMessage') ? getCache('transTaskMessage') : {};
+			state.transTaskMessage = JSON.parse(getCache('transTaskMessage')) ? JSON.parse(getCache('transTaskMessage')) : null;
 			return state.transTaskMessage
 		}
   },

@@ -4,16 +4,16 @@ export default {
 	state: getDefaultLoginState(),
 	getters: {
 		userInfo:(state) => {
-			state.userInfo = getCache('userInfo') ? getCache('userInfo') : {};
-			return JSON.parse(state.userInfo)
+			state.userInfo = JSON.parse(getCache('userInfo')) ? JSON.parse(getCache('userInfo')) : null;
+			return state.userInfo
 		},
 		isMedicalMan:(state) => {
 			state.isMedicalMan = getCache('isMedicalMan') ? getCache('isMedicalMan') === 'false' ? false : true : false;
 			return state.isMedicalMan
 		},
 		chooseHospitalArea:(state) => {
-			state.chooseHospitalArea = getCache('chooseHospitalArea') ? getCache('chooseHospitalArea') : {};
-			return JSON.parse(state.chooseHospitalArea)
+			state.chooseHospitalArea = JSON.parse(getCache('chooseHospitalArea')) ? JSON.parse(getCache('chooseHospitalArea')) : null;
+			return state.chooseHospitalArea
 		},
 		isLogin: (state) => {
 			state.isLogin = getCache('isLogin') ? getCache('isLogin') === 'false' ? false : true : false;

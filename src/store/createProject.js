@@ -5,7 +5,7 @@ export default {
 	
   getters:{
 		projectTaskMessage:(state) => {
-			state.projectTaskMessage = getCache('projectTaskMessage') ? getCache('projectTaskMessage') : {};
+			state.projectTaskMessage = JSON.parse(getCache('projectTaskMessage')) ? JSON.parse(getCache('projectTaskMessage')) : null;
 			return state.projectTaskMessage
 		}
   },
