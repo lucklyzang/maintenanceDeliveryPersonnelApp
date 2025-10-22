@@ -1,11 +1,11 @@
 <template>
 	<div class="container">
-    <van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+    	<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
 		<van-dialog v-model="modalShow" :title="modalContent"
 		 show-cancel-button @confirm="sureCancel" @cancel="cancelSure">
 		</van-dialog>
 		<!-- 院区 -->
-		<div class="transport-rice-box" v-if="showHospitalCampus">
+		<div class="transport-rice-box" v-show="showHospitalCampus">
 			<ScrollSelection buttonLocation='top' v-model="showHospitalCampus" :pickerValues="hospitalCampusDefaultIndex" :isShowSearch="false" :columns="hospitalCampusOption" @sure="hospitalCampusSureEvent" @cancel="hospitalCampusCancelEvent" @close="hospitalCampusCloseEvent" />
 		</div>
 		<div class="top-background-area">
@@ -19,7 +19,7 @@
 			<div class="form-box">
 				<van-field
 					left-icon="contact"
-          :border="false"
+          			:border="false"
 					placeholder="请输入账号"
 					v-model="form.username"
 					type="text"
@@ -28,7 +28,7 @@
 				</van-field>
 				<van-field
 					left-icon="lock"
-          :border="false"
+          			:border="false"
 					placeholder="请输入密码"
 					v-model="form.password"
 					type="password"
@@ -52,7 +52,7 @@
 	import { mapGetters, mapMutations } from 'vuex'
 	import { logIn, getTemplateType } from '@/api/login.js'
 	import { setCache, getCache, removeCache } from '@/common/js/utils'
-	import ScrollSelection from "@/components/scrollSelection";
+	import ScrollSelection from "@/components/ScrollSelection";
   	import Qs from 'qs'
 	export default {
 	components: {
@@ -66,7 +66,7 @@
 					username: '',
 					password: ''
 				},
-        checked: false,
+                checked: false,
 				hospitalCampusDefaultIndex: [0],
 				hospitalCampusOption: [],
 				showHospitalCampus: false,
@@ -81,7 +81,8 @@
 		},
 		computed: {
 			...mapGetters([
-				'chooseHospitalArea'
+				'chooseHospitalArea',
+				'userInfo',
 			])
 		},
 		onShow () {
@@ -105,7 +106,7 @@
 					this.hospitalCampusDefaultIndex = [id]
 					this.currentHospitalCampusSpaces =  val;
 					this.storeChooseHospitalArea({
-						span: val,
+						text: val,
 						value,
 						id
 					});
@@ -137,7 +138,7 @@
 				let loginMessage = Qs.stringify({
 				  username: this.form.username,
 				  password: this.form.password,
-					logType: 1
+				  logType: 1
 				});
 				this.showLoadingHint = true;
 				logIn(loginMessage).then((res) => {
@@ -147,37 +148,36 @@
 						   this.changeOverDueWay(false);
 						   setCache('storeOverDueWay',false); 
 							// 登录用户名密码及用户信息存入Locastorage
-              // 判断是否勾选记住用户名密码
-              if (this.checked) {
-                setCache('userName', this.form.username);
-                setCache('userPassword', this.form.password);
-              } else {
-                removeCache('userName', this.form.username);
-                removeCache('userPassword', this.form.password);
-              };
+							// 判断是否勾选记住用户名密码
+							if (this.checked) {
+								setCache('userName', this.form.username);
+								setCache('userPassword', this.form.password);
+							} else {
+								removeCache('userName', this.form.username);
+								removeCache('userPassword', this.form.password);
+							};
 							// 登录用户信息存入store
 							this.changeIsLogin(true);
 							this.storeUserInfo(res.data.data);
-							if (res.data.data['extendData']['user_type_id'] == 1) {
-							  this.changeIsMedicalMan(true)
-							} else {
-							  this.changeIsMedicalMan(false)
-							};
-							// 保存模板类型
-							if (res.data.data.mobile) {
-								this.changeTemplateType(res.data.data.mobile);
-							};
-						  this.$router.push({ path: "/home" })
+						   	for (let i = 0;i<this.userInfo['worker']['hospitalList'].length;i++) {
+								this.hospitalCampusOption.push({
+									value: this.userInfo['worker']['hospitalList'][i]['hospitalId'],
+									text: this.userInfo['worker']['hospitalList'][i]['hospitalName'],
+									id: i
+								})
+						   	};
+							this.showHospitalCampus = true;
+							this.changeIsMedicalMan(false)
 					  } else {
-						 this.modalShow = true;
-						 this.modalContent = `${res.data.msg}`
+						this.modalShow = true;
+						this.modalContent = `${res.data.msg}`
 					  }
 					};
 				  })
 				  .catch((err) => {
-						this.showLoadingHint = false;
-					  this.modalShow = true;
-					  this.modalContent = err;
+					this.showLoadingHint = false;
+					this.modalShow = true;
+					this.modalContent = err;
 				  })
 			},
 			
@@ -185,14 +185,14 @@
 			queryTemplateType (data) {
 			  this.showLoadingHint = true;
 				this.infoText = '查询中···';
-			  getTemplateType(data).then((res) => {
+			  	getTemplateType(data).then((res) => {
 				this.showLoadingHint = false;
 					if (res && res.data.code == 200) {
 						// 保存模板类型
 						if (res.data.data) {
 							this.changeTemplateType(res.data.data);
 						};
-					  this.$router.push({ path: "/home" })
+					   this.$router.push({ path: "/home" })
 					} else {
 						this.modalShow = true;
 						this.modalContent = `${res.data.msg}`
@@ -218,7 +218,7 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import "~@/common/stylus/variable.less";
   @import "~@/common/stylus/mixin.less";
   @import "~@/common/stylus/modifyUi.less";

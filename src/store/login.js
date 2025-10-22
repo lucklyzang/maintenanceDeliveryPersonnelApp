@@ -5,15 +5,15 @@ export default {
 	getters: {
 		userInfo:(state) => {
 			state.userInfo = getCache('userInfo') ? getCache('userInfo') : {};
-			return state.userInfo
+			return JSON.parse(state.userInfo)
 		},
 		isMedicalMan:(state) => {
-			state.userInfo = getCache('isMedicalMan') ? getCache('isMedicalMan') === 'false' ? false : true : false;
+			state.isMedicalMan = getCache('isMedicalMan') ? getCache('isMedicalMan') === 'false' ? false : true : false;
 			return state.isMedicalMan
 		},
 		chooseHospitalArea:(state) => {
-			state.userInfo = getCache('chooseHospitalArea') ? getCache('chooseHospitalArea') : {};
-			return state.chooseHospitalArea
+			state.chooseHospitalArea = getCache('chooseHospitalArea') ? getCache('chooseHospitalArea') : {};
+			return JSON.parse(state.chooseHospitalArea)
 		},
 		isLogin: (state) => {
 			state.isLogin = getCache('isLogin') ? getCache('isLogin') === 'false' ? false : true : false;

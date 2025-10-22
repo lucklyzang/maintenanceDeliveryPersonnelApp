@@ -1,75 +1,99 @@
 <template>
-	<view class="content" :style="{ 'padding-top': statusBarHeight + 'px' }">
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 'px' }"></view>
-		<u-toast ref="uToast" />
-    <!-- 顶部标题 -->
-    <view class="topTabbar" :style="{ 'height': navigationBarHeight + 'px', 'lineHeight': navigationBarHeight + 'px', 'paddingRight': capsuleMessage.width + 10 + 'px' }">
-			<view class="title-left">
-				<img :src="homeIconPng" />
-				<text>新茂医信</text>
-			</view>
-			<view class="title-center">
-				智慧后勤服务平台
-			</view>
-    </view>
-		<view class="home-banner-area">
+	<div class="content">
+		 <!-- <div class="nav">
+        	<NavBar path="/home" title="个人中心" />
+    	</div> -->
+		<div class="top-background-area"></div>
+		<!-- 顶部标题 -->
+		<div class="topTabbar" :style="{ 'height': navigationBarHeight + 'px', 'lineHeight': navigationBarHeight + 'px'}">
+				<div class="title-left">
+					<img :src="homeIconPng" />
+					<span>新茂医信</span>
+				</div>
+				<div class="title-center">
+					智慧后勤服务平台
+				</div>
+		</div>
+		<div class="home-banner-area">
             <img :src="homeBannerPng" />
-		</view>
-		<view class="content-box">
-			<view class="service-management">
-				<view class="service-management-title">
+		</div>
+		<div class="content-box">
+			<div class="service-management">
+				<div class="service-management-title">
 					服务管理
-				</view>
-				<view class="service-management-content">
-					<view class="service-list" v-for="(item,index) in serviceList" :key="index" @click="serviceManagementEvent(item,index)">
-						<view class="list-top">
-							<image :src="item.url"></image>
-						</view>
-						<view class="list-bottom">{{ item.text }}</view>
-					</view>
-				</view>
-			</view>
-			<view class="department-box">
-				{{ depName }} - {{ depNum }}
-			</view>
-		</view>
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" text="加载中···" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-	</view>
+				</div>
+				<div class="service-management-content">
+					<div class="service-list" v-for="(item,index) in serviceList" :key="index" @click="serviceManagementEvent(item,index)">
+						<div class="list-top">
+							<img :src="item.url" />
+						</div>
+						<div class="list-bottom">{{ item.text }}</div>
+					</div>
+				</div>
+			</div>
+			<div class="service-management safe-management">
+				<div class="service-management-title">
+					安全管理
+				</div>
+				<div class="service-management-content">
+					<div class="service-list" v-for="(item,index) in safeList" :key="index" @click="serviceManagementEvent(item,index)">
+						<div class="list-top">
+							<img :src="item.url" />
+						</div>
+						<div class="list-bottom">{{ item.text }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+		<FooterBottom></FooterBottom>  
+	</div>
 </template>
 <script>
 	import {
 		mapGetters,
 		mapMutations
 	} from 'vuex'
-	import store from '@/store'
+	import FooterBottom from "@/components/FooterBottom";
+	import NavBar from "@/components/NavBar";
 	export default{
+		components: {
+			FooterBottom
+		},
 		data() {
 			return {
 				showLoadingHint: false,
 				triangleRectListInfoShow: false,
 				infoText: '加载中···',
-				loadingText: '加载中···',
-                homeIconPng: require("@/common/img/home-icon.png"),
-                homeBannerPng: require("@/common/img/home-banner.png"),
+                homeIconPng: require('@/common/img/home-icon.png'),
+                homeBannerPng: require('@/common/img/home-banner.png'),
 				serviceList: [
 					{
 						text: '中央运送',
 						value: 'trans',
-						url: '@/common/img/trans-icon.png'
+						url: require('@/common/img/trans-icon.png')
 					},
 					{
 						text: '工程维修',
 						value: 'project',
-						url: '@/common/img/project-icon.png'
+						url: require('@/common/img/project-icon.png')
 					},
 					{
 						text: '保洁管理',
 						value: 'clean',
-						url: '@/common/img/clean-icon.png'
+						url: require('@/common/img/clean-icon.png')
+					}
+				],
+				safeList: [
+					{
+						text: '安全巡更',
+						value: 'safePatrol',
+						url: require('@/common/img/safe-patrol-icon.png')
+					},
+					{
+						text: '设备巡检',
+						value: 'equipmentPatrol',
+						url: require('@/common/img/equipment-patrol-icon.png')
 					}
 				]
 			}
@@ -85,29 +109,25 @@
 				'chooseHospitalArea'
 			]),
 			userName() {
-				return this.userInfo['name']
-			},
-			proName () {
-			  return this.userInfo['proName']
-			},
-			proId() {
-				return this.userInfo['proId']
+			  return this.userInfo['worker']['name']
 			},
 			workerId() {
-				return this.userInfo['user']['id']
+				return this.userInfo['worker']['id']
+			},
+			proName () {
+			  return this.chooseHospitalArea['text']
+			},
+			proId() {
+				return this.chooseHospitalArea['value']
 			},
 			depId() {
-				return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
 			},
 			depName() {
-				return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
 			},
-			depNum() {
-				if (this.userInfo.hasOwnProperty('depNum')) {
-					return this.userInfo['depNum'] === null ? '' : this.userInfo['depNum']
-				} else {
-					return ''
-				}
+			userAccount() {
+				return this.userInfo['worker']['account']
 			}
 		},
 		
@@ -208,15 +228,6 @@
 	@import "~@/common/stylus/variable.less";
     @import "~@/common/stylus/mixin.less";
     @import "~@/common/stylus/modifyUi.less";
-	page {
-		width: 100%;
-		height: 100%;
-	};
-	view,button,text,input,textarea {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	};
 	.content {
 		.content-wrapper();
 		height: 100vh !important;
@@ -224,16 +235,13 @@
 		box-sizing: border-box;
 		position: relative;
 		background: #F8F8F8;
-		::v-deep .u-popup {
-			flex: none !important
-		};
 		.top-background-area {
 			width: 100%;
 			position: absolute;
 			top: 0;
 			left: 0
 		};
-    .topTabbar {
+    	.topTabbar {
 			width: 100%;
 			display: flex;
 			box-sizing: border-box;
@@ -242,12 +250,12 @@
 			.title-left {
 				padding-left: 8px;
 				box-sizing: border-box;
-				>image {
+				>img {
 					width: 23px;
 					margin-right: 2px;
 					vertical-align: middle;
 				};
-				>text {
+				>sapn {
 					font-size: 12px;
 					color: #3370FF;
 					vertical-align: middle;
@@ -255,7 +263,7 @@
 			};
 			.title-center {
 				flex: 1;
-				text-align: center;
+				padding-left: 15%;
 				font-size: 14px;
 				color: #101010;
 			}
@@ -263,7 +271,7 @@
 		.home-banner-area {
 			margin-top: 10px;
 			height: 150px;
-			>image {
+			>img {
 				width: 100%;
 				height: 100%;
 			}
@@ -272,13 +280,6 @@
 			position: relative;
 			flex: 1;
 			margin-top: 10px;
-			.department-box {
-				position: absolute;
-				bottom: 10px;
-				right: 10px;
-				font-size: 16px;
-				color: #ACADAF;
-			};
 			.service-management {
 				padding: 10px 10px 20px 10px;
 				box-sizing: border-box;
@@ -307,7 +308,7 @@
 							justify-content: center;
 							background: #3370FF;
 							border-radius: 12px;
-							>image {
+							>img {
 								width: 32px;
 								height: 32px;
 							}
@@ -318,7 +319,7 @@
 							color: #101010;
 						}
 					};
-					>view {
+					>div {
 						&:nth-child(2) {
 							.list-top {
 								background: #FC8F66 !important;
@@ -330,6 +331,16 @@
 							} 
 						}
 					}
+				}
+			};
+			.safe-management {
+				margin-top: 10px;
+				>div {
+					&:nth-child(2) {
+							.list-top {
+								background: #4CC9E4 !important;
+							} 
+						};
 				}
 			}
 		};

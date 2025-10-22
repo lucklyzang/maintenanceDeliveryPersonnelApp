@@ -8,6 +8,8 @@ const Login = () =>
     import ('@/pages/Login')
 const MyInfo = () =>
     import ('@/pages/MyInfo')
+const ModificationPassword = () =>
+    import ('@/pages/ModificationPassword')
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -23,6 +25,11 @@ let baseRoute = [{
         path: '/myInfo',
         name: 'myInfo',
         component: MyInfo
+    },
+    {
+        path: '/modificationPassword',
+        name: 'modificationPassword',
+        component: ModificationPassword
     }
 ];
 let router = new Router({

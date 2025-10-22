@@ -15,7 +15,7 @@ export const setCache = (name, content) => {
   if (!name) return;
   if (typeof content !== 'string') {
     content = JSON.stringify(content);
-  }
+  };
   window.localStorage.setItem(name, content);
 }
 
@@ -606,25 +606,14 @@ export const compareDateTime = (t1,t2) => {
 */
 
 export const removeAllLocalStorage = () => {
-  // removeStore('userName');
-  // removeStore('userPassword');
-  removeStore('userInfo');
-  removeStore('isLogin');
-  removeStore('token');
-  removeStore('isLogin');
-  removeStore('permissionInfo');
-  removeStore('roleNameList');
-  removeStore('changeOverDueWay');
-  removeStore('currentCleanTaskName');
-  removeStore('currentCleanTaskDateVlue');
-  removeStore('cleanTaskDetails');
-  removeStore('timeMessage');
-  removeStore('storageForthwithTaskMessage');
-  removeStore('storageSpecialTaskMessage');
-  removeStore('ossMessage');
-  removeStore('chooseProject');
-  removeStore('attendanceTypeDetailsMessage');
-  removeStore('personnelStatisticsDetailsMessage')
+  // removeCache('userName');
+  // removeCache('userPassword');
+  removeCache('userInfo');
+  removeCache('isLogin');
+  removeCache('token');
+  removeCache('isLogin');
+  removeCache('timeMessage');
+  removeCache('ossMessage');
 }
 
 /*
@@ -635,16 +624,16 @@ export const removeAllLocalStorage = () => {
 */
 
 export const removeExceptLoginMessageLocalStorage = () => {
-  removeStore('currentCleanTaskName');
-  removeStore('currentCleanTaskDateVlue');
-  removeStore('cleanTaskDetails');
-  removeStore('timeMessage');
-  removeStore('storageForthwithTaskMessage');
-  removeStore('storageSpecialTaskMessage');
-  removeStore('ossMessage');
-  removeStore('chooseProject');
-  removeStore('attendanceTypeDetailsMessage');
-  removeStore('personnelStatisticsDetailsMessage')
+  removeCache('currentCleanTaskName');
+  removeCache('currentCleanTaskDateVlue');
+  removeCache('cleanTaskDetails');
+  removeCache('timeMessage');
+  removeCache('storageForthwithTaskMessage');
+  removeCache('storageSpecialTaskMessage');
+  removeCache('ossMessage');
+  removeCache('chooseProject');
+  removeCache('attendanceTypeDetailsMessage');
+  removeCache('personnelStatisticsDetailsMessage')
 }
 
 /*

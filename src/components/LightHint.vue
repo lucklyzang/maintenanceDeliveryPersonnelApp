@@ -1,13 +1,13 @@
 <template>
     <div class="light-hint" v-if="isShow">
-        <img :src="type == 'success' ? passedPng : exclamationPointPng" alt="">
-        <span>{{message}}</span>
+		<img :src="type == 'success' ? passedPng : exclamationPointPng" alt="">
+    <span>{{message}}</span>
     </div>
 </template>
  
 <script>
 export default {
-  name: 'LightHint',
+   name: 'LightHint',
   props: {
     type: {
       type: String,
@@ -41,32 +41,33 @@ export default {
   }
 };
 </script>
-<style lang='less' scoped>
-@import "~@/common/stylus/variable.less";
-@import "~@/common/stylus/mixin.less";
-@import "~@/common/stylus/modifyUi.less";
+<style lang="less" scoped>
  .light-hint {
     background: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 216px;
-    height: 48px;
+    min-width: 180px;
+    min-height: 48px;
+    padding: 4px 10px; 
+		box-sizing: border-box;
     position: fixed;
     z-index: 1000;
     bottom: 200px;
     left: 50%;
     transform: translateX(-50%);
-    text-align: center;
-    line-height: 30px;
     font-weight: bold;
     color: #101010;
     font-size: 14px;
+		box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.4);
     span {
       vertical-align: middle;
-      margin-left: 10px
+      margin-left: 10px;
+			text-align: left;
+			word-break: break-all;
     };
     img {
+			flex-shrink: 0;
       vertical-align: middle;
       width: 24px;
       height: 24px

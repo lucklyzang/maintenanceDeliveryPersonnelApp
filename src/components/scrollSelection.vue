@@ -5,14 +5,14 @@
       class="picker"
     >
       <section class="picker-main" ref="pickerMain" :class="{'picker-box-activate': show,'picker-box-inertia': !show}">
-        <h3 ref="chooseBox">
+        <h3 ref="chooseBox" v-show="buttonLocation == 'bottom'">
           {{ title }}
           <van-icon name="cross" size="25" @click="close" />
         </h3>
-        <div class="button-box-top" v-show="list.length > 0 && buttonLocation == 'top'">
-          <text class="cancel-text" @click="cancel" v-show="list.length > 0">取消</text>
-          <text class="title-text"> {{ title }}</text>
-          <text class="sure-text" @click="sure" v-show="list.length > 0">确定</text>
+        <div class="button-box-top" ref="buttonBoxtop" v-show="list.length > 0 && buttonLocation == 'top'">
+          <span class="cancel-text" @click="cancel" v-show="list.length > 0">取消</span>
+          <span class="title-text"> {{ title }}</span>
+          <span class="sure-text" @click="sure" v-show="list.length > 0">确定</span>
 				</div>
         <div class="search-box" v-show="isShowSearch" ref="searchBox">
             <van-search
@@ -81,6 +81,7 @@ export default {
       cacheList: '',
       list: [],
       currentValue: '',
+      currentId: '',
       show: false,
       active: null,
       currentText: "",
@@ -143,9 +144,9 @@ export default {
     // 确认事件
     sure() {
       this.list.map((item, index) => {
-        item.id == this.active ? (this.currentText = item.text,this.currentValue = item.value) : null
+        item.id == this.active ? (this.currentText = item.text,this.currentValue = item.value,this.currentId = index) : null
       });
-      this.$emit('sure',this.currentText,this.currentValue);
+      this.$emit('sure',this.currentText,this.currentValue,this.currentId);
       // 没有搜索结果时点确认
       if (this.list.length == 0) {
         this.$emit('sure',null)
@@ -169,9 +170,8 @@ export default {
       this.listOffsetTop = [];
       this.list.map((item, index) => {
         let liTop = this.$refs["li" + item.id];
-        this.listOffsetTop.push(liTop[0].offsetTop - liTop[0]['offsetHeight']);
-        console.log('偏移数据',this.listOffsetTop)
-      });
+        this.listOffsetTop.push(liTop[0].offsetTop - liTop[0]['offsetHeight'])
+      })
     },
 
     computeActive() {
@@ -179,13 +179,14 @@ export default {
       let buttonBoxHeight = this.$refs.buttonBox.offsetHeight;
       let searchBoxHeight = this.$refs.searchBox.offsetHeight;
       let chooseBoxHeight = this.$refs.chooseBox.offsetHeight;
+      let buttonBoxtopHeight = this.$refs.buttonBoxtop.offsetHeight
       scroll.addEventListener("scroll", () => {
         this.listOffsetTop.map((item, index) => {
          let currentTop = '';
          if (this.isShowSearch) {
-            currentTop = scroll.scrollTop + buttonBoxHeight + searchBoxHeight + chooseBoxHeight + 20
+            currentTop = scroll.scrollTop + buttonBoxHeight + searchBoxHeight + chooseBoxHeight + buttonBoxtopHeight + 20
          } else {
-            currentTop = scroll.scrollTop + buttonBoxHeight + chooseBoxHeight + 20
+            currentTop = scroll.scrollTop + buttonBoxHeight + chooseBoxHeight + buttonBoxtopHeight + 20
          };
         item <= currentTop ? (this.active = index) : null
         })
@@ -208,9 +209,10 @@ export default {
   display: flex;
   .picker-main {
     width: 100%;
+    height: 40vh;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    padding: 20px 10px;
+    padding: 0px 0px 20px 0px;
     box-sizing: border-box;
     position: absolute;
     bottom: 0;
@@ -242,7 +244,7 @@ export default {
     .button-box-top {
 				height: 44px;
 				background: #F7F7F9;
-				fonr-size: 16px;
+				font-size: 16px;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
