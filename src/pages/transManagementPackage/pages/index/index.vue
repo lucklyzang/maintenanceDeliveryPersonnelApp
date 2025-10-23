@@ -1,116 +1,74 @@
 <template>
-  <view class="content-box">
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" :text="infoText" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></view>
-		<u-toast ref="uToast" />
-		<view class="nav">
-			<nav-bar :home="false" :isShowBackText="true" :isHomeText="true" backState='3000' fontColor="#FFF" bgColor="none" title="任务呼叫" @backClick="backTo">
-			</nav-bar> 
-		</view>
-    <view class="content">
-			<view class="trans-type">
-				<view class="trans-type-title">
+  <div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
+	<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+	<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+		<div class="nav">
+			<NavBar title="任务呼叫" leftText="首页" path="/home" />
+		</div>
+	</div>
+    <div class="content">
+			<div class="trans-type">
+				<div class="trans-type-title">
 					运送类型
-				</view>
-				<view class="trans-type-content">
-					<view class="trans-list" v-for="(item,index) in transTypeList" :key="item.value" @click="transTypeEvent(item,index)">
-						<view class="list-top">
-							<image src="/static/img/circle-background.png"></image>
-							<image v-if="item.text == '标本'" src="/static/img/sample-icon.png"></image>
-							<image v-if="item.text == '检查'" src="/static/img/examine-icon.png"></image>
-							<image v-if="item.text == '药物文书'" src="/static/img/medicine-icon.png"></image>
-						</view>
-						<view class="list-bottom">{{ item.text }}</view>
-					</view>
-				</view>
-			</view>
-    </view>
-		<view class="tab-bar">
-			<u-tabbar
-			  :value="valueName"
-			  @change="tabBarEvent"
-			  :placeholder="false"
-				activeColor="#3890EE"
-				:fixed="true"
-			  :safeAreaInsetBottom="true"
-			>
-			  <u-tabbar-item text="呼叫">
-			    <image
-						class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-			      slot="active-icon"
-			      src="/static/img/call-active-icon.png"
-			    ></image>
-			    <image
-			      slot="inactive-icon"
-						class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-			      src="/static/img/call-inactive-icon.png"
-			    ></image>
-			  </u-tabbar-item>
-				<u-tabbar-item text="实时任务">
-				  <image
-					 class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-				    slot="active-icon"
-				    src="/static/img/real-timetask-active-icon.png"
-				  ></image>
-				  <image
-					  class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-				    slot="inactive-icon"
-				    src="/static/img/real-timetask-inactive-icon.png"
-				  ></image>
-				</u-tabbar-item>
-				<u-tabbar-item text="历史任务">
-				  <image
-					  class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-				    slot="active-icon"
-				    src="/static/img/historical-task-active-icon.png"
-				  ></image>
-				  <image
-					  class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-				    slot="inactive-icon"
-				    src="/static/img/historical-task-inactive-icon.png"
-				  ></image>
-				</u-tabbar-item>
-			</u-tabbar>
-		</view>
-  </view>
+				</div>
+				<div class="trans-type-content">
+					<div class="trans-list" v-for="(item,index) in transTypeList" :key="item.value" @click="transTypeEvent(item,index)">
+						<div class="list-top">
+							<img src="@/common/img/circle-background.png" />
+							<img v-if="item.text == '标本'" src="@/common/img/sample-icon.png" />
+							<img v-if="item.text == '检查'" src="@/common/img/examine-icon.png" />
+							<img v-if="item.text == '药物文书'" src="@/common/img/medicine-icon.png" />
+						</div>
+						<div class="list-bottom">{{ item.text }}</div>
+					</div>
+				</div>
+			</div>
+    </div>
+	<div class="tab-bar">
+		<van-tabbar v-model="valueName" @change="tabBarEvent" active-color="#1684FC" inactive-color="#666666">
+			<van-tabbar-item>
+				<span>呼叫</span>
+				<template #icon="props">
+					<img :src="props.active ? require('@/common/img/call-active-icon.png') : require('@/common/img/call-inactive-icon.png')" />
+				</template>
+			</van-tabbar-item>
+			<van-tabbar-item>
+				<span>实时任务</span>
+				<template #icon="props">
+					<img :src="props.active ? require('@/common/img/real-timetask-active-icon.png') : require('@/common/img/real-timetask-inactive-icon.png')" />
+				</template>
+			</van-tabbar-item>
+			<van-tabbar-item>
+				<span>历史任务</span>
+				<template #icon="props">
+					<img :src="props.active ? require('@/common/img/historical-task-active-icon.png') : require('@/common/img/historical-task-inactive-icon.png')" />
+				</template>
+			</van-tabbar-item>
+		</van-tabbar>
+	</div>
+  </div>
 </template>
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import { queryTransportTypeClass } from '@/api/transport.js'
-import navBar from "@/components/zhouWei-navBar"
+import NavBar from "@/components/NavBar";
 export default {
   components: {
-		navBar
+	NavBar
   },
   data() {
     return {
-			infoText: '加载中···',
-			tierNum: 0,
-			valueName: 0,
-			transTypeList: [],
-			showLoadingHint: false
+		infoText: '加载中···',
+		tierNum: 0,
+		valueName: 0,
+		transTypeList: [],
+		showLoadingHint: false
     }
   },
 	
-  onLoad() {
-		this.parallelFunctionTwo();
-		this.valueName = 0;
-		const pages = getCurrentPages(); //获取当前页面栈的实例数组
-		if (pages.length == 1) {
-			this.tierNum = 1
-		} else {
-			this.tierNum = pages.length;
-		}
+  mounted() {
+	this.parallelFunctionTwo();
+	this.valueName = 0;
   },
 
   watch: {},
@@ -123,46 +81,35 @@ export default {
 			'chooseHospitalArea'
 		]),
 		userName() {
-			return this.userInfo['name']
-		},
-		proName () {
-		  return this.userInfo['proName']
-		},
-		proId() {
-			return this.userInfo['proId']
+			return this.userInfo['worker']['name']
 		},
 		workerId() {
-			return this.userInfo['user']['id']
+			return this.userInfo['worker']['id']
+		},
+		proName () {
+			return this.chooseHospitalArea['text']
+		},
+		proId() {
+			return this.chooseHospitalArea['value']
 		},
 		depId() {
-			return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
+			return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
 		},
 		depName() {
-			return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
+			return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
 		},
 		userAccount() {
-			return this.userInfo['userName']
+			return this.userInfo['worker']['account']
 		}
   },
 
   methods: {
     ...mapMutations([
 		]),
-
-     // 顶部导航返回事件
-     backTo () {
-     	uni.switchTab({
-     		url: '/pages/index/index'
-     	})
-     },
-		 
 		 
 		 // 运送类型点击事件
 		 transTypeEvent (item,index) {
-			const transmitMsg = JSON.stringify(item);
-			uni.navigateTo({
-				url: `/transManagementPackage/pages/callTask/callTask?msg=${transmitMsg}`
-			})
+			this.$router.push({ path: "/transCallTask",query: item })
 		 },
 		 
 		 //运送类型
@@ -216,46 +163,25 @@ export default {
 		 tabBarEvent (index) {
 			 this.valueName = index;
 			 if (this.valueName == 0) {
-				 uni.redirectTo({
-				 	url: '/transManagementPackage/pages/index/index'
-				 })
+				this.$router.push({ path: "/transIndex" })
 			 } else if (this.valueName == 1) {
-				 uni.redirectTo({
-				 	url: '/transManagementPackage/pages/realtimeTask/realtimeTask'
-				 })
+				this.$router.push({ path: "/transRealtimeTask" })
 			 } else if (this.valueName == 2) {
-				 uni.redirectTo({
-				 	url: '/transManagementPackage/pages/historicalTask/historicalTask'
-				 })
+				this.$router.push({ path: "/transHistoricalTask" })
 			 }
 		 } 
   }
 };
 </script>
-<style lang='scss' scoped>
-@import "~@/common/stylus/variable.scss";
-page {
-	width: 100%;
-	height: 100%;
-};
+<style lang='less' scoped>
+	@import "~@/common/stylus/variable.less";
+    @import "~@/common/stylus/mixin.less";
+    @import "~@/common/stylus/modifyUi.less";
 .content-box {
-  @include content-wrapper;
-	height: 100vh !important;
+  .content-wrapper();
+  height: 100vh !important;
   box-sizing: border-box;
   background: #f6f6f6;
-	::v-deep .u-popup {
-		flex: none !important
-	};
-  ::v-deep .u-loading-icon {
-  	position: absolute;
-  	top: 50%;
-  	left: 50%;
-  	transform: translate(-50%,-50%);
-  	z-index: 200000;
-  };
-  ::v-deep .u-transition {
-  	z-index: 100000 !important;
-  };
   .top-background-area {
   	width: 100%;
   	background: #3890EE;
@@ -265,16 +191,34 @@ page {
   	z-index: 10
   };
   .nav {
-		width: 100%;
+	width: 100%;
+	/deep/ .tabBar-box {
+		.van-nav-bar {
+			.van-nav-bar__left {
+				.van-icon {
+					color: #fff !important;
+					font-size: 20px !important;
+				};
+				.van-nav-bar__text {
+					color: #fff !important;
+					font-size: 14px !important;
+					margin-left: 10px;
+				}
+			};
+			.van-nav-bar__title {
+				color: #fff !important;
+				font-size: 14px !important;
+			}
+		}	
+	}
   };
 	.tab-bar {
-		height: 85px;
-		::v-deep {
-			.u-tabbar {
-				height: 100%;
-				.u-tabbar__content {
-					background: #F8F8F8;
-				}
+		height: 51px;
+		border: 1px solid #f1f1f1;
+		/deep/ .van-tabbar {
+			background: #F8F8F8;
+			.van-tabbar-item--active {
+				background: #F8F8F8;
 			}
 		}
 	};
@@ -309,7 +253,7 @@ page {
 		 				width: 50px;
 		 				height: 50px;
 						position: relative;
-		 				>image {
+		 				>img {
 							&:nth-child(1) {
 								width: 50px;
 								height: 50px;

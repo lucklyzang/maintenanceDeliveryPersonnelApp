@@ -208,17 +208,11 @@
 			// 服务管理项点击事件
 			serviceManagementEvent (item,index) {
 				if (item.text == '中央运送') {
-					uni.redirectTo({
-						url: '/transManagementPackage/pages/index/index'
-					})
+					this.$router.push({ path: "/transIndex" })
 				} else if (item.text == '工程维修') {
-					uni.redirectTo({
-						url: '/projectManagementPackage/pages/callTask/callTask'
-					})
+					this.$router.push({ path: "/projectCallTask" })
 				} else if (item.text == '保洁管理') {
-					uni.redirectTo({
-						url: '/cleanManagementPackage/pages/callTask/callTask'
-					})
+					this.$router.push({ path: "/cleanCallTask" })
 				}
 			}
 		}

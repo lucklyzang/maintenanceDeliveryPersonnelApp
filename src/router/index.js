@@ -28,10 +28,10 @@ const ModificationPassword = () =>
 //     import ('@/pages/projectManagementPackage/pages/historicalTask/historicalTask')
 //  const ProjectRealtimeTask = () =>
 //     import ('@/pages/projectManagementPackage/pages/realtimeTask/realtimeTask')
-// const TransIndex = () =>
-//     import ('@/pages/transManagementPackage/pages/index/index')
-// const TransCallTask = () =>
-//     import ('@/pages/transManagementPackage/pages/callTask/callTask')
+const TransIndex = () =>
+    import ('@/pages/transManagementPackage/pages/index/index')
+const TransCallTask = () =>
+    import ('@/pages/transManagementPackage/pages/callTask/callTask')
 // const TransportWorkerOrderMessage = () =>
 //     import ('@/pages/transManagementPackage/pages/transportWorkerOrderMessage/transportWorkerOrderMessage')
 // const TransHistoricalTask = () =>
@@ -104,16 +104,16 @@ let baseRoute = [{
     //     name: 'projectRealtimeTask',
     //     component: ProjectRealtimeTask
     // },
-    // {
-    //     path: '/transCallTask',
-    //     name: 'transCallTask',
-    //     component: TransCallTask
-    // },
-    // {
-    //     path: '/transIndex',
-    //     name: 'transIndex',
-    //     component: TransIndex
-    // },
+    {
+        path: '/transCallTask',
+        name: 'transCallTask',
+        component: TransCallTask
+    },
+    {
+        path: '/transIndex',
+        name: 'transIndex',
+        component: TransIndex
+    },
     // {
     //     path: '/transportWorkerOrderMessage',
     //     name: 'transportWorkerOrderMessage',

@@ -1,9 +1,10 @@
 <template>
-	<div class="content-box">
+	<div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
 		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
-		<div class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></div>
-		<div class="nav" :style="{ 'margin-top':navigationBarHeight + 4 + 'px' }">
-      		<NavBar title="修改密码" path="/myInfo" />
+		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+			<div class="nav">
+      			<NavBar title="修改密码" path="/myInfo" />
+			</div>
 		</div>
 		<div class="content">
 			<div class="former-password-area">
@@ -87,7 +88,7 @@
 				'statusBarHeight',
 				'navigationBarHeight'
 			]),
-				userName() {
+			userName() {
 			  return this.userInfo['worker']['name']
 			},
 			workerId() {
@@ -231,8 +232,8 @@
 		};
 		.nav {
 			width: 100%;
-				width: 100%;
-				/deep/ .tabBar-box {
+			/deep/ .tabBar-box {
+				.van-nav-bar {
 					.van-nav-bar__left {
 						.van-icon {
 							color: #fff !important;
@@ -248,7 +249,8 @@
 						color: #fff !important;
 						font-size: 14px !important;
 					}
-				}
+				}	
+			}
 		};
 		.content {
 			 flex: 1;

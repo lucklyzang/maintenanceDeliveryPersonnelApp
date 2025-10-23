@@ -1,12 +1,13 @@
 <template>
-	<div class="content-box">
+	<div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
     <van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
     <van-dialog v-model="modalShow" title="确定退出登录?"
 		  show-cancel-button @confirm="sureCancel" @cancel="cancelSure" confirm-button-color="#3890EE">
 		</van-dialog>
-		<div class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></div>
-		<div class="nav" :style="{ 'margin-top':navigationBarHeight + 'px' }">
-      <NavBar title="个人中心" :leftArrow="false" leftText="" />
+		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+			<div class="nav">
+      			<NavBar title="个人中心" :leftArrow="false" leftText="" />
+			</div>
 		</div>
 		<div class="content">
 			<div class="content-top">
@@ -176,13 +177,26 @@
 			z-index: 10
 		};
 		.nav {
-			width: 100%;
-      /deep/ .tabBar-box {
-        .van-nav-bar__title {
-          color: #fff;
-          font-size: 14px;
-        }
-      }
+		 	width: 100%;
+			/deep/ .tabBar-box {
+				.van-nav-bar {
+					.van-nav-bar__left {
+						.van-icon {
+							color: #fff !important;
+							font-size: 20px !important;
+						};
+						.van-nav-bar__text {
+							color: #fff !important;
+							font-size: 14px !important;
+							margin-left: 10px;
+						}
+					};
+					.van-nav-bar__title {
+						color: #fff !important;
+						font-size: 14px !important;
+					}
+				}	
+			}
 		};
 		.content {
 			 flex: 1;

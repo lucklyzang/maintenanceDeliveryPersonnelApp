@@ -1,9 +1,9 @@
 <template>
-	<view class="num-box">
-		<view class="subtract-box"
+	<div class="num-box">
+		<div class="subtract-box"
 			@click.stop="minusNumEvent">
-			<u-icon name="minus"></u-icon>
-		</view>
+			<van-icon name="minus" />
+		</div>
 		<input
 			@click.stop="inpuntEvent"
 			type="number"
@@ -12,11 +12,11 @@
 			@blur="inputBlur"
 			@input="stepperValChange"
 		/>
-		<view class="plus-box"
+		<div class="plus-box"
 			@click.stop="plusNumEvent">
-			<u-icon name="plus" color="#fff"></u-icon>
-		</view>
-	</view>
+			<van-icon name="plus" color="#fff" />
+		</div>
+	</div>
 </template>
 
 <script>
@@ -119,7 +119,7 @@
 	}
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 	.num-box {
 		height: 100%;
 		width: 100%;

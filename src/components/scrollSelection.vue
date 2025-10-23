@@ -208,8 +208,10 @@ export default {
   z-index: 1000;
   display: flex;
   .picker-main {
+   display: flex;
+   flex-direction: column;
     width: 100%;
-    height: 40vh;
+    height: 45vh;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 0px 0px 20px 0px;
@@ -272,7 +274,8 @@ export default {
         }
     };
     ul {
-      max-height: 200px;
+      // max-height: 250px;
+      flex: 1;
       padding: 100px 0;
       box-sizing: border-box;
       margin: 0;

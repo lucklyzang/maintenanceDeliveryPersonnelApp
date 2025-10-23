@@ -159,14 +159,23 @@
 							// 登录用户信息存入store
 							this.changeIsLogin(true);
 							this.storeUserInfo(res.data.data);
-						   	for (let i = 0;i<this.userInfo['worker']['hospitalList'].length;i++) {
-								this.hospitalCampusOption.push({
-									value: this.userInfo['worker']['hospitalList'][i]['hospitalId'],
-									text: this.userInfo['worker']['hospitalList'][i]['hospitalName'],
-									id: i
-								})
-						   	};
-							this.showHospitalCampus = true;
+							if (this.userInfo['worker']['hospitalList'].length > 1) {
+								for (let i = 0;i<this.userInfo['worker']['hospitalList'].length;i++) {
+									this.hospitalCampusOption.push({
+										value: this.userInfo['worker']['hospitalList'][i]['hospitalId'],
+										text: this.userInfo['worker']['hospitalList'][i]['hospitalName'],
+										id: i
+									})
+								};
+								this.showHospitalCampus = true;
+							} else {
+								this.storeChooseHospitalArea({
+									text: this.userInfo['worker']['hospitalList'][0]['hospitalName'],
+									value: this.userInfo['worker']['hospitalList'][0]['hospitalId'],
+									id: 0
+								});
+								this.queryTemplateType(this.chooseHospitalArea['value'])
+							};	
 							this.changeIsMedicalMan(false)
 					  } else {
 						this.modalShow = true;

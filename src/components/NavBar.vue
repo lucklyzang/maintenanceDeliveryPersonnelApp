@@ -39,7 +39,7 @@ export default {
     },
     fixed: {
       type: Boolean,
-      default: false
+      default: true
     },
     border: {
       type: Boolean,
