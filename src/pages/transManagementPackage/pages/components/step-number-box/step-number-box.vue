@@ -4,14 +4,16 @@
 			@click.stop="minusNumEvent">
 			<van-icon name="minus" />
 		</div>
-		<input
-			@click.stop="inpuntEvent"
-			type="number"
-			:disabled="disabled"
-			:value="val"
-			@blur="inputBlur"
-			@input="stepperValChange"
-		/>
+		<div class="input-box">
+			<input
+				@click.stop="inpuntEvent"
+				type="number"
+				:disabled="disabled"
+				:value="val"
+				@blur="inputBlur"
+				@input="stepperValChange"
+			/>
+		</div>
 		<div class="plus-box"
 			@click.stop="plusNumEvent">
 			<van-icon name="plus" color="#fff" />
@@ -133,10 +135,13 @@
 			justify-content: center;
 			align-items: center;
 		};
-		input {
+		.input-box {
 			flex: 1;
 			height: 100%;
 			background: #a7a7a7;
+			input {
+				width: 100%;
+			}
 		};
 		.plus-box  {
 			width: 30px;
