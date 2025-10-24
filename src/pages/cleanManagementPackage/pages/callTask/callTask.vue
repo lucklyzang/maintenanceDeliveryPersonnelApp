@@ -1,156 +1,134 @@
 <template>
-	<view class="content-box">
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" :text="infoText" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-		<light-hint ref="alertToast"></light-hint>
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></view>
-		<u-toast ref="uToast"></u-toast>
-		<view class="nav">
-			<nav-bar :home="false" :isShowBackText="true" :isHomeText="true" backState='3000' fontColor="#FFF" bgColor="none" title="任务呼叫" @backClick="backTo">
-			</nav-bar> 
-		</view>
-		<view class="content">
-			<view class="result-picture">
-				<view>
+	<div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
+		<van-overlay :show="overlayShow" />
+		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+			<div class="nav">
+				<NavBar title="任务呼叫" path="/home" />
+			</div>
+		</div>
+		<div class="content">
+			<div class="result-picture">
+				<div>
 					图片
-				</view>
-				<view class="image-list">
-					<view v-for="(item, index) in resultimageList" :key="index">
-						<image :src="item" />
-						<view class="icon-box"  @click="issueDelete(index)">
-								<u-icon name="trash" color="#d70000"></u-icon>
-						</view>    
-					</view>
-					<view @click="getImg">
-						<u-icon name="plus" size="30" color="#101010"></u-icon>
-					</view>
-				</view>
-			</view>
-			<view class="category-box">
-				<view class="category-title">
-						<text>*</text>
-						<text>优先级</text>
-				</view>
-				<view class="select-box">
-					<u-radio-group v-model="priorityRadioValue" direction="horizontal">
-						<u-radio name="1" activeColor="#289E8E" labelColor="#289E8E" label="正常"></u-radio>
-						<u-radio name="2" activeColor="#E8CB51" labelColor="#E8CB51" label="重要"></u-radio>
-						<u-radio name="3" activeColor="#F2A15F" labelColor="#F2A15F" label="紧急"></u-radio>
-						<u-radio name="4" activeColor="#E86F50" labelColor="#E86F50" label="紧急重要"></u-radio>
-					</u-radio-group>
-				</view>
-			</view>
-			<view class="category-box location-box">
-				<view class="category-title">
-						<text>*</text>
-						<text>位置</text>
-				</view>
-				<view class="select-box" @click="locationEvent">
-					<text>{{ locationValue }}</text>
-					<u-icon name="arrow-right" color="#101010" size="20"></u-icon>
-				</view>
-			</view>
-			<view class="enter-remark">
-				<view>
+				</div>
+				<div class="img-list">
+					<div v-for="(item, index) in resultimageList" :key="index">
+						<img :src="item" />
+						<div class="icon-box"  @click="issueDelete(index)">
+							<van-icon name="delete-o" color="#d70000" />
+						</div>    
+					</div>
+					<div @click="getImg">
+						<van-icon name="plus" color="#101010" size="36px" />
+					</div>
+				</div>
+			</div>
+			<div class="category-box">
+				<div class="category-title">
+						<span>*</span>
+						<span>优先级</span>
+				</div>
+				<div class="select-box">
+					<van-radio-group v-model="priorityRadioValue" direction="horizontal">
+						<van-radio name="1" checked-color="#289E8E">正常</van-radio>
+						<van-radio name="2" checked-color="#F2A15F">重要</van-radio>
+						<van-radio name="3" checked-color="#E8CB51">紧急</van-radio>
+						<van-radio name="4" checked-color="#E86F50">紧急重要</van-radio>
+              		</van-radio-group>
+				</div>
+			</div>
+			<div class="category-box location-box">
+				<div class="category-title">
+						<span>*</span>
+						<span>位置</span>
+				</div>
+				<div class="select-box" @click="locationEvent">
+					<span>{{ locationValue }}</span>
+					<van-icon name="arrow" color="#101010" size="20" />
+				</div>
+			</div>
+			<div class="enter-remark">
+				<div>
 					问题描述
-				</view>
-				<view class="remark-box">
-					<u--textarea v-model="enterRemark" count maxlength="500" placeholder="请输入问题描述"></u--textarea>
-				</view>
-			</view>
-		</view>
-		<view class="btn-box">
-		  <text class="operate-one" @click="resetEvent">重置</text>
-			<text class="operate-two" @click="submitEvent">提交</text>
-		</view>
-		<u-modal :show="deleteInfoDialogShow" title="确定删除此图片?"
-			:closeOnClickOverlay="true" @close="deleteInfoDialogShow = false"
-			confirmColor="#218FFF" showCancelButton
-			@confirm="sureDeleteEvent"
-			@cancel="deleteInfoDialogShow=false"
-			>
-		</u-modal>
-		<view class="tab-bar">
-			<u-tabbar
-			  :value="valueName"
-			  @change="tabBarEvent"
-			  :placeholder="false"
-				activeColor="#3890EE"
-				:fixed="true"
-			  :safeAreaInsetBottom="true"
-				hover-class="hover-effect"
-			>
-			  <u-tabbar-item text="呼叫">
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="active-icon"
-			      src="/static/img/call-active-icon.png"
-			    ></image>
-			    <image
-			  	  class="u-page__item__slot-icon"
-			      slot="inactive-icon"
-			  		style="width:19px;height:18px"
-			      src="/static/img/call-inactive-icon.png"
-			    ></image>
-			  </u-tabbar-item>
-			  <u-tabbar-item text="实时任务">
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="active-icon"
-			      src="/static/img/real-timetask-active-icon.png"
-			    ></image>
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="inactive-icon"
-			      src="/static/img/real-timetask-inactive-icon.png"
-			    ></image>
-			  </u-tabbar-item>
-			  <u-tabbar-item text="历史任务">
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="active-icon"
-			      src="/static/img/historical-task-active-icon.png"
-			    ></image>
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="inactive-icon"
-			      src="/static/img/historical-task-inactive-icon.png"
-			    ></image>
-			  </u-tabbar-item>
-			</u-tabbar>
-		</view>
-	</view>
+				</div>
+				<div class="remark-box">
+					<van-field
+						v-model="enterRemark"
+						rows="3"
+						autosize
+						show-word-limit
+						maxlength="500" 
+						placeholder="请输入问题描述"
+						type="textarea"
+					/>
+				</div>
+			</div>
+		</div>
+		<div class="btn-box">
+		  <span class="operate-one" @click="resetEvent">重置</span>
+		  <span class="operate-two" @click="submitEvent">提交</span>
+		</div>
+		<van-dialog v-model="deleteInfoDialogShow" title="确定删除此图片?" :close-on-click-overlay="true"  @close="deleteInfoDialogShow = false"
+		  show-cancel-button @confirm="sureDeleteEvent" @cancel="deleteInfoDialogShow" confirm-button-color="#3890EE">
+		</van-dialog>
+		<div class="tab-bar">
+			<van-tabbar v-model="valueName" @change="tabBarEvent" active-color="#1684FC" inactive-color="#666666">
+				<van-tabbar-item>
+					<span>呼叫</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/call-active-icon.png') : require('@/common/img/call-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+				<van-tabbar-item>
+					<span>实时任务</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/real-timetask-active-icon.png') : require('@/common/img/real-timetask-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+				<van-tabbar-item>
+					<span>历史任务</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/historical-task-active-icon.png') : require('@/common/img/historical-task-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+			</van-tabbar>
+		</div>
+		<transition name="van-slide-up">
+			<div class="choose-photo-box" v-show="photoBox">
+			<div class="choose-photo">
+				<van-icon name="photo" />
+				<input name="uploadImg1" id="demo1" @change="previewFileOne" type="file" accept="image/album"/>从图库中选择
+			</div>
+			<div class="photo-graph">
+				<van-icon name="photograph" />
+				<input name="uploadImg2" id="demo2"  @change="previewFileTwo" type="file" accept="image/camera"/>拍照
+			</div>
+			<div class="photo-cancel" @click="photoCancel">取消</div>
+			</div>
+		</transition>
+	</div>
 </template>
 
 <script>
 	import store from '@/store'
+	import axios from 'axios';
 	import {
 		mapGetters,
 		mapMutations
 	} from 'vuex'
-	import {
-		setCache,
-		removeAllLocalStorage
-	} from '@/common/js/utils'
+	import { compress } from '@/common/js/utils'
 	import { addForthwithCleanTask } from '@/api/environment.js'
-	import navBar from "@/components/zhouWei-navBar"
-	import LightHint from "@/components/light-hint/light-hint.vue"
+	import NavBar from "@/components/NavBar";
 	export default {
+		name: "cleanCallTask",
 		components: {
-			navBar,
-			LightHint
+			NavBar
 		},
 		data() {
 			return {
 				showLoadingHint: false,
+				overlayShow: false,
 				isShowNoData: false,
 				infoText: '加载中···',
 				photoBox: false,
@@ -164,7 +142,8 @@
 				priorityRadioValue: '1',
 				resultimageList: [],
 				imageOnlinePathArr: [],
-				fileList: []
+				fileList: [],
+				fromPath: ''
 			}
 		},
 		computed: {
@@ -175,32 +154,40 @@
 				"timeMessage",
 				"ossMessage",
 				"locationMessage",
-			  'chooseHospitalArea'
+			  	'chooseHospitalArea'
 			  ]),
-			  userName() {
-			  	return this.userInfo['name']
-			  },
-			  proName () {
-			    return this.userInfo['proName']
-			  },
-			  proId() {
-			  	return this.userInfo['proId']
-			  },
-			  workerId() {
-			  	return this.userInfo['user']['id']
-			  },
-			  depId() {
-			  	return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
-			  },
-			  depName() {
-			  	return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
-			  },
-			  userAccount() {
-			  	return this.userInfo['userName']
-			  }
+			userName() {
+			return this.userInfo['worker']['name']
+			},
+			workerId() {
+				return this.userInfo['worker']['id']
+			},
+			proName () {
+				return this.chooseHospitalArea['text']
+			},
+			proId() {
+				return this.chooseHospitalArea['value']
+			},
+			depId() {
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+			},
+			depName() {
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+			},
+			userAccount() {
+				return this.userInfo['worker']['account']
+			}
 		},
-		onShow() {
-		  this.echoLoactionMessage();
+		beforeRouteEnter(to, from, next) {
+			next(vm => {
+			vm.fromPath = from['path']
+			})
+		},
+		activated() {
+			this.echoLoactionMessage();
+			if (this.fromPath == '/home') {
+				this.resetEvent()
+			}
 		},
 		methods: {
 			...mapMutations([
@@ -210,23 +197,15 @@
 				"storeCurrentIndex"
 			]),
 			
-			// 顶部导航返回事件
-			backTo () {
-				this.resetEvent();
-				uni.switchTab({
-					url: '/pages/index/index'
-				})
-			},
-			
 			// 重置事件
 			resetEvent () {
 				this.storeLocationMessage([]);
-			  this.enterRemark = "";
-			  this.locationValue = '请选择位置';
-			  this.priorityRadioValue = '1';
-			  this.resultimageList = [];
-			  this.imageOnlinePathArr = [];
-			  this.fileList = []
+				this.enterRemark = "";
+				this.locationValue = '请选择位置';
+				this.priorityRadioValue = '1';
+				this.resultimageList = [];
+				this.imageOnlinePathArr = [];
+				this.fileList = []
 			},
 		// 回显位置信息
 		echoLoactionMessage () {
@@ -237,9 +216,7 @@
 
 		// 位置点击事件
 		locationEvent () {
-			uni.navigateTo({
-				url: '/cleanManagementPackage/pages/callTask/choosePosition'
-			})
+			this.$router.push({ path: "/cleanChoosePosition"})
 		},
 
 		// 格式化时间
@@ -267,75 +244,175 @@
 				return currentdate;
 		},
 
-		// 选择图片方法
-		getImg() {
-			if (this.resultimageList.length == 5) {
-				this.$refs.uToast.show({
-					message: "至多只能上传5张图片",
-					position: 'center'
+		// 拍照问题照片点击
+		getImg () {
+			this.photoBox = true;
+			this.overlayShow = true
+		},
+
+		// 图片上传预览
+		previewFileOne() {
+			let Orientation;
+			let file = document.getElementById("demo1").files[0];
+			this.fileList.push(file);
+			let _this = this;
+			let reader = new FileReader();
+			let index = file['name'].lastIndexOf(".");
+			//获取后缀
+			let jpgUrl = file['name'].substr(index + 1);
+			if (jpgUrl != "png" && jpgUrl != "jpg" && jpgUrl != "jpeg") {
+				that.$dialog.alert({
+					message: '只可上传jpg或png格式的图片!',
+					closeOnPopstate: true
+				}).then(() => {
 				});
 				return
 			};
-			let that = this;
-			uni.chooseImage({
-				count: 5,
-				sizeType: ['original', 'compressed'],
-				sourceType: ['album', 'camera'],
-				success: function(res) {
-					uni.previewImage({
-						urls: res.tempFilePaths
-					});
-					for (let imgI = 0, len = res.tempFilePaths.length; imgI < len; imgI++) {
-						let url = res.tempFiles[imgI].path;
-						//获取最后一个的位置
-						let index = url.lastIndexOf(".");
-						//获取后缀
-						let jpgUrl = url.substr(index + 1);
-						if (jpgUrl != "png" && jpgUrl != "jpg" && jpgUrl != "jpeg") {
-							that.$refs.uToast.show({
-								message: '只可上传jpg或png格式的图片!',
-								type: 'error',
-								position: 'center'
-							});
-							continue
-						};
-						let isLt2M = res.tempFiles[imgI].size/1024/1024 < 10;
-						if (!isLt2M) {
-							that.$refs.uToast.show({
-								message: '图片必须小于10MB!',
-								type: 'error',
-								position: 'center'
-							});
-							continue
-						};
-						that.fileList.push(res.tempFiles[imgI]['path']);
-						uni.getFileSystemManager().readFile({
-							filePath: res.tempFilePaths[imgI],
-							encoding: 'base64',
-							success: res => {
-								let base64 = 'data:image/jpeg;base64,' + res.data;
-								that.resultimageList.push(base64);
-							}
-						})
-					}
+			let isLt2M = file.size/1024/1024 < 10;
+			if (!isLt2M) {
+				this.$dialog.alert({
+					message: '上传图片大小不能超过10MB!',
+					closeOnPopstate: true
+				}).then(() => {
+				});
+				return
+			};  
+			reader.addEventListener("load", function () {
+				_this.photoCancel();
+				// 压缩图片
+				let result = reader.result;
+				let img = new Image();
+				img.src = result;
+				img.onload = function () {
+					let src = compress(img,Orientation);
+					_this.resultimageList.push(src)
 				}
-			})
+			}, false);
+			if (file) {
+				reader.readAsDataURL(file);
+			};
 		},
+
+		//拍照预览
+		previewFileTwo() {
+			let Orientation;
+			let file = document.getElementById("demo2").files[0];
+			this.fileList.push(file);
+			let _this = this;
+			let reader = new FileReader();
+			let index = file['name'].lastIndexOf(".");
+			//获取后缀
+			let jpgUrl = file['name'].substr(index + 1);
+			if (jpgUrl != "png" && jpgUrl != "jpg" && jpgUrl != "jpeg") {
+				that.$dialog.alert({
+					message: '只可上传jpg或png格式的图片!',
+					closeOnPopstate: true
+				}).then(() => {
+				});
+				return
+			};
+			let isLt2M = file.size/1024/1024 < 10;
+			if (!isLt2M) {
+				_this.$dialog.alert({
+					message: '上传图片大小不能超过10MB!',
+					closeOnPopstate: true
+				}).then(() => {
+				});
+				return
+			};  
+			reader.addEventListener("load", function () {
+				_this.photoCancel();
+				// 压缩图片
+				let result = reader.result;
+				let img = new Image();
+				img.src = result;
+				img.onload = function () {
+					let src = compress(img,Orientation);
+					_this.resultimageList.push(src)
+				}
+			}, false);
+			if (file) {
+				reader.readAsDataURL(file);
+			};
+		},
+
+		// 拍照取消
+		photoCancel () {
+			this.photoBox = false;
+			this.overlayShow = false
+		},
+
+		// 选择图片方法
+		// getImg() {
+		// 	if (this.resultimageList.length == 5) {
+		// 		this.$refs.uToast.show({
+		// 			message: "至多只能上传5张图片",
+		// 			position: 'center'
+		// 		});
+		// 		return
+		// 	};
+		// 	let that = this;
+		// 	uni.chooseImage({
+		// 		count: 5,
+		// 		sizeType: ['original', 'compressed'],
+		// 		sourceType: ['album', 'camera'],
+		// 		success: function(res) {
+		// 			uni.previewImage({
+		// 				urls: res.tempFilePaths
+		// 			});
+		// 			for (let imgI = 0, len = res.tempFilePaths.length; imgI < len; imgI++) {
+		// 				let url = res.tempFiles[imgI].path;
+		// 				//获取最后一个的位置
+		// 				let index = url.lastIndexOf(".");
+		// 				//获取后缀
+		// 				let jpgUrl = url.substr(index + 1);
+		// 				if (jpgUrl != "png" && jpgUrl != "jpg" && jpgUrl != "jpeg") {
+		// 					that.$refs.uToast.show({
+		// 						message: '只可上传jpg或png格式的图片!',
+		// 						type: 'error',
+		// 						position: 'center'
+		// 					});
+		// 					continue
+		// 				};
+		// 				let isLt2M = res.tempFiles[imgI].size/1024/1024 < 10;
+		// 				if (!isLt2M) {
+		// 					that.$refs.uToast.show({
+		// 						message: '图片必须小于10MB!',
+		// 						type: 'error',
+		// 						position: 'center'
+		// 					});
+		// 					continue
+		// 				};
+		// 				that.fileList.push(res.tempFiles[imgI]['path']);
+		// 				uni.getFileSystemManager().readFile({
+		// 					filePath: res.tempFilePaths[imgI],
+		// 					encoding: 'base64',
+		// 					success: res => {
+		// 						let base64 = 'data:img/jpeg;base64,' + res.data;
+		// 						that.resultimageList.push(base64);
+		// 					}
+		// 				})
+		// 			}
+		// 		}
+		// 	})
+		// },
 		
 		// 上传图片到服务器
 		uploadFileEvent (imgI) {
 			this.infoText = '图片上传中···';
 			this.showLoadingHint = true;
 			return new Promise((resolve, reject) => {
-				uni.uploadFile({
-				 url: 'https://show.blinktech.cn/clean/oss/upload',
-				 filePath: imgI,
-				 name: 'files',
-				 header: {
-					'content-type': 'multipart/form-data',
-					'Authorization': `${store.getters.token}`
-				 },
-				 success: (res) => {
+				const imgPath = new FormData();
+				imgPath.append('files',imgI)
+				axios({
+					url: 'http://show.blinktech.cn/clean/oss/upload',
+					method: 'post',
+					data: imgPath,
+					headers: {
+						'Content-type': 'multipart/form-data',
+						'Authorization': `${store.getters.token}`
+					},
+				}).then(res => {
 					if (res.statusCode == 200) {
 						if (res.data != '') {
 							let temporaryData = JSON.parse(res.data);
@@ -344,42 +421,39 @@
 								resolve()
 							} else {
 								this.showLoadingHint = false;
-								this.$refs.uToast.show({
+								this.$dialog.alert({
 									message: temporaryData.msg,
-									type: 'error',
-									position: 'center'
+									closeOnPopstate: true
+								}).then(() => {
 								});
 								reject()
 							}
 						} else {
 							this.showLoadingHint = false;
-							this.$refs.uToast.show({
+							this.$dialog.alert({
 								message: '返回数据为空',
-								type: 'error',
-								position: 'center'
+								closeOnPopstate: true
+							}).then(() => {
 							});
 							reject()
 						}	
 					} else {
 						this.showLoadingHint = false;
-						this.$refs.uToast.show({
+						this.$dialog.alert({
 							message: '上传图片失败',
-							type: 'error',
-							position: 'center'
+							closeOnPopstate: true
+						}).then(() => {
 						});
 						reject()
 					}
-				 },
-				 fail: (err) => {
+				}).catch(err => {
 					this.showLoadingHint = false;
-					this.$refs.uToast.show({
+					this.$dialog.alert({
 						message: err.errMsg,
-						type: 'error',
-						duration: 5000,
-						position: 'center'
+						closeOnPopstate: true
+					}).then(() => {
 					});
 					reject()
-				 }
 				})
 			})
 		},
@@ -387,9 +461,7 @@
 		// 任务提交事件
 		async submitEvent() {
 			if (this.locationMessage.length != 4) {
-				this.$refs.uToast.show({
-						message: '请选择位置',
-				});
+				this.$toast({message: '请选择位置'});
 				return
 			};
 			let paramsData = {
@@ -437,29 +509,17 @@
 					this.imageOnlinePathArr = [];
 					this.fileList = [];
 					if (res && res.data.code == 200) {
-						this.$refs.alertToast.show({
-							type: 'success',
-							message: '提交成功!',
-							isShow: true
-						});
+						this.$Alert({message:"提交成功!",type:'success'});
 						this.resetEvent();
 						setTimeout(() => {
-							this.backTo();
+							this.$router.push({ path: "/home"})
 						},2000);
 					} else {
-						this.$refs.alertToast.show({
-							type: 'error',
-							message: res.data.msg,
-							isShow: true
-						})
+						this.$Alert({message:res.data.msg,type:'error'});
 					}
 				}).
 				catch((err) => {
-					this.$refs.alertToast.show({
-						type: 'error',
-						message: err,
-						isShow: true
-					});
+					this.$Alert({message:err,type:'success'});
 					this.imageOnlinePathArr = [];
 					this.fileList = [];
 					this.showLoadingHint = false;
@@ -479,53 +539,34 @@
 				this.fileList.splice(this.imageIndex, 1);
 				this.deleteInfoDialogShow = false;
 			},
-			
-			// tabBar点击事件
-				tabBarEvent (index) {
-				 this.valueName = index;
-				 if (this.valueName == 0) {
-					 uni.redirectTo({
-						url: '/cleanManagementPackage/pages/callTask/callTask'
-					 })
-				 } else if (this.valueName == 1) {
-					 uni.redirectTo({
-						url: '/cleanManagementPackage/pages/realtimeTask/realtimeTask'
-					 })
-				 } else if (this.valueName == 2) {
-					 uni.redirectTo({
-						url: '/cleanManagementPackage/pages/historicalTask/historicalTask'
-					 })
-				 }
+
+			 // tabBar点击事件
+			tabBarEvent (index) {
+				this.valueName = index;
+				if (this.valueName == 0) {
+					this.$router.push({ path: "/cleanCallTask" })
+				} else if (this.valueName == 1) {
+					this.$router.push({ path: "/cleanRealtimeTask" })
+				} else if (this.valueName == 2) {
+					this.$router.push({ path: "/cleanHistoricalTask" })
+				}
 			} 
-	
 		}
 	}
 </script>
 
-<style lang="scss">
-	@import "~@/common/stylus/variable.scss";
-	page {
-		width: 100%;
-		height: 100%;
-	};
+<style lang="less" scoped>
+	@import "~@/common/stylus/variable.less";	
+    @import "~@/common/stylus/mixin.less";
+    @import "~@/common/stylus/modifyUi.less";
 	.content-box {
-		@include content-wrapper;
+		/deep/ .van-overlay {
+			z-index: 100 !important
+		};
+		.content-wrapper();
 		height: 100vh !important;
 		box-sizing: border-box;
 		background: #fff;
-		::v-deep .u-popup {
-			flex: none !important
-		};
-		::v-deep .u-loading-icon {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%,-50%);
-			z-index: 200000;
-		};
-		::v-deep .u-transition {
-			z-index: 100000 !important;
-		};
 		.top-background-area {
 			width: 100%;
 			background: #3890EE;
@@ -536,26 +577,33 @@
 		};
 		.nav {
 			width: 100%;
+			/deep/ .tabBar-box {
+				.van-nav-bar {
+					.van-nav-bar__left {
+						.van-icon {
+							color: #fff !important;
+							font-size: 20px !important;
+						};
+						.van-nav-bar__text {
+							color: #fff !important;
+							font-size: 14px !important;
+							margin-left: 10px;
+						}
+					};
+					.van-nav-bar__title {
+						color: #fff !important;
+						font-size: 14px !important;
+					}
+				}	
+			}
 		};
 		.tab-bar {
-			height: 85px;
-			.hover-effect {
-			  transform: scale(1.1);
-			  transition: transform 0.2s ease;
-			};
-			::v-deep {
-				.u-tabbar {
-					height: 100%;
-					.u-tabbar__content {
-						background: #F8F8F8;
-						.u-tabbar-item {
-							transition: none;
-						};
-						.u-tabbar-item.active {
-						  transform: scale(1.1); /* 轻微放大 */
-						  transition: transform 0.2s ease; /* 平滑过渡 */
-						}
-					}
+			height: 51px;
+			border: 1px solid #f1f1f1;
+			/deep/ .van-tabbar {
+				background: #F8F8F8;
+				.van-tabbar-item--active {
+					background: #F8F8F8;
 				}
 			}
 		};
@@ -568,7 +616,7 @@
 		    overflow: auto;
 		    .category-box {
 		      padding: 0 8px;
-					min-height: 38px;
+			min-height: 38px;
 		      margin-bottom: 6px;
 		      height: 40px;
 		      box-sizing: border-box;
@@ -579,7 +627,7 @@
 		      .category-title {
 		        font-size: 14px;
 		        color: #101010;
-		        >text {
+		        >span {
 		            &:first-child {
 		                color: red
 		            }
@@ -591,7 +639,7 @@
 						display: flex;
 						align-items: center;
 						justify-content: flex-end;
-		        >text {
+		        >span {
 							display: inline-block;
 							padding-left: 10px;
 							flex: 1;
@@ -599,19 +647,36 @@
 							color: #174E97 !important;
 							font-size: 14px !important;
 							margin-right: 4px;
-							@include no-wrap();
+							.no-wrap();
 						};
-						/deep/ .u-radio-group {
-							display: flex;
-							justify-content: space-between;
-							.u-radio {
-								flex: 1 0 auto !important;
-								justify-content: center;
-								.u-radio__label {
-									margin-right: 9px;
+						/deep/ .van-radio-group {
+						justify-content: space-between;
+						width: 100%;
+						margin-left: 10px;
+						.van-radio--horizontal {
+							margin-right: 0 !important;
+							&:nth-child(1) {
+								.van-radio__label {
+								color: #289E8E !important
+								}
+							};
+							&:nth-child(2) {
+								.van-radio__label {
+								color: #E8CB51 !important
+								}
+							};
+							&:nth-child(3) {
+								.van-radio__label {
+								color: #F2A15F !important
+								}
+							};
+							&:nth-child(4) {
+								.van-radio__label {
+								color: #E86F50 !important
 								}
 							}
 						}
+					}
 		      }
 		    };
 		    .location-box {
@@ -621,11 +686,11 @@
 		        box-sizing: border-box;
 		        display: flex;
 		        align-items: center;
-		        >text {
+		        >span {
 		          font-size: 14px;
 		          &:nth-child(1) {
 		            flex: 1;
-		            @include no-wrap();
+		            .no-wrap();
 		            color: #101010 !important;
 		            vertical-align: middle
 		          }
@@ -638,7 +703,7 @@
 		    .completeDate-box {
 		        .select-box {
 		          text-align: right;
-		            >text {
+		            >span {
 		              font-size: 14px;
 		              vertical-align: middle;
 		                color: #174E97
@@ -655,7 +720,7 @@
 		      display: flex;
 		      background: #fff;
 		      justify-content: space-between;
-		      > view {
+		      > div {
 		        font-size: 14px;
 		        color: #101010;
 		        &:first-child {
@@ -665,7 +730,7 @@
 		          display: flex;
 		          flex-wrap: wrap;
 		          flex: 1;
-		          > view {
+		          > div {
 		            width: 31%;
 		            height: 100px;
 		            vertical-align: top;
@@ -697,9 +762,9 @@
 									background: #616161;
 									/deep/ .van-icon {}  
 		            };
-		            image {
-		              width: 100%;
-									height: 80px;
+		            img {
+						width: 100%;
+						height: 80px;
 		            }
 		            &:last-child {
 		             display: flex;
@@ -722,14 +787,14 @@
 		      box-sizing: border-box;
 		      display: flex;
 					flex-direction: column;
-		      > view {
+		      > div {
 		        font-size: 14px;
 		        color: #101010;
 		        &:first-child {
 							margin-bottom: 10px;
 		        };
 		        &:nth-child(2) {
-		          /deep/ .u-cell {
+		          /deep/ .van-cell {
 		            padding: 4px !important;
 		            border: 1px solid #cacaca;
 		          }
@@ -744,7 +809,7 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				>text {
+				>span {
 					width: 35%;
 					display: inline-block;
 					height: 45px;
@@ -766,6 +831,86 @@
 						box-shadow: 0px 2px 6px 0 rgba(0, 0, 0, 0.4);
 					}
 				}
-			}
+			};
+			 .choose-photo-box {
+        position: fixed;
+        margin: auto;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 1000;
+        font-size: 0;
+        > div {
+          width: 100%;
+          text-align: center;
+          font-size: 16px;
+          background: #f6f6f6
+        }
+        .choose-photo {
+          padding: 8px 10px;
+          height: 30px;
+          .bottom-border-1px(#cbcbcb);
+          line-height: 30px;
+          position: relative;
+          cursor: pointer;
+          color: @color-theme;
+          overflow: hidden;
+          display: inline-block;
+          *display: inline;
+          *zoom: 1;
+          /deep/ .van-icon {
+            vertical-align: top;
+            font-size: 20px;
+            display: inline-block;
+            line-height: 30px
+          };
+          input {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            height: 100%;
+            opacity: 0;
+            filter: alpha(opacity=0);
+            cursor: pointer
+          }
+        };
+        .photo-graph {
+          position: relative;
+          display: inline-block;
+          height: 50px;
+          overflow: hidden;
+         .bottom-border-1px(#cbcbcb);
+          color: @color-theme;
+          text-decoration: none;
+          text-indent: 0;
+          line-height: 50px;
+          /deep/ .van-icon {
+            vertical-align: top;
+            font-size: 20px;
+            display: inline-block;
+            line-height: 50px
+          };
+          input {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            height: 100%;
+            top: 0;
+            opacity: 0;
+          }
+        };
+        .photo-cancel {
+          position: relative;
+          display: inline-block;
+          padding: 8px 12px;
+          overflow: hidden;
+          color: @color-theme;
+          text-decoration: none;
+          text-indent: 0;
+          line-height: 30px;
+          font-weight: bold
+        }
+      }
 	}
 </style>

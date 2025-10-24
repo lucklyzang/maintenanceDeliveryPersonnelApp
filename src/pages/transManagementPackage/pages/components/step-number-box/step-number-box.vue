@@ -138,8 +138,8 @@
 		.input-box {
 			flex: 1;
 			height: 100%;
-			background: #a7a7a7;
 			input {
+				background: #a7a7a7;
 				width: 100%;
 			}
 		};

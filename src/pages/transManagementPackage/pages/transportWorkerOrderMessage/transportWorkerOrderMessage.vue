@@ -1,148 +1,143 @@
 <template>
-	<view class="content-box">
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" :text="infoText" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></view>
-		<u-toast ref="uToast" />
-		<view class="nav">
-			<nav-bar :home="false" backState='3000' :isShowBackText="true" fontColor="#FFF" bgColor="none" title="任务详情" @backClick="backTo">
-			</nav-bar> 
-		</view>
-		<view class="content">
-			<view class="basic-message" ref="basicMessage">
-			<view class="basic-mesage-state">
-				<image :src="stateTransferimage(transTaskMessage.state)" />
-			</view>
-			<view class="basic-message-title">
-				<image src="@/static/img/basic-message.png" alt="">
-				<text>
+	<div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
+		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+			<div class="nav">
+				<NavBar title="任务详情" :path="fromPath" />
+			</div>
+		</div>
+		<div class="content">
+			<div class="basic-message" ref="basicMessage">
+			<div class="basic-mesage-state">
+				<img :src="stateTransferimage(transTaskMessage.state)" />
+			</div>
+			<div class="basic-message-title">
+				<img src="@/common/img/basic-message.png" alt="">
+				<span>
 					基本信息
-				</text>
-			</view>
-			 <view class="wait-handle-message">
-				 <view class="wait-handle-message-top">
-					<view class="handle-message-line-wrapper" v-if="templateType === 'template_one'">
-						<view>
-							<text class="message-tit">任务类型 :&nbsp;</text>
-							<text class="message-tit-real">{{transTaskMessage.taskTypeName}}</text>
-						</view>
-					</view>
-					 <view class="handle-message-line-wrapper">
-						 <view>
-							 <text class="message-tit" :class="{'priorityTwoStyle' : transTaskMessage.priority != 1}">优&nbsp;&nbsp;先&nbsp;级 :&nbsp;</text>
-							 <text class="message-tit-real" :class="[transTaskMessage.priority==1 ? 'priorityOneStyle' : 'priorityTwoStyle']">{{taskPriotityTransition(transTaskMessage.priority)}}</text>
-						 </view>
-					 </view>
-					<view class="handle-message-line-wrapper handle-message-line-wrapper-other">
-						<view>
-							<text class="message-tit">任务起点 :&nbsp;</text>
-							<text class="message-tit-real">{{transTaskMessage.setOutPlaceName}}</text>
-						</view>
-					</view>
-					<view class="handle-message-line-wrapper handle-message-line-wrapper-other" v-if="templateType === 'template_one'">
-						<view>
-							<text class="message-tit">任务终点 :&nbsp;</text>
-							<text class="message-tit-real">{{transTaskMessage.destinationName}}</text>
-						</view>
-					</view>
-				 <view class="handle-message-line-wrapper-other-two" v-else-if="templateType === 'template_two'">
-					 <view>
-						 <text class="message-tit">任务终点 :&nbsp;</text>
-					 </view>
-					 <view>
-						 <text class="message-tit-real message-tit-real-destinationList" v-for="(innerItem,innerindex) in transTaskMessage.destinations" :key="innerindex">{{innerItem.destinationName}}</text>
-					 </view>
-				 </view>
-					<view class="handle-message-line-wrapper handle-message-line-wrapper-other">
-						<view>
-							<text class="message-tit">任务时间 :&nbsp;</text>
-							<text class="message-tit-real">{{transTaskMessage.planStartTime}}</text>
-						</view>
-					</view>
-				 </view>
-				 <view class="wait-handle-message-middle">
-						<view class="handle-message-line-wrapper message-name" v-if="templateType === 'template_one'">
-							<view>
-								<text class="message-tit" :class="{'textStyle' : transTaskMessage.quarantine == 1}">病人姓名 :&nbsp;</text>
-								<text class="message-tit-real" :class="{'textStyle' : transTaskMessage.quarantine == 1}">{{transTaskMessage.patientName == "" ? '无' : transTaskMessage.patientName}}</text>
-								<image :src="contactIsolationPng" v-if="transTaskMessage.quarantine == 1">
-							</view>
-						</view>
-					 <view class="handle-message-line-wrapper" v-if="templateType === 'template_one'">
-						 <view>
-							 <text class="message-tit" :class="{'textStyle' : transTaskMessage.quarantine == 1}">床&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号 :&nbsp;</text>
-							 <text class="message-tit-real" :class="{'textStyle' : transTaskMessage.quarantine == 1}">{{transTaskMessage.bedNumber == "" ? '无' : transTaskMessage.bedNumber}}</text>
-						 </view>
-					 </view>
-					 <view class="handle-message-line-wrapper" v-if="templateType === 'template_one'">
-						 <view>
-							 <text class="message-tit">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄 :&nbsp;</text>
-							 <text class="message-tit-real">{{transTaskMessage.age == "" ? '无' : transTaskMessage.age}}</text>
-						 </view>
-					 </view>
-					<view class="handle-message-line-wrapper">
-							<view>
-								<text class="message-tit">数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量 :&nbsp;</text>
-								<text class="message-tit-real">{{transTaskMessage.actualCount == "" ? "无" : transTaskMessage.actualCount}}</text>
-							</view>
-						</view>
-					 <view class="handle-message-line-wrapper">
-						 <view>
-							 <text class="message-tit">转运工具 :&nbsp;</text>
-							 <text class="message-tit-real">{{transTaskMessage.toolName == "" ? '无' : transTaskMessage.toolName}}</text>
-						 </view>
-					 </view>
-						<view class="handle-message-line-wrapper">
-							<view class="describe-line-wrapper">
-								<view class="message-tit">语音备注 :&nbsp;</view>
-								<view class="message-tit-real-audio" v-if="showChildrenComponent">
+				</span>
+			</div>
+			 <div class="wait-handle-message">
+				 <div class="wait-handle-message-top">
+					<div class="handle-message-line-wrapper" v-if="templateType === 'template_one'">
+						<div>
+							<span class="message-tit">任务类型 :&nbsp;</span>
+							<span class="message-tit-real">{{transTaskMessage.taskTypeName}}</span>
+						</div>
+					</div>
+					 <div class="handle-message-line-wrapper">
+						 <div>
+							 <span class="message-tit" :class="{'priorityTwoStyle' : transTaskMessage.priority != 1}">优&nbsp;&nbsp;先&nbsp;级 :&nbsp;</span>
+							 <span class="message-tit-real" :class="[transTaskMessage.priority==1 ? 'priorityOneStyle' : 'priorityTwoStyle']">{{taskPriotityTransition(transTaskMessage.priority)}}</span>
+						 </div>
+					 </div>
+					<div class="handle-message-line-wrapper handle-message-line-wrapper-other">
+						<div>
+							<span class="message-tit">任务起点 :&nbsp;</span>
+							<span class="message-tit-real">{{transTaskMessage.setOutPlaceName}}</span>
+						</div>
+					</div>
+					<div class="handle-message-line-wrapper handle-message-line-wrapper-other" v-if="templateType === 'template_one'">
+						<div>
+							<span class="message-tit">任务终点 :&nbsp;</span>
+							<span class="message-tit-real">{{transTaskMessage.destinationName}}</span>
+						</div>
+					</div>
+				 <div class="handle-message-line-wrapper-other-two" v-else-if="templateType === 'template_two'">
+					 <div>
+						 <span class="message-tit">任务终点 :&nbsp;</span>
+					 </div>
+					 <div>
+						 <span class="message-tit-real message-tit-real-destinationList" v-for="(innerItem,innerindex) in transTaskMessage.destinations" :key="innerindex">{{innerItem.destinationName}}</span>
+					 </div>
+				 </div>
+					<div class="handle-message-line-wrapper handle-message-line-wrapper-other">
+						<div>
+							<span class="message-tit">任务时间 :&nbsp;</span>
+							<span class="message-tit-real">{{transTaskMessage.planStartTime}}</span>
+						</div>
+					</div>
+				 </div>
+				 <div class="wait-handle-message-middle">
+						<div class="handle-message-line-wrapper message-name" v-if="templateType === 'template_one'">
+							<div>
+								<span class="message-tit" :class="{'textStyle' : transTaskMessage.quarantine == 1}">病人姓名 :&nbsp;</span>
+								<span class="message-tit-real" :class="{'textStyle' : transTaskMessage.quarantine == 1}">{{transTaskMessage.patientName == "" ? '无' : transTaskMessage.patientName}}</span>
+								<img :src="contactIsolationPng" v-if="transTaskMessage.quarantine == 1" />
+							</div>
+						</div>
+					 <div class="handle-message-line-wrapper" v-if="templateType === 'template_one'">
+						 <div>
+							 <span class="message-tit" :class="{'textStyle' : transTaskMessage.quarantine == 1}">床&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号 :&nbsp;</span>
+							 <span class="message-tit-real" :class="{'textStyle' : transTaskMessage.quarantine == 1}">{{transTaskMessage.bedNumber == "" ? '无' : transTaskMessage.bedNumber}}</span>
+						 </div>
+					 </div>
+					 <div class="handle-message-line-wrapper" v-if="templateType === 'template_one'">
+						 <div>
+							 <span class="message-tit">年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;龄 :&nbsp;</span>
+							 <span class="message-tit-real">{{transTaskMessage.age == "" ? '无' : transTaskMessage.age}}</span>
+						 </div>
+					 </div>
+					<div class="handle-message-line-wrapper">
+							<div>
+								<span class="message-tit">数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量 :&nbsp;</span>
+								<span class="message-tit-real">{{transTaskMessage.actualCount == "" ? "无" : transTaskMessage.actualCount}}</span>
+							</div>
+						</div>
+					 <div class="handle-message-line-wrapper">
+						 <div>
+							 <span class="message-tit">转运工具 :&nbsp;</span>
+							 <span class="message-tit-real">{{transTaskMessage.toolName == "" ? '无' : transTaskMessage.toolName}}</span>
+						 </div>
+					 </div>
+						<div class="handle-message-line-wrapper">
+							<div class="describe-line-wrapper">
+								<div class="message-tit">语音备注 :&nbsp;</div>
+								<div class="message-tit-real-audio" v-if="showChildrenComponent">
 									<MyAudio v-if="!transTaskMessage.recordTime != true" :src="`http://show.blinktech.cn/trans/${transTaskMessage.taskNumber}.mp3`"></MyAudio>
-								</view>
-								<view class="message-tit-real" v-show="!transTaskMessage.recordTime">
+								</div>
+								<div class="message-tit-real" v-show="!transTaskMessage.recordTime">
 									无语音信息
-								</view>
-							</view>
-						</view>
-				 </view>
-				 <view class="wait-handle-message-content">
-					 <view class="transport-type-wrapper" v-if="templateType === 'template_two'">
-						 <view class="transport-type-title">
+								</div>
+							</div>
+						</div>
+				 </div>
+				 <div class="wait-handle-message-content">
+					 <div class="transport-type-wrapper" v-if="templateType === 'template_two'">
+						 <div class="transport-type-title">
 							 运送类型 :&nbsp;
-						 </view>
-						 <view class="transport-type-content">
-							 <view class="transport-type-list-wrapper" v-for="(item,index) in transportList" :key="index">
-									<view class="transport-type-list">
-										<view class="transport-type-list-title">{{item.parentTypeName == '' ? '无': item.parentTypeName}}</view>
-										<view class="transport-type-list-content" v-for="(itemInner,indexInner) in item.typeList" :key="indexInner">
-											<text class="serial"  style="vertical-align: middle;">{{indexInner+1}}、</text>
-											<text :class="{'textStyle' : itemInner.quarantine == 1}"  style="vertical-align: middle;">
+						 </div>
+						 <div class="transport-type-content">
+							 <div class="transport-type-list-wrapper" v-for="(item,index) in transportList" :key="index">
+									<div class="transport-type-list">
+										<div class="transport-type-list-title">{{item.parentTypeName == '' ? '无': item.parentTypeName}}</div>
+										<div class="transport-type-list-content" v-for="(itemInner,indexInner) in item.typeList" :key="indexInner">
+											<span class="serial"  style="vertical-align: middle;">{{indexInner+1}}、</span>
+											<span :class="{'textStyle' : itemInner.quarantine == 1}"  style="vertical-align: middle;">
 												床号 : {{itemInner.bedNumber}},{{itemInner.patientName}},{{genderTransfer(itemInner.sex)}};
-											</text>
-											<text v-for="(targetItem, targetIndex) in itemInner.typeChildList" :key="targetIndex" style="vertical-align: middle;">
+											</span>
+											<span v-for="(targetItem, targetIndex) in itemInner.typeChildList" :key="targetIndex" style="vertical-align: middle;">
 												{{targetItem.taskTypeName}}×{{targetItem.quantity}};
-											</text>
-											<image :src="contactIsolationPng" v-if="itemInner.quarantine == 1">
-										</view>
-									</view>
-								</view>
-						 </view>
-						</view>
-				 </view>
-				 <view class="wait-handle-message-bottom">
-						<view class="handle-message-line-wrapper">
-						 <view class="describe-line-wrapper">
-							 <view class="message-tit">任务描述 :&nbsp;</view>
-							 <view class="message-tit-real">{{transTaskMessage.taskRemark ? transTaskMessage.taskRemark : '无'}}</view>
-						 </view>
-						</view>
-				 </view>
-			</view>
-		</view>
-	</view>
-	</view>
+											</span>
+											<img :src="contactIsolationPng" v-if="itemInner.quarantine == 1">
+										</div>
+									</div>
+								</div>
+						 </div>
+						</div>
+				 </div>
+				 <div class="wait-handle-message-bottom">
+						<div class="handle-message-line-wrapper">
+						 <div class="describe-line-wrapper">
+							 <div class="message-tit">任务描述 :&nbsp;</div>
+							 <div class="message-tit-real">{{transTaskMessage.taskRemark ? transTaskMessage.taskRemark : '无'}}</div>
+						 </div>
+						</div>
+				 </div>
+			</div>
+		</div>
+	</div>
+	</div>
 </template>
 
 <script>
@@ -154,11 +149,11 @@
 		mergeMethods
 	} from '@/common/js/utils'
 	import { getDispatchTaskMessageById } from '@/api/transport.js'
-	import navBar from "@/components/zhouWei-navBar"
+	import NavBar from "@/components/NavBar";	
 	import MyAudio from '@/components/myAudio/myAudio';
 	export default {
 		components: {
-			navBar,
+			NavBar,
 			MyAudio
 		},
 		data() {
@@ -169,15 +164,16 @@
 				taskId: '',
 				tierNum: 0,
 				showChildrenComponent: false,
-				noAllotPng: require('@/static/img/no-allot.png'),
-				taskDelayPng: require('@/static/img/task-delay.png'),
-				noEndPng: require('@/static/img/no-end.png'),
-				noReferPng: require('@/static/img/no-refer.png'),
-				noStartPng: require('@/static/img/no-start.png'),
-				taskFinshedPng: require('@/static/img/task-finshed.png'),
-				taskGoingPng: require('@/static/img/task-going.png'),
-				taskCancelPng: require('@/static/img/task-cancel.png'),
-				contactIsolationPng: require("@/static/img/contact-isolation.png")
+				fromPath: '',
+				noAllotPng: require('@/common/img/no-allot.png'),
+				taskDelayPng: require('@/common/img/task-delay.png'),
+				noEndPng: require('@/common/img/no-end.png'),
+				noReferPng: require('@/common/img/no-refer.png'),
+				noStartPng: require('@/common/img/no-start.png'),
+				taskFinshedPng: require('@/common/img/task-finshed.png'),
+				taskGoingPng: require('@/common/img/task-going.png'),
+				taskCancelPng: require('@/common/img/task-cancel.png'),
+				contactIsolationPng: require("@/common/img/contact-isolation.png")
 			}
 		},
 		computed: {
@@ -186,37 +182,37 @@
 				'templateType',
 				'statusBarHeight',
 				'navigationBarHeight',
-				'transTaskMessage'
+				'transTaskMessage',
+				'chooseHospitalArea'
 			]),
 			userName() {
-				return this.userInfo['name']
-			},
-			proName () {
-			  return this.userInfo['proName']
-			},
-			proId() {
-				return this.userInfo['proId']
+			return this.userInfo['worker']['name']
 			},
 			workerId() {
-				return this.userInfo['user']['id']
+				return this.userInfo['worker']['id']
+			},
+			proName () {
+				return this.chooseHospitalArea['span']
+			},
+			proId() {
+				return this.chooseHospitalArea['value']
 			},
 			depId() {
-				return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
 			},
 			depName() {
-				return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
 			},
 			userAccount() {
-				return this.userInfo['userName']
+				return this.userInfo['worker']['account']
 			}
 		},
-		onLoad() {
-			const pages = getCurrentPages(); //获取当前页面栈的实例数组
-			if (pages.length == 1) {
-				this.tierNum = 1
-			} else {
-				this.tierNum = pages.length;
-			};
+		beforeRouteEnter(to, from, next) {
+			next(vm => {
+				vm.fromPath = from['path']
+			})
+		},
+		mounted() {
 			this.taskId = this.transTaskMessage.id;
 			this.getTaskMessage();
 		},
@@ -302,18 +298,19 @@
 						this.changeTransTaskMessage(res.data.data);
 						this.transportList = mergeMethods(this.transTaskMessage['patientInfoList']);
 					} else {
-						this.$refs.uToast.show({
-							message: `${res.data.msg}`,
-							type: 'error'
-						})
+						this.$dialog.alert({
+							message: res.data.msg,
+							closeOnPopstate: true
+						}).then(() => {
+						})		
 					}
 				})
 				.catch((err) => {
 					this.showLoadingHint = false;
-					this.$refs.uToast.show({
-						message: `${err}`,
-						type: 'error',
-						position: 'bottom'
+					this.$dialog.alert({
+						message: err,
+						closeOnPopstate: true
+					}).then(() => {
 					})
 				})
 			}
@@ -321,30 +318,15 @@
 	}
 </script>
 
-<style lang="scss">
-	@import "~@/common/stylus/variable.scss";
-	page {
-		width: 100%;
-		height: 100%;
-	};
+<style lang="less" scoped>
+	@import "~@/common/stylus/variable.less";	
+    @import "~@/common/stylus/mixin.less";
+    @import "~@/common/stylus/modifyUi.less";
 	.content-box {
-		@include content-wrapper;
+		.content-wrapper();;
 		height: 100vh !important;
 		background: #f6f6f6;
 		box-sizing: border-box;
-		::v-deep .u-popup {
-			flex: none !important
-		};
-		::v-deep .u-loading-icon {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%,-50%);
-			z-index: 200000;
-		};
-		::v-deep .u-transition {
-			z-index: 100000 !important;
-		};
 		.top-background-area {
 			width: 100%;
 			background: #3890EE;
@@ -353,72 +335,27 @@
 			left: 0;
 			z-index: 10
 		};
-		/* 运送订单取消原因弹框 */
-		.trans-box {
-			/deep/ .u-popup__content {
-				border-radius: 10px !important;
-				.u-modal {
-				  border-radius: 10px !important;
-				  overflow: inherit !important;
-				  .u-modal__content {
-					  padding: 0 !important;
-					  box-sizing: border-box;
-						display: flex;
-						flex-direction: column;
-					  .dialog-top {
-						border-top-left-radius: 10px !important;
-						border-top-right-radius: 10px !important;
-						height: 40px;
-						padding-left: 10px;
-						position: relative;
-						display: flex;
-						align-items: center;
-						font-size: 14px;
-						color: #fff;
-						background: #3B9DF9;
-						text-align: left
-					  };
-					  .dialog-center {
-						width: 80%;
-						height: 20vh;
-						margin: 0 auto;
-						margin-top: 20px
-					  }
-				  };
-				  .u-modal__button-group {
-					  padding: 20px !important;
-					  box-sizing: border-box;
-					  justify-content: center;
-					  ::after {
-						content: none
-					  };
-					.u-modal__button-group__wrapper--cancel {
-						width: 40%;
-						height: 40px;
-						line-height: 40px;
-						background: #fff;
-						flex: none !important;
-						border-radius: 10px;
-						border: 1px solid #3B9DF9;
-						margin-right: 30px
-					};
-					.u-modal__button-group__wrapper--confirm {
-						height: 40px;
-						line-height: 40px;
-						flex: none !important;
-						width: 40%;
-						background: #3B9DF9;
-						border-radius: 10px;
-					};
-					.u-line {
-						display: none;
-					}
-				  }
-				}
-			}	  
-		};
 		.nav {
 			width: 100%;
+			/deep/ .tabBar-box {
+				.van-nav-bar {
+					.van-nav-bar__left {
+						.van-icon {
+							color: #fff !important;
+							font-size: 20px !important;
+						};
+						.van-nav-bar__text {
+							color: #fff !important;
+							font-size: 14px !important;
+							margin-left: 10px;
+						}
+					};
+					.van-nav-bar__title {
+						color: #fff !important;
+						font-size: 14px !important;
+					}
+				}	
+			}
 		};
 		.content {
 			flex: 1;
@@ -442,7 +379,7 @@
 				line-height: 30px;
 				top: 8px;
 				right: -12px;
-				image {
+				img {
 					width: 100%;
 					height: 100%
 				}
@@ -452,13 +389,13 @@
 				color: #1a89fd;
 				height: 40px;
 				line-height: 40px;
-				>image {
+				>img {
 					height: 18px;
 					width: 18px;
 					margin-right: 2px;
 					vertical-align: middle;
 				};
-				>text {
+				>span {
 					vertical-align: middle;
 				}
 			}
@@ -472,7 +409,7 @@
 					margin-top: 10px
 				};
 				.handle-message-line-wrapper {
-					>view {
+					>div {
 						display: flex;
 						overflow: auto;
 						height: 30px;
@@ -490,16 +427,16 @@
 							color: red !important;
 							font-weight: bold
 						};
-						text {
+						span {
 							display: inline-block;
 						};
-						text:first-child {
+						span:first-child {
 							width: 25%
 						};
 						.message-tit-real-style {
 							color: #2895ea;
 						}
-						text:last-child {
+						span:last-child {
 							flex: 1;
 							color: black
 						}
@@ -509,7 +446,7 @@
 						display: flex;
 						height: 40px;
 						align-items: center;
-						>view {
+						>div {
 							&:first-child {
 								width: 25%;
 								color: #a0a0a0;
@@ -525,9 +462,9 @@
 					}
 				};
 				.message-name {
-					>view {
+					>div {
 						display: flex;
-						>text {
+						>span {
 							&:nth-child(2) {
 								padding: 0 5px 0 0;
 								box-sizing: border-box;
@@ -536,7 +473,7 @@
 								word-break: break-all
 							}
 						};
-						image {
+						img {
 							width: 27px;
 							height: 27px;
 							vertical-align: bottom
@@ -553,7 +490,7 @@
 					.transport-type-content {
 						color: black;
 						flex: 1;
-						> view:not(:first-child) {
+						> div:not(:first-child) {
 							.transport-type-list-title {
 								margin-top: 6px
 							}
@@ -568,7 +505,7 @@
 								};
 								.transport-type-list-content {
 									line-height: 30px;
-									image {
+									img {
 										width: 24px;
 										height: 24px;
 										vertical-align: middle;
@@ -584,7 +521,7 @@
 					}
 				};
 				.handle-message-line-wrapper-other {
-					>view {
+					>div {
 						width: 100%;
 					}
 				};
@@ -592,15 +529,15 @@
 					display: flex;
 					flex-flow: row now;
 					line-height: 35px;
-					>view:first-child {
+					>div:first-child {
 						width: 25%;
-						text {
+						span {
 							color: #a0a0a0;
 						}
 					};
-					>view:last-child {
+					>div:last-child {
 						flex: 1;
-						text {
+						span {
 							color: black
 						};
 						.message-tit-real-destinationList {

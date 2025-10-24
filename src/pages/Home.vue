@@ -98,7 +98,6 @@
 				]
 			}
 		},
-		updated() {},
 		computed: {
 			...mapGetters([
 				'userInfo',
@@ -131,8 +130,8 @@
 			}
 		},
 		
-		onShow() {
-			this.controlServiceManageModuleShowEvent()
+		mounted() {
+			// this.controlServiceManageModuleShowEvent()
 		},
 		
 		methods: {

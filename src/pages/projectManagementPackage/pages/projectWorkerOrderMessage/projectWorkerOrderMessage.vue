@@ -1,30 +1,26 @@
 <template>
-  <view class="content-box">
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" :text="infoText" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></view>
-		<u-toast ref="uToast"></u-toast>
-		<view class="nav">
-			<nav-bar :home="false" backState='3000' :isShowBackText="true" fontColor="#FFF" bgColor="none" title="任务详情" @backClick="backTo">
-			</nav-bar> 
-		</view>
+  <div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
+	<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+	<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+		<div class="nav">
+			<NavBar title="任务详情" :path="fromPath" />
+		</div>
+	</div>
     <!-- 图片放大弹框  -->
-    <view class="image-dislog-box">
-				 <u-modal :show="imageBoxShow" :closeOnClickOverlay="true" confirmText="关闭" @confirm="confirmEvent">
-				     <image :src="currentimageUrl" mode="widthFix" style="width:100%" />
-				 </u-modal> 
-    </view>
-    <view class="content">
-			<view class="message-box">
-					<view class="message-one">
-							<view class="message-one-left">
-									<text>编号:</text>
-									<text>{{ projectTaskMessage.taskNumber }}</text>
-							</view>
-							<view class="message-one-right"
+    <div class="image-dislog-box">
+		 <van-dialog v-model="imageBoxShow"  @close="deleteInfoDialogShow = false"
+		    @confirm="confirmEvent" @cancel="deleteInfoDialogShow" confirmButtonColor="#3890EE" confirmButtonText="关闭">
+        	<img :src="currentimageUrl" style="width:100%"/>
+		</van-dialog>
+    </div>
+    <div class="content">
+			<div class="message-box">
+					<div class="message-one">
+							<div class="message-one-left">
+									<span>编号:</span>
+									<span>{{ projectTaskMessage.taskNumber }}</span>
+							</div>
+							<div class="message-one-right"
 								:class="{
 									'noAllocation':projectTaskMessage.state == 0,
 									'waitSureStyle':projectTaskMessage.state == 1,
@@ -38,61 +34,61 @@
 								}"
 							>
 									{{ projectTaskStatusTransition(projectTaskMessage.state) }}
-							</view>
-					</view>
-					<view class="message-one message-two">
-							<view class="message-two-left">
-									<text>创建时间</text>
-							</view>
-							<view class="message-two-right">
+							</div>
+					</div>
+					<div class="message-one message-two">
+							<div class="message-two-left">
+									<span>创建时间</span>
+							</div>
+							<div class="message-two-right">
 									{{ projectTaskMessage.createTime }}
-							</view>
-					</view>
-					<view class="message-one message-two">
-							<view class="message-two-left">
-									<text>已经历时间</text>
-							</view>
-							<view class="message-two-right">
+							</div>
+					</div>
+					<div class="message-one message-two">
+							<div class="message-two-left">
+									<span>已经历时间</span>
+							</div>
+							<div class="message-two-right">
 									{{ elapsedTime(projectTaskMessage.planStartTime) }}
-							</view>
-					</view>
-					 <view class="message-one message-two">
-							<view class="message-two-left">
-									<text>响应时间</text>
-							</view>
-							<view class="message-two-right">
+							</div>
+					</div>
+					 <div class="message-one message-two">
+							<div class="message-two-left">
+									<span>响应时间</span>
+							</div>
+							<div class="message-two-right">
 									{{ projectTaskMessage.responseTime == null ? '无' : projectTaskMessage.responseTime }}
-							</view>
-					</view>
-					<view class="message-one message-two">
-							<view class="message-two-left">
-									<text>开始时间</text>
-							</view>
-							<view class="message-two-right">
+							</div>
+					</div>
+					<div class="message-one message-two">
+							<div class="message-two-left">
+									<span>开始时间</span>
+							</div>
+							<div class="message-two-right">
 									{{ projectTaskMessage.planStartTime }}
-							</view>
-					</view>
-					<view class="message-one message-two">
-							<view class="message-two-left">
-									<text>位置</text>
-							</view>
-							<view class="message-two-right">
+							</div>
+					</div>
+					<div class="message-one message-two">
+							<div class="message-two-left">
+									<span>位置</span>
+							</div>
+							<div class="message-two-right">
 									{{ projectTaskMessage.depName == '/' ? '' : projectTaskMessage.depName }}
-							</view>
-					</view>
-					<view class="message-one message-two">
-							<view class="message-two-left">
-									<text>房间</text>
-							</view>
-							<view class="message-two-right">
+							</div>
+					</div>
+					<div class="message-one message-two">
+							<div class="message-two-left">
+									<span>房间</span>
+							</div>
+							<div class="message-two-right">
 								 {{ disposeCheckType(projectTaskMessage.spaces) }}
-							</view>
-					</view>
-					<view class="message-one message-two message-six">
-							<view class="message-two-left">
-									<text>优先级</text>
-							</view>
-							<view class="message-two-right" 
+							</div>
+					</div>
+					<div class="message-one message-two message-six">
+							<div class="message-two-left">
+									<span>优先级</span>
+							</div>
+							<div class="message-two-right" 
 							:class="{
 									'priorityNormalStyle' : projectTaskMessage.priority == 1,
 									'priorityUrgencyStyle' : projectTaskMessage.priority == 2,
@@ -101,99 +97,98 @@
 							 
 							 }">
 									{{ taskPriotityTransition(projectTaskMessage.priority) }}
-							</view>
-					</view>
-					<view class="message-one message-two">
-							<view class="message-two-left">
-									<text>维修员</text>
-							</view>
-							<view class="message-two-right">
+							</div>
+					</div>
+					<div class="message-one message-two">
+							<div class="message-two-left">
+									<span>维修员</span>
+							</div>
+							<div class="message-two-right">
 									{{ projectTaskMessage.workerName ? projectTaskMessage.workerName : '无' }}
-							</view>
-					</view>
-					<view class="message-one message-two">
-							<view class="message-two-left">
-									<text>参与人</text>
-							</view>
-							<view class="message-two-right">
+							</div>
+					</div>
+					<div class="message-one message-two">
+							<div class="message-two-left">
+									<span>参与人</span>
+							</div>
+							<div class="message-two-right">
 									{{ disposeTaskPresent(projectTaskMessage.present) }}
-							</view>
-					</view>
-					<view class="issue-image">
-							<view class="issue-image-left">
-									<text>问题图片</text>
-							</view>
-							<view class="issue-image-list" v-if="issueImage.length > 0">
-								<image alt="" mode="widthFix" v-for="(innerItem,innerIndex) in issueImage" :key="innerIndex" :src="innerItem.path" @click="enlareEvent(innerItem.path)">
-							</view>
-					</view>   
-					<view class="message-one message-two">
-							<view class="message-two-left">
-									<text>问题描述</text>
-							</view>
-							<view class="message-two-right task-remark">
+							</div>
+					</div>
+					<div class="issue-image">
+							<div class="issue-image-left">
+									<span>问题图片</span>
+							</div>
+							<div class="issue-image-list" v-if="issueImage.length > 0">
+								<img alt="" v-for="(innerItem,innerIndex) in issueImage" :key="innerIndex" :src="innerItem.path" @click="enlareEvent(innerItem.path)" />
+							</div>
+					</div>   
+					<div class="message-one message-two">
+							<div class="message-two-left">
+									<span>问题描述</span>
+							</div>
+							<div class="message-two-right task-remark">
 									{{ projectTaskMessage.taskDesc }}
-							</view>
-					</view>
-			</view>
-    </view>
-  </view>
+							</div>
+					</div>
+			</div>
+    </div>
+  </div>
 </template>
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import { repairsDetails, repairsImage } from "@/api/project.js";
-import { setCache, removeAllLocalStorage, } from '@/common/js/utils'
-import navBar from "@/components/zhouWei-navBar"
+import NavBar from "@/components/NavBar";
 export default {
   components: {
-		navBar
+		NavBar
   },
   data() {
     return {
-			infoText: '加载中···',
-			showLoadingHint: false,
-      currentimageUrl: '',
-      imageBoxShow: false,
-			tierNum: 0,
-			issueImage: []
+		infoText: '加载中···',
+		showLoadingHint: false,
+      	currentimageUrl: '',
+      	imageBoxShow: false,
+		issueImage: [],
+		fromPath: ''
     }
   },
+
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.fromPath = from['path']
+    })
+  },
 	
-	onShow () {
-		const pages = getCurrentPages(); //获取当前页面栈的实例数组
-		if (pages.length == 1) {
-			this.tierNum = 1
-		} else {
-			this.tierNum = pages.length;
-		};
+	mounted () {
 		this.parallelFunction()
 	},
 	
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","projectTaskMessage",'statusBarHeight','navigationBarHeight']),
-		userName() {
-			return this.userInfo['name']
-		},
-		proName () {
-			return this.userInfo['proName']
-		},
-		proId() {
-			return this.userInfo['proId']
-		},
-		workerId() {
-			return this.userInfo['user']['id']
-		},
-		depId() {
-			return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
-		},
-		depName() {
-			return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
-		},
-		userAccount() {
-			return this.userInfo['userName']
-		}
+    ...mapGetters(["userInfo","projectTaskMessage",'statusBarHeight','navigationBarHeight','chooseHospitalArea']),
+	userName() {
+	return this.userInfo['worker']['name']
+	},
+	workerId() {
+		return this.userInfo['worker']['id']
+	},
+	proName () {
+		return this.chooseHospitalArea['span']
+	},
+	proId() {
+		return this.chooseHospitalArea['value']
+	},
+	depId() {
+		return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+	},
+	depName() {
+		return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+	},
+	userAccount() {
+		return this.userInfo['worker']['account']
+	}
   },
 
   methods: {
@@ -250,9 +245,10 @@ export default {
 					} else {
 						this.showLoadingHint = false;
 						reject();
-						this.$refs.uToast.show({
+						this.$dialog.alert({
 							message: res.data.msg,
-							type: 'error',
+							closeOnPopstate: true
+						}).then(() => {
 						})
 					}
 				})
@@ -271,9 +267,10 @@ export default {
 						} else {
 							this.showLoadingHint = false;
 							reject();
-							this.$refs.uToast.show({
+							this.$dialog.alert({
 								message: res.data.msg,
-								type: 'error',
+								closeOnPopstate: true
+							}).then(() => {
 							})
 						}
 					})
@@ -311,10 +308,10 @@ export default {
       this.imageBoxShow = true
     },
 		
-		// 图片放大弹框关闭事件
-		confirmEvent () {
-			this.imageBoxShow = false
-		},
+	// 图片放大弹框关闭事件
+	confirmEvent () {
+		this.imageBoxShow = false
+	},
 		
 	// 处理维修任务参与者
 	disposeTaskPresent (item) {
@@ -381,30 +378,15 @@ export default {
   }
 };
 </script>
-<style lang='scss' scoped>
-@import "~@/common/stylus/variable.scss";
-page {
-	width: 100%;
-	height: 100%;
-};
+<style lang='less' scoped>
+@import "~@/common/stylus/variable.less";	
+@import "~@/common/stylus/mixin.less";
+@import "~@/common/stylus/modifyUi.less";
 .content-box {
-  @include content-wrapper;
+  .content-wrapper();
 	height: 100vh !important;
   box-sizing: border-box;
   background: #f6f6f6;
-	::v-deep .u-popup {
-		flex: none !important
-	};
-  ::v-deep .u-loading-icon {
-  	position: absolute;
-  	top: 50%;
-  	left: 50%;
-  	transform: translate(-50%,-50%);
-  	z-index: 200000;
-  };
-  ::v-deep .u-transition {
-  	z-index: 100000 !important;
-  };
   .top-background-area {
   	width: 100%;
   	background: #3890EE;
@@ -442,72 +424,27 @@ page {
         }
     }
   };
-	/* 运送订单取消原因弹框 */
-	.trans-box {
-		/deep/ .u-popup__content {
-			border-radius: 10px !important;
-			.u-modal {
-			  border-radius: 10px !important;
-			  overflow: inherit !important;
-			  .u-modal__content {
-				  padding: 0 !important;
-				  box-sizing: border-box;
-					display: flex;
-					flex-direction: column;
-				  .dialog-top {
-					border-top-left-radius: 10px !important;
-					border-top-right-radius: 10px !important;
-					height: 40px;
-					padding-left: 10px;
-					position: relative;
-					display: flex;
-					align-items: center;
-					font-size: 14px;
-					color: #fff;
-					background: #3B9DF9;
-					text-align: left
-				  };
-				  .dialog-center {
-					width: 80%;
-					height: 20vh;
-					margin: 0 auto;
-					margin-top: 20px
-				  }
-			  };
-			  .u-modal__button-group {
-				  padding: 20px !important;
-				  box-sizing: border-box;
-				  justify-content: center;
-				  ::after {
-					content: none
-				  };
-				.u-modal__button-group__wrapper--cancel {
-					width: 40%;
-					height: 40px;
-					line-height: 40px;
-					background: #fff;
-					flex: none !important;
-					border-radius: 10px;
-					border: 1px solid #3B9DF9;
-					margin-right: 30px
-				};
-				.u-modal__button-group__wrapper--confirm {
-					height: 40px;
-					line-height: 40px;
-					flex: none !important;
-					width: 40%;
-					background: #3B9DF9;
-					border-radius: 10px;
-				};
-				.u-line {
-					display: none;
-				}
-			  }
-			}
-		}	  
-	};
   .nav {
-		width: 100%;
+	width: 100%;
+			/deep/ .tabBar-box {
+				.van-nav-bar {
+					.van-nav-bar__left {
+						.van-icon {
+							color: #fff !important;
+							font-size: 20px !important;
+						};
+						.van-nav-bar__text {
+							color: #fff !important;
+							font-size: 14px !important;
+							margin-left: 10px;
+						}
+					};
+					.van-nav-bar__title {
+						color: #fff !important;
+						font-size: 14px !important;
+					}
+				}	
+			}
   };
   .content {
 		 flex: 1;

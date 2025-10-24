@@ -1349,7 +1349,7 @@ mounted () {
 
     // 取消事件
     cancelEvent () {
-      this.$router.push({ path: "/transIndex" })
+      this.$router.push({ path: "/transIndex"})
     }
   }
 };

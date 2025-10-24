@@ -1,28 +1,22 @@
 <template>
-  <view class="content-box">
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" :text="infoText" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></view>
-		<u-toast ref="uToast" />
-		<view class="nav">
-			<nav-bar :home="false" :isShowBackText="true" backState='3000' fontColor="#FFF" bgColor="none" title="任务详情" @backClick="backTo">
-			</nav-bar> 
-		</view>
+  <div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
+		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+			<div class="nav">
+				<NavBar title="任务详情" :path="fromPath" />
+			</div>
+		</div>
 		<!-- 图片放大弹框  -->
-		<view class="image-dislog-box">
-			 <u-modal :show="imageBoxShow" :closeOnClickOverlay="true" confirmText="关闭" @confirm="confirmEvent">
-				 <template v-slot:default>
-					<image :src="currentimageUrl" mode="widthFix" style="width:100%"/>
-				 </template>
-			 </u-modal> 
-		</view>
-    <view class="content">
-      <view class="forthwith-task-number">
-        <text>状态</text>
-        <text :class="{
+		<div class="img-dislog-box">
+      <van-dialog v-model="imageBoxShow"  @close="deleteInfoDialogShow = false"
+		    @confirm="confirmEvent" @cancel="deleteInfoDialogShow" confirmButtonColor="#3890EE" confirmButtonText="关闭">
+        <img :src="currentimageUrl" style="width:100%"/>
+		  </van-dialog>
+		</div>
+    <div class="content">
+      <div class="forthwith-task-number">
+        <span>状态</span>
+        <span :class="{
             'noStartStyle ' : environmentTaskMessage.state == 1 || environmentTaskMessage.state == 2,
             'underwayStyle' : environmentTaskMessage.state == 3,
             'waitReviewStyle' : environmentTaskMessage.state == 4,
@@ -32,72 +26,71 @@
             'reviewStyle' : environmentTaskMessage.state == 8
           }">
             {{stausTransfer(environmentTaskMessage.state)}}
-        </text>
-      </view>
-			<view class="location">
-			  <text>创建时间</text>
-			  <text>{{environmentTaskMessage.createTime }}</text>
-			</view>
-      <view class="location">
-        <text>位置</text>
-        <text>{{ `${environmentTaskMessage.structureName}-${environmentTaskMessage.depName}-${environmentTaskMessage.areaImmediateName}-${extractSpaceMessage(environmentTaskMessage.spaces)}` }}</text>
-      </view>
-			<view class="location">
-			  <text>优先级</text>
-			  <text>{{environmentTaskMessage.priority }}</text>
-			</view>
-			<view class="issue-picture">
-			  <view>图片</view>
-			  <view class="image-list">
-			    <image :src="item.path" mode="widthFix" alt="" v-for="(item,index) in problemPicturesEchoList" :key="index" @click="enlareEvent(item)">
-			  </view>
-			</view>
-			<view class="location problem-description">
-			  <text>问题描述</text>
-			  <text>{{ environmentTaskMessage.taskRemark}}</text>
-			</view>
-			<view class="location" v-if="environmentTaskMessage.state == 7">
-			  <text>取消原因</text>
-			  <text>{{environmentTaskMessage.cancelReason }}</text>
-			</view>
-			<view class="location" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
-			  <text>开始时间</text>
-			  <text>{{environmentTaskMessage.startTime }}</text>
-			</view>
-      <view class="location" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
-        <text>保洁主管</text>
-        <text>{{ !environmentTaskMessage.managerName ? '未选择' : environmentTaskMessage.managerName }}</text>
-      </view>
-      <view class="location-other" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
-        <view class="location-other-left">
-          <text class="cleaner">保洁员</text>
-        </view>
-				<view class="location-other-right" >
+        </span>
+      </div>
+			<div class="location">
+			  <span>创建时间</span>
+			  <span>{{environmentTaskMessage.createTime }}</span>
+			</div>
+      <div class="location">
+        <span>位置</span>
+        <span>{{ `${environmentTaskMessage.structureName}-${environmentTaskMessage.depName}-${environmentTaskMessage.areaImmediateName}-${extractSpaceMessage(environmentTaskMessage.spaces)}` }}</span>
+      </div>
+			<div class="location">
+			  <span>优先级</span>
+			  <span>{{environmentTaskMessage.priority }}</span>
+			</div>
+			<div class="issue-picture">
+			  <div>图片</div>
+			  <div class="img-list">
+			    <img :src="item.path" mode="widthFix" alt="" v-for="(item,index) in problemPicturesEchoList" :key="index" @click="enlareEvent(item)">
+			  </div>
+			</div>
+			<div class="location problem-description">
+			  <span>问题描述</span>
+			  <span>{{ environmentTaskMessage.taskRemark}}</span>
+			</div>
+			<div class="location" v-if="environmentTaskMessage.state == 7">
+			  <span>取消原因</span>
+			  <span>{{environmentTaskMessage.cancelReason }}</span>
+			</div>
+			<div class="location" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
+			  <span>开始时间</span>
+			  <span>{{environmentTaskMessage.startTime }}</span>
+			</div>
+      <div class="location" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
+        <span>保洁主管</span>
+        <span>{{ !environmentTaskMessage.managerName ? '未选择' : environmentTaskMessage.managerName }}</span>
+      </div>
+      <div class="location-other" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
+        <div class="location-other-left">
+          <span class="cleaner">保洁员</span>
+        </div>
+				<div class="location-other-right" >
 					{{ !environmentTaskMessage.workerName ? '未选择' : environmentTaskMessage.workerName }}
-				</view>
-      </view>
-      <view class="issue-picture" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
-        <view>结果图片</view>
-        <view class="image-list">
-          <image :src="item.path" mode="widthFix" alt="" v-for="(item,index) in problemPicturesEchoList" :key="index" @click="enlareEvent(item)">
-        </view>
-      </view>
-			<view class="location problem-description" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
-			  <text>备注</text>
-			  <text>{{ environmentTaskMessage.taskRemark}}</text>
-			</view>
-    </view>
-  </view>
+				</div>
+      </div>
+      <div class="issue-picture" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
+        <div>结果图片</div>
+        <div class="img-list">
+          <img :src="item.path" mode="widthFix" alt="" v-for="(item,index) in problemPicturesEchoList" :key="index" @click="enlareEvent(item)">
+        </div>
+      </div>
+			<div class="location problem-description" v-if="environmentTaskMessage.state == 3 || environmentTaskMessage.state == 4 || environmentTaskMessage.state == 5 || environmentTaskMessage.state == 8">
+			  <span>备注</span>
+			  <span>{{ environmentTaskMessage.taskRemark}}</span>
+			</div>
+    </div>
+  </div>
 </template>
 <script>
 import { cancelTask, getForthwithCleanTaskDetails } from "@/api/environment.js";
 import { mapGetters, mapMutations } from "vuex";
-import navBar from "@/components/zhouWei-navBar"
-import { setCache, removeAllLocalStorage } from "@/common/js/utils";
+import NavBar from "@/components/NavBar";
 import _ from 'lodash'
 export default {
   components: {
-    navBar
+    NavBar
   },
   data() {
     return {
@@ -110,8 +103,8 @@ export default {
       environmentSelectCancelReason: {},
       environmentCancelReasonShow: false,
       environmentCancelReasonValue: null,
-      environmentCancelReasonOption: [{text: "请选择取消原因",value: null}],
-			problemPicturesEchoList: []
+			problemPicturesEchoList: [],
+      fromPath: ''
     }
   },
 
@@ -126,35 +119,34 @@ export default {
 			'allOrderCancelReason',
 		  'chooseHospitalArea'
 		]),
-		userName() {
-			return this.userInfo['name']
-		},
-		proName () {
-		  return this.userInfo['proName']
-		},
-		proId() {
-			return this.userInfo['proId']
-		},
-		workerId() {
-			return this.userInfo['user']['id']
-		},
-		depId() {
-			return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
-		},
-		depName() {
-			return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
-		},
-		userAccount() {
-			return this.userInfo['userName']
-		}
+	  userName() {
+    return this.userInfo['worker']['name']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
+    },
+    proName () {
+      return this.chooseHospitalArea['span']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
+    }
   },
-	onLoad() {
-		const pages = getCurrentPages(); //获取当前页面栈的实例数组
-		if (pages.length == 1) {
-			this.tierNum = 1
-		} else {
-			this.tierNum = pages.length;
-		};
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.fromPath = from['path']
+    })
+  },
+	mounted() {
 		this.taskId = this.environmentTaskMessage.id;
 		this.getForthwithCleanTaskDetailsEvent(this.taskId);
 	},
@@ -200,10 +192,11 @@ export default {
 					this.changeEnvironmentTaskMessage(res.data.data);
 					this.getResultimageList();
 				} else {
-				 this.$refs.uToast.show({
-					message: `${res.data.msg}`,
-					type: 'error'
-				 })
+          this.$dialog.alert({
+            message: res.data.msg,
+            closeOnPopstate: true
+          }).then(() => {
+          })
 				}
 			})
 			.catch((err) => {
@@ -287,35 +280,20 @@ export default {
 
     // 提取保洁员姓名
     extractCleanerName (val) {
-      return this.cleanerOption.filter((item) => { return item.value == val})[0]['text']
+      return this.cleanerOption.filter((item) => { return item.value == val})[0]['span']
     }
   }
 };
 </script>
-<style lang='scss' scoped>
-@import "~@/common/stylus/variable.scss";
-page {
-	width: 100%;
-	height: 100%;
-};
+<style lang='less' scoped>
+	@import "~@/common/stylus/variable.less";	
+  @import "~@/common/stylus/mixin.less";
+  @import "~@/common/stylus/modifyUi.less";
 .content-box {
- @include content-wrapper;
+ .content-wrapper();
  height: 100vh !important;
  box-sizing: border-box;
  background: #f6f6f6;
- ::v-deep .u-popup {
- 	flex: none !important
- };
- ::v-deep .u-loading-icon {
- 	position: absolute;
- 	top: 50%;
- 	left: 50%;
- 	transform: translate(-50%,-50%);
- 	z-index: 200000;
- };
- ::v-deep .u-transition {
- 	z-index: 100000 !important;
- };
  .top-background-area {
  	width: 100%;
  	background: #3890EE;
@@ -325,10 +303,29 @@ page {
  	z-index: 10
  };
  .nav {
- 	width: 100%;
+   width: 100%;
+    /deep/ .tabBar-box {
+      .van-nav-bar {
+        .van-nav-bar__left {
+          .van-icon {
+            color: #fff !important;
+            font-size: 20px !important;
+          };
+          .van-nav-bar__text {
+            color: #fff !important;
+            font-size: 14px !important;
+            margin-left: 10px;
+          }
+        };
+        .van-nav-bar__title {
+          color: #fff !important;
+          font-size: 14px !important;
+        }
+      }	
+    }
  };
  /*图片放大弹框 */
- .image-dislog-box {
+ .img-dislog-box {
  	/deep/ .u-popup__content {
  		border-radius: 10px !important;
  		.u-modal {
@@ -357,7 +354,7 @@ page {
       background: #fff;
       justify-content: space-between;
       align-items: center;
-      >text {
+      >span {
         font-size: 14px;
         display: inline-block;
         &:first-child {
@@ -365,7 +362,7 @@ page {
           color: #9C9C9C;
           padding-right: 4px;
           box-sizing: border-box;
-          @include no-wrap();
+          .no-wrap();
         };
         &:last-child {
           color: #a1a0a0;
@@ -419,7 +416,7 @@ page {
       background: #fff;
       justify-content: space-between;
       align-items: center;
-       >text {
+       >span {
         font-size: 14px;
         display: inline-block;
         &:first-child {
@@ -445,7 +442,7 @@ page {
       justify-content: space-between;
       align-items: center;
       .location-other-left {
-        >text {
+        >span {
           font-size: 14px;
           display: inline-block
         };
@@ -467,7 +464,7 @@ page {
         /deep/ .vue-dropdown {
           border: none !important;
           .cur-name {
-            >text {
+            >span {
               font-size: 14px;
               padding-right: 10px;
               box-sizing: border-box;
@@ -487,7 +484,7 @@ page {
     };
     .problem-description {
 			flex-direction: column;
-      >text {
+      >span {
         width: 100%;
 				display: inline-block;
 				&:last-child {
@@ -503,13 +500,13 @@ page {
       display: flex;
 			flex-direction: column;
       background: #fff;
-      >view {
+      >div {
         font-size: 14px;
         color: #a1a0a0;
         &:first-child {
         };
         &:last-child {
-          >image {
+          >img {
             width: 31%;
             margin-right: 2%;
             margin-bottom: 6px;
@@ -527,7 +524,7 @@ page {
       display: flex;
       background: #fff;
       justify-content: space-between;
-      >view {
+      >div {
         font-size: 14px;
         color: #a1a0a0;
         line-height: 20px;
@@ -549,7 +546,7 @@ page {
   		justify-content: center;
   		padding-bottom: 20px;
   		box-sizing: border-box;
-  		>text {
+  		>span {
   			font-weight: bold;
   			display: inline-block;
   			font-size: 14px;

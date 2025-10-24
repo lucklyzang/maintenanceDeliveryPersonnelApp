@@ -4,7 +4,7 @@ export default {
 	state: getDefaultEnvironmentState(),
 	getters:{
 			locationMessage:(state) => {
-				state.locationMessage = JSON.parse(getCache('locationMessage')) ? JSON.parse(getCache('locationMessage')) : null;
+				state.locationMessage = JSON.parse(getCache('locationMessage')) ? JSON.parse(getCache('locationMessage')) : [];
 				return state.locationMessage
 			},
 			timeMessage: (state) => {

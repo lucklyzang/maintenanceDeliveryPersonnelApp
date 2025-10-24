@@ -1,76 +1,71 @@
 <template>
-	<view class="content-box">
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" :text="infoText" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></view>
-		<u-toast ref="uToast"></u-toast>
-		<view class="nav">
-			<nav-bar :home="false" backState='3000' :isShowBackText="true" fontColor="#FFF" bgColor="none" title="选择位置" @backClick="backTo">
-			</nav-bar> 
-		</view>
-	 <view class="content">
-			<u-empty text="暂无数据" mode="search" v-if="emptyShow"></u-empty>
+	<div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
+	<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+	<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+		<div class="nav">
+			<NavBar title="选择位置" path="/cleanCallTask" />
+		</div>
+	</div>
+	 <div class="content">
+			<van-empty description="暂无数据" v-show="emptyShow" />
 			<!-- 建筑 -->
-			<view class="departments-name-list" v-for="(item) in architectureList" :key="item.id" v-if="architectureShow"
+			<div class="departments-name-list" v-for="(item) in architectureList" :key="item.id" v-show="architectureShow"
 				@click="architectureClickEvent(item)"
 			>
-					<view class="departments-name-left">
-						<text>建筑</text>
-						<text>
+					<div class="departments-name-left">
+						<span>建筑</span>
+						<span>
 							{{ item.structName }}
-						</text>
-					</view>
-					<view class="departments-name-right">
-						<u-icon name="arrow-right" color="#174E97" size="24"></u-icon>
-					</view>
-			</view>
+						</span>
+					</div>
+					<div class="departments-name-right">
+						<van-icon name="arrow" color="#174E97" size="24" />
+					</div>
+			</div>
 			<!-- 科室 -->
-			<view class="departments-name-list" v-for="(item) in departmentList" :key="item.id" v-if="departmentShow"
+			<div class="departments-name-list" v-for="(item) in departmentList" :key="item.id" v-show="departmentShow"
 				@click="departmentClickEvent(item)"
 			>
-					<view class="departments-name-left">
-						<text>科室</text>
-						<text>
+					<div class="departments-name-left">
+						<span>科室</span>
+						<span>
 							{{ item.departmentName }}
-						</text>
-					</view>
-					<view class="departments-name-right">
-						<u-icon name="arrow-right" color="#174E97" size="24"></u-icon>
-					</view>
-			</view>
+						</span>
+					</div>
+					<div class="departments-name-right">
+						<van-icon name="arrow" color="#174E97" size="24" />
+					</div>
+			</div>
 			<!-- 目的区域 -->
-			<view class="departments-name-list" v-for="(item) in goalAreaList" :key="item.id" v-if="goalAreaShow"
+			<div class="departments-name-list" v-for="(item) in goalAreaList" :key="item.id" v-show="goalAreaShow"
 				@click="goalAreaClickEvent(item)"
 			>
-					<view class="departments-name-left">
-						<text>区域</text>
-						<text>
+					<div class="departments-name-left">
+						<span>区域</span>
+						<span>
 							{{ item.itemName }}
-						</text>
-					</view>
-					<view class="departments-name-right">
-						<u-icon name="arrow-right" color="#174E97" size="24"></u-icon>
-					</view>
-			</view>
+						</span>
+					</div>
+					<div class="departments-name-right">
+						<van-icon name="arrow" color="#174E97" size="24" />
+					</div>
+			</div>
 			<!-- 功能区 -->
-			<view class="departments-name-list" v-for="(item) in functionAreaList" :key="item.id" v-if="functionAreaShow"
+			<div class="departments-name-list" v-for="(item) in functionAreaList" :key="item.id" v-show="functionAreaShow"
 				@click="functionAreaClickEvent(item)"
 			>
-					<view class="departments-name-left">
-						<text>功能区</text>
-						<text>
+					<div class="departments-name-left">
+						<span>功能区</span>
+						<span>
 							{{ item.name }}
-						</text>
-					</view>
-					<view class="departments-name-right">
-						<u-icon name="arrow-right" color="#174E97" size="24"></u-icon>
-					</view>
-			</view>
-		</view>
-	</view>
+						</span>
+					</div>
+					<div class="departments-name-right">
+						<van-icon name="arrow" color="#174E97" size="24" />
+					</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -83,10 +78,10 @@
 		removeAllLocalStorage
 	} from '@/common/js/utils'
 	import { getArchitectureMessage, getGoalAreaMessage, getFunctionAreaMessage, getDepartmentMessage } from '@/api/environment.js'
-	import navBar from "@/components/zhouWei-navBar"
+	import NavBar from "@/components/NavBar";
 	export default {
 		components: {
-			navBar
+			NavBar
 		},
 		data() {
 			return {
@@ -113,31 +108,32 @@
 				'userInfo',
 				'statusBarHeight',
 				'navigationBarHeight',
-				'locationMessage'
+				'locationMessage',
+				'chooseHospitalArea'
 			]),
 			userName() {
-				return this.userInfo['name']
-			},
-			proName () {
-			  return this.userInfo['proName']
-			},
-			proId() {
-				return this.userInfo['proId']
+			return this.userInfo['worker']['name']
 			},
 			workerId() {
-				return this.userInfo['user']['id']
+				return this.userInfo['worker']['id']
+			},
+			proName () {
+				return this.chooseHospitalArea['text']
+			},
+			proId() {
+				return this.chooseHospitalArea['value']
 			},
 			depId() {
-				return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
 			},
 			depName() {
-				return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
 			},
 			userAccount() {
-				return this.userInfo['userName']
+				return this.userInfo['worker']['account']
 			}
 		},
-		onLoad() {
+		mounted() {
 			this.getArchitecture()
 		},
 		methods: {
@@ -182,16 +178,18 @@
 								this.emptyShow = true
 							}
 						} else {
-							this.$refs.uToast.show({
+							that.$dialog.alert({
 								message: res.data.msg,
-								type: 'error',
+								closeOnPopstate: true
+							}).then(() => {
 							})
 						}
 					}).
 					catch((err) => {
-						this.$refs.uToast.show({
-							message: `${err}`,
-							type: 'error'
+						that.$dialog.alert({
+							message: err,
+							closeOnPopstate: true
+						}).then(() => {
 						});
 						this.showLoadingHint = false
 				})
@@ -215,16 +213,18 @@
 								this.emptyShow = true
 							}
 						} else {
-							this.$refs.uToast.show({
+							that.$dialog.alert({
 								message: res.data.msg,
-								type: 'error',
+								closeOnPopstate: true
+							}).then(() => {
 							})
 						}
 					}).
 					catch((err) => {
-						this.$refs.uToast.show({
-							message: `${err}`,
-							type: 'error'
+						that.$dialog.alert({
+							message: err,
+							closeOnPopstate: true
+						}).then(() => {
 						});
 						this.showLoadingHint = false;
 				})
@@ -248,16 +248,18 @@
 								this.emptyShow = true
 							}
 						} else {
-							this.$refs.uToast.show({
+							that.$dialog.alert({
 								message: res.data.msg,
-								type: 'error',
+								closeOnPopstate: true
+							}).then(() => {
 							})
 						}
 					}).
 					catch((err) => {
-						this.$refs.uToast.show({
-							message: `${err}`,
-							type: 'error'
+						that.$dialog.alert({
+							message: err,
+							closeOnPopstate: true
+						}).then(() => {
 						});
 						this.showLoadingHint = false;
 				})
@@ -281,16 +283,18 @@
 								this.emptyShow = true
 							}
 						} else {
-							this.$refs.uToast.show({
+							that.$dialog.alert({
 								message: res.data.msg,
-								type: 'error',
+								closeOnPopstate: true
+							}).then(() => {
 							})
 						}
 					}).
 					catch((err) => {
-						this.$refs.uToast.show({
-							message: `${err}`,
-							type: 'error'
+						that.$dialog.alert({
+							message: err,
+							closeOnPopstate: true
+						}).then(() => {
 						});
 						this.showLoadingHint = false;
 				})
@@ -321,7 +325,7 @@
 			functionAreaClickEvent(item) {
 				this.selectFunctionAreaValue = [];
 				this.selectFunctionAreaValue.push(item);
-				uni.navigateBack();
+				this.$router.push({ path: "/cleanCallTask" });
 				let temporary = [];
 				let temporaryMessage = temporary.concat(this.selectArchitectureValue,this.selectDepartmentValue,this.selectgoalAreaValue,this.selectFunctionAreaValue);
 				this.storeLocationMessage(temporaryMessage)
@@ -330,30 +334,15 @@
 	}
 </script>
 
-<style lang="scss">
-	@import "~@/common/stylus/variable.scss";
-	page {
-		width: 100%;
-		height: 100%;
-	};
+<style lang="less" scoped>
+	@import "~@/common/stylus/variable.less";	
+    @import "~@/common/stylus/mixin.less";
+    @import "~@/common/stylus/modifyUi.less";
 	.content-box {
-		@include content-wrapper;
+		.content-wrapper();
 		height: 100vh !important;
 		box-sizing: border-box;
 		background: #fff;
-		::v-deep .u-popup {
-			flex: none !important
-		};
-		::v-deep .u-loading-icon {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%,-50%);
-			z-index: 200000;
-		};
-		::v-deep .u-transition {
-			z-index: 100000 !important;
-		};
 		.top-background-area {
 			width: 100%;
 			background: #3890EE;
@@ -364,6 +353,25 @@
 		};
 		.nav {
 			width: 100%;
+			/deep/ .tabBar-box {
+				.van-nav-bar {
+					.van-nav-bar__left {
+						.van-icon {
+							color: #fff !important;
+							font-size: 20px !important;
+						};
+						.van-nav-bar__text {
+							color: #fff !important;
+							font-size: 14px !important;
+							margin-left: 10px;
+						}
+					};
+					.van-nav-bar__title {
+						color: #fff !important;
+						font-size: 14px !important;
+					}
+				}	
+			}
 		};
 		.content {
 			flex: 1;
@@ -373,7 +381,7 @@
 			box-sizing: border-box;
 			position: relative;
 			overflow: auto;
-			/deep/ .u-empty {
+			/deep/ .van-empty {
 				position: absolute;
 				top: 50%;
 				left: 50%;
@@ -397,7 +405,7 @@
 							padding-right: 8px;
 							box-sizing: border-box;
 							word-break: break-all;
-							>text {
+							>span {
 								&:nth-child(1) {
 									margin-right: 8px
 								}

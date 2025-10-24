@@ -10,18 +10,18 @@ const MyInfo = () =>
     import ('@/pages/MyInfo')
 const ModificationPassword = () =>
     import ('@/pages/ModificationPassword')
-// const CleanCallTask = () =>
-//     import ('@/pages/cleanManagementPackage/pages/callTask/callTask')
-// const CleanChoosePosition = () =>
-//     import ('@/pages/cleanManagementPackage/pages/choosePosition/choosePosition')
+const CleanCallTask = () =>
+    import ('@/pages/cleanManagementPackage/pages/callTask/callTask')
+const CleanChoosePosition = () =>
+    import ('@/pages/cleanManagementPackage/pages/callTask/choosePosition')
 // const CleanWorkerOrderMessage = () =>
 //     import ('@/pages/cleanManagementPackage/pages/cleanWorkerOrderMessage/cleanWorkerOrderMessage')
 // const CleanHistoricalTask = () =>
 //     import ('@/pages/cleanManagementPackage/pages/historicalTask/historicalTask')
 //  const CleanRealtimeTask = () =>
 //     import ('@/pages/cleanManagementPackage/pages/realtimeTask/realtimeTask')
-// const ProjectCallTask = () =>
-//     import ('@/pages/projectManagementPackage/pages/callTask/callTask')
+const ProjectCallTask = () =>
+    import ('@/pages/projectManagementPackage/pages/callTask/callTask')
 // const ProjectWorkerOrderMessage = () =>
 //     import ('@/pages/projectManagementPackage/pages/projectWorkerOrderMessage/projectWorkerOrderMessage')
 // const ProjectHistoricalTask = () =>
@@ -47,7 +47,7 @@ let baseRoute = [{
     {
         path: '/home',
         name: 'home',
-        component: Home
+        component: Home,
     },
     {
         path: '/myInfo',
@@ -59,16 +59,17 @@ let baseRoute = [{
         name: 'modificationPassword',
         component: ModificationPassword
     },
-    // {
-    //     path: '/cleanCallTask',
-    //     name: 'cleanCallTask',
-    //     component: CleanCallTask
-    // },
-    // {
-    //     path: '/cleanChoosePosition',
-    //     name: 'cleanChoosePosition',
-    //     component: CleanChoosePosition
-    // },
+    {
+        path: '/cleanCallTask',
+        name: 'cleanCallTask',
+        component: CleanCallTask,
+        meta: { keepAlive: true }
+    },
+    {
+        path: '/cleanChoosePosition',
+        name: 'cleanChoosePosition',
+        component: CleanChoosePosition
+    },
     // {
     //     path: '/cleanWorkerOrderMessage',
     //     name: 'cleanWorkerOrderMessage',
@@ -84,11 +85,11 @@ let baseRoute = [{
     //     name: 'cleanRealtimeTask',
     //     component: CleanRealtimeTask
     // },
-     // {
-    //     path: '/projectCallTask',
-    //     name: 'projectCallTask',
-    //     component: ProjectCallTask
-    // },
+    {
+        path: '/projectCallTask',
+        name: 'projectCallTask',
+        component: ProjectCallTask
+    },
     // {
     //     path: '/ProjectWorkerOrderMessage',
     //     name: 'projectWorkerOrderMessage',

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
      <transition :name="transitionName" mode="out-in">
-      <keep-alive include="AddTask">
+      <keep-alive :include="cachedRoutes">
         <router-view class="child-view"></router-view>
       </keep-alive>
     </transition>
@@ -12,6 +12,11 @@
     data () {
       return {
         transitionName: ''
+      }
+    },
+    computed: {
+      cachedRoutes() {
+        return this.$route.matched.filter(r => r.meta && r.meta.keepAlive).map(r => r.name) // 获取需要缓存的路由名称数组
       }
     },
     mounted () {
