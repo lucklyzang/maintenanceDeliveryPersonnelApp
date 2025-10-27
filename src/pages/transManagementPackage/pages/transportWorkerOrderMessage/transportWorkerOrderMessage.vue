@@ -150,7 +150,7 @@
 	} from '@/common/js/utils'
 	import { getDispatchTaskMessageById } from '@/api/transport.js'
 	import NavBar from "@/components/NavBar";	
-	import MyAudio from '@/components/myAudio/myAudio';
+	import MyAudio from '@/components/myAudio';
 	export default {
 		components: {
 			NavBar,
@@ -186,7 +186,7 @@
 				'chooseHospitalArea'
 			]),
 			userName() {
-			return this.userInfo['worker']['name']
+				return this.userInfo['worker']['name']
 			},
 			workerId() {
 				return this.userInfo['worker']['id']
@@ -221,11 +221,6 @@
 				'changeTransTaskMessage',
 				'storeCurrentIndex'
 			]),
-			
-			// 顶部导航返回事件
-			backTo () {
-				uni.navigateBack()
-			},
 			
 			// 转换性别
 			genderTransfer (index) {

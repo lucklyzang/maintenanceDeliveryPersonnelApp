@@ -84,7 +84,7 @@
   </div>
 </template>
 <script>
-import { cancelTask, getForthwithCleanTaskDetails } from "@/api/environment.js";
+import { getForthwithCleanTaskDetails } from "@/api/environment.js";
 import { mapGetters, mapMutations } from "vuex";
 import NavBar from "@/components/NavBar";
 import _ from 'lodash'
@@ -99,6 +99,7 @@ export default {
 			taskId: '',
 			tierNum: 0,
 			currentimageUrl: '',
+      deleteInfoDialogShow: false,
 			imageBoxShow: false,
       environmentSelectCancelReason: {},
       environmentCancelReasonShow: false,
@@ -169,11 +170,6 @@ export default {
 					this.problemPicturesEchoList = this.environmentTaskMessage['images'].filter((item) => { return item.imgType == 0});
 				}
 			}	
-		},
-
-		// 顶部导航返回事件
-		backTo () {
-			uni.navigateBack()
 		},
 		
 		// 图片放大事件

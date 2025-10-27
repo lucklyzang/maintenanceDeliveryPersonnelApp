@@ -114,7 +114,7 @@
 	<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
 	<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
 		<div class="nav">
-			<NavBar :title="currentTransportRice" path="/transIndex" />
+			<NavBar :title="currentTransportRice" path="/transIndex" leftText="返回" />
 		</div>
 	</div>
 	<div class="message-box">

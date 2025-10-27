@@ -117,7 +117,7 @@
 					</div>
 					<div class="issue-image">
 							<div class="issue-image-left">
-									<span>问题图片</span>
+								<span>问题图片</span>
 							</div>
 							<div class="issue-image-list" v-if="issueImage.length > 0">
 								<img alt="" v-for="(innerItem,innerIndex) in issueImage" :key="innerIndex" :src="innerItem.path" @click="enlareEvent(innerItem.path)" />
@@ -148,6 +148,7 @@ export default {
 		infoText: '加载中···',
 		showLoadingHint: false,
       	currentimageUrl: '',
+		deleteInfoDialogShow: true,
       	imageBoxShow: false,
 		issueImage: [],
 		fromPath: ''
@@ -196,11 +197,6 @@ export default {
 			'storeCurrentIndex',
 			'changeProjectTaskMessage'
 		]),
-
-     // 顶部导航返回事件
-     backTo () {
-     	uni.navigateBack()
-     },
 		 
 		 // 并行查询任务详情、任务图片
 		 parallelFunction () {
@@ -554,7 +550,7 @@ export default {
 								display: flex;
 								margin-left: 6px;
 								flex-flow: row wrap;
-								> image {
+								> img {
 									width: 22%;
 									margin-right: 4%;
 									margin-bottom: 10px;

@@ -2,8 +2,8 @@
 	<div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
     <van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
     <van-dialog v-model="modalShow" title="确定退出登录?"
-		  show-cancel-button @confirm="sureCancel" @cancel="cancelSure" confirm-button-color="#3890EE">
-		</van-dialog>
+		show-cancel-button @confirm="sureCancel" @cancel="cancelSure" confirm-button-color="#3890EE">
+	</van-dialog>
 		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
 			<div class="nav">
       			<NavBar title="个人中心" :leftArrow="false" leftText="" />

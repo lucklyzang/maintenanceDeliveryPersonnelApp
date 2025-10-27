@@ -4,7 +4,7 @@
 		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
 		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
 			<div class="nav">
-				<NavBar title="任务呼叫" path="/home" />
+				<NavBar title="任务呼叫" path="/home" leftText="首页" />
 			</div>
 		</div>
 		<div class="content">
@@ -184,6 +184,7 @@
 			})
 		},
 		activated() {
+			this.valueName = 0;
 			this.echoLoactionMessage();
 			if (this.fromPath == '/home') {
 				this.resetEvent()

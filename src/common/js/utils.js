@@ -346,6 +346,121 @@ export const deteleObject = (obj) => {
   return uniques;
 }
 
+/*
+ * 格式化当前日期
+ * 
+*/
+export const getDate = () => {
+	var date = new Date();
+	var year = date.getFullYear();        //年 ,从 Date 对象以四位数字返回年份
+	var month = date.getMonth() + 1;      //月 ,从 Date 对象返回月份 (0 ~ 11) ,date.getMonth()比实际月份少 1 个月
+	var day = date.getDate();             //日 ,从 Date 对象返回一个月中的某一天 (1 ~ 31)
+	
+	var hours = date.getHours();          //小时 ,返回 Date 对象的小时 (0 ~ 23)
+	var minutes = date.getMinutes();      //分钟 ,返回 Date 对象的分钟 (0 ~ 59)
+	var seconds = date.getSeconds();      //秒 ,返回 Date 对象的秒数 (0 ~ 59)   
+	//获取当前系统时间  
+	var currentDate = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+	//修改月份格式
+	if (month >= 1 && month <= 9) {
+		month = "0" + month;
+	}
+	//修改日期格式
+	if (day >= 0 && day <= 9) {
+		day = "0" + day;
+	}
+	//修改小时格式
+	if (hours >= 0 && hours <= 9) {
+		hours = "0" + hours;
+	}
+	//修改分钟格式
+	if (minutes >= 0 && minutes <= 9) {
+		minutes = "0" + minutes;
+	}
+	//修改秒格式
+	if (seconds >= 0 && seconds <= 9) {
+		seconds = "0" + seconds;
+	}
+	//获取当前系统时间  格式(yyyy-mm-dd hh:mm:ss)+ " " + hours + ":" + minutes + ":" + seconds
+	var currentFormatDate = year + "-" + month + "-" + day;
+	return currentFormatDate
+}
+
+
+
+/*
+ * 合并重复的运送类型
+ * @param{Array}
+ * @return {Array}
+ *
+*/
+
+export const  mergeMethods =  (testData) => {
+  if (!Array.isArray(testData)) { return };
+  var mergeData = [];
+  for (var i = 0, len = testData.length; i < len; i++ ) {
+    var temporaryObj = {typeList:[]};
+    var temporaryParentTypeName = [];
+    temporaryObj['typeList'].push({
+      patientName: testData[i]['patientName'],
+      bedNumber: testData[i]['bedNumber'],
+      sex: testData[i]['sex'],
+      quarantine: testData[i]['quarantine'],
+      typeChildList: []
+    });
+    for (var innerI = 0, innerLen = testData[i]['typeList'].length; innerI < innerLen; innerI++ ) {
+      // 判断运送大类是否存在已有的数组元素中
+      if (testData[i]['typeList'].length == 0) { continue };
+      var tragetIndex = mergeData.findIndex(function(item) { return item.parentTypeName == testData[i]['typeList'][innerI]['parentTypeName']});
+      if (tragetIndex == -1) {
+        // 判断该病人是否存在多个运送大类
+        if (temporaryParentTypeName.indexOf(testData[i]['typeList'][innerI]['parentTypeName']) != -1) {
+          temporaryObj['parentTypeName'] = testData[i]['typeList'][innerI]['parentTypeName'];
+          temporaryObj['typeList'][0]['typeChildList'].push({
+            taskTypeName: testData[i]['typeList'][innerI]['taskTypeName'],
+            quantity: testData[i]['typeList'][innerI]['quantity'],
+          })
+        } else {
+          var temporaryinnerObj = {typeList:[]};
+          temporaryinnerObj['parentTypeName'] = testData[i]['typeList'][innerI]['parentTypeName'];
+          temporaryinnerObj['typeList'].push({
+            patientName: testData[i]['patientName'],
+            bedNumber: testData[i]['bedNumber'],
+            sex: testData[i]['sex'],
+            quarantine: testData[i]['quarantine'],
+            typeChildList: []
+          });
+          temporaryinnerObj['typeList'][0]['typeChildList'].push({
+            taskTypeName: testData[i]['typeList'][innerI]['taskTypeName'],
+            quantity: testData[i]['typeList'][innerI]['quantity'],
+          })
+          mergeData.push(temporaryinnerObj)
+        }
+      } else {
+        // 判断病人是否存在于已有运送大类的typelist中
+        var patientIndex = mergeData[tragetIndex]['typeList'].findIndex(function(item) { return item.bedNumber == temporaryObj['typeList'][0]['bedNumber']});
+        if (patientIndex == -1) {
+          mergeData[tragetIndex]['typeList'].push({
+            patientName: testData[i]['patientName'],
+            bedNumber: testData[i]['bedNumber'],
+            sex: testData[i]['sex'],
+            quarantine: testData[i]['quarantine'],
+            typeChildList: []
+          })
+        };
+        mergeData[tragetIndex]['typeList'][mergeData[tragetIndex]['typeList'].length-1]['typeChildList'].push({
+          taskTypeName: testData[i]['typeList'][innerI]['taskTypeName'],
+          quantity: testData[i]['typeList'][innerI]['quantity'],
+        })
+      };
+      // 存储该病人信息下的运送大类(一个病人有可能会有多个运送大类)
+      temporaryParentTypeName.push(testData[i]['typeList'][innerI]['parentTypeName']);
+    };
+    temporaryObj.hasOwnProperty('parentTypeName') && mergeData.push(temporaryObj)
+  };
+  return mergeData
+}
+
 /* 
   * 去除包裹的大括号
   * @param{String} str

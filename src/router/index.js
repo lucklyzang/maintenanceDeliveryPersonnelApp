@@ -14,30 +14,30 @@ const CleanCallTask = () =>
     import ('@/pages/cleanManagementPackage/pages/callTask/callTask')
 const CleanChoosePosition = () =>
     import ('@/pages/cleanManagementPackage/pages/callTask/choosePosition')
-// const CleanWorkerOrderMessage = () =>
-//     import ('@/pages/cleanManagementPackage/pages/cleanWorkerOrderMessage/cleanWorkerOrderMessage')
-// const CleanHistoricalTask = () =>
-//     import ('@/pages/cleanManagementPackage/pages/historicalTask/historicalTask')
-//  const CleanRealtimeTask = () =>
-//     import ('@/pages/cleanManagementPackage/pages/realtimeTask/realtimeTask')
+const CleanWorkerOrderMessage = () =>
+    import ('@/pages/cleanManagementPackage/pages/cleanWorkerOrderMessage/cleanWorkerOrderMessage')
+const CleanHistoricalTask = () =>
+    import ('@/pages/cleanManagementPackage/pages/historicalTask/historicalTask')
+const CleanRealtimeTask = () =>
+    import ('@/pages/cleanManagementPackage/pages/realtimeTask/realtimeTask')
 const ProjectCallTask = () =>
     import ('@/pages/projectManagementPackage/pages/callTask/callTask')
-// const ProjectWorkerOrderMessage = () =>
-//     import ('@/pages/projectManagementPackage/pages/projectWorkerOrderMessage/projectWorkerOrderMessage')
-// const ProjectHistoricalTask = () =>
-//     import ('@/pages/projectManagementPackage/pages/historicalTask/historicalTask')
-//  const ProjectRealtimeTask = () =>
-//     import ('@/pages/projectManagementPackage/pages/realtimeTask/realtimeTask')
+const ProjectWorkerOrderMessage = () =>
+    import ('@/pages/projectManagementPackage/pages/projectWorkerOrderMessage/projectWorkerOrderMessage')
+const ProjectHistoricalTask = () =>
+    import ('@/pages/projectManagementPackage/pages/historicalTask/historicalTask')
+const ProjectRealtimeTask = () =>
+    import ('@/pages/projectManagementPackage/pages/realtimeTask/realtimeTask')
 const TransIndex = () =>
     import ('@/pages/transManagementPackage/pages/index/index')
 const TransCallTask = () =>
     import ('@/pages/transManagementPackage/pages/callTask/callTask')
-// const TransportWorkerOrderMessage = () =>
-//     import ('@/pages/transManagementPackage/pages/transportWorkerOrderMessage/transportWorkerOrderMessage')
-// const TransHistoricalTask = () =>
-//     import ('@/pages/transManagementPackage/pages/historicalTask/historicalTask')
-//  const TransRealtimeTask = () =>
-//     import ('@/pages/transManagementPackage/pages/realtimeTask/realtimeTask')
+const TransportWorkerOrderMessage = () =>
+    import ('@/pages/transManagementPackage/pages/transportWorkerOrderMessage/transportWorkerOrderMessage')
+const TransHistoricalTask = () =>
+    import ('@/pages/transManagementPackage/pages/historicalTask/historicalTask')
+ const TransRealtimeTask = () =>
+    import ('@/pages/transManagementPackage/pages/realtimeTask/realtimeTask')
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -70,41 +70,45 @@ let baseRoute = [{
         name: 'cleanChoosePosition',
         component: CleanChoosePosition
     },
-    // {
-    //     path: '/cleanWorkerOrderMessage',
-    //     name: 'cleanWorkerOrderMessage',
-    //     component: CleanWorkerOrderMessage
-    // },
-    // {
-    //     path: '/cleanHistoricalTask',
-    //     name: 'cleanHistoricalTask',
-    //     component: CleanHistoricalTask
-    // },
-    // {
-    //     path: '/cleanRealtimeTask',
-    //     name: 'cleanRealtimeTask',
-    //     component: CleanRealtimeTask
-    // },
+    {
+        path: '/cleanWorkerOrderMessage',
+        name: 'cleanWorkerOrderMessage',
+        component: CleanWorkerOrderMessage
+    },
+    {
+        path: '/cleanHistoricalTask',
+        name: 'cleanHistoricalTask',
+        component: CleanHistoricalTask,
+        meta: { keepAlive: true }
+    },
+    {
+        path: '/cleanRealtimeTask',
+        name: 'cleanRealtimeTask',
+        component: CleanRealtimeTask,
+        meta: { keepAlive: true }
+    },
     {
         path: '/projectCallTask',
         name: 'projectCallTask',
         component: ProjectCallTask
     },
-    // {
-    //     path: '/ProjectWorkerOrderMessage',
-    //     name: 'projectWorkerOrderMessage',
-    //     component: ProjectWorkerOrderMessage
-    // },
-    // {
-    //     path: '/projectHistoricalTask',
-    //     name: 'projectHistoricalTask',
-    //     component: ProjectHistoricalTask
-    // },
-    // {
-    //     path: '/projectRealtimeTask',
-    //     name: 'projectRealtimeTask',
-    //     component: ProjectRealtimeTask
-    // },
+    {
+        path: '/ProjectWorkerOrderMessage',
+        name: 'projectWorkerOrderMessage',
+        component: ProjectWorkerOrderMessage
+    },
+    {
+        path: '/projectHistoricalTask',
+        name: 'projectHistoricalTask',
+        component: ProjectHistoricalTask,
+        meta: { keepAlive: true }
+    },
+    {
+        path: '/projectRealtimeTask',
+        name: 'projectRealtimeTask',
+        component: ProjectRealtimeTask,
+        meta: { keepAlive: true }
+    },
     {
         path: '/transCallTask',
         name: 'transCallTask',
@@ -115,21 +119,23 @@ let baseRoute = [{
         name: 'transIndex',
         component: TransIndex
     },
-    // {
-    //     path: '/transportWorkerOrderMessage',
-    //     name: 'transportWorkerOrderMessage',
-    //     component: TransportWorkerOrderMessage
-    // },
-    // {
-    //     path: '/transHistoricalTask',
-    //     name: 'transHistoricalTask',
-    //     component: TransHistoricalTask
-    // },
-    // {
-    //     path: '/transRealtimeTask',
-    //     name: 'transRealtimeTask',
-    //     component: TransRealtimeTask
-    // }
+    {
+        path: '/transportWorkerOrderMessage',
+        name: 'transportWorkerOrderMessage',
+        component: TransportWorkerOrderMessage
+    },
+    {
+        path: '/transHistoricalTask',
+        name: 'transHistoricalTask',
+        component: TransHistoricalTask,
+        meta: { keepAlive: true }
+    },
+    {
+        path: '/transRealtimeTask',
+        name: 'transRealtimeTask',
+        component: TransRealtimeTask,
+        meta: { keepAlive: true }
+    }
 ];
 let router = new Router({
     routes: baseRoute,

@@ -3,7 +3,17 @@
 	<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
 	<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
 		<div class="nav">
-			<NavBar title="选择位置" path="/cleanCallTask" />
+			<van-nav-bar
+				title="选择位置"
+				left-text="返回"
+				:left-arrow="true"
+				:placeholder="true"
+				:border="false"
+				:fixed="true"
+				z-index="1000"
+				:safe-area-inset-top="true"
+				@click-left="backTo"
+			/>
 		</div>
 	</div>
 	 <div class="content">
@@ -144,7 +154,7 @@
 			// 顶部导航返回事件
 			backTo () {
 				if (this.architectureShow) {
-					uni.navigateBack()
+					this.$router.push({path: '/cleanCallTask'})
 				} else if (this.departmentShow) {
 					this.emptyShow = false;
 					this.departmentShow = false;
@@ -353,24 +363,23 @@
 		};
 		.nav {
 			width: 100%;
-			/deep/ .tabBar-box {
-				.van-nav-bar {
-					.van-nav-bar__left {
-						.van-icon {
-							color: #fff !important;
-							font-size: 20px !important;
-						};
-						.van-nav-bar__text {
-							color: #fff !important;
-							font-size: 14px !important;
-							margin-left: 10px;
-						}
+			/deep/ .van-nav-bar {
+				background: transparent;
+				.van-nav-bar__left {
+					.van-icon {
+						color: #fff !important;
+						font-size: 20px !important;
 					};
-					.van-nav-bar__title {
+					.van-nav-bar__text {
 						color: #fff !important;
 						font-size: 14px !important;
+						margin-left: 10px;
 					}
-				}	
+				};
+				.van-nav-bar__title {
+					color: #fff !important;
+					font-size: 14px !important;
+				}
 			}
 		};
 		.content {

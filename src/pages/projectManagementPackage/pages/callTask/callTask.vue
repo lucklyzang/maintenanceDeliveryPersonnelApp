@@ -4,7 +4,7 @@
 		<van-loading size="24px" vertical v-if="showLoadingHint">{{ infoText }}</van-loading>
 		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
 			<div class="nav">
-				<NavBar title="任务呼叫" path="/home" />
+				<NavBar title="任务呼叫" path="/home" leftText="首页" />
 			</div>
 		</div>
 		<van-dialog v-model="sureCancelShow" title="确定删除此图片?" :close-on-click-overlay="true"  @close="deleteInfoDialogShow = false"

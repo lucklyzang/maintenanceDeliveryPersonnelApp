@@ -1,88 +1,69 @@
 <template>
-	<view class="content-box">
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" :text="infoText" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></view>
-		<u-toast ref="uToast" />
+	<div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
 		<!-- 日期选择弹框 -->
-		<view>
-			<u-datetime-picker mode="date" :show="dateStartShow" v-model="dateStartValue" @cancel="dateStartShow = false" @confirm="startDateSure"></u-datetime-picker>
-		</view>
-		<view>
-			<u-datetime-picker mode="date" :show="dateEndShow" v-model="dateEndValue" @cancel="dateEndShow = false" @confirm="endDateSure"></u-datetime-picker>
-		</view>
-		<view class="nav">
-			<nav-bar :home="false" :isShowBackText="true" :isHomeText="true" backState='3000' fontColor="#FFF" bgColor="none" title="保洁管理" @backClick="backTo">
-			</nav-bar> 
-		</view>
-		<view class="content">
-			<view class="task-tail-title">
-				<u-tabs 
-				  :list="list"
-					:scrollable="false" 
-					lineColor="#fff"
-					:activeStyle="{
-						color: '#2c9af1',
-						fontSize: '14px'
-					}"
-				 :inactiveStyle="{
-						color: '#606060',
-						fontSize: '14px'
-				 }"
-					lineWidth="0" 
-					lineHeight="0"
-					:current="current" 
+		<div class="datetime-picker">
+			<van-datetime-picker type="date" v-if="dateStartShow" v-model="dateStartValue" @cancel="dateStartShow = false" @confirm="startDateSure" />
+		</div>
+		<div class="datetime-picker">
+			<van-datetime-picker type="date" v-if="dateEndShow" v-model="dateEndValue" @cancel="dateEndShow = false" @confirm="endDateSure" />
+		</div>
+		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+			<div class="nav">
+				<NavBar title="保洁管理" leftText="首页" path="/home" />
+			</div>
+		</div>
+		<div class="content">
+			<div class="task-tail-title">
+				<van-tabs v-model="current"
+					title-active-color="#2c9af1"
+					title-inactive-color="#606060"
+					line-width="0" 
+					line-height="0"
 					@change="tabChange"
 				>
-				</u-tabs>
-				<view class="tab-line" :class="{'tab-left':current == 0,'tab-right':current == 1}"></view>
-			</view>
-			<view class="filtrate-area">
-				<view class="calendar-box">
-					<u-icon name="calendar" color="#101010" size="30"></u-icon>
-				</view>
-				<view class="date-input-box">
-					<view @click="dateStartShow = true">
-						<u--input
+					<van-tab title="已完成"></van-tab>
+					<van-tab title="已取消"></van-tab>
+				</van-tabs>
+				<div class="tab-line" :class="{'tab-left':current == 0,'tab-right':current == 1}"></div>
+			</div>
+			<div class="filtrate-area">
+				<div class="calendar-box">
+					<van-icon name="notes-o" color="#101010" size="26" />
+				</div>
+				<div class="date-input-box">
+					<div @click="dateStartShow = true">
+						<van-field
 							:readonly="true"
-							type="number"
-							color="#101010"
-							fontSize="12px"
-							border="surround"
+							type="text"
 							v-model="dateStart"
-						></u--input>
-					</view>
-					<view>至</view>
-					<view @click="dateEndShow = true">
-						<u--input
-						  :readonly="true"
-							type="number"
-							color="#101010"
-							fontSize="12px"
-							border="surround"
+						/>
+					</div>
+					<div>至</div>
+					<div @click="dateEndShow = true">
+						<van-field
+							:readonly="true"
+							type="text"
 							v-model="dateEnd"
-						></u--input>
-					</view>
-				</view>
-				<view class="filtrate-btn" @click="filtrateEvent">
-					<text>筛选</text>
-				</view>
-			</view>
-			<view class="empty-info" v-if="noDataShow">
-				<u-empty text="数据为空" mode="list"></u-empty>
-			</view>
-			<view class="task-tail-content" v-if="current == 0">
-				<view class="task-tail-content-item" @click="enterTaskMessage(item)"  v-for="(item,index) in stateCompleteList" :key="index">
-					<view class="item-title">
-						<view class="item-top-one">
-							<view class="number">
-								<text>编号: {{item.number}}</text>
-								<text>{{item.createTime}}</text>
-							</view>
-						  <view class="priority"
+						/>
+					</div>
+				</div>
+				<div class="filtrate-btn" @click="filtrateEvent">
+					<span>筛选</span>
+				</div>
+			</div>
+			<div class="empty-info" v-if="noDataShow">
+				<van-empty description="数据为空" />
+			</div>
+			<div class="task-tail-content" v-if="current == 0">
+				<div class="task-tail-content-item" @click="enterTaskMessage(item)"  v-for="(item,index) in stateCompleteList" :key="index">
+					<div class="item-title">
+						<div class="item-top-one">
+							<div class="number">
+								<span>编号: {{item.number}}</span>
+								<span>{{item.createTime}}</span>
+							</div>
+						  <div class="priority"
 						  :class="{
 						  	'noStartStyle ' : item.state == 1 || item.state == 2, 
 						  	'underwayStyle' : item.state == 3,
@@ -93,35 +74,35 @@
 						  	'reviewStyle' : item.state == 8
 						  	}"
 						  >
-						  	<text>{{stateTransfer(item.state)}}</text>
-						  </view>
-						</view>
-					</view>
-					<view class="item-top">
-						<view class="item-top-two">
-						 <text>优先级:</text>
-						 <text>{{priorityTransfer(item.priority)}}</text>
-						</view>
-						<view class="item-top-three">
-						 <text>位置:</text>
-						 <text>{{!item.taskDesc ? '无' : item.taskDesc}}</text>
-						</view>
-						<view class="item-top-four">
-						 <text>问题描述:</text>
-						 <text>{{!item.taskDesc ? '无' : item.taskDesc}}</text>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="task-tail-content task-tail-content-going" v-if="current == 1">
-				<view class="task-tail-content-item" @click="enterTaskMessage(item)" v-for="(item,index) in stateCompleteList" :key="index">
-					<view class="item-title">
-						<view class="item-top-one">
-							<view class="number">
-								<text>编号: {{item.number}}</text>
-								<text>{{item.createTime}}</text>
-							</view>
-						  <view class="priority"
+						  	<span>{{stateTransfer(item.state)}}</span>
+						  </div>
+						</div>
+					</div>
+					<div class="item-top">
+						<div class="item-top-two">
+						 <span>优先级:</span>
+						 <span>{{priorityTransfer(item.priority)}}</span>
+						</div>
+						<div class="item-top-three">
+						 <span>位置:</span>
+						 <span>{{!item.taskDesc ? '无' : item.taskDesc}}</span>
+						</div>
+						<div class="item-top-four">
+						 <span>问题描述:</span>
+						 <span>{{!item.taskDesc ? '无' : item.taskDesc}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="task-tail-content task-tail-content-going" v-if="current == 1">
+				<div class="task-tail-content-item" @click="enterTaskMessage(item)" v-for="(item,index) in stateCompleteList" :key="index">
+					<div class="item-title">
+						<div class="item-top-one">
+							<div class="number">
+								<span>编号: {{item.number}}</span>
+								<span>{{item.createTime}}</span>
+							</div>
+						  <div class="priority"
 						  :class="{
 						  	'noStartStyle ' : item.state == 1 || item.state == 2, 
 						  	'underwayStyle' : item.state == 3,
@@ -132,81 +113,50 @@
 						  	'reviewStyle' : item.state == 8
 						  	}"
 						  >
-						  	<text>{{stateTransfer(item.state)}}</text>
-						  </view>
-						</view>
-					</view>
-					<view class="item-top">
-						<view class="item-top-two">
-						 <text>优先级:</text>
-						 <text>{{priorityTransfer(item.priority)}}</text>
-						</view>
-						<view class="item-top-three">
-						 <text>位置:</text>
-						 <text>{{!item.taskDesc ? '无' : item.taskDesc}}</text>
-						</view>
-						<view class="item-top-four">
-						 <text>问题描述:</text>
-						 <text>{{!item.taskDesc ? '无' : item.taskDesc}}</text>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="tab-bar">
-			<u-tabbar
-			  :value="valueName"
-			  @change="tabBarEvent"
-			  :placeholder="false"
-				activeColor="#3890EE"
-				:fixed="true"
-			  :safeAreaInsetBottom="true"
-			>
-			  <u-tabbar-item text="呼叫">
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="active-icon"
-			      src="/static/img/call-active-icon.png"
-			    ></image>
-			    <image
-			  	  class="u-page__item__slot-icon"
-			      slot="inactive-icon"
-			  		style="width:19px;height:18px"
-			      src="/static/img/call-inactive-icon.png"
-			    ></image>
-			  </u-tabbar-item>
-			  <u-tabbar-item text="实时任务">
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="active-icon"
-			      src="/static/img/real-timetask-active-icon.png"
-			    ></image>
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="inactive-icon"
-			      src="/static/img/real-timetask-inactive-icon.png"
-			    ></image>
-			  </u-tabbar-item>
-			  <u-tabbar-item text="历史任务">
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="active-icon"
-			      src="/static/img/historical-task-active-icon.png"
-			    ></image>
-			    <image
-			  	  class="u-page__item__slot-icon"
-			  		style="width:19px;height:18px"
-			      slot="inactive-icon"
-			      src="/static/img/historical-task-inactive-icon.png"
-			    ></image>
-			  </u-tabbar-item>
-			</u-tabbar>
-		</view>
-	</view>
+						  	<span>{{stateTransfer(item.state)}}</span>
+						  </div>
+						</div>
+					</div>
+					<div class="item-top">
+						<div class="item-top-two">
+						 <span>优先级:</span>
+						 <span>{{priorityTransfer(item.priority)}}</span>
+						</div>
+						<div class="item-top-three">
+						 <span>位置:</span>
+						 <span>{{!item.taskDesc ? '无' : item.taskDesc}}</span>
+						</div>
+						<div class="item-top-four">
+						 <span>问题描述:</span>
+						 <span>{{!item.taskDesc ? '无' : item.taskDesc}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-bar">
+			<van-tabbar v-model="valueName" @change="tabBarEvent" active-color="#1684FC" inactive-color="#666666">
+				<van-tabbar-item>
+					<span>呼叫</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/call-active-icon.png') : require('@/common/img/call-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+				<van-tabbar-item>
+					<span>实时任务</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/real-timetask-active-icon.png') : require('@/common/img/real-timetask-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+				<van-tabbar-item>
+					<span>历史任务</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/historical-task-active-icon.png') : require('@/common/img/historical-task-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+			</van-tabbar>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -216,16 +166,15 @@
 	} from 'vuex'
 	import _ from 'lodash'
 	import {
-		setCache,
-		removeAllLocalStorage,
 		getDate
 	} from '@/common/js/utils'
 	import { queryCleaningManageTaskListHistory } from "@/api/environment.js";
-	import navBar from "@/components/zhouWei-navBar"
+	import NavBar from "@/components/NavBar";	
 	import SOtime from '@/common/js/utils/SOtime.js'
 	export default {
+		name: 'cleanHistoricalTask',
 		components: {
-			navBar
+			NavBar
 		},
 		data() {
 			return {
@@ -237,11 +186,12 @@
 				current: 0,
 				dateStart: getDate(),
 				dateEnd: getDate(),
-				dateStartValue: this.normalizeTimestamp(),
-				dateEndValue: this.normalizeTimestamp(),
+				dateStartValue: new Date(),
+				dateEndValue: new Date(),
 				dateEndShow: false,
 				dateStartShow: false,
-				stateCompleteList: []
+				stateCompleteList: [],
+				fromPath: ''
 			}
 		},
 		computed: {
@@ -250,39 +200,51 @@
 				'statusBarHeight',
 				'navigationBarHeight',
 				'templateType',
-			  'chooseHospitalArea'
+			  	'chooseHospitalArea'
 			  ]),
-			  userName() {
-			  	return this.userInfo['name']
-			  },
-			  proName () {
-			    return this.userInfo['proName']
-			  },
-			  proId() {
-			  	return this.userInfo['proId']
-			  },
-			  workerId() {
-			  	return this.userInfo['user']['id']
-			  },
-			  depId() {
-			  	return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
-			  },
-			  depName() {
-			  	return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
-			  },
-			  userAccount() {
-			  	return this.userInfo['userName']
-			  }
+			 	userName() {
+					return this.userInfo['worker']['name']
+				},
+				workerId() {
+					return this.userInfo['worker']['id']
+				},
+				proName () {
+					return this.chooseHospitalArea['text']
+				},
+				proId() {
+					return this.chooseHospitalArea['value']
+				},
+				depId() {
+					return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+				},
+				depName() {
+					return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+				},
+				userAccount() {
+					return this.userInfo['worker']['account']
+				}
 		},
-		onLoad() {
+		beforeRouteEnter(to, from, next) {
+			next(vm => {
+				vm.fromPath = from['path']
+			})
+		},
+		activated() {
+			if (this.fromPath == '/cleanWorkerOrderMessage') { return };
+			this.current = 0;
+			this.valueName = 2;
+			this.dateStart = getDate();
+			this.dateEnd = getDate();
+			this.dateStartValue = new Date();
+			this.dateEndValue = new Date();
 			this.queryCompleteDispatchTask(
 				{
 				    state:5,
-						proId : this.proId, // 所属项目id
-						createId: this.workerId,// 保洁主管id 
-						taskType: 0, // 0-即时，1-专项
-					  beginTime: this.dateStart,
-						endTime: this.dateEnd
+					proId : this.proId, // 所属项目id
+					createId: this.workerId,// 保洁主管id 
+					taskType: 0, // 0-即时，1-专项
+					beginTime: this.dateStart,
+					endTime: this.dateEnd
 				}
 			)
 		},
@@ -290,13 +252,6 @@
 			...mapMutations([
 				'changeEnvironmentTaskMessage'
 			]),
-			
-			// 顶部导航返回事件
-			backTo () {
-				uni.switchTab({
-					url: '/pages/index/index'
-				})
-			},
 			
 			// 开始日期弹框显示事件
 			showActionStart () {
@@ -313,9 +268,7 @@
 			// 进入订单详情事件
 			enterTaskMessage (item) {
 				this.changeEnvironmentTaskMessage(item);
-				uni.navigateTo({
-					url: '/cleanManagementPackage/pages/cleanWorkerOrderMessage/cleanWorkerOrderMessage'
-				})
+				this.$router.push({path: '/cleanWorkerOrderMessage'})
 			},
 			
 			// 将时间戳转换为当天的 00:00:00
@@ -327,14 +280,11 @@
 			
 			// tab切换改变事件
 			tabChange (index) {
-				if (this.dateEndValue < this.dateStartValue) {
-					this.$refs.uToast.show({
-					  message: `结束日期不能小于开始日期`,
-					  type: 'warning'
-					});
+				if (new Date(this.dateEndValue).getTime() < new Date(this.dateStartValue).getTime()){
+					this.$toast('结束日期不能小于开始日期')
 					return
 				};
-				this.current = index['index'];
+				this.current = index;
 				if (this.current == 0) {
 				  this.queryCompleteDispatchTask(
 						{
@@ -363,13 +313,9 @@
 			// 开始时间确定
 			startDateSure(e) {
 				this.dateStartShow = false;
-				this.dateStart = SOtime.time8(e.value);
-				this.dateStartValue = e.value;
-				if (this.dateEndValue < this.dateStartValue){
-					this.$refs.uToast.show({
-					  message: `结束日期不能小于开始日期`,
-					  type: 'warning'
-					});
+				this.dateStart = SOtime.time8(new Date(e).getTime());
+				if (new Date(this.dateEndValue).getTime() < new Date(this.dateStartValue).getTime()){
+					this.$toast('结束日期不能小于开始日期')
 					return
 				}
 			},
@@ -377,13 +323,9 @@
 			// 结束日期确定
 			endDateSure(e) {
 				this.dateEndShow = false;
-				this.dateEnd = SOtime.time8(e.value);
-				this.dateEndValue = e.value;
-				if (this.dateEndValue < this.dateStartValue) {
-					this.$refs.uToast.show({
-					  message: `结束日期不能小于开始日期`,
-					  type: 'warning'
-					});
+				this.dateEnd = SOtime.time8(new Date(e).getTime());
+				if (new Date(this.dateEndValue).getTime() < new Date(this.dateStartValue).getTime()) {
+					this.$toast('结束日期不能小于开始日期');
 					return
 				}
 			},
@@ -442,11 +384,8 @@
 			
 			// 筛选事件
 			filtrateEvent () {
-				if (this.dateEndValue < this.dateStartValue) {
-					this.$refs.uToast.show({
-					  message: `结束日期不能小于开始日期`,
-					  type: 'warning'
-					});
+				if (new Date(this.dateEndValue).getTime() < new Date(this.dateStartValue).getTime()){
+					this.$toast('结束日期不能小于开始日期')
 					return
 				};
 				if (this.current == 0) {
@@ -476,8 +415,8 @@
 			
 			// 查询保洁任务
 			queryCompleteDispatchTask (data) {
-			  this.noDataShow = false;
-			  this.showLoadingHint = true;
+				this.noDataShow = false;
+				this.showLoadingHint = true;
 				this.infoText = '查询中···';
 				this.stateCompleteList = [];
 				let temporaryDataList = [];
@@ -512,17 +451,19 @@
 						this.noDataShow = true
 				  }
 				} else {
-					this.$refs.uToast.show({
-						message: `${res.data.msg}`,
-						type: 'error'
-					})
+					this.$dialog.alert({
+						message: res.data.msg,
+						closeOnPopstate: true
+					}).then(() => {
+					})	
 				}
 			  })
 			  .catch((err) => {
-					this.$refs.uToast.show({
-						message: `${err.message}`,
-						type: 'error'
-					});
+					this.$dialog.alert({
+						message: err.message,
+						closeOnPopstate: true
+					}).then(() => {
+					})	
 					this.showLoadingHint = false;
 					this.noDataShow = true;
 			  })
@@ -530,49 +471,29 @@
 			
 			// tabBar点击事件
 			tabBarEvent (index) {
-			 this.valueName = index;
-			 if (this.valueName == 0) {
-				 uni.redirectTo({
-					url: '/cleanManagementPackage/pages/callTask/callTask'
-				 })
-			 } else if (this.valueName == 1) {
-				 uni.redirectTo({
-					url: '/cleanManagementPackage/pages/realtimeTask/realtimeTask'
-				 })
-			 } else if (this.valueName == 2) {
-				 uni.redirectTo({
-					url: '/cleanManagementPackage/pages/historicalTask/historicalTask'
-				 })
-			 }
+			 	this.valueName = index;
+				this.valueName = index;
+				if (this.valueName == 0) {
+					this.$router.push({ path: "/cleanCallTask" })
+				} else if (this.valueName == 1) {
+					this.$router.push({ path: "/cleanRealtimeTask" })
+				} else if (this.valueName == 2) {
+					this.$router.push({ path: "/cleanHistoricalTask" })
+				}
 			} 
 		}
 	}
 </script>
 
-<style lang="scss">
-	@import "~@/common/stylus/variable.scss";
-	page {
-		width: 100%;
-		height: 100%;
-	};
+<style lang="less" scoped>
+	@import "~@/common/stylus/variable.less";
+	@import "~@/common/stylus/mixin.less";
+	@import "~@/common/stylus/modifyUi.less";
 	.content-box {
-		@include content-wrapper;
+		.content-wrapper();
 		height: 100vh !important;
 		box-sizing: border-box;
 		background: #f6f6f6;
-		::v-deep .u-popup {
-			flex: none !important
-		};
-		::v-deep .u-loading-icon {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%,-50%);
-			z-index: 200000;
-		};
-		::v-deep .u-transition {
-			z-index: 100000 !important;
-		};
 		.top-background-area {
 			width: 100%;
 			background: #3890EE;
@@ -581,17 +502,49 @@
 			left: 0;
 			z-index: 10
 		};
+		.datetime-picker {
+			position: fixed;
+			width: 100%;
+			left: 0;
+			bottom: 0;
+			z-index: 10;
+			/deep/ .van-datetime-picker {
+				.van-picker__toolbar {
+					.van-picker__confirm {
+						color: #3c9cff !important;
+					}
+				}
+			}
+		};
 		.nav {
 			width: 100%;
+			/deep/ .tabBar-box {
+				.van-nav-bar {
+					.van-nav-bar__left {
+						.van-icon {
+							color: #fff !important;
+							font-size: 20px !important;
+						};
+						.van-nav-bar__text {
+							color: #fff !important;
+							font-size: 14px !important;
+							margin-left: 10px;
+						}
+					};
+					.van-nav-bar__title {
+						color: #fff !important;
+						font-size: 14px !important;
+					}
+				}	
+			}
 		};
 		.tab-bar {
-			height: 85px;
-			::v-deep {
-				.u-tabbar {
-					height: 100%;
-					.u-tabbar__content {
-						background: #F8F8F8;
-					}
+			height: 51px;
+			border: 1px solid #f1f1f1;
+			/deep/ .van-tabbar {
+				background: #F8F8F8;
+				.van-tabbar-item--active {
+					background: #F8F8F8;
 				}
 			}
 		};
@@ -605,15 +558,15 @@
 			 display: flex;
 			 flex-direction: column;
 			 .empty-info {
-				  width: 100px;
-				  height: 120px;
-					position: absolute;
-					top: 0;
-					left: 0;
-					bottom: 0;
-					right: 0;
-					margin: auto;
-					z-index: 100;
+				width: 200px;
+				height: 200px;
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				margin: auto;
+				z-index: 100;
 			 };
 			 .task-tail-title {
 				 width: 85%;
@@ -633,22 +586,24 @@
 					 right: 0
 				 };
 				 border-bottom: 1px solid #bbbbbb;
-				 ::v-deep .u-tabs {
-					 .u-tabs__wrapper {
-						 .u-tabs__wrapper__nav {
-								.u-tabs__wrapper__nav__item {
-									padding: 0 20px;
-									box-sizing: border-box;
-								 &:nth-child(1) {
-										justify-content: flex-start !important;
-								 };
-								 &:nth-child(2) {
-										justify-content: flex-end !important;
-								 }
+				/deep/ .van-tabs {
+					 .van-tabs__wrap {
+						.van-tabs__nav {
+							background: transparent !important;
+							.van-tab {
+								padding: 0 20px;
+								box-sizing: border-box;
+								&:nth-child(1) {
+									justify-content: flex-start !important;
 								};
-								.u-tabs__wrapper__nav__line {
-									margin-bottom: -3px;
+								&:nth-child(2) {
+									justify-content: flex-end !important;
 								}
+							};
+							.van-tabs__line {
+								padding-bottom: 0 !important;
+								margin-bottom: -3px;
+							}
 						 }
 					 }
 				 }
@@ -665,16 +620,17 @@
 				 .date-input-box {
 				  display: flex;
 				  align-items: center;
-				  ::v-deep .u-input {
-				  	 padding: 0 9px !important;
-				  	 width: 73px;
-				  	 height: 22px;
-						 border-radius: 0 !important;
-				  };
-				  ::v-deep .u-border {
-				  	border-color: #bbbbbb !important;
-				  };
-				  >view {
+					/deep/ .van-cell {
+						padding: 0 9px !important;
+						font-size: 12px !important;
+						color: #101010 !important;
+						width: 100px;
+						height: 22px;
+						border-radius: 0 !important;
+						border: 1px solid #bbbbbb;
+						background: transparent !important;
+					};
+				  >div {
 				   &:nth-child(2) {
 				  	margin: 0 8px;
 				  	color: #101010;
@@ -691,7 +647,7 @@
 					 justify-content: center;
 					 border-radius: 6px;
 					 background: linear-gradient(to right, #6ED3F7, #218FFF);
-					 >text {
+					 >span {
 						 color: #fff;
 						 font-size: 12px;
 					 }
@@ -716,17 +672,17 @@
 							display: flex;
 							align-items: center;
 							border-bottom: 1px solid #BBBBBB;
-						  > view {
+						  > div {
 						    word-break: break-all;
 						    font-size: 12px;
-						    text {
+						    span {
 						      color: #ACADAF;
 						    };
 						    &:first-child {
 						      flex: 1;
 						      display: flex;
 						      align-items: center;
-						      >text {
+						      >span {
 						      	display: inline-block;
 						      	&:first-child {
 						      		width: 160px;
@@ -744,7 +700,7 @@
 									display: flex;
 									align-items: center;
 									justify-content: center;
-									>image {
+									>img {
 										width: 22px;
 										height: 22px
 									}
@@ -758,7 +714,7 @@
 									height: 21px;
 									background: #E86F50;
 									border-radius: 3px;
-									>text {
+									>span {
 										color: #fff;
 										font-size: 14px;
 									}
@@ -794,10 +750,10 @@
 			 			width: 100%;
 			 		  box-sizing: border-box;
 			 		  padding: 10px 12px;
-			 		  > view {
+			 		  > div {
 			 		  	display: flex;
 			 				align-items: center;
-			 				>text {
+			 				>span {
 			 					display: inline-block;
 			 					font-size: 12px;
 			 					color: #101010;

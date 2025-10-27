@@ -1,7 +1,7 @@
 <template>
   <div id="app">
      <transition :name="transitionName" mode="out-in">
-      <keep-alive :include="cachedRoutes">
+      <keep-alive :include="['cleanCallTask','cleanHistoricalTask','cleanRealtimeTask','projectHistoricalTask','projectRealtimeTask','transHistoricalTask','transRealtimeTask']">
         <router-view class="child-view"></router-view>
       </keep-alive>
     </transition>

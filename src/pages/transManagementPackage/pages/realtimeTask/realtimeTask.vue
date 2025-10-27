@@ -1,59 +1,45 @@
 <template>
-	<view class="content-box">
-		<u-transition :show="showLoadingHint" mode="fade-down">
-			<view class="loading-box" v-if="showLoadingHint">
-				<u-loading-icon :show="showLoadingHint" :text="infoText" size="18" textSize="16"></u-loading-icon>
-			</view>
-		</u-transition>
-		<light-hint ref="alertToast"></light-hint>
-		<view class="top-background-area" :style="{ 'height': statusBarHeight + navigationBarHeight + 5 + 'px' }"></view>
-		<u-toast ref="uToast" />
+	<div class="content-box" :style="{ 'padding-top': statusBarHeight + 'px' }">
 		<!-- 取消订单原因弹框 -->
-		<view class="transport-rice-box" v-if="showCancelReason">
+		<div class="transport-rice-box" v-if="showCancelReason">
 			<ScrollSelection buttonLocation='top' v-model="showCancelReason" :pickerValues="canCelReasonDefaultIndex" :isShowSearch="false" :columns="cancelReasonOption" @sure="cancelReasonSureEvent" @cancel="cancelReasonCancelEvent" @close="cancelReasonCloseEvent" />
-		</view>
-		<view class="nav">
-			<nav-bar :home="false" :isShowBackText="true" :isHomeText="true" backState='3000' fontColor="#FFF" bgColor="none" title="运送" @backClick="backTo">
-			</nav-bar> 
-		</view>
-		<view class="content">
-			<view class="task-tail-title">
-				<u-tabs 
-				  :list="list"
-					:scrollable="false" 
-					lineColor="#fff"
-					:activeStyle="{
-						color: '#2c9af1',
-						fontSize: '14px'
-					}"
-				 :inactiveStyle="{
-						color: '#606060',
-						fontSize: '14px'
-				 }"
-					lineWidth="0" 
-					lineHeight="0"
-					:current="current" 
+		</div>
+		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
+		<div class="top-background-area" :style="{ 'height': statusBarHeight + 'px' }">
+			<div class="nav">
+				<NavBar title="运送" leftText="返回" path="/transIndex" />
+			</div>
+		</div>
+		<div class="content">
+			<div class="task-tail-title">
+				<van-tabs v-model="current"
+					title-active-color="#2c9af1"
+					title-inactive-color="#606060"
+					line-width="0" 
+					line-height="0"
 					@change="tabChange"
 				>
-				</u-tabs>
-				<view class="tab-line" :class="{'tab-left':current == 0,'tab-right':current == 1}"></view>
-			</view>
-			<view class="empty-info" v-if="noDataShow">
-				<u-empty text="数据为空" mode="list"></u-empty>
-			</view>
-			<view class="task-tail-content" v-if="current == 0">
-				<view class="task-tail-content-item" v-for="(item,index) in stateCompleteList" @click="enterTaskMessage(item)" :key="index">
-					<view class="item-title">
-						<view class="item-top-one">
-							<view class="number">
-								<text>编号: {{item.number}}</text>
-								<text>{{item.createTime}}</text>
-							</view>
-							<view class="contact-isolation">
-								<image :src="contactIsolationPng" v-if="templateType == 'template_one' && item.quarantine == 1"></image>
-								<image :src="contactIsolationPng" v-if="templateType == 'template_two' && item['patientInfoList'].some((el) => { return el.quarantine == 1})"></image>
-							</view>
-						  <view class="priority"
+					<van-tab title="待办任务"></van-tab>
+					<van-tab title="进行中"></van-tab>
+				</van-tabs>
+				<div class="tab-line" :class="{'tab-left':current == 0,'tab-right':current == 1}"></div>
+			</div>
+			<div class="empty-info" v-if="noDataShow">
+				<van-empty description="数据为空" />
+			</div>
+			<div class="task-tail-content" v-if="current == 0">
+				<div class="task-tail-content-item" v-for="(item,index) in stateCompleteList" @click="enterTaskMessage(item)" :key="index">
+					<div class="item-title">
+						<div class="item-top-one">
+							<div class="number">
+								<span>编号: {{item.number}}</span>
+								<span>{{item.createTime}}</span>
+							</div>
+							<div class="contact-isolation">
+								<img :src="contactIsolationPng" v-if="templateType == 'template_one' && item.quarantine == 1" />
+								<img :src="contactIsolationPng" v-if="templateType == 'template_two' && item['patientInfoList'].some((el) => { return el.quarantine == 1})" />
+							</div>
+						  <div class="priority"
 								:class="{
 										'noAllocation' : item.state == 0,
 										'noLookupStyle' : item.state == 1,
@@ -65,89 +51,89 @@
 										'completeStyle' : item.state == 7
 									}"
 							>
-						  	<text>{{stateTransfer(item.state)}}</text>
-						  </view>
-						</view>
-					</view>
-					<view class="item-top">
-						<view class="item-top-two">
-						  <view class="start-point">
-								<text>优先级:</text>
-						  	<text>{{priorityTransfer(item.priority)}}</text>
-						  </view>
-							<view class="destination-point" v-if="templateType == 'template_one'">
-								<text>运送类型:</text>
-								<text>{{item.taskTypeName}}</text>
-							</view>
-							<view class="destination-point" v-else-if="templateType === 'template_two'">
-								<text>运送类型:</text>
-								<text>{{item.patientInfoList[0].typeList.length > 0 ? item.patientInfoList[0].typeList[0].parentTypeName : '无'}}</text>
-							</view>
-						</view>
-						<view class="item-top-three">
-							<view class="transport-type">
-								<text>转运工具:</text>
-								<text>{{!item.toolName ? '无' : item.toolName}}</text>
-							</view>
-						  <view class="transport-people">
-								<text>运送员:</text>
-						  	<text>{{!item.workerName ? '无' : item.workerName}}</text>
-						  </view>
-						</view>
-						<view class="item-top-three">
-							<view class="start-point">
-								<text>出发地:</text>
-								<text>{{item.setOutPlaceName}}</text>
-							</view>
-							<view class="bed-number" v-if="templateType === 'template_one'">
-								<text>床号:</text>
-								<text>{{item.bedNumber}}</text>
-							</view>
-							<view class="bed-number" v-else-if="templateType === 'template_two'">
-								<text>床号:</text>
-								<text>{{ extractBedNumber(item.patientInfoList) }}</text>
-							</view>
-						</view>
-						<view class="item-top-four">
-						  <view class="bed-number" v-if="templateType === 'template_one'">
-						  	<view>目的地: </view>
-								<view>
-									<text class="destina-list">{{ !item.destinationName  ? '无' : item.destinationName }}</text>
-								</view>
-						  </view>
-						  <view class="bed-number" v-if="templateType === 'template_two'">
-						  	<view>目的地: </view>
-								<view>
-									<text class="destina-list" v-for="(innerItem,innerIndex) in item.destinations" :key="innerIndex">{{ item.destinations.length > 0 ? innerItem.destinationName : '无' }}</text>
-									</view>
-						  </view>
-						</view>
-					</view>
-					<view class="item-bottom">
-						<view class="item-bottom-right">
-							<view class="left"  @click.stop="reminder(item)" :class="{'reminderStyle':item.reminder == 1 }">
-								<text>催单</text>
-							</view>
-							<view class="right" @click.stop="cancel(item)" v-if="item.state !== 3">
-								<text>取消订单</text>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="task-tail-content task-tail-content-going" v-if="current == 1">
-				<view class="task-tail-content-item" v-for="(item,index) in stateCompleteList" @click="enterTaskMessage(item)" :key="index">
-					<view class="item-title">
-						<view class="item-top-one">
-							<view class="number">
-								<text>编号: {{item.number}}</text>
-								<text>{{item.createTime}}</text>
-							</view>
-							<view class="contact-isolation">
-								<image :src="contactIsolationPng" v-if="templateType == 'template_one' && item.quarantine == 1"></image>
-								<image :src="contactIsolationPng" v-if="templateType == 'template_two' && item['patientInfoList'].some((el) => { return el.quarantine == 1})"></image>
-							</view>
-						  <view class="priority"
+						  	<span>{{stateTransfer(item.state)}}</span>
+						  </div>
+						</div>
+					</div>
+					<div class="item-top">
+						<div class="item-top-two">
+						  <div class="start-point">
+								<span>优先级:</span>
+						  	<span>{{priorityTransfer(item.priority)}}</span>
+						  </div>
+							<div class="destination-point" v-if="templateType == 'template_one'">
+								<span>运送类型:</span>
+								<span>{{item.taskTypeName}}</span>
+							</div>
+							<div class="destination-point" v-else-if="templateType === 'template_two'">
+								<span>运送类型:</span>
+								<span>{{item.patientInfoList[0].typeList.length > 0 ? item.patientInfoList[0].typeList[0].parentTypeName : '无'}}</span>
+							</div>
+						</div>
+						<div class="item-top-three">
+							<div class="transport-type">
+								<span>转运工具:</span>
+								<span>{{!item.toolName ? '无' : item.toolName}}</span>
+							</div>
+						  <div class="transport-people">
+								<span>运送员:</span>
+						  	<span>{{!item.workerName ? '无' : item.workerName}}</span>
+						  </div>
+						</div>
+						<div class="item-top-three">
+							<div class="start-point">
+								<span>出发地:</span>
+								<span>{{item.setOutPlaceName}}</span>
+							</div>
+							<div class="bed-number" v-if="templateType === 'template_one'">
+								<span>床号:</span>
+								<span>{{item.bedNumber}}</span>
+							</div>
+							<div class="bed-number" v-else-if="templateType === 'template_two'">
+								<span>床号:</span>
+								<span>{{ extractBedNumber(item.patientInfoList) }}</span>
+							</div>
+						</div>
+						<div class="item-top-four">
+						  <div class="bed-number" v-if="templateType === 'template_one'">
+						  	<div>目的地: </div>
+								<div>
+									<span class="destina-list">{{ !item.destinationName  ? '无' : item.destinationName }}</span>
+								</div>
+						  </div>
+						  <div class="bed-number" v-if="templateType === 'template_two'">
+						  	<div>目的地: </div>
+								<div>
+									<span class="destina-list" v-for="(innerItem,innerIndex) in item.destinations" :key="innerIndex">{{ item.destinations.length > 0 ? innerItem.destinationName : '无' }}</span>
+									</div>
+						  </div>
+						</div>
+					</div>
+					<div class="item-bottom">
+						<div class="item-bottom-right">
+							<div class="left"  @click.stop="reminder(item)" :class="{'reminderStyle':item.reminder == 1 }">
+								<span>催单</span>
+							</div>
+							<div class="right" @click.stop="cancel(item)" v-if="item.state !== 3">
+								<span>取消订单</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="task-tail-content task-tail-content-going" v-if="current == 1">
+				<div class="task-tail-content-item" v-for="(item,index) in stateCompleteList" @click="enterTaskMessage(item)" :key="index">
+					<div class="item-title">
+						<div class="item-top-one">
+							<div class="number">
+								<span>编号: {{item.number}}</span>
+								<span>{{item.createTime}}</span>
+							</div>
+							<div class="contact-isolation">
+								<img :src="contactIsolationPng" v-if="templateType == 'template_one' && item.quarantine == 1" />
+								<img :src="contactIsolationPng" v-if="templateType == 'template_two' && item['patientInfoList'].some((el) => { return el.quarantine == 1})" />
+							</div>
+						  <div class="priority"
 								:class="{
 										'noAllocation' : item.state == 0,
 										'noLookupStyle' : item.state == 1,
@@ -159,120 +145,90 @@
 										'completeStyle' : item.state == 7
 									}"
 							>
-						  	<text>{{stateTransfer(item.state)}}</text>
-						  </view>
-						</view>
-					</view>
-					<view class="item-top">
-						<view class="item-top-two">
-						  <view class="start-point">
-								<text>优先级:</text>
-						  	<text>{{priorityTransfer(item.priority)}}</text>
-						  </view>
-							<view class="destination-point" v-if="templateType == 'template_one'">
-								<text>运送类型:</text>
-								<text>{{item.taskTypeName}}</text>
-							</view>
-							<view class="destination-point" v-else-if="templateType === 'template_two'">
-								<text>运送类型:</text>
-								<text>{{item.patientInfoList[0].typeList.length > 0 ? item.patientInfoList[0].typeList[0].parentTypeName : '无'}}</text>
-							</view>
-						</view>
-						<view class="item-top-three">
-							<view class="transport-type">
-								<text>转运工具:</text>
-								<text>{{!item.toolName ? '无' : item.toolName}}</text>
-							</view>
-						  <view class="transport-people">
-								<text>运送员:</text>
-						  	<text>{{!item.workerName ? '无' : item.workerName}}</text>
-						  </view>
-						</view>
-						<view class="item-top-three">
-							<view class="start-point">
-								<text>出发地:</text>
-								<text>{{item.setOutPlaceName}}</text>
-							</view>
-							<view class="bed-number" v-if="templateType === 'template_one'">
-								<text>床号: </text>
-								<text>{{item.bedNumber}}</text>
-							</view>
-							<view class="bed-number" v-else-if="templateType === 'template_two'">
-								<text>床号:</text>
-								<text>{{ extractBedNumber(item.patientInfoList) }}</text>
-							</view>
-						</view>
-						<view class="item-top-four">
-						  <view class="bed-number" v-if="templateType === 'template_one'">
-						  	<view>目的地: </view>
-						  	<view>
-						  		<text class="destina-list">{{ !item.destinationName  ? '无' : item.destinationName }}</text>
-						  	</view>
-						  </view>
-						  <view class="bed-number" v-if="templateType === 'template_two'">
-						  	<view>目的地: </view>
-						  	<view>
-						  		<text class="destina-list" v-for="(innerItem,innerIndex) in item.destinations" :key="innerIndex">{{ item.destinations.length > 0 ? innerItem.destinationName : '无' }}</text>
-						  	</view>
-						  </view>
-						</view>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="tab-bar">
-			<u-tabbar
-			  :value="valueName"
-			  @change="tabBarEvent"
-				activeColor="#3890EE"
-				:fixed="true"
-			  :safeAreaInsetBottom="true"
-			>
-			  <u-tabbar-item text="呼叫">
-			    <image
-					  class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-			      slot="active-icon"
-			      src="/static/img/call-active-icon.png"
-			    ></image>
-			    <image
-					  class="u-page__item__slot-icon"
-			      slot="inactive-icon"
-						style="width:19px;height:18px"
-			      src="/static/img/call-inactive-icon.png"
-			    ></image>
-			  </u-tabbar-item>
-				<u-tabbar-item text="实时任务">
-				  <image
-					  class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-				    slot="active-icon"
-				    src="/static/img/real-timetask-active-icon.png"
-				  ></image>
-				  <image
-					  class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-				    slot="inactive-icon"
-				    src="/static/img/real-timetask-inactive-icon.png"
-				  ></image>
-				</u-tabbar-item>
-				<u-tabbar-item text="历史任务">
-				  <image
-					  class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-				    slot="active-icon"
-				    src="/static/img/historical-task-active-icon.png"
-				  ></image>
-				  <image
-					  class="u-page__item__slot-icon"
-						style="width:19px;height:18px"
-				    slot="inactive-icon"
-				    src="/static/img/historical-task-inactive-icon.png"
-				  ></image>
-				</u-tabbar-item>
-			</u-tabbar>
-		</view>
-	</view>
+						  	<span>{{stateTransfer(item.state)}}</span>
+						  </div>
+						</div>
+					</div>
+					<div class="item-top">
+						<div class="item-top-two">
+						  <div class="start-point">
+								<span>优先级:</span>
+						  	<span>{{priorityTransfer(item.priority)}}</span>
+						  </div>
+							<div class="destination-point" v-if="templateType == 'template_one'">
+								<span>运送类型:</span>
+								<span>{{item.taskTypeName}}</span>
+							</div>
+							<div class="destination-point" v-else-if="templateType === 'template_two'">
+								<span>运送类型:</span>
+								<span>{{item.patientInfoList[0].typeList.length > 0 ? item.patientInfoList[0].typeList[0].parentTypeName : '无'}}</span>
+							</div>
+						</div>
+						<div class="item-top-three">
+							<div class="transport-type">
+								<span>转运工具:</span>
+								<span>{{!item.toolName ? '无' : item.toolName}}</span>
+							</div>
+						  <div class="transport-people">
+								<span>运送员:</span>
+						  	<span>{{!item.workerName ? '无' : item.workerName}}</span>
+						  </div>
+						</div>
+						<div class="item-top-three">
+							<div class="start-point">
+								<span>出发地:</span>
+								<span>{{item.setOutPlaceName}}</span>
+							</div>
+							<div class="bed-number" v-if="templateType === 'template_one'">
+								<span>床号: </span>
+								<span>{{item.bedNumber}}</span>
+							</div>
+							<div class="bed-number" v-else-if="templateType === 'template_two'">
+								<span>床号:</span>
+								<span>{{ extractBedNumber(item.patientInfoList) }}</span>
+							</div>
+						</div>
+						<div class="item-top-four">
+						  <div class="bed-number" v-if="templateType === 'template_one'">
+						  	<div>目的地: </div>
+						  	<div>
+						  		<span class="destina-list">{{ !item.destinationName  ? '无' : item.destinationName }}</span>
+						  	</div>
+						  </div>
+						  <div class="bed-number" v-if="templateType === 'template_two'">
+						  	<div>目的地: </div>
+						  	<div>
+						  		<span class="destina-list" v-for="(innerItem,innerIndex) in item.destinations" :key="innerIndex">{{ item.destinations.length > 0 ? innerItem.destinationName : '无' }}</span>
+						  	</div>
+						  </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tab-bar">
+			<van-tabbar v-model="valueName" @change="tabBarEvent" active-color="#1684FC" inactive-color="#666666">
+				<van-tabbar-item>
+					<span>呼叫</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/call-active-icon.png') : require('@/common/img/call-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+				<van-tabbar-item>
+					<span>实时任务</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/real-timetask-active-icon.png') : require('@/common/img/real-timetask-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+				<van-tabbar-item>
+					<span>历史任务</span>
+					<template #icon="props">
+						<img :src="props.active ? require('@/common/img/historical-task-active-icon.png') : require('@/common/img/historical-task-inactive-icon.png')" />
+					</template>
+				</van-tabbar-item>
+			</van-tabbar>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -281,14 +237,13 @@
 		mapMutations
 	} from 'vuex'
 	import {getDispatchTaskComplete, taskReminder, queryDispatchTaskCancelReason,updateDispatchTask} from '@/api/transport.js'
-	import navBar from "@/components/zhouWei-navBar"
-	import ScrollSelection from "@/components/scrollSelection/scrollSelection";
-	import LightHint from "@/components/light-hint/light-hint.vue";
+	import NavBar from "@/components/NavBar";	
+	import ScrollSelection from "@/components/ScrollSelection";
 	export default {
+		name: 'transRealtimeTask',
 		components: {
-			navBar,
-			ScrollSelection,
-			LightHint
+			NavBar,
+			ScrollSelection
 		},
 		data() {
 			return {
@@ -298,12 +253,14 @@
 				list: [{name: '待办任务'}, {name: '进行中'}],
 				current: 0,
 				noDataShow: false,
-				contactIsolationPng: require("@/static/img/contact-isolation.png"),
+				canCelReasonDefaultIndex: [0],
+				contactIsolationPng: require("@/common/img/contact-isolation.png"),
 				cancelReasonDefaultIndex: [0],
 				cancelReasonOption: [],
 				showCancelReason: false,
 				currentCancelReason: '请选择',
-				stateCompleteList: []
+				stateCompleteList: [],
+				fromPath: ''
 			}
 		},
 		computed: {
@@ -315,28 +272,36 @@
 				'chooseHospitalArea',
 			]),
 			userName() {
-				return this.userInfo['name']
-			},
-			proName () {
-			  return this.userInfo['proName']
-			},
-			proId() {
-				return this.userInfo['proId']
+			return this.userInfo['worker']['name']
 			},
 			workerId() {
-				return this.userInfo['user']['id']
+				return this.userInfo['worker']['id']
+			},
+			proName () {
+				return this.chooseHospitalArea['text']
+			},
+			proId() {
+				return this.chooseHospitalArea['value']
 			},
 			depId() {
-				return this.userInfo['depId'] === null ? '' : this.userInfo['depId']
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
 			},
 			depName() {
-				return this.userInfo['depName'] === null ? '' : this.userInfo['depName']
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
 			},
 			userAccount() {
-				return this.userInfo['userName']
+				return this.userInfo['worker']['account']
 			}
 		},
-		onLoad() {
+		beforeRouteEnter(to, from, next) {
+			next(vm => {
+				vm.fromPath = from['path']
+			})
+		},
+		activated() {
+			if (this.fromPath == '/transportWorkerOrderMessage') { return };
+			this.current = 0;
+			this.valueName = 1;
 			this.getDispatchTaskCancelReason();
 			this.queryCompleteDispatchTask(
 				{
@@ -350,24 +315,15 @@
 				'changeTransTaskMessage'
 			]),
 			
-			// 顶部导航返回事件
-			backTo () {
-				uni.switchTab({
-					url: '/pages/index/index'
-				})
-			},
-			
 			// 进入订单详情事件
 			enterTaskMessage (item) {
 				this.changeTransTaskMessage(item);
-				uni.navigateTo({
-					url: '/transManagementPackage/pages/transportWorkerOrderMessage/transportWorkerOrderMessage'
-				})
+				this.$router.push({path: '/transportWorkerOrderMessage'})
 			},
 			
 			// tab切换改变事件
 			tabChange (index) {
-				this.current = index['index'];
+				this.current = index;
 				if (this.current == 0) {
 				  this.queryCompleteDispatchTask(
 					{
@@ -472,12 +428,12 @@
 			
 			// 查询运送任务
 			queryCompleteDispatchTask (data,text) {
-			  this.noDataShow = false;
-			  this.showLoadingHint = true;
+			  	this.noDataShow = false;
+			  	this.showLoadingHint = true;
 				this.infoText = '查询中···';
 				this.stateCompleteList = [];
 				let temporaryDataList = [];
-			  getDispatchTaskComplete(data).then((res) => {
+			  	getDispatchTaskComplete(data).then((res) => {
 				this.showLoadingHint = false;
 				if (res && res.data.code == 200) {
 				  if (res.data.data.length > 0) {
@@ -523,17 +479,19 @@
 						this.noDataShow = true
 				  }
 				} else {
-						this.$refs.uToast.show({
-							message: `${res.data.msg}`,
-							type: 'error'
-						})
-					}
+					this.$dialog.alert({
+						message: res.data.msg,
+						closeOnPopstate: true
+					}).then(() => {
+					})
+				}
 			  })
 			  .catch((err) => {
-					this.$refs.uToast.show({
-						title: `${err.message}`,
-						type: 'error'
-					});
+				  this.$dialog.alert({
+						message: err.message,
+						closeOnPopstate: true
+					}).then(() => {
+					})
 					this.showLoadingHint = false;
 					this.noDataShow = true;
 			  })
@@ -560,16 +518,18 @@
 							this.cancelReasonOption.push({text: temporaryWorkerMessageArray[1], value: temporaryWorkerMessageArray[1]})
 						}
 					} else {
-						this.$refs.uToast.show({
-							message: `${res.data.msg}`,
-							type: 'error'
+						this.$dialog.alert({
+							message: res.data.msg,
+							closeOnPopstate: true
+						}).then(() => {
 						})
 					}
 				})
 				.catch((err) => {
-					this.$refs.uToast.show({
-						title: `${err.message}`,
-						type: 'error'
+					this.$dialog.alert({
+						message: err.message,
+						closeOnPopstate: true
+					}).then(() => {
 					});
 					this.showLoadingHint = false;
 				})
@@ -585,14 +545,10 @@
 			cancelDispatchTask (data) {
 				this.showLoadingHint = true;
 				this.infoText = '取消中···';
-			  updateDispatchTask(data).then((res) => {
+			 	updateDispatchTask(data).then((res) => {
 					this.showLoadingHint = false;
 					if (res && res.data.code == 200) {
-						this.$refs.alertToast.show({
-							type: 'success',
-							message: '取消成功!',
-							isShow: true
-						});
+						this.$Alert({message:"取消成功!",type:'success'});
 						this.queryCompleteDispatchTask(
 							{
 								 proId:this.proId, workerId:'',state: -1,
@@ -600,20 +556,12 @@
 							},'待办任务'
 						)
 					} else {
-						this.$refs.alertToast.show({
-							type: 'error',
-							message: '取消失败!',
-							isShow: true
-						})
+						this.$Alert({message:`${res.data.msg}!`,type:'error'});
 					}
 			  })
 			  .catch((err) => {
 					this.showLoadingHint = false;
-					this.$refs.alertToast.show({
-						type: 'error',
-						message: `${err.message}`,
-						isShow: true
-					})
+					this.$Alert({message: err.message,type:'error'});
 			  })
 			},
 			  
@@ -624,83 +572,50 @@
 				};
 				this.showLoadingHint = true;
 				this.infoText = '催单中···';
-			  taskReminder(this.proId,item.id).then((res) => {
-					this.showLoadingHint = false;
+			  	taskReminder(this.proId,item.id).then((res) => {
+				this.showLoadingHint = false;
 			    if (res && res.data.code == 200) {
-						this.$refs.alertToast.show({
-							type: 'success',
-							message: '催单成功!',
-							isShow: true
-						});
-						this.queryCompleteDispatchTask(
-							{
-								 proId:this.proId, workerId:'',state: -1,
-								 departmentId: this.userInfo.depId
-							},'待办任务'
-						)
+					this.$Alert({message:"催单成功!",type:'success'});
+					this.queryCompleteDispatchTask(
+						{
+							proId:this.proId, workerId:'',state: -1,
+							departmentId: this.userInfo.depId
+						},'待办任务'
+					)
 			    } else {
-			      this.$refs.alertToast.show({
-			      	type: 'error',
-			      	message: '催单失败!',
-			      	isShow: true
-			      })
+					this.$Alert({message:`${res.data.msg}!`,type:'error'});
 			    }
 			  })
 			  .catch((err) => {
 					this.showLoadingHint = false;
-					this.$refs.alertToast.show({
-						type: 'error',
-						message: `${err.message}!`,
-						isShow: true
-					})
+					this.$Alert({message: err.message,type:'success'});
 			  })
 			},
 			
 			// tabBar点击事件
 			tabBarEvent (index) {
-			 this.valueName = index;
-			 if (this.valueName == 0) {
-				 uni.redirectTo({
-					url: '/transManagementPackage/pages/index/index'
-				 })
-			 } else if (this.valueName == 1) {
-				 uni.redirectTo({
-					url: '/transManagementPackage/pages/realtimeTask/realtimeTask'
-				 })
-			 } else if (this.valueName == 2) {
-				 uni.redirectTo({
-					url: '/transManagementPackage/pages/historicalTask/historicalTask'
-				 })
-			 }
+				this.valueName = index;
+				if (this.valueName == 0) {
+					this.$router.push({ path: "/transIndex" })
+				} else if (this.valueName == 1) {
+					this.$router.push({ path: "/transRealtimeTask" })
+				} else if (this.valueName == 2) {
+					this.$router.push({ path: "/transHistoricalTask" })
+				}
 			} 
 		}
 	}
 </script>
 
-<style lang="scss">
-	@import "~@/common/stylus/variable.scss";
-	page {
-		width: 100%;
-		height: 100%;
-	};
+<style lang="less" scoped>
+	@import "~@/common/stylus/variable.less";
+    @import "~@/common/stylus/mixin.less";
+    @import "~@/common/stylus/modifyUi.less";
 	.content-box {
-		@include content-wrapper;
+		.content-wrapper();
 		height: 100vh !important;
 		box-sizing: border-box;
 		background: #f6f6f6;
-		::v-deep .u-popup {
-			flex: none !important
-		};
-		::v-deep .u-loading-icon {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%,-50%);
-			z-index: 200000;
-		};
-		::v-deep .u-transition {
-			z-index: 100000 !important;
-		};
 		.top-background-area {
 			width: 100%;
 			background: #3890EE;
@@ -711,15 +626,33 @@
 		};
 		.nav {
 			width: 100%;
+			/deep/ .tabBar-box {
+				.van-nav-bar {
+					.van-nav-bar__left {
+						.van-icon {
+							color: #fff !important;
+							font-size: 20px !important;
+						};
+						.van-nav-bar__text {
+							color: #fff !important;
+							font-size: 14px !important;
+							margin-left: 10px;
+						}
+					};
+					.van-nav-bar__title {
+						color: #fff !important;
+						font-size: 14px !important;
+					}
+				}	
+			}
 		};
 		.tab-bar {
-			height: 85px;
-			::v-deep {
-				.u-tabbar {
-					height: 100%;
-					.u-tabbar__content {
-						background: #F8F8F8;
-					}
+			height: 51px;
+			border: 1px solid #f1f1f1;
+			/deep/ .van-tabbar {
+				background: #F8F8F8;
+				.van-tabbar-item--active {
+					background: #F8F8F8;
 				}
 			}
 		};
@@ -733,15 +666,15 @@
 			 display: flex;
 			 flex-direction: column;
 			 .empty-info {
-					width: 100px;
-					height: 120px;
-					position: absolute;
-					top: 0;
-					left: 0;
-					bottom: 0;
-					right: 0;
-					margin: auto;
-					z-index: 100;
+				width: 200px;
+				height: 200px;
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				right: 0;
+				margin: auto;
+				z-index: 100;
 			 };
 			 .task-tail-title {
 				 width: 85%;
@@ -761,22 +694,24 @@
 				 	 right: 0
 				 };
 				 border-bottom: 1px solid #bbbbbb;
-				 ::v-deep .u-tabs {
-					 .u-tabs__wrapper {
-						 .u-tabs__wrapper__nav {
-								.u-tabs__wrapper__nav__item {
-									padding: 0 20px;
-									box-sizing: border-box;
-								 &:nth-child(1) {
-										justify-content: flex-start !important;
-								 };
-								 &:nth-child(2) {
-										justify-content: flex-end !important;
-								 }
+				 /deep/ .van-tabs {
+					 .van-tabs__wrap {
+						.van-tabs__nav {
+							background: transparent !important;
+							.van-tab {
+								padding: 0 20px;
+								box-sizing: border-box;
+								&:nth-child(1) {
+									justify-content: flex-start !important;
 								};
-								.u-tabs__wrapper__nav__line {
-									margin-bottom: -3px;
+								&:nth-child(2) {
+									justify-content: flex-end !important;
 								}
+							};
+							.van-tabs__line {
+								padding-bottom: 0 !important;
+								margin-bottom: -3px;
+							}
 						 }
 					 }
 				 }
@@ -801,16 +736,16 @@
 							display: flex;
 							align-items: center;
 							border-bottom: 1px solid #BBBBBB;
-						  > view {
+						  > div {
 						    font-size: 12px;
-						    text {
+						    span {
 						      color: #ACADAF;
 						    };
 						    &:first-child {
 						      flex: 1;
 						      display: flex;
 						      align-items: center;
-						      >text {
+						      >span {
 						      	display: inline-block;
 										word-break: break-all;
 										&:first-child {
@@ -829,7 +764,7 @@
 									display: flex;
 									align-items: center;
 									justify-content: center;
-									>image {
+									>img {
 										width: 22px;
 										height: 22px
 									}
@@ -843,7 +778,7 @@
 									height: 21px;
 									background: #E86F50;
 									border-radius: 3px;
-									>text {
+									>span {
 										color: #fff;
 										font-size: 14px;
 									}
@@ -880,14 +815,14 @@
 			 			font-size: 16px;
 			 			display: inline-block;
 			 			color: black;
-			 		  > view {
+			 		  > div {
 			 		    padding: 6px 0;
 			 		    display: flex;
 			 		    box-sizing: border-box;
 			 		    flex-flow: row nowrap;
-			 		    > view {
+			 		    > div {
 			 		      width: 50%;
-			 		      > text {
+			 		      > span {
 			 		        &:last-child {
 			 		          padding-left: 0;
 			 		        }
@@ -897,14 +832,14 @@
 			 			.item-top-two {
 							box-sizing: border-box;
 							padding: 10px 12px;
-			 				> view {
+			 				> div {
 								display: flex;
 								word-break: break-all;
 			 				  &:first-child {
 			 				    width: 60%;
 									padding-right: 6px;
 									box-sizing: border-box;
-			 						text {
+			 						span {
 										font-size: 12px;
 										color: #101010;
 			 							&:first-child {
@@ -917,7 +852,7 @@
 			 				  };
 			 				  &:last-child {
 			 						width: 40%;
-			 						text {
+			 						span {
 										font-size: 12px;
 										color: #101010;
 										&:first-child {
@@ -933,7 +868,7 @@
 			 		  .item-top-three {
 							 box-sizing: border-box;
 							 padding: 10px 12px;
-			 		    > view {
+			 		    > div {
 								display: flex;
 								word-break: break-all;
 			 		      &:first-child {
@@ -941,7 +876,7 @@
 									padding-right: 6px;
 									box-sizing: border-box;
 									display: flex;
-									text {
+									span {
 										font-size: 12px;
 										color: #101010;
 										&:first-child {
@@ -954,7 +889,7 @@
 			 		      };
 			 		      &:last-child {
 			 						width: 40%;
-			 		    		text {
+			 		    		span {
 			 		    			font-size: 12px;
 			 		    			color: #101010;
 			 		    			&:first-child {
@@ -974,8 +909,8 @@
 							 .bed-number {
 								 display: flex;
 								 width: 100%;
-								 > view {
-								 	>text {
+								 > div {
+								 	>span {
 								 		font-size: 12px;
 								 		color: #101010;
 								 	};
@@ -985,7 +920,7 @@
 								 	&:last-child {
 								 		flex: 1;
 								 		word-break: break-all;
-								 		>text {
+								 		>span {
 								 			margin-right: 4px;
 								 		}
 								 	}
@@ -1004,13 +939,13 @@
 			 				display: flex;
 			 				align-items: center;
 			 				justify-content: flex-end;
-			 				> view {
+			 				> div {
 								width: 45%;
 								height: 30px;
 								border-radius: 4px;
 								text-align: center;
 								line-height: 30px;
-								>text {
+								>span {
 									font-size: 14px;
 								}
 			 				};
