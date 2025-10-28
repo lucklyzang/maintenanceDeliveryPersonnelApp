@@ -368,23 +368,23 @@ export default {
 	showStartDepartment: false,
 	currentStartDepartment: '请选择',
 	startDepartmentList: [],
-	startDepartmentDefaultIndex: [0],
+	startDepartmentDefaultIndex: 0,
 	showEndDepartment: false,
 	currentEndDepartment: '请选择',
 	endDepartmentList: [],
-	endDepartmentDefaultIndex: [0],
+	endDepartmentDefaultIndex: 0,
 	showTransporter: false,
 	currentTransporter: '请选择',
 	currentTransporterValue: '',
 	transporterList: [],
-	transporterDefaultIndex: [0],
+	transporterDefaultIndex: 0,
 	showTransportTool: false,
 	currentTransportTool: '无工具',
 	transportToolList: [],
-	transportToolDefaultIndex: [0],
+	transportToolDefaultIndex: 0,
 	showGender: false,
 	currentGender: '请选择',
-	genderDefaultIndex: [0],
+	genderDefaultIndex: 0,
     genderList: [
         {
         	id: '0',
@@ -949,7 +949,7 @@ mounted () {
     // 起点科室下拉选择框确认事件
     startDepartmentSureEvent (val,value,id) {
       if (val) {
-		this.startDepartmentDefaultIndex = [id];
+		this.startDepartmentDefaultIndex = id;
         this.currentStartDepartment =  val
       } else {
         this.currentStartDepartment = '请选择'
@@ -970,7 +970,7 @@ mounted () {
     // 终点科室下拉选择框确认事件(模板一)
     endDepartmentSureEvent (val,value,id) {
       if (val) {
-		this.endDepartmentDefaultIndex = [id];
+		this.endDepartmentDefaultIndex = id;
         this.currentEndDepartment =  val
       } else {
         this.currentEndDepartment = '请选择'
@@ -1022,7 +1022,7 @@ mounted () {
     // 运送员下拉选择框确认事件
     transporterSureEvent (val,value,id) {
       if (val) {
-		this.transporterDefaultIndex = [id];
+		this.transporterDefaultIndex = id;
         this.currentTransporter =  val;
         this.currentTransporterValue = value
       } else {
@@ -1045,10 +1045,10 @@ mounted () {
     // 转运工具下拉选择框确认事件
     transportToolSureEvent (val,value,id) {
       if (val) {
-		this.transportToolDefaultIndex = [id];
+		this.transportToolDefaultIndex = id;
         this.currentTransportTool =  val
       } else {
-		this.transportToolDefaultIndex = [0];
+		this.transportToolDefaultIndex = 0;
         this.currentTransportTool = '无工具'
       };
       this.showTransportTool = false
@@ -1067,7 +1067,7 @@ mounted () {
     // 性别下拉选择框确认事件
     genderSureEvent (val,value,id) {
       if (val) {
-		this.genderDefaultIndex = [id];
+		this.genderDefaultIndex = id;
         this.currentGender =  val
       } else {
         this.currentGender = '请选择'

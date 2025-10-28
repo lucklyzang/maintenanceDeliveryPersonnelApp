@@ -1,20 +1,20 @@
 <template>
   <div>
     <div
-      v-if="show"
+      v-show="show"
       class="picker"
     >
-      <section class="picker-main" ref="pickerMain" :class="{'picker-box-activate': show,'picker-box-inertia': !show}">
-        <h3 ref="chooseBox" v-show="buttonLocation == 'bottom'">
+      <section class="picker-main" :class="{'picker-box-activate': show,'picker-box-inertia': !show}">
+        <h3 v-show="buttonLocation == 'bottom'">
           {{ title }}
           <van-icon name="cross" size="25" @click="close" />
         </h3>
-        <div class="button-box-top" ref="buttonBoxtop" v-show="list.length > 0 && buttonLocation == 'top'">
+        <div class="button-box-top" v-show="list.length > 0 && buttonLocation == 'top'">
           <span class="cancel-text" @click="cancel" v-show="list.length > 0">取消</span>
           <span class="title-text"> {{ title }}</span>
           <span class="sure-text" @click="sure" v-show="list.length > 0">确定</span>
 				</div>
-        <div class="search-box" v-show="isShowSearch" ref="searchBox">
+        <div class="search-box" v-show="isShowSearch">
             <van-search
                 v-model="searchValue"
                 show-action
@@ -25,15 +25,14 @@
             </template>
             </van-search>
         </div>
-        <ul ref="ul">
-          <li
-            v-for="(item, index) in list"
-            :key="index"
-            :class="{'active':active == item.id}"
-            :ref="'li'+item.id"
-          >{{item.text}}</li>
-        </ul>
-        <div class="button-box" ref="buttonBox" v-show="list.length > 0 && buttonLocation == 'bottom'">
+        <div class="picker-box">
+          <van-picker
+            :columns="list"
+            :default-index="pickerValues"
+            @change=pickerChangeEvent
+          />
+        </div>
+        <div class="button-box" v-show="list.length > 0 && buttonLocation == 'bottom'">
             <span @click="resetEvent" v-show="isShowReset">重置</span>
             <span @click="cancel" v-show="!isShowReset">取消</span>
             <span @click="sure">确认</span>
@@ -53,7 +52,7 @@ export default {
       type: String,
       default: '请选择'
     },
-    // 滚动展示的数据 格式[{id: '',text:''}]
+    // 滚动展示的数据 格式[{id: '',text:'',value: ''}]
     columns: {
       type: Array,
       default: []
@@ -62,6 +61,11 @@ export default {
     buttonLocation: {
       type: String,
       default: 'bottom'
+    },
+    // 默认显示列索引
+    pickerValues: {
+      type: Number | String,
+      default: 0
     },
     // 是否显示搜索框
     isShowSearch: {
@@ -83,11 +87,8 @@ export default {
       currentValue: '',
       currentId: '',
       show: false,
-      active: null,
-      currentText: "",
-      listOffsetTop: [],
-      timer: null
-    };
+      currentText: ""
+    }
   },
 
    watch: {
@@ -106,7 +107,7 @@ export default {
 
   mounted () {
     this.list = this.columns;
-    this.cacheList = this.list;  
+    this.cacheList = this.list;
     this.showPicker()
   },
 
@@ -116,36 +117,35 @@ export default {
     onSearch(val) {
       this.isClickSearch = true;
       this.list = this.cacheList.filter((item) => { return item.text.indexOf(this.searchValue) != -1});
-      this.list.map((item,index) => { item.id = index });
       this.showPicker()
     },
 
     // 重置事件
     resetEvent () {
-        this.searchValue = '';
-        this.list = this.cacheList;
-        this.list.map((item,index) => { item.id = index });
-        this.showPicker()
+      this.searchValue = '';
+      this.list = this.cacheList;
+      this.showPicker()
     },
 
     // 初始化事件
     showPicker() {
-      this.show = true;
-      this.active = null;
-      this.timer = setTimeout(() => {
-        clearTimeout(this.timer);
-        this.getOffsetTop();
-        this.computeActive();
-        this.list = this.cacheList.filter((item) => { return item.text.indexOf(this.searchValue) != -1});
-        this.list.map((item,index) => { item.id = index })
-      }, 50)
+      this.show = true
+    },
+
+    // picker值改变事件
+    pickerChangeEvent (picker, value, index) {
+      this.currentId = value['id'];
+      this.currentText = value['text'];
+      this.currentValue = value['value']
     },
 
     // 确认事件
     sure() {
-      this.list.map((item, index) => {
-        item.id == this.active ? (this.currentText = item.text,this.currentValue = item.value,this.currentId = index) : null
-      });
+      if (this.list.length == 1) {
+        this.currentId = this.list[0]['id'];
+        this.currentText = this.list[0]['text'];
+        this.currentValue = this.list[0]['value'];
+      };
       this.$emit('sure',this.currentText,this.currentValue,this.currentId);
       // 没有搜索结果时点确认
       if (this.list.length == 0) {
@@ -164,33 +164,6 @@ export default {
     cancel() {
       this.$emit('cancel',this.currentText);
       this.show = false
-    },
-
-    getOffsetTop() {
-      this.listOffsetTop = [];
-      this.list.map((item, index) => {
-        let liTop = this.$refs["li" + item.id];
-        this.listOffsetTop.push(liTop[0].offsetTop - liTop[0]['offsetHeight'])
-      })
-    },
-
-    computeActive() {
-      let scroll = this.$refs.ul;
-      let buttonBoxHeight = this.$refs.buttonBox.offsetHeight;
-      let searchBoxHeight = this.$refs.searchBox.offsetHeight;
-      let chooseBoxHeight = this.$refs.chooseBox.offsetHeight;
-      let buttonBoxtopHeight = this.$refs.buttonBoxtop.offsetHeight
-      scroll.addEventListener("scroll", () => {
-        this.listOffsetTop.map((item, index) => {
-         let currentTop = '';
-         if (this.isShowSearch) {
-            currentTop = scroll.scrollTop + buttonBoxHeight + searchBoxHeight + chooseBoxHeight + buttonBoxtopHeight + 20
-         } else {
-            currentTop = scroll.scrollTop + buttonBoxHeight + chooseBoxHeight + buttonBoxtopHeight + 20
-         };
-        item <= currentTop ? (this.active = index) : null
-        })
-      })
     }
   }
 };
@@ -211,7 +184,6 @@ export default {
    display: flex;
    flex-direction: column;
     width: 100%;
-    height: 45vh;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding: 0px 0px 20px 0px;
@@ -273,22 +245,18 @@ export default {
             }
         }
     };
-    ul {
-      // max-height: 250px;
-      flex: 1;
-      padding: 100px 0;
-      box-sizing: border-box;
-      margin: 0;
-      overflow: scroll;
-      background-color: #fff;
-      li {
-        list-style: none;
-        color: #101010;
-        font-size: 18px;
-        line-height: 40px;
-        text-align: center;
-        height: 40px;
-        background-color: #fff;
+    .picker-box {
+      /deep/ .van-picker {
+        .van-picker__columns {
+          .van-picker-column__wrapper {
+            .van-picker-column__item {
+              font-size: 18px !important;
+            };
+            .van-picker-column__item--selected {
+              color: #101010 !important
+            }
+          }
+        }
       }
     };
     .button-box {

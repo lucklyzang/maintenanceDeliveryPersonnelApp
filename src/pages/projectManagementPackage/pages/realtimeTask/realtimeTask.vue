@@ -191,7 +191,7 @@
 				list: [{name: '待办任务'}, {name: '进行中'}],
 				current: 0,
 				noDataShow: false,
-				canCelReasonDefaultIndex: [0],
+				canCelReasonDefaultIndex: 0,
 				cancelReasonOption: [],
 				showCancelReason: false,
 				currentCancelReason: '请选择',
@@ -432,9 +432,14 @@
 				projectTaskCancelReason(data).then((res) => {
 					this.showLoadingHint = false;
 					if (res && res.data.code == 200) {
-						this.cancelReasonLlist = [];
-						for (let item of res.data.data) {
-						   this.cancelReasonOption.push({text: item.cancelName, value: item.id})
+						this.cancelReasonOption = [];
+						if ( res.data.data.length == 0) { return };
+						for (let i = 0, len = res.data.data.length; i < len; i++) {
+							this.cancelReasonOption.push({
+								text: res.data.data[i].cancelName,
+								value: res.data.data[i].id,
+								id: i
+							})
 						}
 					} else {
 						this.$dialog.alert({

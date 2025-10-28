@@ -342,61 +342,6 @@
 			this.photoBox = false;
 			this.overlayShow = false
 		},
-
-		// 选择图片方法
-		// getImg() {
-		// 	if (this.resultimageList.length == 5) {
-		// 		this.$refs.uToast.show({
-		// 			message: "至多只能上传5张图片",
-		// 			position: 'center'
-		// 		});
-		// 		return
-		// 	};
-		// 	let that = this;
-		// 	uni.chooseImage({
-		// 		count: 5,
-		// 		sizeType: ['original', 'compressed'],
-		// 		sourceType: ['album', 'camera'],
-		// 		success: function(res) {
-		// 			uni.previewImage({
-		// 				urls: res.tempFilePaths
-		// 			});
-		// 			for (let imgI = 0, len = res.tempFilePaths.length; imgI < len; imgI++) {
-		// 				let url = res.tempFiles[imgI].path;
-		// 				//获取最后一个的位置
-		// 				let index = url.lastIndexOf(".");
-		// 				//获取后缀
-		// 				let jpgUrl = url.substr(index + 1);
-		// 				if (jpgUrl != "png" && jpgUrl != "jpg" && jpgUrl != "jpeg") {
-		// 					that.$refs.uToast.show({
-		// 						message: '只可上传jpg或png格式的图片!',
-		// 						type: 'error',
-		// 						position: 'center'
-		// 					});
-		// 					continue
-		// 				};
-		// 				let isLt2M = res.tempFiles[imgI].size/1024/1024 < 10;
-		// 				if (!isLt2M) {
-		// 					that.$refs.uToast.show({
-		// 						message: '图片必须小于10MB!',
-		// 						type: 'error',
-		// 						position: 'center'
-		// 					});
-		// 					continue
-		// 				};
-		// 				that.fileList.push(res.tempFiles[imgI]['path']);
-		// 				uni.getFileSystemManager().readFile({
-		// 					filePath: res.tempFilePaths[imgI],
-		// 					encoding: 'base64',
-		// 					success: res => {
-		// 						let base64 = 'data:img/jpeg;base64,' + res.data;
-		// 						that.resultimageList.push(base64);
-		// 					}
-		// 				})
-		// 			}
-		// 		}
-		// 	})
-		// },
 		
 		// 上传图片到服务器
 		uploadFileEvent (imgI) {
@@ -410,25 +355,14 @@
 					method: 'post',
 					data: imgPath,
 					headers: {
-						'Content-type': 'multipart/form-data',
-						'Authorization': `${store.getters.token}`
+						'Authorization': `${store.getters.token}`,
+						'HTTP_REQUEST_TYPE': 'new'
 					},
 				}).then(res => {
-					if (res.statusCode == 200) {
-						if (res.data != '') {
-							let temporaryData = JSON.parse(res.data);
-							if (temporaryData.code == 200) {
-								this.imageOnlinePathArr.push(temporaryData.data[0]);
-								resolve()
-							} else {
-								this.showLoadingHint = false;
-								this.$dialog.alert({
-									message: temporaryData.msg,
-									closeOnPopstate: true
-								}).then(() => {
-								});
-								reject()
-							}
+					if (res.data.code == 200) {
+						if (res.data.data.length > 0) {
+							this.imageOnlinePathArr.push(res.data.data[0]);
+							resolve()
 						} else {
 							this.showLoadingHint = false;
 							this.$dialog.alert({
@@ -441,7 +375,7 @@
 					} else {
 						this.showLoadingHint = false;
 						this.$dialog.alert({
-							message: '上传图片失败',
+							message: res.data.msg,
 							closeOnPopstate: true
 						}).then(() => {
 						});
@@ -450,7 +384,7 @@
 				}).catch(err => {
 					this.showLoadingHint = false;
 					this.$dialog.alert({
-						message: err.errMsg,
+						message: err,
 						closeOnPopstate: true
 					}).then(() => {
 					});
@@ -617,7 +551,7 @@
 		    overflow: auto;
 		    .category-box {
 		      padding: 0 8px;
-			min-height: 38px;
+			  min-height: 38px;
 		      margin-bottom: 6px;
 		      height: 40px;
 		      box-sizing: border-box;
@@ -751,17 +685,18 @@
 		              margin-right: 0;
 		            }
 		            .icon-box {
-									position: absolute;
-									bottom: 0;
-									right: 0;
-									display: flex;
-									width: 100%;
-									padding: 2px 0;
-									box-sizing: border-box;
-									justify-content: center;
-									align-items: center;
-									background: #616161;
-									/deep/ .van-icon {}  
+						position: absolute;
+						bottom: 0;
+						right: 0;
+						display: flex;
+						width: 100%;
+						padding: 2px 0;
+						height: 20px;
+						box-sizing: border-box;
+						justify-content: center;
+						align-items: center;
+						background: #616161;
+						/deep/ .van-icon {}  
 		            };
 		            img {
 						width: 100%;

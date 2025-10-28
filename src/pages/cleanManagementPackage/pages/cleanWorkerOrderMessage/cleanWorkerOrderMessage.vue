@@ -38,7 +38,7 @@
       </div>
 			<div class="location">
 			  <span>优先级</span>
-			  <span>{{environmentTaskMessage.priority }}</span>
+			  <span>{{ taskPriotityTransition(environmentTaskMessage.priority) }}</span>
 			</div>
 			<div class="issue-picture">
 			  <div>图片</div>
@@ -249,6 +249,24 @@ export default {
       } 
     },
 
+    // 优先级转换
+    taskPriotityTransition (state) {
+      switch(state) {
+        case 1 :
+          return '正常'
+          break;
+        case 2 :
+          return '重要'
+          break;
+        case 3 :
+          return '紧急'
+          break;
+        case 4 :
+          return '紧急重要'
+          break
+      }
+    },
+
     // 格式化时间
     getNowFormatDate(currentDate) {   
       let seperator1 = "-";
@@ -322,18 +340,14 @@ export default {
  };
  /*图片放大弹框 */
  .img-dislog-box {
- 	/deep/ .u-popup__content {
+ 	/deep/ .van-dialog {
  		border-radius: 10px !important;
- 		.u-modal {
- 		  border-radius: 10px !important;
- 		  overflow: inherit !important;
- 		  .u-modal__content {
- 				padding: 10 !important;
- 				box-sizing: border-box;
-				max-height: 85vh;
-				overflow: auto;
- 			}
- 		}
+    .van-dialog__content {
+      padding: 10px !important;
+      box-sizing: border-box;
+      max-height: 85vh;
+      overflow: auto;
+    }
  	}		
  };
   .content {

@@ -253,7 +253,7 @@
 				list: [{name: '待办任务'}, {name: '进行中'}],
 				current: 0,
 				noDataShow: false,
-				canCelReasonDefaultIndex: [0],
+				canCelReasonDefaultIndex: 0,
 				contactIsolationPng: require("@/common/img/contact-isolation.png"),
 				cancelReasonDefaultIndex: [0],
 				cancelReasonOption: [],
@@ -505,17 +505,18 @@
 					this.showLoadingHint = false;
 					if (res && res.data.code == 200) {
 						this.cancelReasonOption = [];
-						for (let item of res.data.data) {
+						if ( res.data.data.length == 0) { return };
+						for (let i = 0, len = res.data.data.length; i < len; i++) {
 							let temporaryWorkerMessageArray = [];
-							for (let innerItem in item) {
-							if (innerItem == 'id') {
-								temporaryWorkerMessageArray.push(item[innerItem])
+							for (let innerItem in res.data.data[i]) {
+								if (innerItem == 'id') {
+									temporaryWorkerMessageArray.push(res.data.data[i][innerItem])
+								};
+								if (innerItem == 'cancelName') {
+									temporaryWorkerMessageArray.push(res.data.data[i][innerItem])
+								}
 							};
-							if (innerItem == 'cancelName') {
-								temporaryWorkerMessageArray.push(item[innerItem])
-							}
-							};
-							this.cancelReasonOption.push({text: temporaryWorkerMessageArray[1], value: temporaryWorkerMessageArray[1]})
+							this.cancelReasonOption.push({text: temporaryWorkerMessageArray[1], value: temporaryWorkerMessageArray[1], id:i})
 						}
 					} else {
 						this.$dialog.alert({

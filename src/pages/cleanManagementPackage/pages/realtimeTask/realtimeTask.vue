@@ -164,7 +164,7 @@
 				list: [{name: '待办任务'}, {name: '进行中'}],
 				current: 0,
 				noDataShow: false,
-				cancelReasonDefaultIndex: [0],
+				cancelReasonDefaultIndex: 0,
 				cancelReasonOption: [],
 				showCancelReason: false,
 				currentCancelReason: '请选择',
@@ -278,7 +278,7 @@
 			// 取消原因下拉选择框确认事件
 			cancelReasonSureEvent (val,value,id) {
 				if (val) {
-					this.cancelReasonDefaultIndex = [id]
+					this.cancelReasonDefaultIndex = id
 					this.currentCancelReason=  val;
 					this.cancelEnvironmentWorkerOrderMessageTask({
 						id: this.taskId, //当前任务ID

@@ -7,7 +7,7 @@
 		</div>
 	</div>
     <!-- 图片放大弹框  -->
-    <div class="image-dislog-box">
+    <div class="img-dislog-box">
 		 <van-dialog v-model="imageBoxShow"  @close="deleteInfoDialogShow = false"
 		    @confirm="confirmEvent" @cancel="deleteInfoDialogShow" confirmButtonColor="#3890EE" confirmButtonText="关闭">
         	<img :src="currentimageUrl" style="width:100%"/>
@@ -381,8 +381,8 @@ export default {
 .content-box {
   .content-wrapper();
 	height: 100vh !important;
-  box-sizing: border-box;
-  background: #f6f6f6;
+	box-sizing: border-box;
+	background: #f6f6f6;
   .top-background-area {
   	width: 100%;
   	background: #3890EE;
@@ -391,35 +391,18 @@ export default {
   	left: 0;
   	z-index: 10
   };
-  /deep/ .van-popup--right {
-    padding: 20px 0 80px 0;
-    box-sizing: border-box;
-    .top-icon {
-        padding-left: 10px;
-        box-sizing: border-box
-    };
-    .center-content {
-        margin-top: 20px;
-        .function-list {
-            width: 153px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            margin: 0 auto;
-            border: 1px solid #3B9DF9;
-            box-sizing: border-box;
-            font-size: 16px;
-            color: #3B9DF9;
-            border-radius: 8px;
-            margin-bottom: 20px
-        };
-        .functionListStyle {
-            color: #fff !important;
-            border: none !important;
-            background: #3B9DF9 !important
-        }
-    }
-  };
+  /*图片放大弹框 */
+ .img-dislog-box {
+ 	/deep/ .van-dialog {
+ 		border-radius: 10px !important;
+		.van-dialog__content {
+		padding: 10px !important;
+		box-sizing: border-box;
+		max-height: 85vh;
+		overflow: auto;
+		}
+ 	}		
+ };
   .nav {
 	width: 100%;
 			/deep/ .tabBar-box {

@@ -183,17 +183,17 @@
 				sureCancelShow: false,
 				
 				goalDepartmentOption: [],
-				goalDepartmentDefaultIndex: [0],
+				goalDepartmentDefaultIndex: 0,
 				showGoalDepartment: false,
 				currentGoalDepartment: '请选择',
 	
 				goalSpacesOption: [],
 				showGoalSpaces: false,
-				goalSpacesDefaultIndex: [0],
+				goalSpacesDefaultIndex: 0,
 				currentGoalSpaces: '请选择',
 	
 				taskTypeOption: [],
-				taskTypeDefaultIndex: [0],
+				taskTypeDefaultIndex: 0,
 				showTaskType: false,
 				currentTaskType: '请选择',
 	
@@ -236,7 +236,7 @@
 			if (this.isMedicalMan) {
 				this.currentGoalDepartment = this.depName == '' ? '请选择' :  this.depName;
 				if (this.depName) {
-					this.goalDepartmentDefaultIndex = [this.goalDepartmentOption.findIndex((item) => { return item.text == this.depName })];
+					this.goalDepartmentDefaultIndex = this.goalDepartmentOption.findIndex((item) => { return item.text == this.depName });
 				};
 				// 登陆人员为医务人员时，根据默认科室id查询目的房间列表
 				if (this.depId) {
@@ -531,7 +531,7 @@
 				// 任务类型下拉选择框确认事件
 				taskTypeSureEvent (val,value,id) {
 				if (val) {
-					this.taskTypeDefaultIndex = [id];
+					this.taskTypeDefaultIndex = id;
 					this.currentTaskType =  val
 				} else {
 					this.currentTaskType = '请选择'
@@ -554,7 +554,7 @@
 				if (val) {
 					this.currentGoalDepartment =  val;
 					this.currentGoalSpaces = '请选择';
-					this.goalDepartmentDefaultIndex = [id];
+					this.goalDepartmentDefaultIndex = id;
 					this.getSpacesByDepartmentId(this.goalDepartmentOption.filter((item) => { return item['text'] == this.currentGoalDepartment})[0]['value'],false)
 				} else {
 					this.currentGoalDepartment = '请选择'
@@ -594,7 +594,7 @@
 				// 目的房间下拉选择框确认事件
 				goalSpacesSureEvent (val,value,id) {
 				if (val.length > 0) {
-					this.goalSpacesDefaultIndex = [id];
+					this.goalSpacesDefaultIndex = id;
 					this.currentGoalSpaces =  val;
 				} else {
 					this.currentGoalSpaces = '请选择'
@@ -658,10 +658,10 @@
 				// 重置事件
 				resetEvent () {
 					this.priorityRadioValue = '1';
-					this.goalDepartmentDefaultIndex = [0];
+					this.goalDepartmentDefaultIndex = 0;
 					this.currentGoalDepartment = '请选择';
 					this.currentGoalSpaces = '请选择';
-					this.taskTypeDefaultIndex = [0];
+					this.taskTypeDefaultIndex = 0;
 					this.currentTaskType = '请选择';
 					this.imgArr = [];
 					this.taskDescribe = []

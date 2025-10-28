@@ -39,28 +39,8 @@
           this.transitionName = '';
           return
         };
-        if (to.name == 'home' && from.name == 'myObject') {
-          this.transitionName = '';
-          return
-        };
         if (to.name == 'myInfo' && from.name == 'home') {
           this.transitionName = '';
-          return
-        };
-        if (to.name == 'myInfo' && from.name == 'myObject') {
-          this.transitionName = '';
-          return
-        };
-        if (to.name == 'myObject' && from.name == 'home') {
-          this.transitionName = '';
-          return
-        };
-        if (to.name == 'myObject' && from.name == 'myInfo') {
-          this.transitionName = '';
-          return
-        };
-        if (to.name == 'home' && !from.name) {
-          this.transitionName = 'slide-right';
           return
         };
         const toDepth = to.meta.index;
