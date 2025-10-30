@@ -321,6 +321,16 @@
 			})
 		},
 		activated() {
+			// 控制设备物理返回按键
+			if (!IsPC()) {
+				pushHistory();
+				this.gotoURL(() => {
+					pushHistory();
+					this.$router.push({
+						path: '/home',
+					})
+				})
+			};
 			if (this.fromPath == '/transportWorkerOrderMessage') { return };
 			this.valueName = 2;
 			this.current = 0;

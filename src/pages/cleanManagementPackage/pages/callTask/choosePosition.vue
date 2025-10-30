@@ -61,7 +61,7 @@
 					</div>
 			</div>
 			<!-- 功能区 -->
-			<div class="departments-name-list" v-for="(item) in functionAreaList" :key="item.id" v-show="functionAreaShow"
+			<div class="departments-name-list" v-for="(item) in functionAreaList" :key="`${item.id}-${item.name}`" v-show="functionAreaShow"
 				@click="functionAreaClickEvent(item)"
 			>
 					<div class="departments-name-left">
@@ -83,10 +83,6 @@
 		mapGetters,
 		mapMutations
 	} from 'vuex'
-	import {
-		setCache,
-		removeAllLocalStorage
-	} from '@/common/js/utils'
 	import { getArchitectureMessage, getGoalAreaMessage, getFunctionAreaMessage, getDepartmentMessage } from '@/api/environment.js'
 	import NavBar from "@/components/NavBar";
 	export default {
@@ -144,6 +140,16 @@
 			}
 		},
 		mounted() {
+			// 控制设备物理返回按键
+			if (!IsPC()) {
+				pushHistory();
+				this.gotoURL(() => {
+						pushHistory();
+						this.$router.push({
+						path: "/cleanCallTask",
+					})
+				})
+			};
 			this.getArchitecture()
 		},
 		methods: {

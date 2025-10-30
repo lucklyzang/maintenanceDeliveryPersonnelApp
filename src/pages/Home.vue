@@ -23,7 +23,7 @@
 					服务管理
 				</div>
 				<div class="service-management-content">
-					<div class="service-list" v-for="(item,index) in serviceList" :key="index" @click="serviceManagementEvent(item,index)">
+					<div class="service-list" v-for="(item,index) in hasAuthSystemsList" :key="index" @click="serviceManagementEvent(item,index)">
 						<div class="list-top">
 							<img :src="item.url" />
 						</div>
@@ -67,6 +67,7 @@
 				infoText: '加载中···',
                 homeIconPng: require('@/common/img/home-icon.png'),
                 homeBannerPng: require('@/common/img/home-banner.png'),
+				hasAuthSystemsList: [],
 				serviceList: [
 					{
 						text: '中央运送',
@@ -143,10 +144,11 @@
 			
 			// 控制服务管理模块显示隐藏
 			controlServiceManageModuleShowEvent () {
+				this.hasAuthSystemsList = [];
 				if (this.userInfo['extendData'].hasOwnProperty('systems')) {
 					this.serviceList.map((value,index,arr) => {
-						if (this.userInfo['extendData']['systems'].indexOf(value['value']) == -1) {
-							arr.splice(index,1)
+						if (this.userInfo['extendData']['systems'].indexOf(value['value']) != -1) {
+							this.hasAuthSystemsList.push(value)
 						}
 					})
 				}
@@ -272,11 +274,16 @@
 		.content-box {
 			position: relative;
 			flex: 1;
+			height: 0;
+			display: flex;
+			flex-direction: column;
 			margin-top: 10px;
 			.service-management {
 				padding: 10px 10px 20px 10px;
 				box-sizing: border-box;
 				width: 98%;
+				flex: 1;
+				overflow: auto;
 				margin: 0 auto;
 				background: #fff;
 				border-radius: 10px;
@@ -328,6 +335,8 @@
 			};
 			.safe-management {
 				margin-top: 10px;
+				flex: 1;
+				overflow: auto;
 				>div {
 					&:nth-child(2) {
 							.list-top {

@@ -35,20 +35,22 @@
 
     watch: {
       '$route' (to, from) {
-        if (to.name == 'home' && from.name == 'myInfo') {
-          this.transitionName = '';
-          return
-        };
-        if (to.name == 'myInfo' && from.name == 'home') {
-          this.transitionName = '';
-          return
-        };
+        // if (to.name == 'home' && from.name == 'myInfo') {
+        //   this.transitionName = '';
+        //   return
+        // };
+        // if (to.name == 'myInfo' && from.name == 'home') {
+        //   this.transitionName = '';
+        //   return
+        // };
         const toDepth = to.meta.index;
         const fromDepth = from.meta.index;
         if (toDepth > fromDepth) {
           this.transitionName = 'slide-right'
-        } else {
+        } else if (toDepth < fromDepth) {
           this.transitionName = 'slide-left'
+        } else {
+          this.transitionName = ''
         }
       }
 

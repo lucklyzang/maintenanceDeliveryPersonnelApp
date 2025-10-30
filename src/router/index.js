@@ -42,99 +42,110 @@ Vue.use(Router)
 let baseRoute = [{
         path: '/',
         name: 'login',
-        component: Login
+        component: Login,
+        meta: { index: 0 }
     },
     {
         path: '/home',
         name: 'home',
         component: Home,
+        meta: { index: 1 }
     },
     {
         path: '/myInfo',
         name: 'myInfo',
-        component: MyInfo
+        component: MyInfo,
+        meta: { index: 1 }
     },
     {
         path: '/modificationPassword',
         name: 'modificationPassword',
-        component: ModificationPassword
+        component: ModificationPassword,
+        meta: { index: 2 }
     },
     {
         path: '/cleanCallTask',
         name: 'cleanCallTask',
         component: CleanCallTask,
-        meta: { keepAlive: true }
+        meta: { keepAlive: true,index: 2 }
     },
     {
         path: '/cleanChoosePosition',
         name: 'cleanChoosePosition',
-        component: CleanChoosePosition
+        component: CleanChoosePosition,
+        meta: { index: 3 }
     },
     {
         path: '/cleanWorkerOrderMessage',
         name: 'cleanWorkerOrderMessage',
-        component: CleanWorkerOrderMessage
+        component: CleanWorkerOrderMessage,
+        meta: { index: 3 }
     },
     {
         path: '/cleanHistoricalTask',
         name: 'cleanHistoricalTask',
         component: CleanHistoricalTask,
-        meta: { keepAlive: true }
+        meta: { keepAlive: true, index: 2 }
     },
     {
         path: '/cleanRealtimeTask',
         name: 'cleanRealtimeTask',
         component: CleanRealtimeTask,
-        meta: { keepAlive: true }
+        meta: { keepAlive: true, index: 2 }
     },
     {
         path: '/projectCallTask',
         name: 'projectCallTask',
-        component: ProjectCallTask
+        component: ProjectCallTask,
+        meta: { index: 2 }
     },
     {
         path: '/ProjectWorkerOrderMessage',
         name: 'projectWorkerOrderMessage',
-        component: ProjectWorkerOrderMessage
+        component: ProjectWorkerOrderMessage,
+        meta: { index: 3 }
     },
     {
         path: '/projectHistoricalTask',
         name: 'projectHistoricalTask',
         component: ProjectHistoricalTask,
-        meta: { keepAlive: true }
+        meta: { keepAlive: true, index: 2 },
     },
     {
         path: '/projectRealtimeTask',
         name: 'projectRealtimeTask',
         component: ProjectRealtimeTask,
-        meta: { keepAlive: true }
+        meta: { keepAlive: true, index: 2 }
     },
     {
         path: '/transCallTask',
         name: 'transCallTask',
-        component: TransCallTask
+        component: TransCallTask,
+        meta: { index: 3 }
     },
     {
         path: '/transIndex',
         name: 'transIndex',
-        component: TransIndex
+        component: TransIndex,
+        meta: { index: 2 }
     },
     {
         path: '/transportWorkerOrderMessage',
         name: 'transportWorkerOrderMessage',
-        component: TransportWorkerOrderMessage
+        component: TransportWorkerOrderMessage,
+        meta: { index: 3 }
     },
     {
         path: '/transHistoricalTask',
         name: 'transHistoricalTask',
         component: TransHistoricalTask,
-        meta: { keepAlive: true }
+        meta: { keepAlive: true, index: 2 }
     },
     {
         path: '/transRealtimeTask',
         name: 'transRealtimeTask',
         component: TransRealtimeTask,
-        meta: { keepAlive: true }
+        meta: { keepAlive: true, index: 2 }
     }
 ];
 let router = new Router({

@@ -148,6 +148,16 @@ export default {
     })
   },
 	mounted() {
+    // 控制设备物理返回按键
+		if (!IsPC()) {
+      pushHistory();
+      this.gotoURL(() => {
+          pushHistory();
+          this.$router.push({
+            path: this.fromPath,
+        })
+      })
+    };
 		this.taskId = this.environmentTaskMessage.id;
 		this.getForthwithCleanTaskDetailsEvent(this.taskId);
 	},
