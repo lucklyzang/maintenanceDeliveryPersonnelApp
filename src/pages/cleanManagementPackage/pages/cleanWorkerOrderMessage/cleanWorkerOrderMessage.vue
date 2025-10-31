@@ -38,7 +38,15 @@
       </div>
 			<div class="location">
 			  <span>优先级</span>
-			  <span>{{ taskPriotityTransition(environmentTaskMessage.priority) }}</span>
+			  <span
+        :class="{
+						'priorityNormalStyle' : environmentTaskMessage.priority == 1,
+						'priorityUrgencyStyle' : environmentTaskMessage.priority == 2,
+						'priorityImportanceStyle' : environmentTaskMessage.priority == 3,
+						'priorityUrgentImportanceStyle' : environmentTaskMessage.priority == 4,
+				 
+				 }"
+        >{{ taskPriotityTransition(environmentTaskMessage.priority) }}</span>
 			</div>
 			<div class="issue-picture">
 			  <div>图片</div>
@@ -451,7 +459,19 @@ export default {
           box-sizing: border-box;
           word-break: break-all
         }
-      }
+      };
+      .priorityNormalStyle {
+					color: #289E8E !important
+			};
+			.priorityUrgencyStyle { 
+					color: #E8CB51 !important
+			};
+			.priorityImportanceStyle { 
+					color: #F2A15F !important
+			};
+			.priorityUrgentImportanceStyle { 
+					color: #E86F50 !important
+			}
     };
     .location-other {
       padding: 10px 8px;

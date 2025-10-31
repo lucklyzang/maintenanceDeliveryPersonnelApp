@@ -564,6 +564,7 @@
 				if (val) {
 					this.currentGoalDepartment =  val;
 					this.currentGoalSpaces = '请选择';
+					this.goalSpacesDefaultIndex = 0;
 					this.goalDepartmentDefaultIndex = id;
 					this.getSpacesByDepartmentId(this.goalDepartmentOption.filter((item) => { return item['text'] == this.currentGoalDepartment})[0]['value'],false)
 				} else {

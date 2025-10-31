@@ -57,7 +57,7 @@
 						</div>
 						<div class="item-top-three">
 						 <span>位置:</span>
-						 <span>{{!item.taskDesc ? '无' : item.taskDesc}}</span>
+						 <span>{{ `${item.structureName}-${item.depName}-${item.areaImmediateName}-${extractSpaceMessage(item.spaces)}` }}</span>
 						</div>
 						<div class="item-top-four">
 						 <span>问题描述:</span>
@@ -259,6 +259,18 @@
 				  )
 				}
 			},
+
+			// 提取即时保洁功能区信息
+			extractSpaceMessage (spaces) {
+			  if (spaces.length == 0) {
+			      return ''
+			  };
+			  let temporaryArray = [];
+			  for (let item of spaces) {
+			      temporaryArray.push(item.name);
+			  };
+			  return temporaryArray.join("、")
+			},
 			
 			// 查询环境订单取消原因
 			getEnvironmentOrderCancelReason () {
@@ -403,7 +415,11 @@
 								id: item.id,
 								taskDesc: item.taskRemark,
 								workerName: item.workerName,
-								reminder: item.reminder
+								reminder: item.reminder == null ? '' : item.reminder,
+								structureName: item.structureName,
+								depName: item.depName,
+								areaImmediateName: item.areaImmediateName,
+								spaces: item.spaces
 							})
 						}
 				  } else {
@@ -729,6 +745,8 @@
 							margin: 10px 0;
 			 		  };
 			 		  .item-top-four {
+						max-height: 100px;
+						overflow: auto;
 			 		  }
 			 		};
 			 		.item-bottom {
