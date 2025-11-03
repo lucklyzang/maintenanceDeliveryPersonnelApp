@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import router from '../router'
 import Vue from 'vue';
-import { removeAllLocalStorage } from "@/common/js/utils";
+import { removeAllLocalStorage, IsPC } from "@/common/js/utils";
 import { Dialog, Toast } from 'vant';
 // 全局注册
 Vue.use(Dialog);
@@ -12,7 +12,7 @@ Vue.use(Dialog);
 // 生产环境：http://blinktech.cn
 // 新测试环境  http://act.blinktech.cn
 const service = axios.create({
-    baseURL: 'http://show.blinktech.cn', //接口基础地址
+    baseURL: `${store.getters.baseURL}`, //接口基础地址
     retry: 2, // 网络请求异常后，重试次数
     retryDelay: 1000, // 每次重试间隔时间
     shouldRetry: (err) => true // 重试条件
@@ -21,13 +21,32 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
     config => {
+        if (config.method === 'get') {
+            config.data = {unused: 0}
+        };
         config.headers['HTTP_REQUEST_TYPE'] = 'new';
-        if (config['url'] == 'auth/login') {
+        if (config['url'] == 'nblink/auth/login') {
             config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         };
         // 请求头添加token
         if (store.getters.token) {
             config.headers['Authorization'] = store.getters.token
+        };
+        // 请求头添加模板信息
+        if (store.getters.templateType) {
+            config.headers['REQUEST_TEMPLATE'] = store.getters.templateType
+        };
+        // 请求头添加设备唯一标识号(IMEI)
+        if (!IsPC()) {
+            config.headers['MOBILE_MARK'] = ''
+                // try {
+                //   if (window.android.getImei()) {
+                //     config.headers['MOBILE_MARK'] = window.android.getImei()
+                //   } else {
+                //     config.headers['MOBILE_MARK'] = ''
+                //   }
+                // } catch (err) {
+                // }
         }; 
         return config;
       }, function (error) {

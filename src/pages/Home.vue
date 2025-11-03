@@ -65,36 +65,36 @@
 				showLoadingHint: false,
 				triangleRectListInfoShow: false,
 				infoText: '加载中···',
-                homeIconPng: require('@/common/img/home-icon.png'),
-                homeBannerPng: require('@/common/img/home-banner.png'),
+                homeIconPng: require('@/common/images/home/home-icon.png'),
+                homeBannerPng: require('@/common/images/home/home-banner.png'),
 				hasAuthSystemsList: [],
 				serviceList: [
 					{
 						text: '中央运送',
 						value: 'trans',
-						url: require('@/common/img/trans-icon.png')
+						url: require('@/common/images/home/trans-icon.png')
 					},
 					{
 						text: '工程维修',
 						value: 'project',
-						url: require('@/common/img/project-icon.png')
+						url: require('@/common/images/home/project-icon.png')
 					},
 					{
 						text: '保洁管理',
 						value: 'clean',
-						url: require('@/common/img/clean-icon.png')
+						url: require('@/common/images/home/clean-icon.png')
 					}
 				],
 				safeList: [
 					{
 						text: '安全巡更',
 						value: 'safePatrol',
-						url: require('@/common/img/safe-patrol-icon.png')
+						url: require('@/common/images/home/safe-patrol-icon.png')
 					},
 					{
 						text: '设备巡检',
 						value: 'equipmentPatrol',
-						url: require('@/common/img/equipment-patrol-icon.png')
+						url: require('@/common/images/home/equipment-patrol-icon.png')
 					}
 				]
 			}
@@ -106,7 +106,8 @@
 				'statusBarHeight',
 				'navigationBarHeight',
 				'capsuleMessage',
-				'chooseHospitalArea'
+				'chooseHospitalArea',
+				'appPermission'
 			]),
 			userName() {
 			  return this.userInfo['worker']['name']
@@ -145,7 +146,7 @@
 			// 控制服务管理模块显示隐藏
 			controlServiceManageModuleShowEvent () {
 				this.hasAuthSystemsList = [];
-				if (this.userInfo['extendData'].hasOwnProperty('systems')) {
+				if (this.appPermission.hasOwnProperty('systems')) {
 					this.serviceList.map((value,index,arr) => {
 						if (this.userInfo['extendData']['systems'].indexOf(value['value']) != -1) {
 							this.hasAuthSystemsList.push(value)

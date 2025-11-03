@@ -11,7 +11,7 @@ export const formatTime = (formatType) => {
  * @param{String} name key值
  * @param{String} content value值
 */
-export const setCache = (name, content) => {
+export const setStore = (name, content) => {
   if (!name) return;
   if (typeof content !== 'string') {
     content = JSON.stringify(content);
@@ -23,7 +23,7 @@ export const setCache = (name, content) => {
  * 获取localStorage
  * @param{String} name key值
 */
-export const getCache = name => {
+export const getStore = name => {
   if (!name) return;
   return window.localStorage.getItem(name);
 }
@@ -32,7 +32,7 @@ export const getCache = name => {
  * 删除localStorage
  * @param{String} name key值
 */
-export const removeCache = name => {
+export const removeStore = name => {
   if (!name) return;
   window.localStorage.removeItem(name);
 }
@@ -721,14 +721,14 @@ export const compareDateTime = (t1,t2) => {
 */
 
 export const removeAllLocalStorage = () => {
-  // removeCache('userName');
-  // removeCache('userPassword');
-  removeCache('userInfo');
-  removeCache('isLogin');
-  removeCache('token');
-  removeCache('isLogin');
-  removeCache('timeMessage');
-  removeCache('ossMessage');
+  // removeStore('userName');
+  // removeStore('userPassword');
+  removeStore('userInfo');
+  removeStore('isLogin');
+  removeStore('token');
+  removeStore('isLogin');
+  removeStore('timeMessage');
+  removeStore('ossMessage');
 }
 
 /*
@@ -739,16 +739,16 @@ export const removeAllLocalStorage = () => {
 */
 
 export const removeExceptLoginMessageLocalStorage = () => {
-  removeCache('currentCleanTaskName');
-  removeCache('currentCleanTaskDateVlue');
-  removeCache('cleanTaskDetails');
-  removeCache('timeMessage');
-  removeCache('storageForthwithTaskMessage');
-  removeCache('storageSpecialTaskMessage');
-  removeCache('ossMessage');
-  removeCache('chooseProject');
-  removeCache('attendanceTypeDetailsMessage');
-  removeCache('personnelStatisticsDetailsMessage')
+  removeStore('currentCleanTaskName');
+  removeStore('currentCleanTaskDateVlue');
+  removeStore('cleanTaskDetails');
+  removeStore('timeMessage');
+  removeStore('storageForthwithTaskMessage');
+  removeStore('storageSpecialTaskMessage');
+  removeStore('ossMessage');
+  removeStore('chooseProject');
+  removeStore('attendanceTypeDetailsMessage');
+  removeStore('personnelStatisticsDetailsMessage')
 }
 
 /*

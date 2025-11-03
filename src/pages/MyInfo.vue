@@ -139,19 +139,19 @@
 				this.infoText = '退出登录中...';
 				userSignOut(this.proId,this.workerId).then((res) => {
 					if ( res && res.data.code == 200) {
-            // 清空store和localStorage
+            		// 清空store和localStorage
 						removeAllLocalStorage();
 						store.dispatch('resetLoginState');
 					  this.$router.push({path: "/"});
 					} else {
-            this.modalShow = true;
+            			this.modalShow = true;
 						this.modalContent = `${res.data.msg}`
 					};
 					this.showLoadingHint = false;
 				})
 				.catch((err) => {
 					this.showLoadingHint = false;
-          this.modalShow = true;
+          			this.modalShow = true;
 					this.modalContent = err.message
 				})
 			}
@@ -160,7 +160,7 @@
 </script>
 
 <style lang="less" scoped>
-		@import "~@/common/stylus/variable.less";
+	@import "~@/common/stylus/variable.less";
     @import "~@/common/stylus/mixin.less";
     @import "~@/common/stylus/modifyUi.less";
 	.content-box {

@@ -9,10 +9,10 @@
           {{ title }}
           <van-icon name="cross" size="25" @click="close" />
         </h3>
-        <div class="button-box-top" v-show="list.length > 0 && buttonLocation == 'top'">
-          <span class="cancel-text" @click="cancel" v-show="list.length > 0">取消</span>
+        <div class="button-box-top" v-show="buttonLocation == 'top'">
+          <span class="cancel-text" @click="cancel">取消</span>
           <span class="title-text"> {{ title }}</span>
-          <span class="sure-text" @click="sure" v-show="list.length > 0">确定</span>
+          <span class="sure-text" @click="sure">确定</span>
 				</div>
         <div class="search-box" v-show="isShowSearch">
             <van-search
@@ -87,7 +87,8 @@ export default {
       currentValue: '',
       currentId: '',
       show: false,
-      currentText: ""
+      currentText: "",
+      triggerChanged: false
     }
   },
 
@@ -134,6 +135,7 @@ export default {
 
     // picker值改变事件
     pickerChangeEvent (picker, value, index) {
+      this.triggerChanged = true;
       this.currentId = value['id'];
       this.currentText = value['text'];
       this.currentValue = value['value']
@@ -145,7 +147,14 @@ export default {
         this.currentId = this.list[0]['id'];
         this.currentText = this.list[0]['text'];
         this.currentValue = this.list[0]['value'];
+      } else {
+        if (!this.triggerChanged) {
+          this.currentId = this.list[Number(this.pickerValues)]['id'];
+          this.currentText = this.list[Number(this.pickerValues)]['text'];
+          this.currentValue = this.list[Number(this.pickerValues)]['value'];
+        }
       };
+      this.triggerChanged = false;
       this.$emit('sure',this.currentText,this.currentValue,this.currentId);
       // 没有搜索结果时点确认
       if (this.list.length == 0) {

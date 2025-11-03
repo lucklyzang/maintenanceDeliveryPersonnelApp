@@ -1,38 +1,42 @@
-import { setCache, getCache } from '@/common/js/utils'
+import { setStore, getStore } from '@/common/js/utils'
 import { getDefaultLoginState } from '@/common/js/resetStore.js'
 export default {	
 	state: getDefaultLoginState(),
 	getters: {
 		userInfo:(state) => {
-			state.userInfo = JSON.parse(getCache('userInfo')) ? JSON.parse(getCache('userInfo')) : null;
+			state.userInfo = JSON.parse(getStore('userInfo')) ? JSON.parse(getStore('userInfo')) : null;
 			return state.userInfo
 		},
 		isMedicalMan:(state) => {
-			state.isMedicalMan = getCache('isMedicalMan') ? getCache('isMedicalMan') === 'false' ? false : true : false;
+			state.isMedicalMan = getStore('isMedicalMan') ? getStore('isMedicalMan') === 'false' ? false : true : false;
 			return state.isMedicalMan
 		},
 		chooseHospitalArea:(state) => {
-			state.chooseHospitalArea = JSON.parse(getCache('chooseHospitalArea')) ? JSON.parse(getCache('chooseHospitalArea')) : null;
+			state.chooseHospitalArea = JSON.parse(getStore('chooseHospitalArea')) ? JSON.parse(getStore('chooseHospitalArea')) : null;
 			return state.chooseHospitalArea
 		},
+		appPermission:(state) => {
+			state.appPermission = JSON.parse(getStore('appPermission')) ? JSON.parse(getStore('appPermission')) : null;
+			return state.appPermission
+		},
 		isLogin: (state) => {
-			state.isLogin = getCache('isLogin') ? getCache('isLogin') === 'false' ? false : true : false;
+			state.isLogin = getStore('isLogin') ? getStore('isLogin') === 'false' ? false : true : false;
 			return state.isLogin
 		},
 		socketOpen: (state) => {
-			state.socketOpen = getCache('socketOpen') ? getCache('socketOpen') === 'false' ? false : true : false;
+			state.socketOpen = getStore('socketOpen') ? getStore('socketOpen') === 'false' ? false : true : false;
 			return state.socketOpen
 		},
 		templateType:  (state) => {
-			state.templateType = getCache('templateType') ? getCache('templateType') : '';
+			state.templateType = getStore('templateType') ? getStore('templateType') : '';
 			return state.templateType
 		},
 		token:(state) => {
-			state.token = getCache('token') ? getCache('token') : null;
+			state.token = getStore('token') ? getStore('token') : null;
 			return state.token
 		},
 		affairToken:(state) => {
-			state.affairToken = getCache('affairToken') ? getCache('affairToken') : null;
+			state.affairToken = getStore('affairToken') ? getStore('affairToken') : null;
 			return state.affairToken
 		},
 		overDueWay: state => state.overDueWay
@@ -43,48 +47,54 @@ export default {
 		},
 		storeUserInfo(state, playLoad) {
 			if (playLoad && playLoad != 'null') {
-				setCache('userInfo', playLoad);
+				setStore('userInfo', playLoad);
 				state.userInfo = playLoad
 			}
 		},
 		storeChooseHospitalArea(state, playLoad) {
 			if (playLoad && playLoad != 'null') {
-				setCache('chooseHospitalArea', playLoad);
+				setStore('chooseHospitalArea', playLoad);
 				state.chooseHospitalArea = playLoad
+			}
+		},
+		storeAppPermission(state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setStore('appPermission', playLoad);
+				state.appPermission = playLoad
 			}
 		},
 		// 修改模板状态
 		changeTemplateType(state, playLoad) {
 			if (playLoad && playLoad != 'null') {
-				setCache('templateType', playLoad);
+				setStore('templateType', playLoad);
 				state.templateType = playLoad
 			}
 		},
 		// 修改token状态
 		changeToken(state, playLoad) {
 			if (playLoad && playLoad != 'null') {
-				setCache('token', playLoad);
+				setStore('token', playLoad);
 				state.token = playLoad
 			}
 		},
 		// 修改事务接口token状态
 		changeAffairToken(state, playLoad) {
 			if (playLoad && playLoad != 'null') {
-				setCache('affairToken', playLoad);
+				setStore('affairToken', playLoad);
 				state.affairToken = playLoad
 			}
 		},
 		// 修改socken是否打开
 		changeSocketOpen(state, playLoad) {
 			if (playLoad && playLoad != 'null') {
-				setCache('socketOpen', playLoad);
+				setStore('socketOpen', playLoad);
 				state.socketOpen = playLoad
 			}
 		},
 		// 修改是否登录状态
 		changeIsLogin(state, playLoad) {
 			if (playLoad && playLoad != 'null') {
-				setCache('isLogin', playLoad);
+				setStore('isLogin', playLoad);
 				state.isLogin = playLoad
 			}
 		},

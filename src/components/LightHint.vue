@@ -24,8 +24,8 @@ export default {
   },
   data() {
     return {
-      exclamationPointPng: require("@/common/img/exclamation-point.png"),
-      passedPng: require("@/common/img/passed.png"),
+      exclamationPointPng: require("@/common/images/home/exclamation-point.png"),
+      passedPng: require("@/common/images/home/passed.png"),
       isShow: false //是否显示标识
     };
   },

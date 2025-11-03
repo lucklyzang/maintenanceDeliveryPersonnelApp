@@ -1,3 +1,7 @@
+import 'babel-polyfill'
+import Es6Promise from 'es6-promise'
+require('es6-promise').polyfill()
+Es6Promise.polyfill()
 import Vue from 'vue'
 import router from './router'
 import store from './store'
@@ -6,6 +10,8 @@ import Vant from 'vant';
 import { Toast } from 'vant';
 import 'vant/lib/index.css';
 import moment from 'moment'
+import echarts from 'echarts'
+import '../static/icon/iconfont.css'
 import Create from '@/common/js/create.js';
 import Alert from '@/components/LightHint.vue';
 Vue.use(Toast);

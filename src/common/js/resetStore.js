@@ -9,6 +9,7 @@ export function getDefaultLoginState() {
 		isMedicalMan: true,
 		templateType: '',
 		socketOpen: false,
+		appPermission: {},
 		chooseHospitalArea: {}
 	}	
 }
@@ -29,33 +30,10 @@ export function getDefaultCommonState() {
 			projectCancelReason: {},
 			affairCancelReason: {}
 		},
-		// 订单列表点击索引
-		currentIndex: 0
-	}	
-}
-
-// 工程订单信息store的初始值
-export function getDefaultProjectState() {
-	return {
-		// 工程订单详情
-		projectTaskMessage: {}
-	}	
-}
-
-// 运送订单信息store的初始值
-export function getDefaultTransState() {
-	return {
-		// 运送订单详情
-		transTaskMessage: {}
-	}	
-}
-
-// 环境订单信息store的初始值
-export function getDefaultEnvironmentState() {
-	return {
-		timeMessage: {},
-		ossMessage: {},
-		locationMessage: [],
-		environmentTaskMessage: {}
-	}	
+		// 生产域名 https://blinktech.cn
+		// 开发域名 https://blink.blinktech.cn
+		// 准生产域名 https://ver.blinktech.cn
+		// 测试域名 https://show.blinktech.cn
+		baseURL: 'https://show.blinktech.cn'
+	}
 }

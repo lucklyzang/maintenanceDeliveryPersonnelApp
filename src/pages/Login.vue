@@ -9,9 +9,9 @@
 			<ScrollSelection buttonLocation='top' v-model="showHospitalCampus" :pickerValues="hospitalCampusDefaultIndex" :isShowSearch="false" :columns="hospitalCampusOption" @sure="hospitalCampusSureEvent" @cancel="hospitalCampusCancelEvent" @close="hospitalCampusCloseEvent" />
 		</div>
 		<div class="top-background-area">
-			<img src="@/common/img/login-background-image.png" />
+			<img src="@/common/images/home/login-background-image.png" />
 			<div class="title-area">
-				<img src="@/common/img/login-icon.png" />
+				<img src="@/common/images/home/login-icon.png" />
 				<span>智 慧 后 勤 服 务 平 台</span>
 			</div>
 		</div>
@@ -50,8 +50,8 @@
 
 <script>
 	import { mapGetters, mapMutations } from 'vuex'
-	import { logIn, getTemplateType } from '@/api/login.js'
-	import { setCache, getCache, removeCache } from '@/common/js/utils'
+	import { logIn, getTemplateType, getdepartmentList, getdepartmentListNo,registerChannel, getAppPermission } from '@/api/login.js'
+	import { setStore, getStore, removeStore,IsPC } from '@/common/js/utils'
 	import ScrollSelection from "@/components/ScrollSelection";
   	import Qs from 'qs'
 	export default {
@@ -67,14 +67,16 @@
 					password: ''
 				},
                 checked: false,
-				hospitalCampusDefaultIndex: [0],
+				hospitalCampusDefaultIndex: 0,
 				hospitalCampusOption: [],
 				showHospitalCampus: false,
 				currentHospitalCampusSpaces: '请选择',
 				
 				rememberAccountMessage: false,
 				modalShow: false,
-				modalContent: ''
+				modalContent: '',
+				temporaryUsername: '',
+				proId: ''
 			}
 		},
 		onReady () {
@@ -86,8 +88,8 @@
 			])
 		},
 		onShow () {
-			 this.form.username = getCache('userName') ? getCache('userName') : '';
-			 this.form.password = getCache('userPassword') ? getCache('userPassword') : '';
+			 this.form.username = getStore('userName') ? getStore('userName') : '';
+			 this.form.password = getStore('userPassword') ? getStore('userPassword') : '';
 		},
 		methods: {
 			...mapMutations([
@@ -97,20 +99,21 @@
 				'changeToken',
 				'changeIsLogin',
 				'storeChooseHospitalArea',
-				'changeIsMedicalMan'
+				'changeIsMedicalMan',
+				'storeAppPermission'
 			]),
       
 			// 院区下拉选择框确认事件
 			hospitalCampusSureEvent (val,value,id) {
 				if (val) {
-					this.hospitalCampusDefaultIndex = [id]
+					this.hospitalCampusDefaultIndex = id;
 					this.currentHospitalCampusSpaces =  val;
 					this.storeChooseHospitalArea({
 						text: val,
 						value,
 						id
 					});
-					this.queryTemplateType(this.chooseHospitalArea['value'])
+					this.loginHandle();
 				} else {
 					this.currentGoalSpaces = '请选择'
 				};
@@ -126,7 +129,145 @@
 			hospitalCampusCloseEvent () {
 				this.showHospitalCampus = false
 			},
-          
+
+			// 获取科室字典id
+			queryDepartmentList () {
+				return new Promise((resolve,reject) => {
+					this.showLoadingHint = true;
+					this.infoText = '查询中···';
+					getdepartmentList(this.chooseHospitalArea['value']).then((res) => {
+						this.showLoadingHint = false;
+						this.infoText = '';
+						if (res && res.data.code == 200) {
+							resolve(res.data.data);
+							setStore('departmentInfo', res.data.data);
+						} else {
+							this.$dialog.alert({
+								message: `${res.data.msg}`,
+								closeOnPopstate: true
+							}).then(() => {})
+						};
+						this.showLoadingHint = false;
+						reject(res.data.msg);
+					})
+					.catch((err) => {
+						reject(err);
+						this.showLoadingHint = false;
+						this.infoText = '';
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})
+					})
+				})
+			},
+
+			// 获取科室字典编号
+			queryDepartmentListNo () {
+				return new Promise((resolve,reject) => {
+					this.showLoadingHint = true;
+					this.infoText = '查询中···';
+					getdepartmentListNo(this.chooseHospitalArea['value']).then((res) => {
+					this.showLoadingHint = false;
+					this.infoText = '';
+					if (res && res.data.code == 200) {
+						resolve(res.data.data);
+						setStore('departmentInfoNo', res.data.data);
+						} else {
+							reject(res.data.msg);
+							this.$dialog.alert({
+								message: `${res.data.msg}`,
+								closeOnPopstate: true
+							}).then(() => {})
+						}
+					})
+					.catch((err) => {
+						reject(err);
+						this.showLoadingHint = false;
+						this.infoText = '';
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})
+					})
+				})
+			},
+
+			// 注册channel
+			getChannel (data) {
+				return new Promise((resolve,reject) => {
+					this.showLoadingHint = true;
+					this.infoText = '注册中···';
+					registerChannel(data)
+					.then((res) => {
+						this.showLoadingHint = false;
+						this.infoText = '';
+						resolve()
+					})
+					.catch((err) => {
+						reject(err);
+						this.showLoadingHint = false;
+						this.infoText = '';
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})
+					})
+				})
+			},
+
+			// 向客户端发送信标服务器地址
+			postUrl (workerId) {
+				return new Promise((resolve,reject) => {
+					let xinbiaoTimer = setTimeout(window.android.setPostUrl(`http://blink.blinktech.cn/trans/workerPositionLog/save/${workerId}`),100);
+					if (window.android.setPostUrl(`http://blink.blinktech.cn/trans/workerPositionLog/save/${workerId}`) == 'success') {
+					resolve(window.android.setPostUrl(`http://blink.blinktech.cn/trans/workerPositionLog/save/${workerId}`));
+					clearTimeout(xinbiaoTimer)
+					}
+				})
+			},
+
+			// 获取用户权限
+			getappPermissionEvent () {
+				return new Promise((resolve,reject) => {
+					this.showLoadingHint = true;
+					this.infoText = '查询中···';
+					getAppPermission(this.userInfo['worker']['account'])
+					.then((res) => {
+						this.showLoadingHint = false;
+						this.infoText = '';
+						if (res && res.data.code == 200) {
+							resolve();
+							this.storeAppPermission(res.data.data);
+							// 保存是否为新循环任务
+							if (res.data.data.circle == 1) {
+								// this.changeIsNewCircle(true);
+								setStore('isNewCircle',{isNewCircle: true})
+							} else {
+								// this.changeIsNewCircle(false);
+								setStore('isNewCircle',{isNewCircle: false})
+							}
+						} else {
+							reject(res.data.msg);
+							this.$dialog.alert({
+								message: `${res.data.msg}`,
+								closeOnPopstate: true
+							}).then(() => {})
+						}
+					})
+					.catch((err) => {
+						reject(err);
+						this.showLoadingHint = false;
+						this.infoText = '';
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})
+					})
+				})
+			},
+
+				
 			// 账号密码事件
 			sure () {
 				if (this.form.username === '' || this.form.password === '') {
@@ -135,72 +276,81 @@
 					});
 					return;
 				};
-				let loginMessage = Qs.stringify({
-				  username: this.form.username,
-				  password: this.form.password,
-				  logType: 1
-				});
-				this.showLoadingHint = true;
-				logIn(loginMessage).then((res) => {
-					this.showLoadingHint = false;
-					if (res) {
-					  if (res.data.code == 200) {
-						   this.changeOverDueWay(false);
-						   setCache('storeOverDueWay',false); 
-							// 登录用户名密码及用户信息存入Locastorage
-							// 判断是否勾选记住用户名密码
-							if (this.checked) {
-								setCache('userName', this.form.username);
-								setCache('userPassword', this.form.password);
-							} else {
-								removeCache('userName', this.form.username);
-								removeCache('userPassword', this.form.password);
-							};
-							// 登录用户信息存入store
-							this.changeIsLogin(true);
-							this.storeUserInfo(res.data.data);
-							if (this.userInfo['worker']['hospitalList'].length > 1) {
-								for (let i = 0;i<this.userInfo['worker']['hospitalList'].length;i++) {
-									this.hospitalCampusOption.push({
-										value: this.userInfo['worker']['hospitalList'][i]['hospitalId'],
-										text: this.userInfo['worker']['hospitalList'][i]['hospitalName'],
-										id: i
-									})
+				return new Promise((resolve,reject)=> {
+					let loginMessage = Qs.stringify({
+						username: this.form.username,
+						password: this.form.password,
+						logType: 0
+					});
+					this.temporaryUsername = getStore('userName') ? getStore('userName') : '无';
+					this.showLoadingHint = true;
+					logIn(loginMessage).then((res) => {
+						this.showLoadingHint = false;
+						this.infoText = '';
+						if (res) {
+							if (res.data.code == 200) {
+								resolve(res.data.data)
+								this.changeOverDueWay(false);
+								setStore('storeOverDueWay',false); 
+								// 登录用户名密码及用户信息存入Locastorage
+								// 判断是否勾选记住用户名密码
+								if (this.checked) {
+									setStore('userName', this.form.username);
+									setStore('userPassword', this.form.password);
+								} else {
+									getStore('userName', this.form.username);
+									getStore('userPassword', this.form.password);
 								};
-								this.showHospitalCampus = true;
+								// 登录用户信息存入store
+								this.changeIsLogin(true);
+								this.storeUserInfo(res.data.data);
+								this.hospitalCampusOption = [];
+								this.changeIsMedicalMan(false);
+								if (this.userInfo['worker']['hospitalList'].length > 1) {
+									for (let i = 0;i<this.userInfo['worker']['hospitalList'].length;i++) {
+										this.hospitalCampusOption.push({
+											value: this.userInfo['worker']['hospitalList'][i]['id'],
+											text: this.userInfo['worker']['hospitalList'][i]['name'],
+											id: i
+										})
+									};
+									this.showHospitalCampus = true;
+								} else {
+									this.storeChooseHospitalArea({
+										text: this.userInfo['worker']['hospitalList'][0]['id'],
+										value: this.userInfo['worker']['hospitalList'][0]['name'],
+										id: 0
+									});
+									this.loginHandle()
+								}
 							} else {
-								this.storeChooseHospitalArea({
-									text: this.userInfo['worker']['hospitalList'][0]['hospitalName'],
-									value: this.userInfo['worker']['hospitalList'][0]['hospitalId'],
-									id: 0
-								});
-								this.queryTemplateType(this.chooseHospitalArea['value'])
-							};	
-							this.changeIsMedicalMan(false)
-					  } else {
+								reject(res.data.msg);
+								this.modalShow = true;
+								this.modalContent = `${res.data.msg}`
+							}
+						}
+					})
+					.catch((err) => {
+						reject(err);
+						this.showLoadingHint = false;
+						this.infoText = '';
 						this.modalShow = true;
-						this.modalContent = `${res.data.msg}`
-					  }
-					};
-				  })
-				  .catch((err) => {
-					this.showLoadingHint = false;
-					this.modalShow = true;
-					this.modalContent = err;
-				  })
+						this.modalContent = err;
+					})
+				})	
 			},
 			
 			// 查询模板类型
 			queryTemplateType (data) {
-			  this.showLoadingHint = true;
+			  	this.showLoadingHint = true;
 				this.infoText = '查询中···';
 			  	getTemplateType(data).then((res) => {
-				this.showLoadingHint = false;
+					this.showLoadingHint = false;
 					if (res && res.data.code == 200) {
 						// 保存模板类型
 						if (res.data.data) {
 							this.changeTemplateType(res.data.data);
-						};
+						}
 					   this.$router.push({ path: "/home" })
 					} else {
 						this.modalShow = true;
@@ -212,6 +362,61 @@
 					this.modalShow = true;
 					this.modalContent = err.message;
 			  })
+			},
+
+			// 登录事件
+			async loginHandle () {
+				// 用户身份类别存入store和Locastorage
+				// this.changeUserType(0);
+				// setStore('userType', 0);
+				if (!IsPC()) {
+					// 注册channel
+					if (window.android.getChannelId()) {
+						try {
+							await this.getChannel({
+								proId: this.queryTemplateType(this.chooseHospitalArea['value']),
+								workerId: this.userInfo['worker'].id,
+								type: 0,
+								channelId: window.android.getChannelId()
+							})
+						} catch (err) {
+							this.$dialog.alert({
+								message: `${err.message}`,
+								closeOnPopstate: true
+							}).then(() => {
+							})
+						}
+					} else {
+						this.$toast('未获取到channelId')
+					};
+					// 向客户端发送信标服务器地址
+					try {
+						let xinbiaoInfo = await this.postUrl(this.userInfo['worker'].id);
+					} catch (err) {
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})
+					}
+				};
+				try {
+					// 获取用户权限
+					await this.getappPermissionEvent();
+					// 获取科室字典id
+					await this.queryDepartmentList();
+					// 获取科室字典编号
+					await this.queryDepartmentListNo();
+					this.queryTemplateType(this.chooseHospitalArea['value']);
+					// 如果当前登录用户和上次登录用户不一致，则清除循环任务完成标本采集的科室信息
+					if (this.temporaryUsername != this.username) {
+						removeStore('completeDepartmentMessage')
+					}
+				} catch (err) {
+					this.$dialog.alert({
+						message: `${err}`,
+						closeOnPopstate: true
+					}).then(() => {})
+				}
 			},
 			
 			// 弹框确定事件
