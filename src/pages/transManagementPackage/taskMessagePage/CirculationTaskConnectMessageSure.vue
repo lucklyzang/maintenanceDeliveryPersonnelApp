@@ -153,10 +153,15 @@ export default {
       'storeNoConnectSample',
       'completeDeparnmentInfo',
       'circulationTaskId',
-      'circulationDetails'
+      'circulationDetails',
+      'chooseHospitalArea',
+      'userInfo'
     ]),
-    proId () {
-      return JSON.parse(getStore('userInfo')).extendData.proId
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
     }
   },
 

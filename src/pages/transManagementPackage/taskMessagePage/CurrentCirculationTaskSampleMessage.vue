@@ -151,10 +151,14 @@ export default {
       'circulationDetails',
       'verifyCirculationOfficeId',
       'verifyNewCirculationOfficeId',
-      'isCompleteSampleList'
+      'isCompleteSampleList',
+      'chooseHospitalArea'
     ]),
-    proId () {
-      return JSON.parse(getStore('userInfo')).extendData.proId
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
     },
     circulationTaskId () {
       return this.circulationDetails.id

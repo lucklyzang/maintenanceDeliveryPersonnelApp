@@ -609,16 +609,35 @@
         'completeCheckedItemInfo',
         'catch_components',
         'isFreshAppointTaskPage',
-        'appointTaskTransferIdList'
+        'appointTaskTransferIdList',
+        'chooseHospitalArea'
       ]),
-      proId () {
-        return JSON.parse(getStore('userInfo')).extendData.proId
+      sex () {
+        return this.userInfo['worker']['extendData']['sex']
       },
-      workerId () {
-        return JSON.parse(getStore('userInfo')).extendData.userId
+      userTypeId () {
+        return this.isMedicalMan
       },
-      workerName () {
-        return this.userInfo.name
+      workerName() {
+        return this.userInfo['worker']['name']
+      },
+      workerId() {
+        return this.userInfo['worker']['id']
+      },
+      proName () {
+        return this.chooseHospitalArea['text']
+      },
+      proId() {
+        return this.chooseHospitalArea['value']
+      },
+      depId() {
+        return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+      },
+      depName() {
+        return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+      },
+      userAccount() {
+        return this.userInfo['worker']['account']
       }
     },
 

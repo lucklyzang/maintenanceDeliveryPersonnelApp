@@ -147,10 +147,12 @@ export default {
       'circulationTaskMessage',
       'completeDeparnmentInfo',
       'verifyCirculationOfficeId',
-      'circulationDetails'
+      'circulationDetails',
+      'chooseHospitalArea',
+      'userInfo'
     ]),
-    proId () {
-      return JSON.parse(getStore('userInfo')).extendData.proId
+    proId() {
+      return this.chooseHospitalArea['value']
     },
     circulationTaskId () {
       return this.circulationDetails.id

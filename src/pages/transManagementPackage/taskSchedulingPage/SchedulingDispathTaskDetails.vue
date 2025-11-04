@@ -258,10 +258,31 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","schedulingTaskDetails","operateBtnClickRecord","templateType"]),
-    proId () {
-        return this.userInfo.extendData.proId
-    }
+    ...mapGetters(["userInfo","chooseHospitalArea","schedulingTaskDetails","operateBtnClickRecord","templateType"]),
+      userTypeId () {
+        return this.isMedicalMan
+      },
+      userName() {
+        return this.userInfo['worker']['name']
+      },
+      workerId() {
+        return this.userInfo['worker']['id']
+      },
+      proName () {
+        return this.chooseHospitalArea['text']
+      },
+      proId() {
+        return this.chooseHospitalArea['value']
+      },
+      depId() {
+        return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+      },
+      depName() {
+        return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+      },
+      userAccount() {
+        return this.userInfo['worker']['account']
+      }
   },
 
   methods: {

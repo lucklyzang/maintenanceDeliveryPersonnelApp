@@ -356,13 +356,15 @@ export default {
 
   computed:{
     ...mapGetters([
-      'navTopTitle'
+      'navTopTitle',
+      'chooseHospitalArea',
+      'userInfo'
     ]),
-    proId () {
-      return JSON.parse(getStore('userInfo')).extendData.proId
+    proId() {
+      return this.chooseHospitalArea['value']
     },
-    workerId () {
-      return JSON.parse(getStore('userInfo')).extendData.userId
+    workerId() {
+      return this.userInfo['worker']['id']
     }
   },
 
