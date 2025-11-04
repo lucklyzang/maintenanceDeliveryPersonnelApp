@@ -7,17 +7,19 @@ import appointTask from './trans/appointTask.js'
 import taskScheduling from './trans/taskScheduling.js'
 import circulationTask from './trans/circulationTask.js'
 import medicalTask from './trans/medicalTask.js'
+import transLogin from './trans/transLogin.js'
 import catchComponent from './trans/catchComponent.js'
 Vue.use(Vuex);
 export default new Vuex.Store({
   modules:{
     login,
-	common,
-	dispatchTask,
+	  common,
+	  dispatchTask,
     appointTask,
     taskScheduling,
     circulationTask,
     medicalTask,
+    transLogin,
     catchComponent
   }
 });

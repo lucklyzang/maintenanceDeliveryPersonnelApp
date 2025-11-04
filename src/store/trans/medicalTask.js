@@ -1,30 +1,41 @@
 import { setStore, getStore, removeStore } from '@/common/js/utils'
+import { getDefaultTransMedicalTaskState } from '@/common/js/resetStore.js'
 
 export default {
-  state:{
-    transportantTaskMessage: null,
-    taskTranceMsg: '',
-    // 判断模板类型
-    templateType: ''
-  },
+  state: getDefaultTransMedicalTaskState(),
   getters:{
-    transportantTaskMessage: state => state.transportantTaskMessage,
-    taskTranceMsg: state => state.taskTranceMsg,
-    templateType: state => state.templateType
+    transportantTaskMessage: (state) => {
+      state.transportantTaskMessage = JSON.parse(getStore('transportantTaskMessage')) ? JSON.parse(getStore('transportantTaskMessage')) : null;
+			return state.transportantTaskMessage
+    },
+    taskTranceMsg:  (state) => {
+			state.taskTranceMsg = getStore('taskTranceMsg') ? getStore('taskTranceMsg') : '';
+			return state.taskTranceMsg
+		}
   },
   mutations:{
     // 改变运送任务信息状态
     changetransportTypeMessage (state,payLoad) {
-      state.transportantTaskMessage = payLoad.DtMsg
+      if (playLoad && playLoad != 'null') {
+				setStore('transportantTaskMessage', payLoad.DtMsg);
+				state.transportantTaskMessage = payLoad.DtMsg
+			}
     },
     // 改变任务跟踪信息的状态
     changeTaskTranceMsg (state,payLoad) {
-      state.taskTranceMsg = payLoad
+      if (playLoad && playLoad != 'null') {
+				setStore('taskTranceMsg', payLoad);
+				state.taskTranceMsg = payLoad
+			}
     },
-    // 修改模板状态
-    changeTemplateType(state, playLoad) {
-      state.templateType = playLoad
+    //重置Medical信息的状态
+		resetTransMedicalTaskState(state) {
+      Object.assign(state, getDefaultTransMedicalTaskState())
     }
   },
-  actions:{}
+  actions:{
+    resetTransMedicalTaskStateEvent({ commit }) {
+			commit('resetTransMedicalTaskState')
+		}
+  }
 }

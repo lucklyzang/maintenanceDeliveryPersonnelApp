@@ -93,7 +93,7 @@ export default {
 		},
 		// 修改是否登录状态
 		changeIsLogin(state, playLoad) {
-			if (playLoad && playLoad != 'null') {
+			if (playLoad != 'null') {
 				setStore('isLogin', playLoad);
 				state.isLogin = playLoad
 			}

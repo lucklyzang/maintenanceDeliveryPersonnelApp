@@ -43,7 +43,7 @@ export default {
   data () {
     return {
       postData: [],
-      defaultPersonPng: require('@/common/images/home/default-person.png'),
+      defaultPersonPng: require('@/common/images/home/man-person-default.png'),
     }
   },
   mounted () {

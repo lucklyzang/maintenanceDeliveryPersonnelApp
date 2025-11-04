@@ -3,7 +3,7 @@ import store from '@/store';
 // 查询总量和排序
 export function queryAllTaskMessage(data) {
   return request({
-    url: `worker/countRank`,
+    url: `trans/worker/countRank`,
     method: 'get',
     params: data
   })
@@ -12,7 +12,7 @@ export function queryAllTaskMessage(data) {
 // 用户签退
 export function userSignOut(proId,workerId) {
   return request({
-    url: `login/signOut/${proId}/${workerId}`,
+    url: `trans/login/signOut/${proId}/${workerId}`,
     method: 'get'
   })
 };
@@ -20,7 +20,7 @@ export function userSignOut(proId,workerId) {
 // 获取是否有新任务
 export function getNewWork(proId,workerId) {
   return request({
-    url: `worker/getNew/${proId}/${workerId}`,
+    url: `trans/worker/getNew/${proId}/${workerId}`,
     method: 'get'
   })
 };
@@ -28,7 +28,7 @@ export function getNewWork(proId,workerId) {
 // 获取所有任务数量
 export function getAllTaskNumber(proID,workerId) {
   return request({
-    url: `worker/taskCount/${proID}/${workerId}`,
+    url: `trans/worker/taskCount/${proID}/${workerId}`,
     method: 'get'
   })
 };

@@ -386,6 +386,15 @@ export const getDate = () => {
 	return currentFormatDate
 }
 
+/*
+  * 数组去重方法
+  * @param{Array} targetArray
+*/
+export const uniqueArray = (targetArray) => {
+  if (!Array.isArray(targetArray)) {return};
+  return Array.from(new Set(targetArray))
+}
+
 
 
 /*
@@ -729,6 +738,43 @@ export const removeAllLocalStorage = () => {
   removeStore('isLogin');
   removeStore('timeMessage');
   removeStore('ossMessage');
+  // 中央运送
+  removeStore('currentTitle');
+  removeStore('storeOverDueWay');
+  removeStore('departmentInfo');
+  removeStore('departmentInfoNo');
+  removeStore('questToken');
+  // removeStore('userName');
+  // removeStore('userPassword');
+  removeStore('userInfo');
+  removeStore('isLogin');
+  removeStore('userType');
+  removeStore('completAppointTaskSweepCodeDestinationInfo');
+  removeStore('currentDepartmentId');
+  removeStore('completPhotoInfo');
+  removeStore('completdispatchIssuePhotoInfo');
+  removeStore('completeDispatchSweepCodeDestinationInfo');
+  removeStore('completAppointTaskSweepCodeDepartureInfo');
+  removeStore('completAppointTaskCheckedItemInfo');
+  removeStore('isDispatchFirstSweepCode');
+  removeStore('completeDispatchSweepCodeInfo');
+  removeStore('currentCirculationCollectMessage');
+  // 暂不清除循环任务完成标本采集的科室信息
+  // removeStore('completeDepartmentMessage');
+  removeStore('isDeleteEcho');
+  removeStore('isampleInfo');
+  removeStore('isClickSure');
+  removeStore('isDeleteCancel');
+  removeStore('isDeleteEcho');
+  removeStore('currentCirculationConnectMessage');
+  removeStore('currentAppointTaskMessage');
+  removeStore('currentDispatchTaskMessage');
+  removeStore('currentDispatchTaskMessage');
+  removeStore('completDepartmentNumber');
+  removeStore('templateType');
+  removeStore('isNewCircle');
+  removeStore('catch_components');
+  removeStore('completeCollectSample')
 }
 
 /*

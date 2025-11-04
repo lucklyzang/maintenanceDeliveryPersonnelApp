@@ -23,7 +23,7 @@
 					服务管理
 				</div>
 				<div class="service-management-content">
-					<div class="service-list" v-for="(item,index) in hasAuthSystemsList" :key="index" @click="serviceManagementEvent(item,index)">
+					<div class="service-list" v-for="(item,index) in hasAuthserviceManagementSystemsList" :key="index" @click="serviceManagementEvent(item,index)">
 						<div class="list-top">
 							<img :src="item.url" />
 						</div>
@@ -67,7 +67,23 @@
 				infoText: '加载中···',
                 homeIconPng: require('@/common/images/home/home-icon.png'),
                 homeBannerPng: require('@/common/images/home/home-banner.png'),
-				hasAuthSystemsList: [],
+				hasAuthserviceManagementSystemsList: [
+					{
+						text: '中央运送',
+						value: 'trans',
+						url: require('@/common/images/home/trans-icon.png')
+					},
+					{
+						text: '工程维修',
+						value: 'project',
+						url: require('@/common/images/home/project-icon.png')
+					},
+					{
+						text: '保洁管理',
+						value: 'clean',
+						url: require('@/common/images/home/clean-icon.png')
+					}
+				],
 				serviceList: [
 					{
 						text: '中央运送',
@@ -83,6 +99,18 @@
 						text: '保洁管理',
 						value: 'clean',
 						url: require('@/common/images/home/clean-icon.png')
+					}
+				],
+				hasAuthsafeManagementSystemsList: [
+					{
+						text: '安全巡更',
+						value: 'safePatrol',
+						url: require('@/common/images/home/safe-patrol-icon.png')
+					},
+					{
+						text: '设备巡检',
+						value: 'equipmentPatrol',
+						url: require('@/common/images/home/equipment-patrol-icon.png')
 					}
 				],
 				safeList: [
@@ -145,11 +173,11 @@
 			
 			// 控制服务管理模块显示隐藏
 			controlServiceManageModuleShowEvent () {
-				this.hasAuthSystemsList = [];
+				this.hasAuthserviceManagementSystemsList = [];
 				if (this.appPermission.hasOwnProperty('systems')) {
 					this.serviceList.map((value,index,arr) => {
 						if (this.userInfo['extendData']['systems'].indexOf(value['value']) != -1) {
-							this.hasAuthSystemsList.push(value)
+							this.hasAuthserviceManagementSystemsList.push(value)
 						}
 					})
 				}
@@ -210,11 +238,21 @@
 			// 服务管理项点击事件
 			serviceManagementEvent (item,index) {
 				if (item.text == '中央运送') {
-					this.$router.push({ path: "/transIndex" })
+					this.$router.push({ path: "/transHome" })
 				} else if (item.text == '工程维修') {
-					this.$router.push({ path: "/projectCallTask" })
+					this.$router.push({ path: "/projectHome" })
 				} else if (item.text == '保洁管理') {
-					this.$router.push({ path: "/cleanCallTask" })
+					this.$router.push({ path: "/cleanHome" })
+				}
+			},
+
+			
+			// 安全管理项点击事件
+			safeManagementEvent (item,index) {
+				if (item.text == '安全巡更') {
+					this.$router.push({ path: "/transIndex" })
+				} else if (item.text == '设备巡检') {
+					this.$router.push({ path: "/projectCallTask" })
 				}
 			}
 		}
@@ -283,7 +321,7 @@
 				padding: 10px 10px 20px 10px;
 				box-sizing: border-box;
 				width: 98%;
-				flex: 1;
+				max-height: 25vh;
 				overflow: auto;
 				margin: 0 auto;
 				background: #fff;
@@ -336,7 +374,7 @@
 			};
 			.safe-management {
 				margin-top: 10px;
-				flex: 1;
+				max-height: 25vh;
 				overflow: auto;
 				>div {
 					&:nth-child(2) {

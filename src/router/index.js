@@ -69,7 +69,7 @@ let baseRoute = [{
         component: ModificationPassword,
         meta: { index: 2 }
     },
-    // 运送路由
+    // 中央运送路由
     {
         path: '/transHome',
         name: 'transHome',

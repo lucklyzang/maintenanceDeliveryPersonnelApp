@@ -1,38 +1,32 @@
 import { setStore, getStore, removeStore } from '@/common/js/utils'
-
+import { getDefaultTransTaskSchedulingState } from '@/common/js/resetStore.js'
 export default {
-  state:{
-    // 任务调度类型
-    schedulingTaskType: {},
-    // 任务调度详情
-    schedulingTaskDetails: {},
-    //操作按钮点击记录
-    operateBtnClickRecord: {
-      allocationBtnClick: false,
-      delayBtnClick: false,
-      cancelBtnClick: false
-    },
-    // 暂存创建调度任务的信息
-    temporaryStorageCreateDispathTaskMessage: {},
-    // 暂存创建预约任务的信息
-    temporaryStorageCreateAppointTaskMessage: {}
-  },
+  state: getDefaultTransTaskSchedulingState(),
 
   getters:{
     schedulingTaskType: (state) => {
-      return state.schedulingTaskType
+      state.schedulingTaskType = JSON.parse(getStore('schedulingTaskType')) ? JSON.parse(getStore('schedulingTaskType')) : {};
+			return state.schedulingTaskType
     },
     schedulingTaskDetails: (state) => {
-      return state.schedulingTaskDetails
+      state.schedulingTaskDetails = JSON.parse(getStore('schedulingTaskDetails')) ? JSON.parse(getStore('schedulingTaskDetails')) : {};
+			return state.schedulingTaskDetails
     },
     operateBtnClickRecord: (state) => {
-      return state.operateBtnClickRecord
+      state.operateBtnClickRecord = JSON.parse(getStore('operateBtnClickRecord')) ? JSON.parse(getStore('operateBtnClickRecord')) : {
+        allocationBtnClick: false,
+        delayBtnClick: false,
+        cancelBtnClick: false
+      };
+			return state.operateBtnClickRecord
     },
     temporaryStorageCreateDispathTaskMessage: (state) => {
-      return state.temporaryStorageCreateDispathTaskMessage
+      state.temporaryStorageCreateDispathTaskMessage = JSON.parse(getStore('temporaryStorageCreateDispathTaskMessage')) ? JSON.parse(getStore('temporaryStorageCreateDispathTaskMessage')) : {};
+			return state.temporaryStorageCreateDispathTaskMessage
     },
     temporaryStorageCreateAppointTaskMessage: (state) => {
-      return state.temporaryStorageCreateAppointTaskMessage
+      state.temporaryStorageCreateAppointTaskMessage = JSON.parse(getStore('temporaryStorageCreateAppointTaskMessage')) ? JSON.parse(getStore('temporaryStorageCreateAppointTaskMessage')) : {};
+			return state.temporaryStorageCreateAppointTaskMessage
     }
   },
 
@@ -40,29 +34,53 @@ export default {
 
     // 保存任务调度切换类型
     changeSchedulingTaskType (state, payLoad) {
-      state.schedulingTaskType = payLoad
+      if (playLoad && playLoad != 'null') {
+				setStore('schedulingTaskType', payLoad);
+				state.schedulingTaskType = payLoad
+			}
     },
 
     // 保存任务调度详情
     changeSchedulingTaskDetails (state, payLoad) {
-      state.schedulingTaskDetails = payLoad
+      if (playLoad && playLoad != 'null') {
+				setStore('schedulingTaskDetails', payLoad);
+				state.schedulingTaskDetails = payLoad
+			}
     },
 
     // 保存操作按钮点击记录
     changeOperateBtnClickRecord (state, payLoad) {
-      state.operateBtnClickRecord = payLoad
+      if (playLoad && playLoad != 'null') {
+				setStore('operateBtnClickRecord', payLoad);
+				state.operateBtnClickRecord = payLoad
+			}
     },
 
     // 保存暂存创建调度任务的信息
     changeTemporaryStorageCreateDispathTaskMessage (state, payLoad) {
-      state.temporaryStorageCreateDispathTaskMessage = payLoad
+      if (playLoad && playLoad != 'null') {
+				setStore('temporaryStorageCreateDispathTaskMessage', payLoad);
+				state.temporaryStorageCreateDispathTaskMessage = payLoad
+			}
     },
 
     // 保存暂存创建预约任务的信息
     changeTemporaryStorageCreateAppointTaskMessage (state, payLoad) {
-      state.temporaryStorageCreateAppointTaskMessage = payLoad
+      if (playLoad && playLoad != 'null') {
+				setStore('temporaryStorageCreateAppointTaskMessage', payLoad);
+				state.temporaryStorageCreateAppointTaskMessage = payLoad
+			}
+    },
+
+    //重置TaskScheduling信息的状态
+		resetTransTaskSchedulingState(state) {
+      Object.assign(state, getDefaultTransTaskSchedulingState())
     }
   },
   
-  actions:{}
+  actions:{
+    resetTransTaskSchedulingStateEvent({ commit }) {
+			commit('resetTransTaskSchedulingState')
+		}
+  }
 }

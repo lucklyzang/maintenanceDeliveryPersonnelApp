@@ -100,7 +100,8 @@
 				'changeIsLogin',
 				'storeChooseHospitalArea',
 				'changeIsMedicalMan',
-				'storeAppPermission'
+				'storeAppPermission',
+				'changeUserType'
 			]),
       
 			// 院区下拉选择框确认事件
@@ -367,8 +368,8 @@
 			// 登录事件
 			async loginHandle () {
 				// 用户身份类别存入store和Locastorage
-				// this.changeUserType(0);
-				// setStore('userType', 0);
+				this.changeUserType(0);
+				setStore('userType', 0);
 				if (!IsPC()) {
 					// 注册channel
 					if (window.android.getChannelId()) {

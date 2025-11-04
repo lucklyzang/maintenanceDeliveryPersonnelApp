@@ -31,6 +31,10 @@ export default {
     width: 100%;
     height: @header-title-height;
     line-height: @header-title-height;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    box-sizing: border-box;
     .header_title {
       position: absolute;
       height: @header-title-height;

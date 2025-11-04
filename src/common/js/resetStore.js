@@ -37,3 +37,131 @@ export function getDefaultCommonState() {
 		baseURL: 'https://show.blinktech.cn'
 	}
 }
+
+/*
+ * 中央运送相关模块store初始值
+*/
+
+//预约任务store初始值
+export function getDefaultTransAppointTaskState() {
+	return {
+		appointTaskMessage: {},
+		appointTaskTransferIdList: [],
+		isFreshAppointTaskPage: true,
+		originalSignature: {},
+		completeSweepcodeDestinationInfo: [],
+		completeSweepcodeDepartureInfo: [],
+		completeCheckedItemInfo: []
+	}
+}
+
+// 缓存组件store初始值
+export function getDefaultTransCatchComponentsState() {
+	return {
+		catch_components: ['dispatchTask']
+	}
+}
+
+//循环任务store初始值
+export function getDefaultTransCirculationTaskState() {
+	return {
+		arriveDepartmentId: false,
+		storeArriveDeparnmentId: '',
+		circulationTaskMessage: null,
+		currentElectronicSignature: null,
+		circulationCollectMessageList: [],
+		isCollectEnterSweepCodePage: false,
+		circulationConnectMessageList: [],
+		isrefreshCirculationConnectPage: false,
+		completeDeparnmentInfo: [],
+		stipulateOfficeList: [],
+		storeAlreadyConnectSample: [],
+		storeNoConnectSample: [],
+		isDeleteEcho: false,
+		isDeleteCancel: false,
+		isClickSure: false,
+		circulationDetails: null,
+		verifyCirculationOfficeId: '',
+		verifyNewCirculationOfficeId: '',
+		isFreshCirculationTaskPage: true,
+		circulationTaskId: '',
+		// 新循环任务采集过的标本信息
+		isCompleteSampleList: []
+	}
+}
+
+//调度任务store初始值
+export function getDefaultTransDispatchTaskState() {
+	return {
+		navTitle: '中央运送',
+		dispatchTaskMessage: null,
+		dispatchTaskTransferIdList: [],
+		dispatchTaskCancelIdList: [],
+		dispatchTaskState: '',
+		dispatchTaskId: '',
+		dispatchTaskDepartmentType: '',
+		isCoerceTakePhoto: false,
+		isCompleteSweepCode: [],
+		isCompleteSweepCodeDestinationList: [],
+		isDispatchTaskFirstSweepCode: true,
+		isCompletePhotoList: [],
+		isBack: '',
+		isSign: '',
+		isSingleDestination: '',
+		showEndTaskBtn: false,
+		isFreshDispatchTaskPage: true,
+		currentDepartmentNumber: [],
+		photoAreaBoxShow: false,
+		isCallDispatchSweepcodeMethod: true,
+		isCompleteDispatchIssuePhotoList: []
+	}
+}
+
+//medicalTask store初始值
+export function getDefaultTransMedicalTaskState() {
+	return {
+		transportantTaskMessage: null,
+		taskTranceMsg: ''
+	}
+}
+
+//taskScheduling store初始值
+export function getDefaultTransTaskSchedulingState() {
+	return {
+		// 任务调度类型
+		schedulingTaskType: {},
+		// 任务调度详情
+		schedulingTaskDetails: {},
+		//操作按钮点击记录
+		operateBtnClickRecord: {
+		  allocationBtnClick: false,
+		  delayBtnClick: false,
+		  cancelBtnClick: false
+		},
+		// 暂存创建调度任务的信息
+		temporaryStorageCreateDispathTaskMessage: {},
+		// 暂存创建预约任务的信息
+		temporaryStorageCreateAppointTaskMessage: {}
+	}
+}
+
+//transLogin store初始值
+export function getDefaultTransTransLoginState() {
+	return {
+		isTemplateOne: 0,
+		routerFlag: true,
+		// 是否扫码登录
+		loginSweepCode: false,
+		// 用户身份
+		userType: '',
+		departmentInfoList: {},
+		departmentInfoListNo: {},
+		newTaskName: '',
+		taskDetailsMessage: {},
+		taskType: '',
+		globalTimer: null,
+		globalCircleTimer: null,
+		isFreshHomePage: false,
+		isNewCircle: false
+	}
+}

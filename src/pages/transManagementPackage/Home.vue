@@ -10,7 +10,10 @@
     <div class="worker-show" v-if="workerShow">
       <!-- 顶部导航栏 -->
       <HeaderTop :title="navTopTitle">
-        <van-icon name="manager-o" slot="right" @click="skipMyInfo"></van-icon>
+        <div class="header-left" slot="left" @click="backTo">
+          <van-icon name="wap-home" color="#fff" size="22"></van-icon>
+          <span>首页</span>
+        </div>
       </HeaderTop>
       <!-- 右边下拉框菜单 -->
       <ul class="left-dropDown" v-show="leftDownShow">
@@ -23,7 +26,7 @@
             <span class="content-top-userName-img">
               <img :src="sex == 1 ? defaultPersonManPng : defaultPersonWomanPng" alt="">
             </span>
-            <span class="real-name">{{name}}</span>
+            <span class="real-name">{{ userName }}</span>
           </div>
           <div class="content-top-userName-right">
             <span class="scan-code" @click="scanCodeEvent">扫描任务二维码</span>
@@ -1174,7 +1177,7 @@
         defaultPersonManPng: require('@/common/images/home/man-person-default.png'),
         taskInfoPng: require('@/common/images/home/task-info.png'),
         defaultPersonWomanPng: require('@/common/images/home/woman-person-default.png'),
-        homeBannerPng: require('@/common/images/home/home-banner.png'),
+        homeBannerPng: require('@/common/images/home/trans-home-banner.png'),
         btnTaskWrapperPng: require('@/common/images/home/btn-background.png'),
         taskSearchPng: require('@/components/images/task-search.png'),
         taskGetPng: require('@/components/images/task-get.png'),
@@ -1200,14 +1203,13 @@
     window['scanQRcodeCallbackCanceled'] = () => {
       me.scanQRcodeCallbackCanceled();
     };
-    console.log('信息校验',this.appointTaskMessage);
       document.addEventListener('click',(e) => {
         if(e.target.className!='van-icon van-icon-manager-o' && e.target.className!='left-dropDown'){
           this.leftDownShow = false;
         }
       });
       // 查询任务数量
-      if (this.userTypeId == 0) {
+      if (this.userTypeId) {
         this.isHaveTask = this.newTaskName;
         this.parallelFunction(this.taskTypeTransfer(this.newTaskName));
         this.judgeTaskComplete();
@@ -1234,7 +1236,7 @@
     watch: {
       userTypeId: {
         handler(newName, oldName) {
-          if (newName == 0) {
+          if (!newName) {
             this.workerShow = true
           } else {
             this.workerShow = false
@@ -1297,49 +1299,58 @@
       ...mapGetters([
         'navTopTitle',
         'userType',
+        'chooseHospitalArea',
         'userInfo',
         'newTaskName',
         'globalTimer',
         'catch_components',
         'isFreshHomePage',
         'templateType',
-        'isNewCircle'
+        'isNewCircle',
+        'isMedicalMan'
       ]),
-      userName () {
-       return this.userInfo.userName
-      },
       sex () {
-        return this.userInfo.sex
+        return this.userInfo['worker']['extendData']['sex']
       },
       userTypeId () {
-        return this.userInfo.extendData.user_type_id
+        return this.isMedicalMan
       },
-      proId () {
-        return this.userInfo.extendData.proId
-      },
-      proName () {
-        return this.userInfo.extendData.proName
-      },
-      workerId () {
-        return this.userInfo.extendData.userId
-      },
-      name () {
-        return this.userInfo.name
-      }
+      userName() {
+			  return this.userInfo['worker']['name']
+			},
+			workerId() {
+				return this.userInfo['worker']['id']
+			},
+			proName () {
+			  return this.chooseHospitalArea['text']
+			},
+			proId() {
+				return this.chooseHospitalArea['value']
+			},
+			depId() {
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+			},
+			depName() {
+				return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+			},
+			userAccount() {
+				return this.userInfo['worker']['account']
+			}
     },
 
     beforeRouteEnter (to, from, next) {
-      if (store.state.login.userInfo.extendData.user_type_id == 1) {
-        let catch_components = store.state.catchComponent.catch_components;
-        let i = catch_components.indexOf('home');
-        i === -1 && catch_components.push('home')
-      };
-      next()
+      next(vm => {
+        if (vm.isMedicalMan) {
+          let catch_components = store.state.catchComponent.catch_components;
+          let i = catch_components.indexOf('home');
+          i === -1 && catch_components.push('home')
+        }
+      })
     },
 
     beforeRouteLeave (to, from, next) {
       let catch_components = this.catch_components;
-      if (store.state.login.userInfo.extendData.user_type_id == 1) {
+      if (this.isMedicalMan) {
         if (to.name !== 'transportTypeMessage' && to.name !== 'padDispatchTaskCancelForm'){
           let i = catch_components.indexOf('home');
           i > -1 && this.changeCatchComponent([]);
@@ -1770,9 +1781,9 @@
         this.userLoginOut(this.proId, this.userInfo.userName)
       },
 
-      // 跳转到我的页
-      skipMyInfo () {
-        this.leftDownShow = !this.leftDownShow;
+      // 跳转到首页
+      backTo () {
+        this.$router.push({path:'/home'});
       },
 
       //下面任务按钮路由跳转
@@ -2046,7 +2057,7 @@
           proId : this.proId,
           feedbackId : this.workerId, // 反馈者ID
           typeFlag: this.opinionTypeIndex + 1, //意见类型
-          feedbackName : this.name, // 反馈者名称
+          feedbackName : this.userName, // 反馈者名称
           feedbackRole : this.userInfo.roleName, //反馈角色，暂定为医务人员的 role 字段
           depId : this.userInfo.depId  , //反馈科室ID，医务人员depId字段
           depName:  this.userInfo.depName , //反馈科室名称医务人员depName字段
@@ -2082,7 +2093,7 @@
         };
 				let data = {
 					feedbackId : this.workerId, // 反馈者ID
-					feedbackName : this.name, // 反馈者名称
+					feedbackName : this.userName, // 反馈者名称
 					feedbackRole : this.userInfo.roleName, //反馈角色，暂定为医务人员的 role 字段
 					depId : this.userInfo.depId  , //反馈科室ID，医务人员depId字段
 					depName:  this.userInfo.depName , //反馈科室名称医务人员depName字段
@@ -2181,7 +2192,7 @@
 				if (this.stateCompleteList[index]['isShowGiveLikeIconStyle']) {return};
 				let data = {
 					feedbackId : this.workerId, // 反馈者ID
-					feedbackName : this.name, // 反馈者名称
+					feedbackName : this.userName, // 反馈者名称
 					feedbackRole : this.userInfo.roleName, //反馈角色，暂定为医务人员的 role 字段
 					depId : this.userInfo.depId, //反馈科室ID，医务人员depId字段
           isIssueFeedback: item.isIssueFeedback,
@@ -2851,12 +2862,20 @@
   }
 </script>
 <style lang='less' scoped>
-  @import "../common/stylus/variable.less";
-  @import "../common/stylus/mixin.less";
-  @import "../common/stylus/modifyUi.less";
+  @import "~@/common/stylus/variable.less";
+  @import "~@/common/stylus/mixin.less";
+  @import "~@/common/stylus/modifyUi.less";
   .content-wrapper {
     .content-wrapper();
     position: relative;
+    .header {
+      .header-left {
+        >span {
+          font-size: 14px;
+          color: #F8F9FA;
+        }
+      }
+    };
      .no-data {
       position: absolute;
       top: 245px;
