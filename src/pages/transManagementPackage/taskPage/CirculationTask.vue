@@ -8,7 +8,7 @@
     <!-- 顶部导航栏 -->
     <HeaderTop :title="navTopTitle">
       <van-icon name="arrow-left" slot="left" @click="backTo"></van-icon>
-      <van-icon name="manager-o" slot="right" @click="skipMyInfo"></van-icon>
+      <!-- <van-icon name="manager-o" slot="right" @click="skipMyInfo"></van-icon> -->
     </HeaderTop>
      <!-- 右边下拉框菜单 -->
     <ul class="left-dropDown" v-show="leftDownShow">
@@ -206,9 +206,6 @@
       sex () {
         return this.userInfo['worker']['extendData']['sex']
       },
-      userTypeId () {
-        return this.isMedicalMan
-      },
       workerName() {
         return this.userInfo['worker']['name']
       },
@@ -239,7 +236,7 @@
         pushHistory();
         that.gotoURL(() => {
           pushHistory();
-          this.$router.push({path: 'home'});
+          this.$router.push({path: 'transHome'});
           this.changeTitleTxt({tit:'中央运送'});
           setStore('currentTitle','中央运送')
         })
@@ -279,7 +276,7 @@
         pushHistory();
         that.gotoURL(() => {
           pushHistory();
-          this.$router.push({path: 'home'});
+           this.$router.push({path: 'transHome'});
           this.changeTitleTxt({tit:'中央运送'});
           setStore('currentTitle','中央运送')
         })
@@ -795,7 +792,7 @@
 
       // 返回上一页
       backTo () {
-        this.$router.push({path: 'home'});
+         this.$router.push({path: 'transHome'});
         this.changeTitleTxt({tit:'中央运送'});
         setStore('currentTitle','中央运送')
       },

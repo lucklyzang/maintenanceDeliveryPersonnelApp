@@ -61,7 +61,7 @@ export default {
       that.gotoURL(() => {
         pushHistory();
         this.changeIsFreshHomePage(true);
-        this.$router.push({path: 'home'});
+         this.$router.push({path: 'transHome'});
         this.changeTitleTxt({tit:'中央运送'});
         setStore('currentTitle','中央运送')
       })
@@ -73,13 +73,11 @@ export default {
     ...mapGetters([
       'navTopTitle',
       'taskTranceMsg',
-      'chooseHospitalArea'
+      'chooseHospitalArea',
+      'isMedicalMan'
     ]),
     sex () {
       return this.userInfo['worker']['extendData']['sex']
-    },
-    userTypeId () {
-      return this.isMedicalMan
     },
     userName() {
       return this.userInfo['worker']['name']
@@ -140,7 +138,7 @@ export default {
         .then((res) => {
           if (res && res.data.code == 200) {
             this.$toast(`${res.data.msg}`);
-            this.$router.push({path: 'home'});
+             this.$router.push({path: 'transHome'});
             this.changeTitleTxt({tit:'中央运送'});
             setStore('currentTitle','中央运送')
           } else {
@@ -175,7 +173,7 @@ export default {
     // 返回上一页
     backTo () {
       this.changeIsFreshHomePage(true);
-      this.$router.push({path: 'home'});
+       this.$router.push({path: 'transHome'});
       this.changeTitleTxt({tit:'中央运送'});
       setStore('currentTitle','中央运送')
     },
@@ -197,7 +195,7 @@ export default {
 
     // 取消原因取消事件
     transferPersonCancel () {
-      this.$router.push({path: 'home'});
+       this.$router.push({path: 'transHome'});
       this.changeTitleTxt({tit:'中央运送'});
       setStore('currentTitle','中央运送')
     }

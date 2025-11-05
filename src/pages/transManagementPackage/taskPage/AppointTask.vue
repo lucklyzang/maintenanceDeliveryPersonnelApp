@@ -12,7 +12,7 @@
     <!-- 顶部导航栏 -->
     <HeaderTop :title="navTopTitle">
       <van-icon name="arrow-left" slot="left" @click="backTo"></van-icon>
-      <van-icon name="manager-o" slot="right" @click="skipMyInfo"></van-icon>
+      <!-- <van-icon name="manager-o" slot="right" @click="skipMyInfo"></van-icon> -->
     </HeaderTop>
     <!-- 二维码图片弹框 -->
     <div class="area-code-box">
@@ -615,9 +615,6 @@
       sex () {
         return this.userInfo['worker']['extendData']['sex']
       },
-      userTypeId () {
-        return this.isMedicalMan
-      },
       workerName() {
         return this.userInfo['worker']['name']
       },
@@ -678,7 +675,7 @@
         pushHistory();
         that.gotoURL(() => {
           pushHistory();
-          this.$router.push({path: 'home'});
+          this.$router.push({path: 'transHome'});
           this.changeTitleTxt({tit:'中央运送'});
           setStore('currentTitle','中央运送')
         })
@@ -692,7 +689,7 @@
         }
       });
       // 查询预约任务(分配给自己的)
-      this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, state: -1, isMobile: 1,startDate: '',endDate: ''}, this.stateIndex);
+      this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, state: -1, isMobile: 1,startDate: '',endDate: ''}, this.stateIndex);
       this.drawTaskId()
     },
 
@@ -703,7 +700,7 @@
         pushHistory();
         that.gotoURL(() => {
           pushHistory();
-          this.$router.push({path: 'home'});
+           this.$router.push({path: 'transHome'});
           this.changeTitleTxt({tit:'中央运送'});
           setStore('currentTitle','中央运送')
         })
@@ -718,7 +715,7 @@
       });
       // 查询预约任务(分配给自己的)
       if (this.isFreshAppointTaskPage) {
-        this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, isMobile: 1, state: -1,startDate: '',endDate: ''}, this.stateIndex);
+        this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, isMobile: 1, state: -1,startDate: '',endDate: ''}, this.stateIndex);
         this.drawTaskId()
       }
     },
@@ -761,7 +758,7 @@
 
       // 二维码弹框关闭事件
       areaCodeBoxCloseEvent () {
-        this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, state: -1, isMobile: 1,startDate: '',endDate: ''}, this.stateIndex);
+        this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, state: -1, isMobile: 1,startDate: '',endDate: ''}, this.stateIndex);
       },
 
       // 任务取消
@@ -855,7 +852,7 @@
         } else if (item == '近三月') {
           startDate = this.$moment().subtract(3, 'months').format('YYYY-MM-DD')
         };
-        this.queryCompleteDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, state: -2,
+        this.queryCompleteDispatchTask({proId: this.proId, workerId: this.workerId, state: -2,
           startDate: startDate,endDate: endDate})
       },
 
@@ -882,7 +879,7 @@
           this.loadingContent = '';
           if (res && res.data.code == 200) {
             this.$toast(`${res.data.msg}`);
-            this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, isMobile: 1, state: -1, startDate: '',endDate: ''}, this.stateIndex)
+            this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, isMobile: 1, state: -1, startDate: '',endDate: ''}, this.stateIndex)
           } else {
             this.$toast(`${res.data.msg}`)
           }
@@ -929,7 +926,7 @@
           this.loadingContent = '';
           if (res && res.data.code == 200) {
             this.$toast(`${res.data.msg}`);
-            this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, isMobile: 1, state: -1, startDate: '',endDate: ''}, this.stateIndex)
+            this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, isMobile: 1, state: -1, startDate: '',endDate: ''}, this.stateIndex)
           } else {
             this.$toast(`${res.data.msg}`)
           }
@@ -1140,7 +1137,7 @@
 
       // 搜索完成的任务
       searchCompleteTask () {
-        this.queryCompleteDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, state: -2,startDate: this.startTime,endDate: this.endTime})
+        this.queryCompleteDispatchTask({proId: this.proId, workerId: this.workerId, state: -2,startDate: this.startTime,endDate: this.endTime})
       },
 
       // 任务状态转换
@@ -1276,7 +1273,7 @@
 
       // 下拉刷新
       onRefresh () {
-        this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, isMobile: 1, state: this.stateIndex,startDate: '',endDate: ''}, this.stateIndex)
+        this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, isMobile: 1, state: this.stateIndex,startDate: '',endDate: ''}, this.stateIndex)
       },
 
       // 提取存储已完成采集任务科室所属任务id
@@ -1387,7 +1384,7 @@
 
       // 返回上一页
       backTo () {
-        this.$router.push({path: 'home'});
+         this.$router.push({path: 'transHome'});
         this.changeTitleTxt({tit:'中央运送'});
         setStore('currentTitle','中央运送')
       },
@@ -1404,20 +1401,20 @@
           this.taskQueryShow = false;
           this.waitHandleBox = true;
           this.valueStatus = '全部';
-          this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, isMobile: 1, state: -1,startDate: '',endDate: ''}, -1);
+          this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, isMobile: 1, state: -1,startDate: '',endDate: ''}, -1);
         } else if (index == '1') {
           this.stateIndex = null;
           this.taskQueryShow = true;
           this.waitHandleBox = false;
           this.cancelTaskBtnShow = false;
           this.transferTaskBtnShow = false;
-          this.queryCompleteDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, state: -2,startDate: this.startTime,endDate: this.endTime})
+          this.queryCompleteDispatchTask({proId: this.proId, workerId: this.workerId, state: -2,startDate: this.startTime,endDate: this.endTime})
         }
       },
 
        // 状态筛选列表点击
       stateListEvent (index) {
-        this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, isMobile: 1,state: index ,startDate: '',endDate: ''}, index)
+        this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, isMobile: 1,state: index ,startDate: '',endDate: ''}, index)
       },
 
       // 状态框确定事件
@@ -1522,7 +1519,7 @@
             this.loadingContent = '';
             if (res && res.data.code == 200) {
               this.$toast(`${ res.data.msg}`);
-              this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, isMobile: 1, state: -1,startDate: '',endDate: ''},-1);
+              this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, isMobile: 1, state: -1,startDate: '',endDate: ''},-1);
             } else {
               this.$dialog.alert({
                 message: res.data.msg,
@@ -1609,7 +1606,7 @@
           this.showLoadingHint = false;
           this.overlayShow = false;
           if (res && res.data.code == 200) {
-            this.queryStateFilterDispatchTask({proId: this.userInfo.extendData.proId, workerId: this.workerId, isMobile: 1, state: -1,startDate: '',endDate: ''},-1)
+            this.queryStateFilterDispatchTask({proId: this.proId, workerId: this.workerId, isMobile: 1, state: -1,startDate: '',endDate: ''},-1)
           }
         })
         .catch(err => {

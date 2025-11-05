@@ -3,9 +3,9 @@ import { getDefaultTransDispatchTaskState } from '@/common/js/resetStore.js'
 export default {
   state: getDefaultTransDispatchTaskState(),
   getters:{
-    navTitle:  (state) => {
-			state.storeArriveDeparnmentId = getStore('navTitle') ? getStore('navTitle') : '中央运送';
-			return state.navTitle
+    navTopTitle:  (state) => {
+			state.navTopTitle = getStore('navTopTitle') ? getStore('navTopTitle') : '中央运送';
+			return state.navTopTitle
 		},
     dispatchTaskMessage: (state) => {
       state.dispatchTaskMessage = JSON.parse(getStore('dispatchTaskMessage')) ? JSON.parse(getStore('dispatchTaskMessage')) : null;
@@ -91,15 +91,15 @@ export default {
   mutations:{
     // 改变页面标题
     changeTitleTxt (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
-				setStore('navTitle', payLoad.tit);
-				state.navTitle = payLoad.tit
+      if (payLoad && payLoad != 'null') {
+				setStore('navTopTitle', payLoad.tit);
+				state.navTopTitle = payLoad.tit
 			}
     },
 
     // 改变调度任务信息状态
     changeDispatchTaskMessage (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('dispatchTaskMessage', payLoad.DtMsg);
 				state.dispatchTaskMessage = payLoad.DtMsg
 			}
@@ -107,7 +107,7 @@ export default {
 
     // 改变调度任务id状态
     changeDispatchTaskId (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('dispatchTaskId', payLoad);
 				state.dispatchTaskId = payLoad
 			}
@@ -115,126 +115,126 @@ export default {
 
     // 改变转移人员列表状态
     changedispatchTaskTransferIdList (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('dispatchTaskTransferIdList', payLoad.DtMsg);
 				state.dispatchTaskTransferIdList = payLoad.DtMsg
 			}
     },
     // 改变取消原因列表状态
     changedispatchTaskCancelIdList (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('dispatchTaskCancelIdList', payLoad.DtMsg);
 				state.dispatchTaskCancelIdList = payLoad.DtMsg
 			}
     },
     // 改变调度任务状态的状态
     changeDispatchTaskState (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('dispatchTaskState', payLoad);
 				state.dispatchTaskState = payLoad
 			}
     },
     // 改变调度任务科室类型的状态
     changeDispatchTaskDepartmentType (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('dispatchTaskDepartmentType', payLoad);
 				state.dispatchTaskDepartmentType = payLoad
 			}
     },
     //改变是否强制拍照的状态
     changeIsCoerceTakePhoto (state,payLoad) {
-      if (playLoad != 'null') {
+      if (payLoad != 'null') {
 				setStore('isCoerceTakePhoto', payLoad);
 				state.isCoerceTakePhoto = payLoad
 			}
     },
     //改变是否完成扫码的状态(出发地和单一目的地的id)
     changeisCompleteSweepCode (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('isCompleteSweepCode', payLoad);
 				state.isCompleteSweepCode = payLoad
 			}
     },
     //改变是否完成非单一目的地扫码的状态
     changeIsCompleteSweepCodeDestinationList (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('isCompleteSweepCodeDestinationList', payLoad);
 				state.isCompleteSweepCodeDestinationList = payLoad
 			}
     },
     //改变是否首次扫码的状态
     changeIsDispatchTaskFirstSweepCode (state,payLoad) {
-      if (playLoad != 'null') {
+      if (payLoad != 'null') {
 				setStore('isDispatchTaskFirstSweepCode', payLoad);
 				state.isDispatchTaskFirstSweepCode = payLoad
 			}
     },
     //改变完成上传的照片
      changeIsCompletePhotoList (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('isCompletePhotoList', payLoad);
 				state.isCompletePhotoList = payLoad
 			}
     },
     //改变是否返回出发地的状态
     changeIsBack (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('isBack', payLoad);
 				state.isBack = payLoad
 			}
     },
     //改变是否签字的状态
     changeIsSign (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('isSign', payLoad);
 				state.isSign = payLoad
 			}
     },
     //改变是否是单一目的地状态
     changeIsSingleDestination (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('isSingleDestination', payLoad);
 				state.isSingleDestination = payLoad
 			}
     },
     // 改变是否显示结束任务按钮状态
     changeShowEndTaskBtn (state,payLoad) {
-      if (playLoad != 'null') {
+      if (payLoad != 'null') {
 				setStore('showEndTaskBtn', payLoad);
 				state.showEndTaskBtn = payLoad
 			}
     },
     // 改变是否刷新任务页的状态
     changeIsFreshDispatchTaskPage (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('isFreshDispatchTaskPage', payLoad);
 				state.isFreshDispatchTaskPage = payLoad
 			}
     },
     // 改变当前科室标号状态
     changeCurrentDepartmentNumber (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('currentDepartmentNumber', payLoad);
 				state.currentDepartmentNumber = payLoad
 			}
     },
     // 改变显示图爿框的状态
     changePhotoAreaBoxShow (state,payLoad) {
-      if (playLoad != 'null') {
+      if (payLoad != 'null') {
 				setStore('photoAreaBoxShow', payLoad);
 				state.photoAreaBoxShow = payLoad
 			}
     },
     // 改变是否调取扫码方法的状态
     changeIsCallDispatchSweepcodeMethod (state,payLoad) {
-      if (playLoad != 'null') {
+      if (payLoad != 'null') {
 				setStore('isCallDispatchSweepcodeMethod', payLoad);
 				state.isCallDispatchSweepcodeMethod = payLoad
 			}
     },
     // 改变已完成上传图片的状态
-    changeIsCompleteDispatchIssuePhotoList (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeIsCompleteDispatchIssuePhotoList (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('isCompleteDispatchIssuePhotoList', payLoad);
 				state.isCompleteDispatchIssuePhotoList = payLoad
 			}

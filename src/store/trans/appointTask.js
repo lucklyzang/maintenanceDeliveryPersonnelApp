@@ -13,74 +13,74 @@ export default {
 			return state.appointTaskTransferIdList
     },
     originalSignature: (state) => {
-      state.originalSignature = JSON.parse(getStore('originalSignature')) ? JSON.parse(getStore('originalSignature')) : {};
+      state.originalSignature = getStore('originalSignature') ? getStore('originalSignature') : '';
 			return state.originalSignature
     },
     completeSweepcodeDestinationInfo: (state) => {
-      state.completeSweepcodeDestinationInfo = JSON.parse(getStore('completeSweepcodeDestinationInfo')) ? JSON.parse(getStore('completeSweepcodeDestinationInfo')) : [];
+      state.completeSweepcodeDestinationInfo = JSON.parse(getStore('completAppointTaskSweepCodeDestinationInfo'))['sweepCodeInfo'] ? JSON.parse(getStore('completAppointTaskSweepCodeDestinationInfo'))['sweepCodeInfo'] : [];
 			return state.completeSweepcodeDestinationInfo
     },
     completeSweepcodeDepartureInfo: (state) => {
-      state.completeSweepcodeDepartureInfo = JSON.parse(getStore('completeSweepcodeDepartureInfo')) ? JSON.parse(getStore('completeSweepcodeDepartureInfo')) : [];
+      state.completeSweepcodeDepartureInfo = JSON.parse(getStore('completAppointTaskSweepCodeDepartureInfo'))['sweepCodeInfo'] ? JSON.parse(getStore('completAppointTaskSweepCodeDepartureInfo'))['sweepCodeInfo'] : [];
 			return state.completeSweepcodeDepartureInfo
     },
     completeCheckedItemInfo: (state) => {
-      state.completeCheckedItemInfo = JSON.parse(getStore('completeCheckedItemInfo')) ? JSON.parse(getStore('completeCheckedItemInfo')) : [];
+      state.completeCheckedItemInfo = JSON.parse(getStore('completAppointTaskCheckedItemInfo'))['sweepCodeInfo'] ? JSON.parse(getStore('completAppointTaskCheckedItemInfo'))['sweepCodeInfo'] : [];
 			return state.completeCheckedItemInfo
     },
     isFreshAppointTaskPage:(state) => {
-			state.isMedicalMan = getStore('isFreshAppointTaskPage') ? getStore('isFreshAppointTaskPage') === 'false' ? false : true : true;
+			state.isFreshAppointTaskPage = getStore('isFreshAppointTaskPage') ? getStore('isFreshAppointTaskPage') === 'false' ? false : true : true;
 			return state.isFreshAppointTaskPage
 		}
   },
   mutations:{
     // 改变预约任务信息状态
     changeAppointTaskMessage (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('appointTaskMessage', payLoad.DtMsg);
 				state.appointTaskMessage = payLoad.DtMsg
 			}
     },
     // 改变转移人员列表状态
     changeAppointTaskTransferIdList (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('appointTaskTransferIdList', payLoad.DtMsg);
 				state.appointTaskTransferIdList = payLoad.DtMsg
 			}
     },
     // 改变原始签名状态
     changeOriginalSignature (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
-				setStore('originalSignature', playLoad);
-				state.originalSignature = playLoad
+      if (payLoad && payLoad != 'null') {
+				setStore('originalSignature', payLoad);
+				state.originalSignature = payLoad
 			}
     },
     //改变完成扫码目的地信息的状态
     changeCompleteSweepcodeDestinationInfo (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
-				setStore('completeSweepcodeDestinationInfo', playLoad);
-				state.completeSweepcodeDestinationInfo = playLoad
+      if (payLoad && payLoad != 'null') {
+				setStore('completAppointTaskSweepCodeDestinationInfo', {"sweepCodeInfo": payLoad});
+				state.completeSweepcodeDestinationInfo = payLoad
 			}
     },
     //改变完成检查科室的信息状态
     changeCompleteCheckedItemInfo (state,payLoad) {
-      if (playLoad && playLoad != 'null') {
-				setStore('completeCheckedItemInfo', playLoad);
-				state.completeCheckedItemInfo = playLoad
+      if (payLoad && payLoad != 'null') {
+				setStore('completAppointTaskCheckedItemInfo', {"sweepCodeInfo": payLoad});
+				state.completeCheckedItemInfo = payLoad
 			}
     },
     //改变完成扫码起始地信息的状态
     changeCompleteSweepcodeDepartureInfo(state,payLoad) {
-      if (playLoad && playLoad != 'null') {
-				setStore('completeSweepcodeDepartureInfo', playLoad);
-				state.completeSweepcodeDepartureInfo = playLoad
+      if (payLoad && payLoad != 'null') {
+				setStore('completAppointTaskSweepCodeDepartureInfo', {"sweepCodeInfo": payLoad});
+				state.completeSweepcodeDepartureInfo = payLoad
 			}
     },
     //改变是否刷新预约任务页的状态
     changeIsFreshAppointTaskPage (state,payLoad) {
-      if (playLoad != 'null') {
-				setStore('isFreshAppointTaskPage', playLoad);
-				state.isFreshAppointTaskPage = playLoad
+      if (payLoad != 'null') {
+				setStore('isFreshAppointTaskPage', payLoad);
+				state.isFreshAppointTaskPage = payLoad
 			}
     },
     //重置预约任务信息的状态

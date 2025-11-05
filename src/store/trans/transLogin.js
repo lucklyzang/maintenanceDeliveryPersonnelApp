@@ -1,4 +1,5 @@
 import { getDefaultTransTransLoginState } from '@/common/js/resetStore.js'
+import { getStore, setStore } from '@/common/js/utils'
 export default {
   state: getDefaultTransTransLoginState(),
   getters:{
@@ -6,10 +7,6 @@ export default {
 			state.isTemplateOne = getStore('isTemplateOne') ? getStore('isTemplateOne') : 0;
 			return state.isTemplateOne
 		},
-    routerFlag: (state) => {
-      state.routerFlag = getStore('routerFlag') ? getStore('routerFlag') === 'false' ? false : true : true;
-			return state.routerFlag
-    },
     loginSweepCode: (state) => {
       state.loginSweepCode = getStore('loginSweepCode') ? getStore('loginSweepCode') === 'false' ? false : true : false;
 			return state.loginSweepCode
@@ -56,91 +53,85 @@ export default {
     }
   },
   mutations:{
-    changeRouterFlag (state, playLoad) {
-      if (playLoad != 'null') {
-				setStore('routerFlag', payLoad);
-				state.routerFlag = payLoad
-			}
-    },
-    changeLoginMethod (state, playLoad) {
-      if (playLoad != 'null') {
+    changeLoginMethod (state, payLoad) {
+      if (payLoad != 'null') {
 				setStore('loginSweepCode', payLoad);
 				state.loginSweepCode = payLoad
 			}
     },
     // 修改模板状态
-    changeIsTemplateOne (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeIsTemplateOne (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('isTemplateOne', payLoad);
 				state.isTemplateOne = payLoad
 			}
     },
     // 修改用户状态
-    changeUserType (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeUserType (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('userType', payLoad);
 				state.userType = payLoad
 			}
     },
     // 改变科室信息状态id
-    changeDepartmentInfoList (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeDepartmentInfoList (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('departmentInfoList', payLoad);
 				state.departmentInfoList = payLoad
 			}
     },
     // 改变科室信息状态编号
-    changeDepartmentInfoListNo (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeDepartmentInfoListNo (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('departmentInfoListNo', payLoad);
 				state.departmentInfoListNo = payLoad
 			}
     },
     // 改变新任务列表状态
-    changeNewTaskList (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeNewTaskList (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('newTaskName', payLoad);
 				state.newTaskName = payLoad
 			}
     },
     // 改变历史任务详情
-    changeTaskDetailsMessage (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeTaskDetailsMessage (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('taskDetailsMessage', payLoad);
 				state.taskDetailsMessage = payLoad
 			}
     },
     // 改变任务类型状态
-    changeTaskType (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeTaskType (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('taskType', payLoad);
 				state.taskType = payLoad
 			}
     },
     // 改变全局定时器的状态
-    changeGlobalTimer (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeGlobalTimer (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('globalTimer', payLoad);
 				state.globalTimer = payLoad
 			}
     },
     // 改变全局定时器的状态
-    changeGlobalCircleTimer (state, playLoad) {
-      if (playLoad && playLoad != 'null') {
+    changeGlobalCircleTimer (state, payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('globalCircleTimer', payLoad);
 				state.globalCircleTimer = payLoad
 			}
     },
     // 改变是否刷新首页的状态
-    changeIsFreshHomePage (state, playLoad) {
-      if (playLoad != 'null') {
+    changeIsFreshHomePage (state, payLoad) {
+      if (payLoad != 'null') {
 				setStore('isFreshHomePage', payLoad);
 				state.isFreshHomePage = payLoad
 			}
     },
     // 修改是否是新循环任务状态
-    changeIsNewCircle (state, playLoad) {
-      if (playLoad != 'null') {
+    changeIsNewCircle (state, payLoad) {
+      if (payLoad != 'null') {
 				setStore('isNewCircle', payLoad);
 				state.isNewCircle = payLoad
 			}

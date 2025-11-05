@@ -8,7 +8,6 @@
     <!-- 顶部导航栏 -->
     <HeaderTop :title="navTopTitle">
       <van-icon name="arrow-left" slot="left" @click="backTo"></van-icon>
-      <van-icon name="manager-o" slot="right" @click="skipMyInfo"></van-icon>
     </HeaderTop>
    <!-- 右边下拉框菜单 -->
     <ul class="left-dropDown" v-show="leftDownShow">
@@ -516,9 +515,6 @@
       sex () {
         return this.userInfo['worker']['extendData']['sex']
       },
-      userTypeId () {
-        return this.isMedicalMan
-      },
       workerName() {
         return this.userInfo['worker']['name']
       },
@@ -568,7 +564,7 @@
         pushHistory();
         that.gotoURL(() => {
           pushHistory();
-          this.$router.push({path: 'home'});
+          this.$router.push({path: 'transHome'});
           this.changeTitleTxt({tit:'中央运送'});
           setStore('currentTitle','中央运送')
         })
@@ -582,7 +578,7 @@
         }
       });
       // 查询调度任务(分配给自己的)
-      this.queryStateFilterDispatchTask(this.userInfo.extendData.proId, this.workerId, this.stateIndex)
+      this.queryStateFilterDispatchTask(this.proId, this.workerId, this.stateIndex)
 
     },
 
@@ -593,7 +589,7 @@
         pushHistory();
         that.gotoURL(() => {
           pushHistory();
-          this.$router.push({path: 'home'});
+          this.$router.push({path: 'transHome'});
           this.changeTitleTxt({tit:'中央运送'});
           setStore('currentTitle','中央运送')
         })
@@ -608,7 +604,7 @@
       });
       // 查询调度任务(分配给自己的)
       if (this.isFreshDispatchTaskPage) {
-        this.queryStateFilterDispatchTask(this.userInfo.extendData.proId, this.workerId, -1)
+        this.queryStateFilterDispatchTask(this.proId, this.workerId, -1)
       }
     },
 
@@ -809,7 +805,7 @@
 
       // 下拉刷新
       onRefresh () {
-        this.queryStateFilterDispatchTask(this.userInfo.extendData.proId, this.workerId, this.stateIndex)
+        this.queryStateFilterDispatchTask(this.proId, this.workerId, this.stateIndex)
       },
 
       // 查询调度任务(已完成)
@@ -1048,13 +1044,6 @@
         }
       },
 
-
-      // 右边下拉框菜单点击
-      leftLiCLick (index) {
-        this.liIndex = index;
-        this.userLoginOut(this.proId, this.userInfo.userName)
-      },
-
       // 跳转到我的页
       skipMyInfo () {
         this.leftDownShow = !this.leftDownShow;
@@ -1062,7 +1051,7 @@
 
       // 返回上一页
       backTo () {
-        this.$router.push({path: 'home'});
+        this.$router.push({path: 'transHome'});
         this.changeTitleTxt({tit:'中央运送'});
         setStore('currentTitle','中央运送')
       },
@@ -1079,7 +1068,7 @@
           this.valueStatus = '全部';
           this.waitHandleBox = true;
           this.taskQueryShow = false;
-          this.queryStateFilterDispatchTask(this.userInfo.extendData.proId, this.workerId, this.stateIndex)
+          this.queryStateFilterDispatchTask(this.proId, this.workerId, this.stateIndex)
         } else if (index == '1') {
           this.timeFastindex = '';
           this.stateIndex = null;
@@ -1167,7 +1156,7 @@
           this.overlayShow = false;
           if (res && res.data.code == 200) {
             this.$toast(`${res.data.msg}`);
-            this.queryStateFilterDispatchTask(this.userInfo.extendData.proId, this.workerId, this.stateIndex)
+            this.queryStateFilterDispatchTask(this.proId, this.workerId, this.stateIndex)
           }
         })
         .catch((err) => {
@@ -1262,7 +1251,7 @@
               closeOnPopstate: true
             }).then(() => {
             });
-            this.queryStateFilterDispatchTask(this.userInfo.extendData.proId, this.workerId, this.stateIndex)
+            this.queryStateFilterDispatchTask(this.proId, this.workerId, this.stateIndex)
           } else {
             this.$dialog.alert({
               message: `${res.data.msg}`,

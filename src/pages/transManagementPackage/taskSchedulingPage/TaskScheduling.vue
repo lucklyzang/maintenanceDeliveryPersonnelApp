@@ -365,7 +365,7 @@ export default {
       that.gotoURL(() => {
         pushHistory();
         that.resetBtnClickStatus();
-        that.$router.push({path: '/home'})
+        that.$router.push({path: 'transHome'})
       })
     };
     this.$nextTick(()=> {
@@ -445,9 +445,6 @@ export default {
 
   computed: {
     ...mapGetters(["userInfo","chooseHospitalArea","schedulingTaskType","operateBtnClickRecord","templateType","schedulingTaskDetails"]),
-      userTypeId () {
-        return this.isMedicalMan
-      },
       userName() {
         return this.userInfo['worker']['name']
       },
@@ -475,7 +472,7 @@ export default {
     ...mapMutations(["changeSchedulingTaskType","changeTitleTxt","changeCatchComponent","changeOverDueWay","changeSchedulingTaskDetails","changeOperateBtnClickRecord"]),
 
      onClickLeft() {
-      this.$router.push({ path: "/home"})
+      this.$router.push({path: 'transHome'})
     },
 
     // 控制模块显示

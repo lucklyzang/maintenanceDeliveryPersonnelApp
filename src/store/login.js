@@ -3,6 +3,14 @@ import { getDefaultLoginState } from '@/common/js/resetStore.js'
 export default {	
 	state: getDefaultLoginState(),
 	getters: {
+		timeMessage: (state) => {
+			state.timeMessage = JSON.parse(getStore('timeMessage')) ? JSON.parse(getStore('timeMessage')) : {};
+			return state.timeMessage
+		},
+		ossMessage:(state) => {
+			state.ossMessage = JSON.parse(getStore('ossMessage')) ? JSON.parse(getStore('ossMessage')) : {};
+			return state.ossMessage
+		},
 		userInfo:(state) => {
 			state.userInfo = JSON.parse(getStore('userInfo')) ? JSON.parse(getStore('userInfo')) : null;
 			return state.userInfo
@@ -42,6 +50,20 @@ export default {
 		overDueWay: state => state.overDueWay
 	},
 	mutations: {
+		//保存阿里云签名信息
+		changeOssMessage (state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setStore('ossMessage', playLoad);
+				state.ossMessage = playLoad
+			}
+		},
+		//保存阿里云签名过期日期
+		changeTimeMessage (state, playLoad) {
+			if (playLoad && playLoad != 'null') {
+				setStore('timeMessage', playLoad);
+				state.timeMessage = playLoad
+			}
+		},
 		changeIsMedicalMan (state, playLoad) {
 		  state.isMedicalMan = playLoad
 		},

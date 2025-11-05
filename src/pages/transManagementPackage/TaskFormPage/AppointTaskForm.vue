@@ -82,9 +82,6 @@ export default {
     sex () {
       return this.userInfo['worker']['extendData']['sex']
     },
-    userTypeId () {
-      return this.isMedicalMan
-    },
     workerName() {
       return this.userInfo['worker']['name']
     },

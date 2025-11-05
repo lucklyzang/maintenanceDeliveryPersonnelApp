@@ -10,7 +10,9 @@ export function getDefaultLoginState() {
 		templateType: '',
 		socketOpen: false,
 		appPermission: {},
-		chooseHospitalArea: {}
+		chooseHospitalArea: {},
+		timeMessage: {},
+		ossMessage: {}
 	}	
 }
 
@@ -48,7 +50,7 @@ export function getDefaultTransAppointTaskState() {
 		appointTaskMessage: {},
 		appointTaskTransferIdList: [],
 		isFreshAppointTaskPage: true,
-		originalSignature: {},
+		originalSignature: '',
 		completeSweepcodeDestinationInfo: [],
 		completeSweepcodeDepartureInfo: [],
 		completeCheckedItemInfo: []
@@ -68,7 +70,7 @@ export function getDefaultTransCirculationTaskState() {
 		arriveDepartmentId: false,
 		storeArriveDeparnmentId: '',
 		circulationTaskMessage: null,
-		currentElectronicSignature: null,
+		currentElectronicSignature: '',
 		circulationCollectMessageList: [],
 		isCollectEnterSweepCodePage: false,
 		circulationConnectMessageList: [],
@@ -93,7 +95,7 @@ export function getDefaultTransCirculationTaskState() {
 //调度任务store初始值
 export function getDefaultTransDispatchTaskState() {
 	return {
-		navTitle: '中央运送',
+		navTopTitle: '中央运送',
 		dispatchTaskMessage: null,
 		dispatchTaskTransferIdList: [],
 		dispatchTaskCancelIdList: [],
@@ -149,7 +151,6 @@ export function getDefaultTransTaskSchedulingState() {
 export function getDefaultTransTransLoginState() {
 	return {
 		isTemplateOne: 0,
-		routerFlag: true,
 		// 是否扫码登录
 		loginSweepCode: false,
 		// 用户身份
@@ -164,4 +165,64 @@ export function getDefaultTransTransLoginState() {
 		isFreshHomePage: false,
 		isNewCircle: false
 	}
+}
+
+/*
+ * 工程维修相关模块store初始值
+*/
+
+// 自主任务模块store的初始值
+export function getDefaultAutoRepairTaskState() {
+    return {
+        createAutoRepairTaskMessage: {}, //创建自主报修任务信息(暂存)
+        submitAutoRepairTaskMessage: {} //提交自主报修任务信息
+    }
+}
+
+// departmentService模块store的初始值
+export function getDefaultDepartmentServiceState() {
+    return {
+        isFreshDepartmentServicePage: true,
+		departmentServiceMsg: '',
+		isSingleDepartmentSignature: true,
+		isDepartmentServiceVerifySweepCode: [],
+		isCurrentDepartmentServiceVerifySweepCode: [],
+		departmentServiceOfficeId: '',
+		completeDepartmentServiceOfficeInfo: [],
+		currentDepartmentServiceCheckedItemId: null,
+		completeDepartmentServiceCheckedItemList: []
+    }
+}
+
+// deviceService模块store的初始值
+export function getDefaultDeviceServiceState() {
+    return {
+        isFreshDeviceServicePage: true,
+		deviceServiceMsg: '',
+		energyRecordList: [],
+		isCurrentDeviceCopyServiceVerifySweepCode: [],
+		currentDeviceCopyVerifySweepCodeDepNumber: '',
+		completeDeviceEnergyRecordServiceOfficeInfo: []
+    }
+}
+
+// repairsWorkOrder模块store的初始值
+export function getDefaultRepairsWorkOrderState() {
+    return {
+		isFreshRepairsWorkOrderPage: true,
+		repairsWorkOrderMsg: '',
+		completeRoomList: [],
+		isFillMaterialList: [],
+		isCompleteRepairsWorkOrderPhotoList: []
+    }
+}
+
+// taskScheduling模块store的初始值
+export function getDefaultTaskSchedulingState() {
+    return {
+		// 任务调度相关信息
+		schedulingTaskAboutMessage: {},
+		// 暂存创建维修任务的信息
+		temporaryStorageCreateRepairsTaskMessage: {}
+    }
 }

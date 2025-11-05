@@ -40,14 +40,14 @@ export function getAllTaskNumber(proID,workerId) {
 // 查询调度任务(分配给本人的)
 export function getDispatchTaskMessage(proID,workerId,state) {
   return request({
-    url: store.getters.templateType == 'template_one' ? `task/allTask/${proID}/${workerId}/?state=${state}` : `dispatch/allTask/${proID}/${workerId}/?state=${state}`,
+    url: store.getters.templateType == 'template_one' ? `trans/task/allTask/${proID}/${workerId}/?state=${state}` : `trans/dispatch/allTask/${proID}/${workerId}/?state=${state}`,
     method: 'get',
   })
 };
 // 查询调度任务(分配给本人的已完成)
 export function getDispatchTaskComplete(data) {
   return request({
-    url: store.getters.templateType == 'template_one' ? 'task/queryTask':'dispatch/queryTask',
+    url: store.getters.templateType == 'template_one' ? 'trans/task/queryTask':'trans/dispatch/queryTask',
     method: 'get',
     params: data
   })
@@ -55,14 +55,14 @@ export function getDispatchTaskComplete(data) {
 // 查询调度任务(根据id)
 export function getDispatchTaskMessageById(taskId,tempFlag) {
   return request({
-    url: store.getters.templateType == 'template_one' ? `task/query/${taskId}/${tempFlag}` : `dispatch/app/query/${taskId}`,
+    url: store.getters.templateType == 'template_one' ? `trans/task/query/${taskId}/${tempFlag}` : `trans/dispatch/app/query/${taskId}`,
     method: 'get'
   })
 };
 // 调度任务的操作(更新、延迟、取消)
 export function updateDispatchTask(data) {
   return request({
-    url: store.getters.templateType == 'template_one' ? 'task/update':'dispatch/update',
+    url: store.getters.templateType == 'template_one' ? 'trans/task/update':'trans/dispatch/update',
     method: 'put',
     data
   })
@@ -70,14 +70,14 @@ export function updateDispatchTask(data) {
 // 获取调度任务的操作
 export function getDispatchTask(taskId,workerId,tempFlag) {
   return request({
-    url: store.getters.templateType == 'template_one' ? `task/getTransTask/${taskId}/${workerId}/${tempFlag}` : `dispatch/getTransTask/${taskId}/${workerId}`,
+    url: store.getters.templateType == 'template_one' ? `trans/task/getTransTask/${taskId}/${workerId}/${tempFlag}` : `trans/dispatch/getTransTask/${taskId}/${workerId}`,
     method: 'get'
   })
 };
 // 调度任务退回原因查询
 export function querySendBackDispatchTaskReason(proId,type) {
   return request({
-    url: 'back/dict',
+    url: 'trans/back/dict',
     method: 'get',
     params: {
       proId,
@@ -88,14 +88,14 @@ export function querySendBackDispatchTaskReason(proId,type) {
 // 调度任务退回接口
 export function sendBackDispatchTask(proId,taskId,reason,tempFlag) {
   return request({
-    url: store.getters.templateType == 'template_one' ? `task/sendBack/${proId}/${taskId}/${tempFlag}?reason=${reason}` : `dispatch/sendBack/${proId}/${taskId}?reason=${reason}`,
+    url: store.getters.templateType == 'template_one' ? `trans/task/sendBack/${proId}/${taskId}/${tempFlag}?reason=${reason}` : `trans/dispatch/sendBack/${proId}/${taskId}?reason=${reason}`,
     method: 'get'
   })
 };
 // 调度任务批量取消
 export function cancelDispatchTaskBatch(data) {
   return request({
-    url: store.getters.templateType == 'template_one' ? 'task/batchCancel' : 'dispatch/batchCancel',
+    url: store.getters.templateType == 'template_one' ? 'trans/task/batchCancel' : 'trans/dispatch/batchCancel',
     method: 'put',
     data
   })
@@ -104,7 +104,7 @@ export function cancelDispatchTaskBatch(data) {
 // 取消原因查询
 export function queryDispatchTaskCancelReason(data) {
   return request({
-    url: 'cancel/queryAll',
+    url: 'trans/cancel/queryAll',
     method: 'get',
     params: data
   })
@@ -113,7 +113,7 @@ export function queryDispatchTaskCancelReason(data) {
 // 退回原因查询
 export function queryAppointTaskSendbackReason(data) {
   return request({
-    url: 'undo/queryAll',
+    url: 'trans/undo/queryAll',
     method: 'get',
     params: data
   })
@@ -122,7 +122,7 @@ export function queryAppointTaskSendbackReason(data) {
 // 调度任务的转移
 export function transferDispatchTask(data) {
   return request({
-    url: store.getters.templateType == 'template_one' ? 'task/transfer' : 'dispatch/transfer',
+    url: store.getters.templateType == 'template_one' ? 'trans/task/transfer' : 'trans/dispatch/transfer',
     method: 'put',
     data
   })
@@ -130,7 +130,7 @@ export function transferDispatchTask(data) {
 // 任务取消原因查询
 export function queryTaskCancelReason(data) {
   return request({
-    url: 'cancel/queryAll',
+    url: 'trans/cancel/queryAll',
     method: 'get',
     params: data
   })
@@ -138,7 +138,7 @@ export function queryTaskCancelReason(data) {
 // 任务延迟原因查询
 export function queryTaskDelayReason(data) {
   return request({
-    url: 'delay/queryAll',
+    url: 'trans/delay/queryAll',
     method: 'get',
     params: data
   })
@@ -147,7 +147,7 @@ export function queryTaskDelayReason(data) {
 // 校验调度任务扫描科室信息
 export function judgeDispatchTaskDepartment(data) {
   return request({
-    url: store.getters.templateType == 'template_one' ? 'task/checkTransTask' : 'dispatch/checkTransTask',
+    url: store.getters.templateType == 'template_one' ? 'trans/task/checkTransTask' : 'trans/dispatch/checkTransTask',
     method: 'post',
     data
   })
@@ -156,7 +156,7 @@ export function judgeDispatchTaskDepartment(data) {
 // 调度任务上传拍照信息
 export function dispatchTaskUploadMsg(data) {
   return request({
-    url: 'taskPhoto/saveOrUpdatePhotoByString',
+    url: 'trans/taskPhoto/saveOrUpdatePhotoByString',
     method: 'post',
     data
   })
@@ -165,7 +165,7 @@ export function dispatchTaskUploadMsg(data) {
 // 根据ID查询调度任务详情
 export function queryDispatchTaskMessage(taskId) {
   return request({
-    url: store.getters.templateType == 'template_one' ? `task/query/${taskId}` : `dispatch/queryOne/${taskId}`,
+    url: store.getters.templateType == 'template_one' ? `trans/task/query/${taskId}` : `trans/dispatch/queryOne/${taskId}`,
     method: 'get'
   })
 };
@@ -177,7 +177,7 @@ export function queryDispatchTaskMessage(taskId) {
 // 查询循环任务
 export function queryCirculationTask(data) {
   return request({
-    url: 'circleTask/workerTask',
+    url: 'trans/circleTask/workerTask',
     method: 'get',
     params: data
   })
@@ -186,7 +186,7 @@ export function queryCirculationTask(data) {
 // 查询循环任务(根据id)
 export function getCirculationTaskMessageById(id) {
   return request({
-    url: `circleTask/query/${id}`,
+    url: `trans/circleTask/query/${id}`,
     method: 'get'
   })
 };
@@ -194,7 +194,7 @@ export function getCirculationTaskMessageById(id) {
 // 查询标本信息
 export function querySampleMessage(data) {
   return request({
-    url: 'specimen/queryAll',
+    url: 'trans/specimen/queryAll',
     method: 'get',
     params: data
   })
@@ -203,7 +203,7 @@ export function querySampleMessage(data) {
 // 查询检查项
 export function queryCheckEntry(data) {
   return request({
-    url: 'collectionItem/queryAll',
+    url: 'trans/collectionItem/queryAll',
     method: 'get',
     params: data
   })
@@ -212,7 +212,7 @@ export function queryCheckEntry(data) {
 // 判断科室是否为指定的科室
 export function judgeDepartment(data) {
   return request({
-    url: 'circleTask/verifySpaces',
+    url: 'trans/circleTask/verifySpaces',
     method: 'get',
     params: data
   })
@@ -221,7 +221,7 @@ export function judgeDepartment(data) {
 // 循环任务标本信息收集
 export function collectSampleInfo(data) {
   return request({
-    url: 'taskSpecimen/specimens',
+    url: 'trans/taskSpecimen/specimens',
     method: 'post',
     data
   })
@@ -230,7 +230,7 @@ export function collectSampleInfo(data) {
 // 标本送达信息
 export function samplesArrived(data) {
   return request({
-    url: 'taskSpecimen/arrive',
+    url: 'trans/taskSpecimen/arrive',
     method: 'put',
     data
   })
@@ -239,7 +239,7 @@ export function samplesArrived(data) {
 // 根据项目ID和任务ID查询收集的标本信息
 export function queryCollectSampleMessage(proId,taskId) {
   return request({
-    url: `taskSpecimen/specimen/${proId}/${taskId}`,
+    url: `trans/taskSpecimen/specimen/${proId}/${taskId}`,
     method: 'get'
   })
 };
@@ -247,7 +247,7 @@ export function queryCollectSampleMessage(proId,taskId) {
 // 标本送达信息
 export function sampleDelivery(data) {
   return request({
-    url: 'taskSpecimen/arrive',
+    url: 'trans/taskSpecimen/arrive',
     method: 'put',
     data
   })
@@ -256,7 +256,7 @@ export function sampleDelivery(data) {
 // 循环任务更新
 export function updateCirculationTask(data) {
   return request({
-    url: 'circleTask/update',
+    url: 'trans/circleTask/update',
     method: 'put',
     data
   })
@@ -265,7 +265,7 @@ export function updateCirculationTask(data) {
 // 获取循环情况接口
 export function getCirculationCondition(data) {
   return request({
-    url: 'circleTask/circleCondition',
+    url: 'trans/circleTask/circleCondition',
     method: 'get',
     params: data
   })
@@ -274,7 +274,7 @@ export function getCirculationCondition(data) {
 // 获取循环任务详情
 export function queryCirculationTaskMessage(id, date) {
   return request({
-    url: `circleTask/circleTaskDetial/${id}/${date}`,
+    url: `trans/circleTask/circleTaskDetial/${id}/${date}`,
     method: 'get'
   })
 };
@@ -286,7 +286,7 @@ export function queryCirculationTaskMessage(id, date) {
 // 搜集标本信息
 export function collectNewCircleSampleMessage(data) {
   return request({
-    url: 'circlePackage/collect',
+    url: 'trans/circlePackage/collect',
     method: 'put',
     data
   })
@@ -295,7 +295,7 @@ export function collectNewCircleSampleMessage(data) {
 // 查询标本信息
 export function queryNewCircleSampleMessage(data) {
   return request({
-    url: 'circlePackage/arriveQuery',
+    url: 'trans/circlePackage/arriveQuery',
     method: 'get',
     params: data
   })
@@ -304,7 +304,7 @@ export function queryNewCircleSampleMessage(data) {
 // 查询任务详情
 export function queryNewCircleTaskDetails(taskId) {
   return request({
-    url: `circlePackage/info/${taskId}`,
+    url: `trans/circlePackage/info/${taskId}`,
     method: 'get'
   })
 };
@@ -312,7 +312,7 @@ export function queryNewCircleTaskDetails(taskId) {
 // 查询科室标本交接情况
 export function queryNewCircleTaskComplete(data) {
   return request({
-    url: 'circlePackage/finish',
+    url: 'trans/circlePackage/finish',
     method: 'get',
     params: data
   })
@@ -325,7 +325,7 @@ export function queryNewCircleTaskComplete(data) {
 // 查询预约任务
 export function queryAppointTaskMessage(data) {
   return request({
-    url: 'bookTask/queryTask',
+    url: 'trans/bookTask/queryTask',
     method: 'get',
     params: data
   })
@@ -334,7 +334,7 @@ export function queryAppointTaskMessage(data) {
 // 根据ID查询预约任务详情
 export function queryAppointTaskDetailsMessage(taskId) {
   return request({
-    url: `bookTask/query/${taskId}`,
+    url: `trans/bookTask/query/${taskId}`,
     method: 'get'
   })
 };
@@ -342,7 +342,7 @@ export function queryAppointTaskDetailsMessage(taskId) {
 // 查询调度任务(分配给本人的已完成)
 export function getAppointTaskComplete(data) {
   return request({
-    url: 'reserve/queryTask',
+    url: 'trans/reserve/queryTask',
     method: 'get',
     params: data
   })
@@ -351,7 +351,7 @@ export function getAppointTaskComplete(data) {
 // 预约任务的获取
 export function updateAppointTaskMessage(data) {
   return request({
-    url: 'bookTask/confirm',
+    url: 'trans/bookTask/confirm',
     method: 'put',
     data
   })
@@ -360,7 +360,7 @@ export function updateAppointTaskMessage(data) {
 // 任务转移
 export function transferAppointTask(data) {
   return request({
-    url: 'bookTask/transfer',
+    url: 'trans/bookTask/transfer',
     method: 'put',
     data
   })
@@ -369,7 +369,7 @@ export function transferAppointTask(data) {
 // 任务取消
 export function cancelAppointTask(data) {
   return request({
-    url: 'bookTask/cancelTask',
+    url: 'trans/bookTask/cancelTask',
     method: 'put',
     data
   })
@@ -378,7 +378,7 @@ export function cancelAppointTask(data) {
 // 任务退回
 export function sendbackAppointTask(data) {
   return request({
-    url: 'bookTask/undoTask',
+    url: 'trans/bookTask/undoTask',
     method: 'put',
     data
   })
@@ -388,7 +388,7 @@ export function sendbackAppointTask(data) {
 // 校验病人信息
 export function judgeAppointTaskCheckPatient(data) {
   return request({
-    url: 'bookTask/checkPatient',
+    url: 'trans/bookTask/checkPatient',
     method: 'put',
     data
   })
@@ -397,7 +397,7 @@ export function judgeAppointTaskCheckPatient(data) {
 // 校验起始科室
 export function judgeAppointTaskCheckDepartment(data) {
   return request({
-    url: 'bookTask/checkDepartment',
+    url: 'trans/bookTask/checkDepartment',
     method: 'put',
     data
   })
@@ -406,7 +406,7 @@ export function judgeAppointTaskCheckDepartment(data) {
 // 校验检查项科室
 export function judgeAppointTaskCheckItem(data) {
   return request({
-    url: 'bookCheckItem/verify',
+    url: 'trans/bookCheckItem/verify',
     method: 'put',
     data
   })
@@ -415,7 +415,7 @@ export function judgeAppointTaskCheckItem(data) {
 // 客户预约信息确认
 export function sureCustomerAppointInfo (data) {
   return request({
-    url: 'bookTask/saveSign',
+    url: 'trans/bookTask/saveSign',
     method: 'put',
     data
   })
@@ -424,7 +424,7 @@ export function sureCustomerAppointInfo (data) {
 // 预约任务检查科室完成
 export function checkItemsCompleted (data) {
   return request({
-    url: 'bookCheckItem/complete',
+    url: 'trans/bookCheckItem/complete',
     method: 'put',
     data
   })
@@ -433,7 +433,7 @@ export function checkItemsCompleted (data) {
 // 预约任务完成
 export function appointTaskCompleted (data) {
   return request({
-    url: 'bookTask/completeTask',
+    url: 'trans/bookTask/completeTask',
     method: 'put',
     data
   })
@@ -442,7 +442,7 @@ export function appointTaskCompleted (data) {
 // 预约任务签名完成
 export function appointTaskSignCompleted (data) {
   return request({
-    url: 'bookTask/complete/sign',
+    url: 'trans/bookTask/complete/sign',
     method: 'put',
     data
   })
@@ -451,7 +451,7 @@ export function appointTaskSignCompleted (data) {
 // 查询预约任务结束原因
 export function getAppointTaskEndReason(data) {
   return request({
-    url: 'complete/queryAll',
+    url: 'trans/complete/queryAll',
     method: 'get',
     params: data
   })

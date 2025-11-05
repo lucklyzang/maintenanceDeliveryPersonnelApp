@@ -7,7 +7,7 @@ const Login = () => import ('@/pages/Login')
 const MyInfo = () => import ('@/pages/MyInfo')
 const ModificationPassword = () => import ('@/pages/ModificationPassword')
 // 中央运送
-const transHome = () => import('@/pages/transManagementPackage/Home')
+const TransHome = () => import('@/pages/transManagementPackage/Home')
 const DispatchTask = () => import('@/pages/transManagementPackage/taskPage/DispatchTask')
 const CirculationTask = () => import('@/pages/transManagementPackage/taskPage/CirculationTask')
 const AppointTask = () => import('@/pages/transManagementPackage/taskPage/AppointTask')
@@ -44,6 +44,34 @@ const CreateDispathTask = () => import('@/pages/transManagementPackage/taskSched
 const CreateAppointTask = () => import('@/pages/transManagementPackage/taskSchedulingPage/CreateAppointTask')
 const EditDispathTask = () => import('@/pages/transManagementPackage/taskSchedulingPage/EditDispathTask')
 const EditAppointTask = () => import('@/pages/transManagementPackage/taskSchedulingPage/EditAppointTask')
+// 工程维护
+const ProjectHome = () => import('@/pages/projectManagementPackage/Home')
+const RepairsWorkOrder = () => import('@/pages/projectManagementPackage/taskPage/RepairsWorkOrder')
+const DeviceService = () => import('@/pages/projectManagementPackage/taskPage/DeviceService')
+const DepartmentService = () => import('@/pages/projectManagementPackage/taskPage/DepartmentService')
+const WorkOrderDetails = () => import('@/pages/projectManagementPackage/taskDetailsPage/WorkOrderDetails')
+const FillConsumable = () => import('@/pages/projectManagementPackage/taskMessagePage/workOrderMessage/FillConsumable')
+const WorkOrderSignature = () => import('@/pages/projectManagementPackage/taskMessagePage/workOrderMessage/WorkOrderSignature')
+const workOrderCheck = () => import('@/pages/projectManagementPackage/taskDetailsPage/WorkOrderCheck')
+const DepartmentWorkOrderDeatils = () => import('@/pages/projectManagementPackage/taskDetailsPage/DepartmentWorkOrderDeatils')
+const DepartmentServiceSignature = () => import('@/pages/projectManagementPackage/taskMessagePage/departmentService/DepartmentServiceSignature')
+const DepartmentServiceBill = () => import('@/pages/projectManagementPackage/taskMessagePage/departmentService/DepartmentServiceBill')
+const DepartmentServiceIssueReport = () => import('@/pages/projectManagementPackage/taskMessagePage/departmentService/DepartmentServiceIssueReport')
+const DeviceServiceDetails = () => import('@/pages/projectManagementPackage/taskDetailsPage/DeviceServiceDetails')
+const OperateRecordOrderDetails = () => import('@/pages/projectManagementPackage/taskDetailsPage/OperateRecordOrderDetails')
+const CopyDetails = () => import('@/pages/projectManagementPackage/taskDetailsPage/CopyDetails')
+const DeviceServiceBill = () => import('@/pages/projectManagementPackage/taskMessagePage/deviceService/DeviceServiceBill')
+const OperateRecordBill = () => import('@/pages/projectManagementPackage/taskMessagePage/deviceService/OperateRecordBill')
+const CopyRecordBill = () => import('@/pages/projectManagementPackage/taskMessagePage/deviceService/CopyRecordBill')
+const DepartmentServiceFillConsumable = () => import('@/pages/projectManagementPackage/taskMessagePage/departmentService/DepartmentServiceFillConsumable')
+const EngineeringTaskManagement = () => import('@/pages/projectManagementPackage/engineeringTaskManagementPage/EngineeringTaskManagement')
+const SchedulingRepairsTaskDetails = () => import('@/pages/projectManagementPackage/engineeringTaskManagementPage/SchedulingRepairsTaskDetails')
+const CreateRepairsTask = () => import('@/pages/projectManagementPackage/engineeringTaskManagementPage/createRepairsTask')
+const EditRepairsTask = () => import('@/pages/projectManagementPackage/engineeringTaskManagementPage/EditRepairsTask')
+const AutoRepairList = () => import('@/pages/projectManagementPackage/autoRepair/AutoRepairList')
+const AutoRepairHistoryRecord = () => import('@/pages/projectManagementPackage/AutoRepair/autoRepairHistoryRecord')
+const AutoRepairCreate = () => import('@/pages/projectManagementPackage/autoRepair/AutoRepairCreate')
+const AutoRepairTaskSignature = () => import('@/pages/projectManagementPackage/autoRepair/AutoRepairTaskSignature')
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -73,7 +101,7 @@ let baseRoute = [{
     {
         path: '/transHome',
         name: 'transHome',
-        component: transHome,
+        component: TransHome,
         meta: { index: 2 }
     },
     {
@@ -84,17 +112,20 @@ let baseRoute = [{
       {
         path: '/dispatchTask',
         name: 'dispatchTask',
-        component: DispatchTask
+        component: DispatchTask,
+        meta: { index: 3 }
       },
       {
         path: '/circulationTask',
         name: 'circulationTask',
-        component: CirculationTask
+        component: CirculationTask,
+        meta: { index: 3 }
       },
       {
         path: '/appointTask',
         name: 'appointTask',
-        component: AppointTask
+        component: AppointTask,
+        meta: { index: 3 }
       },
       {
         path: '/autonomicTask',
@@ -224,7 +255,8 @@ let baseRoute = [{
       {
         path: '/taskScheduling',
         name: 'taskScheduling',
-        component: TaskScheduling
+        component: TaskScheduling,
+        meta: { index: 3 }
       },
       {
         path: '/schedulingDispathTaskDetails',
@@ -255,6 +287,148 @@ let baseRoute = [{
         path: '/editAppintTask',
         name: 'editAppintTask',
         component: EditAppointTask
+      },
+      // 工程维护路由
+      {
+        path: '/projectHome',
+        name: 'projectHome',
+        component: ProjectHome,
+        meta: { index: 2 }
+      },
+      {
+        path: '/repairsWorkOrder',
+        name: 'repairsWorkOrder',
+        component: RepairsWorkOrder,
+        meta: { index: 3 }
+      },
+      {
+        path: '/deviceService',
+        name: 'deviceService',
+        component: DeviceService,
+        meta: { index: 3 }
+      },
+      {
+        path: '/departmentService',
+        name: 'departmentService',
+        component: DepartmentService,
+        meta: { index: 3 }
+      },
+      {
+        path: '/workOrderDetails',
+        name: 'workOrderDetails',
+        component:  WorkOrderDetails
+      },
+      {
+        path: '/fillConsumable',
+        name: 'fillConsumable',
+        component:  FillConsumable
+      },
+      {
+        path: '/workOrderSignature',
+        name: 'workOrderSignature',
+        component:  WorkOrderSignature
+      },
+      {
+        path: '/workOrderCheck',
+        name: 'workOrderCheck',
+        component:  workOrderCheck
+      },
+      {
+        path: '/departmentWorkOrderDeatils',
+        name: 'departmentWorkOrderDeatils',
+        component:  DepartmentWorkOrderDeatils
+      },
+      {
+        path: '/departmentServiceSignature',
+        name: 'departmentServiceSignature',
+        component:  DepartmentServiceSignature
+      },
+      {
+        path: '/departmentServiceBill',
+        name: 'departmentServiceBill',
+        component:  DepartmentServiceBill
+      },
+      {
+        path: '/departmentServiceIssueReport',
+        name: 'departmentServiceIssueReport',
+        component:  DepartmentServiceIssueReport
+      },
+      {
+        path: '/deviceServiceDetails',
+        name: 'deviceServiceDetails',
+        component: DeviceServiceDetails
+      },
+      {
+        path: '/deviceServiceBill',
+        name: 'deviceServiceBill',
+        component: DeviceServiceBill
+      },
+      {
+        path: '/operateRecordBill',
+        name: 'operateRecordBill',
+        component: OperateRecordBill
+      },
+      {
+        path: '/copyRecordBill',
+        name: 'copyRecordBill',
+        component: CopyRecordBill
+      },
+      {
+        path: '/operateRecordOrderDetails',
+        name: 'operateRecordOrderDetails',
+        component: OperateRecordOrderDetails
+      },
+      {
+        path: '/copyDetails',
+        name: 'copyDetails',
+        component: CopyDetails
+      },
+      {
+        path: '/departmentServiceFillConsumable',
+        name: 'departmentServiceFillConsumable',
+        component: DepartmentServiceFillConsumable
+      },
+      {
+        path: '/engineeringTaskManagement',
+        name: 'engineeringTaskManagement',
+        component: EngineeringTaskManagement,
+        meta: { index: 3 }
+      },
+      {
+        path: '/schedulingRepairsTaskDetails',
+        name: 'schedulingRepairsTaskDetails',
+        component: SchedulingRepairsTaskDetails
+      },
+      {
+        path: '/createRepairsTask',
+        name: 'createRepairsTask',
+        component: CreateRepairsTask
+      },
+      {
+        path: '/editRepairsTask',
+        name: 'editRepairsTask',
+        component: EditRepairsTask
+      },
+      {
+        path: '/autoRepairList',
+        name: 'autoRepairList',
+        component: AutoRepairList,
+        meta: { index: 3 }
+      },
+      {
+        path: '/autoRepairHistoryRecord',
+        name: 'autoRepairHistoryRecord',
+        component: AutoRepairHistoryRecord
+      },
+      { 
+        path: '/autoRepairCreate',
+        name: 'autoRepairCreate',
+        component: AutoRepairCreate
+      },
+      {
+        path: '/autoRepairTaskSignature',
+        name: 'autoRepairTaskSignature',
+        component: AutoRepairTaskSignature
       }
 ];
 let router = new Router({

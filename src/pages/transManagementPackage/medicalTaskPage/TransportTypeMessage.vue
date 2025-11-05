@@ -458,9 +458,6 @@ export default {
     sex () {
       return this.userInfo['worker']['extendData']['sex']
     },
-    userTypeId () {
-      return this.isMedicalMan
-    },
     userName() {
       return this.userInfo['worker']['name']
     },
@@ -496,7 +493,7 @@ export default {
       that.gotoURL(() => {
         pushHistory();
         this.changeIsFreshHomePage(false);
-        this.$router.push({path: 'home'});
+         this.$router.push({path: 'transHome'});
         this.changeTitleTxt({tit:'首页'});
         setStore('currentTitle','首页')
       })
@@ -521,7 +518,7 @@ export default {
       // 返回上一页
       backTo () {
         this.changeIsFreshHomePage(false);
-        this.$router.push({path: 'home'});
+         this.$router.push({path: 'transHome'});
         this.changeTitleTxt({tit:'中央运送'});
         setStore('currentTitle','中央运送')
       },

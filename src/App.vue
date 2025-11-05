@@ -1,13 +1,16 @@
 <template>
   <div id="app">
      <transition :name="transitionName" mode="out-in">
-      <keep-alive :include="['cleanCallTask','cleanHistoricalTask','cleanRealtimeTask','projectHistoricalTask','projectRealtimeTask','transHistoricalTask','transRealtimeTask']">
+      <keep-alive :include="catch_components">
         <router-view class="child-view"></router-view>
       </keep-alive>
     </transition>
   </div>
 </template>
 <script>
+	import {
+		mapGetters
+	} from 'vuex'
   export default {
     data () {
       return {
@@ -15,6 +18,9 @@
       }
     },
     computed: {
+      ...mapGetters([
+        'catch_components',
+      ]),
       cachedRoutes() {
         return this.$route.matched.filter(r => r.meta && r.meta.keepAlive).map(r => r.name) // 获取需要缓存的路由名称数组
       }

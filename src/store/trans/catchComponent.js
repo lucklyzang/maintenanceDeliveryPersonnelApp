@@ -1,4 +1,5 @@
 import { getDefaultTransCatchComponentsState } from '@/common/js/resetStore.js'
+import { getStore, setStore } from '@/common/js/utils'
 export default {
   state: getDefaultTransCatchComponentsState(),
   getters:{
@@ -9,9 +10,9 @@ export default {
   },
   mutations:{
     changeCatchComponent(state,payLoad) {
-      if (playLoad && playLoad != 'null') {
-				setStore('catch_components', playLoad);
-				state.catch_components = playLoad
+      if (payLoad && payLoad != 'null') {
+				setStore('catch_components', payLoad);
+				state.catch_components = payLoad
 			}
     },
 		resetTransCatchComponentsState(state) {

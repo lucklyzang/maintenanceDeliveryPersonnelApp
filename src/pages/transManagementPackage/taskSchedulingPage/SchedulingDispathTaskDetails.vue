@@ -259,9 +259,6 @@ export default {
 
   computed: {
     ...mapGetters(["userInfo","chooseHospitalArea","schedulingTaskDetails","operateBtnClickRecord","templateType"]),
-      userTypeId () {
-        return this.isMedicalMan
-      },
       userName() {
         return this.userInfo['worker']['name']
       },
