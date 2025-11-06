@@ -12,7 +12,7 @@ export default {
 			return state.currentElectronicSignature
     },
     circulationCollectMessageList: (state) => {
-      state.circulationCollectMessageList = JSON.parse(getStore('currentCirculationCollectMessage'))['innerMessage'] ? JSON.parse(getStore('currentCirculationCollectMessage'))['innerMessage'] : [];
+      state.circulationCollectMessageList = JSON.parse(getStore('currentCirculationCollectMessage')) ? JSON.parse(getStore('currentCirculationCollectMessage'))['innerMessage'] : [];
 			return state.circulationCollectMessageList
     },
     isCollectEnterSweepCodePage: (state) => {
@@ -20,7 +20,7 @@ export default {
 			return state.isCollectEnterSweepCodePage
     },
     circulationConnectMessageList: (state) => {
-      state.circulationConnectMessageList = JSON.parse(getStore('currentCirculationConnectMessage'))['innerMessage'] ? JSON.parse(getStore('currentCirculationConnectMessage'))['innerMessage'] : [];
+      state.circulationConnectMessageList = JSON.parse(getStore('currentCirculationConnectMessage')) ? JSON.parse(getStore('currentCirculationConnectMessage'))['innerMessage'] : [];
 			return state.circulationConnectMessageList
     },
     isrefreshCirculationConnectPage: (state) => {
@@ -28,7 +28,7 @@ export default {
 			return state.isrefreshCirculationConnectPage
     },
     completeDeparnmentInfo: (state) => {
-      state.completeDeparnmentInfo = JSON.parse(getStore('completeDepartmentMessage'))['sureInfo'] ? JSON.parse(getStore('completeDepartmentMessage'))['sureInfo'] : [];
+      state.completeDeparnmentInfo = JSON.parse(getStore('completeDepartmentMessage')) ? JSON.parse(getStore('completeDepartmentMessage'))['sureInfo'] : [];
 			return state.completeDeparnmentInfo
     },
     stipulateOfficeList: (state) => {
@@ -84,7 +84,7 @@ export default {
 			return state.circulationTaskId
 		},
     isCompleteSampleList: (state) => {
-      state.isCompleteSampleList = JSON.parse(getStore('completeCollectSample'))['sampleInfo'] ? JSON.parse(getStore('completeCollectSample'))['sampleInfo'] : [];
+      state.isCompleteSampleList = JSON.parse(getStore('completeCollectSample')) ? JSON.parse(getStore('completeCollectSample'))['sampleInfo'] : [];
 			return state.isCompleteSampleList
     }
   },

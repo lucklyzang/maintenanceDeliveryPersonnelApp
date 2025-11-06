@@ -16,11 +16,11 @@ export default {
 			return state.userType
 		},
     departmentInfoList: (state) => {
-      state.departmentInfoList = JSON.parse(getStore('departmentInfoList')) ? JSON.parse(getStore('departmentInfoList')) : {};
+      state.departmentInfoList = JSON.parse(getStore('departmentInfo')) ? JSON.parse(getStore('departmentInfo')) : {};
 			return state.departmentInfoList
     },
     departmentInfoListNo: (state) => {
-      state.departmentInfoListNo = JSON.parse(getStore('departmentInfoListNo')) ? JSON.parse(getStore('departmentInfoListNo')) : {};
+      state.departmentInfoListNo = JSON.parse(getStore('departmentInfoNo')) ? JSON.parse(getStore('departmentInfoNo')) : {};
 			return state.departmentInfoListNo
     },
     newTaskName:  (state) => {
@@ -76,14 +76,14 @@ export default {
     // 改变科室信息状态id
     changeDepartmentInfoList (state, payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('departmentInfoList', payLoad);
+				setStore('departmentInfo', payLoad);
 				state.departmentInfoList = payLoad
 			}
     },
     // 改变科室信息状态编号
     changeDepartmentInfoListNo (state, payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('departmentInfoListNo', payLoad);
+				setStore('departmentInfoNo', payLoad);
 				state.departmentInfoListNo = payLoad
 			}
     },

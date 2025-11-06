@@ -8,6 +8,9 @@ export default {
         },
         submitAutoRepairTaskMessage: (state) => {
             return state.submitAutoRepairTaskMessage
+        },
+        projectGlobalTimer: (state) => {
+            return state.projectGlobalTimer
         }
     },
 
@@ -20,6 +23,13 @@ export default {
         // 保存提交自主报修任务信息
         changeSubmitAutoRepairTaskMessage (state, playLoad) {
             state.submitAutoRepairTaskMessage = playLoad
+        },
+
+        // 保存全局globalTimer
+        changeProjectGlobalTimer (state, payLoad) {
+            if ( payLoad && payLoad != 'null') {
+                    state.projectGlobalTimer = payLoad
+                }
         },
 
         //重置自主报修任务状态

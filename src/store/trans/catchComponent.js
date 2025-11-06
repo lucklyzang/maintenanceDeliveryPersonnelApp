@@ -4,7 +4,7 @@ export default {
   state: getDefaultTransCatchComponentsState(),
   getters:{
     catch_components: (state) => {
-      state.catch_components = JSON.parse(getStore('catch_components')) ? JSON.parse(getStore('catch_components')) : ['dispatchTask'];
+      state.catch_components = JSON.parse(getStore('catch_components')) ? JSON.parse(getStore('catch_components')) : ['dispatchTask','AddTask'];
 			return state.catch_components
     }
   },

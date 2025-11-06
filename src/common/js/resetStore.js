@@ -60,7 +60,7 @@ export function getDefaultTransAppointTaskState() {
 // 缓存组件store初始值
 export function getDefaultTransCatchComponentsState() {
 	return {
-		catch_components: ['dispatchTask']
+		catch_components: ['dispatchTask','AddTask']
 	}
 }
 
@@ -157,7 +157,7 @@ export function getDefaultTransTransLoginState() {
 		userType: '',
 		departmentInfoList: {},
 		departmentInfoListNo: {},
-		newTaskName: '',
+		newTaskName: [],
 		taskDetailsMessage: {},
 		taskType: '',
 		globalTimer: null,
@@ -175,7 +175,8 @@ export function getDefaultTransTransLoginState() {
 export function getDefaultAutoRepairTaskState() {
     return {
         createAutoRepairTaskMessage: {}, //创建自主报修任务信息(暂存)
-        submitAutoRepairTaskMessage: {} //提交自主报修任务信息
+        submitAutoRepairTaskMessage: {}, //提交自主报修任务信息
+		projectGlobalTimer: null
     }
 }
 
@@ -209,6 +210,7 @@ export function getDefaultDeviceServiceState() {
 // repairsWorkOrder模块store的初始值
 export function getDefaultRepairsWorkOrderState() {
     return {
+		newProjectTaskName: [],
 		isFreshRepairsWorkOrderPage: true,
 		repairsWorkOrderMsg: '',
 		completeRoomList: [],
@@ -226,3 +228,28 @@ export function getDefaultTaskSchedulingState() {
 		temporaryStorageCreateRepairsTaskMessage: {}
     }
 }
+
+/*
+ * 保洁管理相关模块store初始值
+*/
+
+// 保洁管理信息store的初始值
+export function getDefaultEnvironmentManagementState() {
+    return {
+		permissionInfo: [], //权限列表
+		roleNameList: [], //角色列表
+		chooseProject: [], //选择的医院 
+		currentCleanTaskName: {},
+		currentCleanTaskDateVlue: '',
+		cleanTaskDetails: {},
+		attendanceTypeDetailsMessage: {},
+		personnelStatisticsDetailsMessage: {},
+		locationMessage: [],
+		attendanceStatisticsSwitchMessage: {},
+		storageForthwithTaskMessage: [],
+		storageSpecialTaskMessage: [],
+		pollingTaskDepartmentMessage: {},
+		pollingTaskDepartmentFunctionalZoneMessage: {},
+		pollingTaskCurrentShowTime: ''
+    }
+};

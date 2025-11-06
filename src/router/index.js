@@ -72,6 +72,39 @@ const AutoRepairList = () => import('@/pages/projectManagementPackage/autoRepair
 const AutoRepairHistoryRecord = () => import('@/pages/projectManagementPackage/AutoRepair/autoRepairHistoryRecord')
 const AutoRepairCreate = () => import('@/pages/projectManagementPackage/autoRepair/AutoRepairCreate')
 const AutoRepairTaskSignature = () => import('@/pages/projectManagementPackage/autoRepair/AutoRepairTaskSignature')
+// 保洁管理
+const CleanHome = () =>
+    import ('@/pages/cleanManagementPackage/Home')
+const CleanTaskList = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/TaskList')
+const CleaningTask = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/CleaningTask')
+const ForthwithCleaningTaskDetails = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/ForthwithCleaningTaskDetails')
+const ChoosePosition = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/ChoosePosition')
+const SpecialCleaningTaskDetails = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/SpecialCleaningTaskDetails')
+const AddTask = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/AddTask')
+const PollingTaskDetails = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/PollingTaskDetails')
+const PollingTaskDepartmentDetails = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/PollingTaskDepartmentDetails')
+const PollingTaskDepartmentCornerDetails = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/PollingTaskDepartmentCornerDetails')
+const PollingTaskNoCompleteReason = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/PollingTaskNoCompleteReason')
+const ScanQRCode = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/ScanQRCode')
+const AttendanceManagement = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/AttendanceManagement')
+const AttendanceStatistics = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/AttendanceStatistics')
+const AttendanceTypeDetails = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/AttendanceTypeDetails')
+const PersonnelStatisticsDetails = () =>
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/PersonnelStatisticsDetails')               
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -429,7 +462,99 @@ let baseRoute = [{
         path: '/autoRepairTaskSignature',
         name: 'autoRepairTaskSignature',
         component: AutoRepairTaskSignature
-      }
+      },
+      // 保洁管理路由
+      {
+        path: '/cleanHome',
+        name: 'cleanHome',
+        component: CleanHome,
+        meta: { index: 2 }
+    },
+    {
+        path: '/myInfo',
+        name: 'myInfo',
+        component: MyInfo
+    },
+    {
+        path: '/cleaningTask',
+        name: 'cleaningTask',
+        component: CleaningTask
+    },
+    {
+        path: '/cleanTaskList',
+        name: 'cleanTaskList',
+        component: CleanTaskList,
+        meta: { index: 3 }
+    },
+    {
+        path: '/addTask',
+        name: 'addTask',
+        component: AddTask,
+        meta: { index: 4 }
+    },
+    {
+        path: '/forthwithCleaningTaskDetails',
+        name: 'forthwithCleaningTaskDetails',
+        component: ForthwithCleaningTaskDetails
+    },
+    {
+        path: '/choosePosition',
+        name: 'choosePosition',
+        component: ChoosePosition
+    },
+    {
+        path: '/specialCleaningTaskDetails',
+        name: 'specialCleaningTaskDetails',
+        component: SpecialCleaningTaskDetails
+    },
+    {
+        path: '/pollingTaskDetails',
+        name: 'pollingTaskDetails',
+        component: PollingTaskDetails
+    },
+    {
+        path: '/pollingTaskDepartmentDetails',
+        name: 'pollingTaskDepartmentDetails',
+        component: PollingTaskDepartmentDetails
+    },
+    {
+        path: '/pollingTaskDepartmentCornerDetails',
+        name: 'pollingTaskDepartmentCornerDetails',
+        component: PollingTaskDepartmentCornerDetails
+    },
+    {
+        path: '/pollingTaskNoCompleteReason',
+        name: 'pollingTaskNoCompleteReason',
+        component: PollingTaskNoCompleteReason
+    },
+    {
+        path: '/scanQRCode',
+        name: 'scanQRCode',
+        component: ScanQRCode
+    },
+    {
+        path: '/attendanceManagement',
+        name: 'attendanceManagement',
+        component: AttendanceManagement,
+        meta: { index: 3 }
+    },
+    {
+        path: '/attendanceStatistics',
+        name: 'attendanceStatistics',
+        component: AttendanceStatistics,
+        meta: { index: 3 }
+    },
+    {
+        path: '/attendanceTypeDetails',
+        name: 'attendanceTypeDetails',
+        component: AttendanceTypeDetails,
+        meta: { index: 4 }
+    },
+    {
+        path: '/personnelStatisticsDetails',
+        name: 'personnelStatisticsDetails',
+        component: PersonnelStatisticsDetails
+    }
 ];
 let router = new Router({
     routes: baseRoute,

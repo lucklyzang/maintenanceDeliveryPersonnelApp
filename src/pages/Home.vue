@@ -176,7 +176,7 @@
 				this.hasAuthserviceManagementSystemsList = [];
 				if (this.appPermission.hasOwnProperty('systems')) {
 					this.serviceList.map((value,index,arr) => {
-						if (this.userInfo['extendData']['systems'].indexOf(value['value']) != -1) {
+						if (this.appPermission['systems'].indexOf(value['value']) != -1) {
 							this.hasAuthserviceManagementSystemsList.push(value)
 						}
 					})

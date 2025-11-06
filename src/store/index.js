@@ -11,11 +11,13 @@ import medicalTask from './trans/medicalTask.js'
 import transLogin from './trans/transLogin.js'
 import catchComponent from './trans/catchComponent.js'
 // 工程
-import repairsWorkOrder from './project/repairsWorkOrder'
+import repairsWorkOrder from './project/repairsWorkOrder.js'
 import projectTaskScheduling from './project/taskScheduling.js'
-import deviceService from './project/deviceService'
-import departmentService from './project/departmentService'
-import autoRepairTask from './project/autoRepairTask'
+import deviceService from './project/deviceService.js'
+import departmentService from './project/departmentService.js'
+import autoRepairTask from './project/autoRepairTask.js'
+// 保洁
+import environmentManagement from './clean/environmentManagement.js'
 Vue.use(Vuex);
 export default new Vuex.Store({
   modules:{
@@ -32,6 +34,7 @@ export default new Vuex.Store({
     projectTaskScheduling,
     deviceService,
     departmentService,
-    autoRepairTask
+    autoRepairTask,
+    environmentManagement
   }
 });

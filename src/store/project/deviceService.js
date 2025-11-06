@@ -12,19 +12,19 @@ export default {
 			return state.deviceServiceMsg
 		},
     energyRecordList: (state) => {
-      state.energyRecordList = JSON.parse(getStore('energyRecordList')) ? JSON.parse(getStore('energyRecordList')) : [];
+      state.energyRecordList = JSON.parse(getStore('energyRecordList')) ? JSON.parse(getStore('energyRecordList'))['energyRecord'] : [];
 			return state.energyRecordList
     },
     isCurrentDeviceCopyServiceVerifySweepCode: (state) => {
-      state.isCurrentDeviceCopyServiceVerifySweepCode = JSON.parse(getStore('isCurrentDeviceCopyServiceVerifySweepCode')) ? JSON.parse(getStore('isCurrentDeviceCopyServiceVerifySweepCode')) : [];
+      state.isCurrentDeviceCopyServiceVerifySweepCode = JSON.parse(getStore('isCurrentDeviceCopyServiceVerifySweepCode')) ? JSON.parse(getStore('isCurrentDeviceCopyServiceVerifySweepCode'))['number'] : [];
 			return state.isCurrentDeviceCopyServiceVerifySweepCode
     },
     currentDeviceCopyVerifySweepCodeDepNumber:  (state) => {
-			state.currentDeviceCopyVerifySweepCodeDepNumber = getStore('currentDeviceCopyVerifySweepCodeDepNumber') ? getStore('currentDeviceCopyVerifySweepCodeDepNumber') : '';
+			state.currentDeviceCopyVerifySweepCodeDepNumber = getStore('energyDepartmentService') ? getStore('energyDepartmentService') : '';
 			return state.currentDeviceCopyVerifySweepCodeDepNumber
 		},
     completeDeviceEnergyRecordServiceOfficeInfo: (state) => {
-      state.completeDeviceEnergyRecordServiceOfficeInfo = JSON.parse(getStore('completeDeviceEnergyRecordServiceOfficeInfo')) ? JSON.parse(getStore('completeDeviceEnergyRecordServiceOfficeInfo')) : [];
+      state.completeDeviceEnergyRecordServiceOfficeInfo = JSON.parse(getStore('isCompleteDeviceEnergyRecordServiceOfficeInfo')) ? JSON.parse(getStore('isCompleteDeviceEnergyRecordServiceOfficeInfo'))['sweepCodeInfo'] : [];
 			return state.completeDeviceEnergyRecordServiceOfficeInfo
     }
   },
@@ -38,7 +38,7 @@ export default {
     // 改变每条任务下各个科室能耗录入数据状态
     changeEnergyRecordList (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('energyRecordList', payLoad);
+				setStore('energyRecordList', {energyRecord: payLoad});
 				state.energyRecordList = payLoad
 			}
     },
@@ -52,14 +52,14 @@ export default {
     // 改变设备巡检中能耗录入扫码校验通过的当前科室id的状态
     changeIsCurrentDeviceCopyServiceVerifySweepCode (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('isCurrentDeviceCopyServiceVerifySweepCode', payLoad);
+				setStore('isCurrentDeviceCopyServiceVerifySweepCode', {number: payLoad});
 				state.isCurrentDeviceCopyServiceVerifySweepCode = payLoad
 			}
     },
     // 改变设备巡检中能耗录入扫码校验通过的当前科室编号的状态
     changeCurrentDeviceCopyVerifySweepCodeDepNumber (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('currentDeviceCopyVerifySweepCodeDepNumber', payLoad);
+				setStore('energyDepartmentService', payLoad);
 				state.currentDeviceCopyVerifySweepCodeDepNumber = payLoad
 			}
     },
@@ -67,7 +67,7 @@ export default {
     // 改变设备巡检中完成能耗录入的当前科室编号的状态
     changeCompleteDeviceEnergyRecordServiceOfficeInfo (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('completeDeviceEnergyRecordServiceOfficeInfo', payLoad);
+				setStore('isCompleteDeviceEnergyRecordServiceOfficeInfo', {sweepCodeInfo: payLoad});
 				state.completeDeviceEnergyRecordServiceOfficeInfo = payLoad
 			}
     },

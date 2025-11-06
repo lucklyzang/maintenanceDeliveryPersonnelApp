@@ -83,7 +83,8 @@
 				'userInfo',
 				'statusBarHeight',
 				'navigationBarHeight',
-				'chooseHospitalArea'
+				'chooseHospitalArea',
+				'projectGlobalTimer'
 			]),
 			userName() {
 			  return this.userInfo['worker']['name']
@@ -140,7 +141,9 @@
 				userSignOut(this.proId,this.workerId).then((res) => {
 					if ( res && res.data.code == 200) {
             		// 清空store和localStorage
+					 	if(this.projectGlobalTimer) {window.clearInterval(this.globalTimer)};
 						removeAllLocalStorage();
+						store.dispatch('resetAutoRepairTaskStore');
 						store.dispatch('resetLoginState');
 					  this.$router.push({path: "/"});
 					} else {

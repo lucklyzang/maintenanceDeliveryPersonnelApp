@@ -68,7 +68,7 @@ export function registerChannel (data) {
 }
 
 // 获取阿里云签名接口
-export function getAliyunSign() {
+export function getProjectAliyunSign() {
 	return request({
 	    url: 'project/oss/upload',
 	    method: 'get'

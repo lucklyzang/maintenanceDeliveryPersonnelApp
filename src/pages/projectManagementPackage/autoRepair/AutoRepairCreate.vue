@@ -386,7 +386,7 @@
 </template>
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import { getAliyunSign } from '@/api/project/login.js'
+import { getProjectAliyunSign } from '@/api/project/login.js'
 import { scanDepartment, completeAutoRepairsTask } from '@/api/project/autoRepairCreate.js'
 import { getTransporter, querySpace, queryDepartment, queryRepairsTaskTool, queryStructure, queryRepairsTaskMaterial, getRepairsTaskType} from '@/api/project/taskScheduling.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
@@ -662,7 +662,7 @@ export default {
     // 获取阿里云签名接口
     getSign (filePath = '',text) {
       return new Promise((resolve, reject) => {
-        getAliyunSign().then((res) => {
+        getProjectAliyunSign().then((res) => {
           if (res && res.status == 200) {
             // 存储签名信息
             this.changeOssMessage(res.data);

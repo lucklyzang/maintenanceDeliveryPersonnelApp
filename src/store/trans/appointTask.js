@@ -17,15 +17,15 @@ export default {
 			return state.originalSignature
     },
     completeSweepcodeDestinationInfo: (state) => {
-      state.completeSweepcodeDestinationInfo = JSON.parse(getStore('completAppointTaskSweepCodeDestinationInfo'))['sweepCodeInfo'] ? JSON.parse(getStore('completAppointTaskSweepCodeDestinationInfo'))['sweepCodeInfo'] : [];
+      state.completeSweepcodeDestinationInfo = JSON.parse(getStore('completAppointTaskSweepCodeDestinationInfo')) ? JSON.parse(getStore('completAppointTaskSweepCodeDestinationInfo'))['sweepCodeInfo'] : [];
 			return state.completeSweepcodeDestinationInfo
     },
     completeSweepcodeDepartureInfo: (state) => {
-      state.completeSweepcodeDepartureInfo = JSON.parse(getStore('completAppointTaskSweepCodeDepartureInfo'))['sweepCodeInfo'] ? JSON.parse(getStore('completAppointTaskSweepCodeDepartureInfo'))['sweepCodeInfo'] : [];
+      state.completeSweepcodeDepartureInfo = JSON.parse(getStore('completAppointTaskSweepCodeDepartureInfo')) ? JSON.parse(getStore('completAppointTaskSweepCodeDepartureInfo'))['sweepCodeInfo'] : [];
 			return state.completeSweepcodeDepartureInfo
     },
     completeCheckedItemInfo: (state) => {
-      state.completeCheckedItemInfo = JSON.parse(getStore('completAppointTaskCheckedItemInfo'))['sweepCodeInfo'] ? JSON.parse(getStore('completAppointTaskCheckedItemInfo'))['sweepCodeInfo'] : [];
+      state.completeCheckedItemInfo = JSON.parse(getStore('completAppointTaskCheckedItemInfo')) ? JSON.parse(getStore('completAppointTaskCheckedItemInfo'))['sweepCodeInfo'] : [];
 			return state.completeCheckedItemInfo
     },
     isFreshAppointTaskPage:(state) => {

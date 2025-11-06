@@ -30,20 +30,21 @@ export default {
     background-size: 100% 100%;
     width: 100%;
     height: @header-title-height;
-    line-height: @header-title-height;
     display: flex;
     align-items: center;
     padding: 0 10px;
     box-sizing: border-box;
+    position: relative;
     .header_title {
       position: absolute;
       height: @header-title-height;
       line-height: @header-title-height;
       left: 50%;
       transform: translateX(-50%);
-      width: 50%;
+      width: 60%;
       color: #fff;
       text-align: center;
+      .no-wrap();
       .header_title_text {
         font-size: 18px;
         color: #fff;

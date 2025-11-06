@@ -444,7 +444,7 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","chooseHospitalArea","schedulingTaskType","operateBtnClickRecord","templateType","schedulingTaskDetails"]),
+    ...mapGetters(["userInfo","appPermission","chooseHospitalArea","schedulingTaskType","operateBtnClickRecord","templateType","schedulingTaskDetails"]),
       userName() {
         return this.userInfo['worker']['name']
       },
@@ -477,11 +477,11 @@ export default {
 
     // 控制模块显示
     controlModuleShow () {
-      if (this.userInfo['extendData']) {
-        if (!this.userInfo['extendData']['dispAssgin']) {
+      if (this.appPermission) {
+        if (!this.appPermission['dispAssgin']) {
           this.isShowDispathModule = false
         };
-        if (!this.userInfo['extendData']['bookAssgin']) {
+        if (!this.appPermission['bookAssgin']) {
           this.isShowAppointModule = false
         }
       }  

@@ -12,23 +12,23 @@ export default {
 			return state.departmentServiceMsg
 		},
     isDepartmentServiceVerifySweepCode: (state) => {
-      state.isDepartmentServiceVerifySweepCode = JSON.parse(getStore('isDepartmentServiceVerifySweepCode')) ? JSON.parse(getStore('isDepartmentServiceVerifySweepCode')) : [];
+      state.isDepartmentServiceVerifySweepCode = JSON.parse(getStore('isDepartmentServiceVerifySweepCode')) ? JSON.parse(getStore('isDepartmentServiceVerifySweepCode'))['sweepCodeInfo'] : [];
 			return state.isDepartmentServiceVerifySweepCode
     },
     isCurrentDepartmentServiceVerifySweepCode: (state) => {
-      state.isCurrentDepartmentServiceVerifySweepCode = JSON.parse(getStore('isCurrentDepartmentServiceVerifySweepCode')) ? JSON.parse(getStore('isCurrentDepartmentServiceVerifySweepCode')) : [];
+      state.isCurrentDepartmentServiceVerifySweepCode = JSON.parse(getStore('isCurrentDepartmentServiceVerifySweepCode')) ? JSON.parse(getStore('isCurrentDepartmentServiceVerifySweepCode'))['number'] : [];
 			return state.isCurrentDepartmentServiceVerifySweepCode
     },
     departmentServiceOfficeId:  (state) => {
-			state.departmentServiceOfficeId = getStore('departmentServiceOfficeId') ? getStore('departmentServiceOfficeId') : '';
+			state.departmentServiceOfficeId = getStore('departmentServiceId') ? getStore('departmentServiceId') : '';
 			return state.departmentServiceOfficeId
 		},
     completeDepartmentServiceOfficeInfo: (state) => {
-      state.completeDepartmentServiceOfficeInfo = JSON.parse(getStore('completeDepartmentServiceOfficeInfo')) ? JSON.parse(getStore('completeDepartmentServiceOfficeInfo')) : [];
+      state.completeDepartmentServiceOfficeInfo = JSON.parse(getStore('isCompleteDepartmentServiceOfficeInfo')) ? JSON.parse(getStore('isCompleteDepartmentServiceOfficeInfo'))['sweepCodeInfo'] : [];
 			return state.completeDepartmentServiceOfficeInfo
     },
     completeDepartmentServiceCheckedItemList: (state) => {
-      state.completeDepartmentServiceCheckedItemList = JSON.parse(getStore('completeDepartmentServiceCheckedItemList')) ? JSON.parse(getStore('completeDepartmentServiceCheckedItemList')) : [];
+      state.completeDepartmentServiceCheckedItemList = JSON.parse(getStore('isCompleteDepartmentServiceCheckedItemList')) ? JSON.parse(getStore('isCompleteDepartmentServiceCheckedItemList'))['sweepCodeInfo'] : [];
 			return state.completeDepartmentServiceCheckedItemList
     },
     isSingleDepartmentSignature:(state) => {
@@ -36,14 +36,14 @@ export default {
 			return state.isSingleDepartmentSignature
 		},
     currentDepartmentServiceCheckedItemId: (state) => {
-      state.currentDepartmentServiceCheckedItemId = JSON.parse(getStore('currentDepartmentServiceCheckedItemId')) ? JSON.parse(getStore('currentDepartmentServiceCheckedItemId')) : null;
+      state.currentDepartmentServiceCheckedItemId = JSON.parse(getStore('checkedItemId')) ? JSON.parse(getStore('checkedItemId')) : null;
 			return state.currentDepartmentServiceCheckedItemId
     }
   },
   mutations:{
     // 改变是否刷新巡检任务首页的状态
     changeIsFreshDepartmentServicePage (state, payLoad) {
-      if (payLoad!= 'null') {
+      if (payLoad != 'null') {
 				setStore('isFreshDepartmentServicePage', payLoad);
 				state.isFreshDepartmentServicePage = payLoad
 			}
@@ -58,42 +58,42 @@ export default {
     // 改变巡检任务扫码校验通过的科室编号
     changeIsDepartmentServiceVerifySweepCode (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('isDepartmentServiceVerifySweepCode', payLoad);
+				setStore('isDepartmentServiceVerifySweepCode', {sweepCodeInfo: payLoad});
 				state.isDepartmentServiceVerifySweepCode = payLoad
 			}
     },
     // 改变当前巡检任务扫码校验通过的科室id
     changeIsCurrentDepartmentServiceVerifySweepCode (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('isCurrentDepartmentServiceVerifySweepCode', payLoad);
+				setStore('isCurrentDepartmentServiceVerifySweepCode', {number: payLoad});
 				state.isCurrentDepartmentServiceVerifySweepCode = payLoad
 			}
     },
     // 改变当前巡检任务扫码校验通过的科室编号
      changeDepartmentServiceOfficeId (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('departmentServiceOfficeId', payLoad);
+				setStore('departmentServiceId', payLoad);
 				state.departmentServiceOfficeId = payLoad
 			}
     },
     // 改变完成巡检任务的科室信息
     changeCompleteDepartmentServiceOfficeInfo (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('completeDepartmentServiceOfficeInfo', payLoad);
+				setStore('isCompleteDepartmentServiceOfficeInfo', { sweepCodeInfo: payLoad});
 				state.completeDepartmentServiceOfficeInfo = payLoad
 			}
     },
     // 改变当前点击过的检查项id
     changeCurrentDepartmentServiceCheckedItemId (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('currentDepartmentServiceCheckedItemId', payLoad);
+				setStore('checkedItemId', payLoad);
 				state.currentDepartmentServiceCheckedItemId = payLoad
 			}
     },
     // 改变当前完成问题上报的检查项id
     changeCompleteDepartmentServiceCheckedItemList (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('completeDepartmentServiceCheckedItemList', payLoad);
+				setStore('isCompleteDepartmentServiceCheckedItemList', {sweepCodeInfo: payLoad});
 				state.completeDepartmentServiceCheckedItemList = payLoad
 			}
     },

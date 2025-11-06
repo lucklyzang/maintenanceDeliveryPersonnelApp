@@ -85,7 +85,7 @@
               </li>
             </ul>
           </div>
-          <div class="manage-wrapper-one" v-if="!userInfo.extendData.projectAudit">
+          <div class="manage-wrapper-one" v-if="!appPermission.projectAudit">
             <div class="mange-title">
               <span>耗材使用量</span>
             </div>
@@ -101,7 +101,7 @@
               </p>
             </div>
           </div>
-          <div class="manage-wrapper" v-if="userInfo.extendData.projectAudit">
+          <div class="manage-wrapper" v-if="appPermission.projectAudit">
             <div class="mange-title">
               <span>{{repairsWorkOrderMsg.state == 5 || repairsWorkOrderMsg.state == 6? "消耗耗材" : "耗材管理"}}</span>
               <span @click="addConsumable" v-show="repairsWorkOrderMsg.state !== 5 && repairsWorkOrderMsg.state !== 6">添加</span>
@@ -124,8 +124,8 @@
         </div>
       </div>  
       <div class="content-bottom" ref="contentBottom" v-show="repairsWorkOrderMsg.state !== 5 && repairsWorkOrderMsg.state !== 6">
-        <p class="complete-check" :class="{'completeCheckStyle' : !userInfo.extendData.projectAudit }" @click="completeTask">完成审核</p>
-        <p class="reject-workorder" :class="{'rejectWorkorderStyle' : !userInfo.extendData.projectAudit }" @click="rejectWorkorderEvent">取消</p>
+        <p class="complete-check" :class="{'completeCheckStyle' : !appPermission.projectAudit }" @click="completeTask">完成审核</p>
+        <p class="reject-workorder" :class="{'rejectWorkorderStyle' : !appPermission.projectAudit }" @click="rejectWorkorderEvent">取消</p>
       </div>
     </div>
     <div class="reject-reason-dialog">
@@ -325,7 +325,8 @@
         'userInfo',
         'isCompleteRepairsWorkOrderPhotoList',
         'isFillMaterialList',
-        'chooseHospitalArea'
+        'chooseHospitalArea',
+        'appPermission'
       ]),
       name() {
         return this.userInfo['worker']['name']
@@ -888,7 +889,7 @@
 
       // 完成审核
       async completeTask () {
-        if (!this.userInfo.extendData.projectAudit) {
+        if (!appPermission.projectAudit) {
           this.$toast('你暂无此权限!');
           return
         };

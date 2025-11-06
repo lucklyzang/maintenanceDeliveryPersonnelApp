@@ -4,11 +4,11 @@ export default {
   state: getDefaultTransDispatchTaskState(),
   getters:{
     navTopTitle:  (state) => {
-			state.navTopTitle = getStore('navTopTitle') ? getStore('navTopTitle') : '中央运送';
+			state.navTopTitle = getStore('currentTitle') ? getStore('currentTitle') : '中央运送';
 			return state.navTopTitle
 		},
     dispatchTaskMessage: (state) => {
-      state.dispatchTaskMessage = JSON.parse(getStore('dispatchTaskMessage')) ? JSON.parse(getStore('dispatchTaskMessage')) : null;
+      state.dispatchTaskMessage = JSON.parse(getStore('currentDispatchTaskMessage')) ? JSON.parse(getStore('currentDispatchTaskMessage')) : null;
 			return state.dispatchTaskMessage
     },
     dispatchTaskTransferIdList: (state) => {
@@ -32,15 +32,15 @@ export default {
 			return state.isCoerceTakePhoto
     },
     isCompleteSweepCode: (state) => {
-      state.isCompleteSweepCode = JSON.parse(getStore('isCompleteSweepCode')) ? JSON.parse(getStore('isCompleteSweepCode')) : [];
+      state.isCompleteSweepCode = JSON.parse(getStore('completeDispatchSweepCodeInfo')) ? JSON.parse(getStore('completeDispatchSweepCodeInfo'))['sweepCodeInfo'] : [];
 			return state.isCompleteSweepCode
     },
     isDispatchTaskFirstSweepCode: (state) => {
-      state.isDispatchTaskFirstSweepCode = getStore('isDispatchTaskFirstSweepCode') ? getStore('isDispatchTaskFirstSweepCode') === 'false' ? false : true : true;
+      state.isDispatchTaskFirstSweepCode = getStore('isDispatchFirstSweepCode') ? getStore('isDispatchFirstSweepCode') === 'false' ? false : true : true;
 			return state.isDispatchTaskFirstSweepCode
     },
     isCompletePhotoList: (state) => {
-      state.isCompletePhotoList = JSON.parse(getStore('isCompletePhotoList')) ? JSON.parse(getStore('isCompletePhotoList')) : [];
+      state.isCompletePhotoList = JSON.parse(getStore('completPhotoInfo')) ? JSON.parse(getStore('completPhotoInfo'))['photoInfo'] : [];
 			return state.isCompletePhotoList
     },
     isBack: (state) => {
@@ -64,7 +64,7 @@ export default {
 			return state.showEndTaskBtn
     },
     isCompleteSweepCodeDestinationList: (state) => {
-      state.isCompleteSweepCodeDestinationList = JSON.parse(getStore('isCompleteSweepCodeDestinationList')) ? JSON.parse(getStore('isCompleteSweepCodeDestinationList')) : [];
+      state.isCompleteSweepCodeDestinationList = JSON.parse(getStore('completeDispatchSweepCodeDestinationInfo')) ? JSON.parse(getStore('completeDispatchSweepCodeDestinationInfo'))['sweepCodeInfo'] : [];
 			return state.isCompleteSweepCodeDestinationList
     },
     isFreshDispatchTaskPage: (state) => {
@@ -72,7 +72,7 @@ export default {
 			return state.isFreshDispatchTaskPage
     },
     currentDepartmentNumber: (state) => {
-      state.currentDepartmentNumber = JSON.parse(getStore('currentDepartmentNumber')) ? JSON.parse(getStore('currentDepartmentNumber')) : [];
+      state.currentDepartmentNumber = JSON.parse(getStore('completDepartmentNumber')) ? JSON.parse(getStore('completDepartmentNumber'))['number'] : [];
 			return state.currentDepartmentNumber
     },
     photoAreaBoxShow: (state) => {
@@ -84,7 +84,7 @@ export default {
 			return state.isCallDispatchSweepcodeMethod
     },
     isCompleteDispatchIssuePhotoList: (state) => {
-      state.isCompleteDispatchIssuePhotoList = JSON.parse(getStore('isCompleteDispatchIssuePhotoList')) ? JSON.parse(getStore('isCompleteDispatchIssuePhotoList')) : [];
+      state.isCompleteDispatchIssuePhotoList = JSON.parse(getStore('completdispatchIssuePhotoInfo')) ? JSON.parse(getStore('completdispatchIssuePhotoInfo'))['photoInfo'] : [];
 			return state.isCompleteDispatchIssuePhotoList
     }
   },
@@ -92,7 +92,7 @@ export default {
     // 改变页面标题
     changeTitleTxt (state,payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('navTopTitle', payLoad.tit);
+				setStore('currentTitle', payLoad.tit);
 				state.navTopTitle = payLoad.tit
 			}
     },
@@ -100,7 +100,7 @@ export default {
     // 改变调度任务信息状态
     changeDispatchTaskMessage (state,payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('dispatchTaskMessage', payLoad.DtMsg);
+				setStore('currentDispatchTaskMessage', payLoad.DtMsg);
 				state.dispatchTaskMessage = payLoad.DtMsg
 			}
     },
@@ -151,28 +151,28 @@ export default {
     //改变是否完成扫码的状态(出发地和单一目的地的id)
     changeisCompleteSweepCode (state,payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('isCompleteSweepCode', payLoad);
+				setStore('completeDispatchSweepCodeInfo', {sweepCodeInfo: payLoad});
 				state.isCompleteSweepCode = payLoad
 			}
     },
     //改变是否完成非单一目的地扫码的状态
     changeIsCompleteSweepCodeDestinationList (state,payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('isCompleteSweepCodeDestinationList', payLoad);
+				setStore('completeDispatchSweepCodeDestinationInfo', {sweepCodeInfo: payLoad});
 				state.isCompleteSweepCodeDestinationList = payLoad
 			}
     },
     //改变是否首次扫码的状态
     changeIsDispatchTaskFirstSweepCode (state,payLoad) {
       if (payLoad != 'null') {
-				setStore('isDispatchTaskFirstSweepCode', payLoad);
+				setStore('isDispatchFirstSweepCode', payLoad);
 				state.isDispatchTaskFirstSweepCode = payLoad
 			}
     },
     //改变完成上传的照片
-     changeIsCompletePhotoList (state,payLoad) {
+     changeTransDispatchIsCompletePhotoList (state,payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('isCompletePhotoList', payLoad);
+				setStore('completPhotoInfo', { photoInfo: payLoad });
 				state.isCompletePhotoList = payLoad
 			}
     },
@@ -192,7 +192,7 @@ export default {
     },
     //改变是否是单一目的地状态
     changeIsSingleDestination (state,payLoad) {
-      if (payLoad && payLoad != 'null') {
+      if (payLoad != 'null') {
 				setStore('isSingleDestination', payLoad);
 				state.isSingleDestination = payLoad
 			}
@@ -206,7 +206,7 @@ export default {
     },
     // 改变是否刷新任务页的状态
     changeIsFreshDispatchTaskPage (state,payLoad) {
-      if (payLoad && payLoad != 'null') {
+      if (payLoad != 'null') {
 				setStore('isFreshDispatchTaskPage', payLoad);
 				state.isFreshDispatchTaskPage = payLoad
 			}
@@ -214,7 +214,7 @@ export default {
     // 改变当前科室标号状态
     changeCurrentDepartmentNumber (state,payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('currentDepartmentNumber', payLoad);
+				setStore('completDepartmentNumber', { number: payLoad});
 				state.currentDepartmentNumber = payLoad
 			}
     },
@@ -235,7 +235,7 @@ export default {
     // 改变已完成上传图片的状态
     changeIsCompleteDispatchIssuePhotoList (state, payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('isCompleteDispatchIssuePhotoList', payLoad);
+				setStore('completdispatchIssuePhotoInfo', { photoInfo: payLoad});
 				state.isCompleteDispatchIssuePhotoList = payLoad
 			}
     },

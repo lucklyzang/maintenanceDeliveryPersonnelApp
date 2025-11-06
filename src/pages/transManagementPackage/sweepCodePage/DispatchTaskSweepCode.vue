@@ -212,7 +212,7 @@ export default {
       'changeIsFreshDispatchTaskPage',
       'changeisCompleteSweepCode',
       'changeIsDispatchTaskFirstSweepCode',
-      'changeIsCompletePhotoList',
+      'changeIsTransDispatchTaskCompletePhotoList',
       'changeCurrentElectronicSignature',
       'changeShowEndTaskBtn',
       'changeIsCompleteSweepCodeDestinationList',
@@ -397,7 +397,7 @@ export default {
           }
         )
       };
-      this.changeIsCompletePhotoList(temporaryPhotoList);
+      this.changeIsTransDispatchTaskCompletePhotoList(temporaryPhotoList);
       setStore('completPhotoInfo', {"photoInfo": temporaryPhotoList});
       // this.viewPhoto()
     },
@@ -448,7 +448,7 @@ export default {
           // 上传成功后,清除存储的照片
           if(this.photoAreaBoxShow) {
             let temporaryInfo = deepClone(this.isCompletePhotoList.filter((item) => {return item['taskId'] != this.taskId}));
-            this.changeIsCompletePhotoList(temporaryInfo);
+            this.changeIsTransDispatchTaskCompletePhotoList(temporaryInfo);
             setStore('completPhotoInfo', {"photoInfo": temporaryInfo});
             // 判断是否需要签字
             this.judgeIsSignature();

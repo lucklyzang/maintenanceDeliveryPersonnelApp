@@ -65,7 +65,7 @@
   import { formatTime, setStore, getStore, removeStore, IsPC, changeArrIndex, removeAllLocalStorage, repeArray } from '@/common/js/utils'
   let windowTimer
   export default {
-    name: 'Home',
+    name: 'ProjectHome',
     components:{
       HeaderTop,
       NoData,
@@ -108,15 +108,15 @@
         this.gotoURL(() => {
         })
       };
-      // this.temporaryNumList = this.newTaskName;
+      // this.temporaryNumList = this.newProjectTaskName;
       // 获取任务数量
-      if (!this.globalTimer) {
+      if (!this.projectGlobalTimer) {
         windowTimer = window.setInterval(() => {
           if (this.isTimeoutContinue) {
             setTimeout(this.queryNewWork(this.proId, this.workerId), 0);
-            this.changeGlobalTimer(windowTimer)
+            this.changeProjectGlobalTimer(windowTimer)
           } else {
-            this.changeGlobalTimer(null)
+            this.changeProjectGlobalTimer(null)
           }
         }, 3000)
       };
@@ -131,10 +131,11 @@
       ...mapGetters([
         'navTopTitle',
         'userInfo',
-        'globalTimer',
-        'newTaskName',
+        'projectGlobalTimer',
+        'newProjectTaskName',
         'chooseHospitalArea',
-        'userType'
+        'userType',
+        'appPermission'
       ]),
       name() {
 			  return this.userInfo['worker']['name']
@@ -173,8 +174,8 @@
         'changeIsFreshRepairsWorkOrderPage',
         'changeIsFreshDepartmentServicePage',
         'changeIsFreshDeviceServicePage',
-        'changeGlobalTimer',
-        'changeNewTaskList'
+        'changeProjectGlobalTimer',
+        'changeNewProjectTaskList'
       ]),
 
        // 跳转到首页
@@ -184,14 +185,14 @@
 
       // 控制模块显示
       controlModuleShow () {
-        if (this.userInfo['extendData']) {
-          if (!this.userInfo['extendData']['projectDisp']) {
+        if (this.appPermission) {
+          if (!this.appPermission['projectDisp']) {
             this.taskList = this.taskList.filter((item) => { return item.tit != '报修工单'})
           };
-          if (!this.userInfo['extendData']['projectAssgin'] || this.userInfo['extendData']['projectAudit']) {
+          if (!this.appPermission['projectAssgin'] || this.appPermission['projectAudit']) {
             this.taskList = this.taskList.filter((item) => { return item.tit != '调度管理'})
           };
-          if (this.userInfo['extendData']['projectAudit']) {
+          if (this.appPermission['projectAudit']) {
             this.taskList = this.taskList.filter((item) => { return item.tit != '自主报修'})
           }
         }  
@@ -239,10 +240,10 @@
             this.isTimeoutContinue = true;
             Object.keys(res.data.data).forEach((item) => {
               if (item != "all" && res.data.data[item] == true) {
-                this.temporaryNumList = this.newTaskName;
+                this.temporaryNumList = this.newProjectTaskName;
                 this.temporaryNumList.push(item);
                 // 新任务存入vuex中
-                this.changeNewTaskList(repeArray(this.temporaryNumList));
+                this.changeNewProjectTaskList(repeArray(this.temporaryNumList));
                 // 新任务存入localStore中
                 setStore('newTaskList',{taskName:repeArray(this.temporaryNumList)});
                 //更新任务数量
@@ -282,7 +283,7 @@
       // 是否存在指定任务
       isExist (item) {
         let flag;
-        if (this.newTaskName.indexOf(this.taskTypeTransferLetter(item))!= -1) {
+        if (this.newProjectTaskName.indexOf(this.taskTypeTransferLetter(item))!= -1) {
           flag = true
         } else {
           flag = false
@@ -311,12 +312,12 @@
 
       // 任务类型点击事件
       taskClickEvent (item,index) {
-        let currentIndex = this.newTaskName.indexOf(this.taskTypeTransferLetter(item.tit));
-        this.temporaryNumList = this.newTaskName;
+        let currentIndex = this.newProjectTaskName.indexOf(this.taskTypeTransferLetter(item.tit));
+        this.temporaryNumList = this.newProjectTaskName;
         if (item.tit == '报修工单') {
           if (currentIndex != -1) {
             this.temporaryNumList.splice(index,1);
-            this.changeNewTaskList(this.temporaryNumList);
+            this.changeNewProjectTaskList(this.temporaryNumList);
             setStore('newTaskList',{taskName:this.temporaryNumList})
           };
           this.changeIsFreshRepairsWorkOrderPage(true);
@@ -326,7 +327,7 @@
         } else if (item.tit == '设备巡检') {
           if (currentIndex != -1) {
             this.temporaryNumList.splice(index,1);
-            this.changeNewTaskList(this.temporaryNumList);
+            this.changeNewProjectTaskList(this.temporaryNumList);
             setStore('newTaskList',{taskName:this.temporaryNumList})
           };
           this.changeIsFreshDeviceServicePage(true);
@@ -336,7 +337,7 @@
         } else if (item.tit == '区域巡检') {
           if (currentIndex != -1) {
             this.temporaryNumList.splice(index,1);
-            this.changeNewTaskList(this.temporaryNumList);
+            this.changeNewProjectTaskList(this.temporaryNumList);
             setStore('newTaskList',{taskName:this.temporaryNumList})
           };
           this.changeIsFreshDepartmentServicePage(true);
@@ -362,89 +363,6 @@
           this.changeTitleTxt({tit:'个人资料'});
           setStore('currentTitle','个人资料')
         }
-      },
-
-      // 判断每种任务是否收集完成
-      judgeTaskComplete () {
-        // 重新存入用户信息
-        if (getStore('userInfo')) {
-          this.$store.commit('storeUserInfo',JSON.parse(getStore('userInfo')));
-        };
-        if (getStore('userType')) {
-          this.$store.commit('changeUserType',getStore('userType'));
-        };
-        // 重新存入当前标题
-        if (getStore('currentTitle')) {
-          this.$store.commit('changeTitleTxt', {tit: getStore('currentTitle')});
-        };
-        // 重新存入请求token
-        if (getStore('questToken')) {
-          this.$store.commit('changeToken', getStore('questToken'));
-        };
-        // 重新存入新任务列表
-        if (getStore('newTaskList')) {
-          this.$store.commit('changeNewTaskList',JSON.parse(getStore('newTaskList'))['taskName']);
-        };
-        // 重新存入当前报修工单信息
-        if (getStore('repairsWorkOrderMsg')) {
-          this.$store.commit('changeRepairsWorkOrderMsg', JSON.parse(getStore('repairsWorkOrderMsg')));
-        };
-        // 重新存入当前报修工单上传的图片
-        if (getStore('completPhotoInfo')) {
-          this.$store.commit('changeIsCompletePhotoList', JSON.parse(getStore('completPhotoInfo'))['photoInfo']);
-        };
-        // 重新存入当前是否填写过耗材
-        if (getStore('isFillMaterialList')) {
-          this.$store.commit('changeisFillMaterialList', JSON.parse(getStore('isFillMaterialList'))['number']);
-        };
-        // 重新存入科室巡检信息
-        if (getStore('departmentServiceMsg')) {
-          this.$store.commit('changeDepartmentServiceMsg', JSON.parse(getStore('departmentServiceMsg')));
-        };
-        // 重新存入设备巡检信息
-        if (getStore('deviceServiceMsg')) {
-          this.$store.commit('changeDeviceServiceMsg', JSON.parse(getStore('deviceServiceMsg')));
-        };
-        // 重新存入科室巡检扫码校验通过的科室编号
-        if (getStore('isDepartmentServiceVerifySweepCode')) {
-          this.$store.commit('changeIsDepartmentServiceVerifySweepCode', JSON.parse(getStore('isDepartmentServiceVerifySweepCode'))['sweepCodeInfo']);
-        };
-        // 重新存入当前科室巡检扫码校验通过的科室编号
-        if (getStore('isCurrentDepartmentServiceVerifySweepCode')) {
-          this.$store.commit('changeIsCurrentDepartmentServiceVerifySweepCode', JSON.parse(getStore('isCurrentDepartmentServiceVerifySweepCode'))['number']);
-        };
-        // 重新存入当前进行巡检的科室id
-        if (getStore('departmentServiceId')) {
-          this.$store.commit('changeDepartmentServiceOfficeId',getStore('departmentServiceId'))
-        };
-        // 重新存入完成巡检任务的科室编号
-        if (getStore('isCompleteDepartmentServiceOfficeInfo')) {
-          this.$store.commit('changeCompleteDepartmentServiceOfficeInfo',JSON.parse(getStore('isCompleteDepartmentServiceOfficeInfo'))['sweepCodeInfo'])
-        };
-        // 重新存入科室巡检当前点击的检查项id
-        if (getStore('checkedItemId')) {
-          this.$store.commit('changeCurrentDepartmentServiceCheckedItemId', JSON.parse(getStore('checkedItemId')));
-        };
-        // 重新存入完成巡检任务中检查项上报的id
-        if (getStore('isCompleteDepartmentServiceCheckedItemList')) {
-          this.$store.commit('changeCompleteDepartmentServiceCheckedItemList',JSON.parse(getStore('isCompleteDepartmentServiceCheckedItemList'))['sweepCodeInfo'])
-        };
-        // 重新存入设备巡检中能耗录入扫码校验通过的当前科室id
-        if (getStore('isCurrentDeviceCopyServiceVerifySweepCode')) {
-          this.$store.commit('changeIsCurrentDeviceCopyServiceVerifySweepCode', JSON.parse(getStore('isCurrentDeviceCopyServiceVerifySweepCode'))['number']);
-        };
-        // 重新存入设备巡检中能耗录入扫码校验通过的当前科室编号
-        if (getStore('energyDepartmentService')) {
-          this.$store.commit('changeCurrentDeviceCopyVerifySweepCodeDepNumber', getStore('energyDepartmentService'));
-        };
-        // 重新存入当前科室设备能耗记录信息列表
-        if (getStore('energyRecordList')) {
-          this.$store.commit('changeEnergyRecordList',JSON.parse(getStore('energyRecordList'))['energyRecord'])
-        };
-        // 重新存入完成能耗录入的科室编号信息
-        if (getStore('isCompleteDeviceEnergyRecordServiceOfficeInfo')) {
-          this.$store.commit('changeCompleteDeviceEnergyRecordServiceOfficeInfo',JSON.parse(getStore('isCompleteDeviceEnergyRecordServiceOfficeInfo'))['sweepCodeInfo'])
-        };
       }
     }
   }

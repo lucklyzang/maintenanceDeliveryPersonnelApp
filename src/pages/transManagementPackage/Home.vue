@@ -1100,7 +1100,7 @@
   import medicalCollectCheckedPng from '@/common/images/home/medical-collect-checked.png'
   let windowTimer
   export default {
-    name: 'home',
+    name: 'TransHome',
     components:{
       HeaderTop,
       NoData,
@@ -1208,8 +1208,7 @@
           this.leftDownShow = false;
         }
       });
-      // 查询任务数量
-      if (this.userTypeId) {
+      if (this.userTypeId == 0) {
         this.isHaveTask = this.newTaskName;
         this.parallelFunction(this.taskTypeTransfer(this.newTaskName));
         this.judgeTaskComplete();
@@ -1236,7 +1235,7 @@
     watch: {
       userTypeId: {
         handler(newName, oldName) {
-          if (!newName) {
+          if (newName == 0) {
             this.workerShow = true
           } else {
             this.workerShow = false
@@ -1307,13 +1306,14 @@
         'isFreshHomePage',
         'templateType',
         'isNewCircle',
-        'isMedicalMan'
+        'isMedicalMan',
+        'appPermission'
       ]),
       sex () {
         return this.userInfo['worker']['extendData']['sex']
       },
       userTypeId () {
-        return this.isMedicalMan
+        return 0
       },
       userName() {
 			  return this.userInfo['worker']['name']
@@ -1375,11 +1375,11 @@
 
       // 控制模块显示
       controlModuleShow () {
-        if (this.userInfo['extendData']) {
-          if (!this.userInfo['extendData']['dispTask']) {
+        if (this.appPermission) {
+          if (!this.appPermission['dispTask']) {
             this.taskList = this.taskList.filter((item) => { return item.tit != '调度任务'})
           };
-          if (!this.userInfo['extendData']['dispAssgin'] && !this.userInfo['extendData']['bookAssgin']) {
+          if (!this.appPermission['dispAssgin'] && !this.appPermission['bookAssgin']) {
             this.taskList = this.taskList.filter((item) => { return item.tit != '任务调度'})
           }
         }  
@@ -1912,7 +1912,7 @@
         };
         // 重新存入调度任务完成上传的照片
         if (getStore('completPhotoInfo')) {
-          this.$store.commit('changeIsCompletePhotoList', JSON.parse(getStore('completPhotoInfo'))['photoInfo']);
+          this.$store.commit('changeIsTransDispatchTaskCompletePhotoList', JSON.parse(getStore('completPhotoInfo'))['photoInfo']);
         };
         // 重新存入调度任务上传的问题图片
         if (getStore('completdispatchIssuePhotoInfo')) {

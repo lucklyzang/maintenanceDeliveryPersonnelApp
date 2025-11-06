@@ -9,7 +9,6 @@ export default {
 			return state.schedulingTaskType
     },
     schedulingTaskDetails: (state) => {
-      state.schedulingTaskDetails = JSON.parse(getStore('schedulingTaskDetails')) ? JSON.parse(getStore('schedulingTaskDetails')) : {};
 			return state.schedulingTaskDetails
     },
     operateBtnClickRecord: (state) => {
@@ -21,11 +20,9 @@ export default {
 			return state.operateBtnClickRecord
     },
     temporaryStorageCreateDispathTaskMessage: (state) => {
-      state.temporaryStorageCreateDispathTaskMessage = JSON.parse(getStore('temporaryStorageCreateDispathTaskMessage')) ? JSON.parse(getStore('temporaryStorageCreateDispathTaskMessage')) : {};
 			return state.temporaryStorageCreateDispathTaskMessage
     },
     temporaryStorageCreateAppointTaskMessage: (state) => {
-      state.temporaryStorageCreateAppointTaskMessage = JSON.parse(getStore('temporaryStorageCreateAppointTaskMessage')) ? JSON.parse(getStore('temporaryStorageCreateAppointTaskMessage')) : {};
 			return state.temporaryStorageCreateAppointTaskMessage
     }
   },
@@ -43,7 +40,6 @@ export default {
     // 保存任务调度详情
     changeSchedulingTaskDetails (state, payLoad) {
       if (payLoad&& payLoad != 'null') {
-				setStore('schedulingTaskDetails', payLoad);
 				state.schedulingTaskDetails = payLoad
 			}
     },
@@ -59,7 +55,6 @@ export default {
     // 保存暂存创建调度任务的信息
     changeTemporaryStorageCreateDispathTaskMessage (state, payLoad) {
       if (payLoad&& payLoad != 'null') {
-				setStore('temporaryStorageCreateDispathTaskMessage', payLoad);
 				state.temporaryStorageCreateDispathTaskMessage = payLoad
 			}
     },
@@ -67,7 +62,6 @@ export default {
     // 保存暂存创建预约任务的信息
     changeTemporaryStorageCreateAppointTaskMessage (state, payLoad) {
       if (payLoad&& payLoad != 'null') {
-				setStore('temporaryStorageCreateAppointTaskMessage', payLoad);
 				state.temporaryStorageCreateAppointTaskMessage = payLoad
 			}
     },

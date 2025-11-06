@@ -859,6 +859,19 @@ export const removeAllLocalStorage = () => {
   removeStore('energyRecordList'),
   removeStore('isCurrentDeviceCopyServiceVerifySweepCode'),
   removeStore('isCompleteDeviceEnergyRecordServiceOfficeInfo')
+
+  // 保洁
+  removeStore('permissionInfo');
+  removeStore('roleNameList');
+  removeStore('changeOverDueWay');
+  removeStore('currentCleanTaskName');
+  removeStore('currentCleanTaskDateVlue');
+  removeStore('cleanTaskDetails');
+  removeStore('storageForthwithTaskMessage');
+  removeStore('storageSpecialTaskMessage');
+  removeStore('chooseProject');
+  removeStore('attendanceTypeDetailsMessage');
+  removeStore('personnelStatisticsDetailsMessage')
 }
 
 /*
