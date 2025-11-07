@@ -84,7 +84,9 @@
 				'statusBarHeight',
 				'navigationBarHeight',
 				'chooseHospitalArea',
-				'projectGlobalTimer'
+				'projectGlobalTimer',
+				'globalTimer',
+				'equipmentPatrolGlobalTimer'
 			]),
 			userName() {
 			  return this.userInfo['worker']['name']
@@ -140,12 +142,35 @@
 				this.infoText = '退出登录中...';
 				userSignOut(this.proId,this.workerId).then((res) => {
 					if ( res && res.data.code == 200) {
-            		// 清空store和localStorage
-					 	if(this.projectGlobalTimer) {window.clearInterval(this.globalTimer)};
+						// 清空store和localStorage
+						if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+						if(this.globalTimer) {window.clearInterval(this.globalTimer)};
+						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
 						removeAllLocalStorage();
 						store.dispatch('resetAutoRepairTaskStore');
 						store.dispatch('resetLoginState');
-					  this.$router.push({path: "/"});
+						store.dispatch('resetCleanManagementStore');
+						store.dispatch('resetEquipmentPatroLoginStateEvent');
+						store.dispatch('resetPatrolTaskStore');
+						store.dispatch('resetSpotCheckTaskStore');
+						store.dispatch('resetSpotTaskDispatchingManagementStore');
+						store.dispatch('resetDepartmentServiceStateEvent');
+						store.dispatch('resetDeviceServiceStateEvent');
+						store.dispatch('resetRepairsWorkOrderStateEvent');
+						store.dispatch('resetTaskSchedulingStateEvent');
+						store.dispatch('resetTransAppointTaskStateEvent');
+						store.dispatch('resetTransCatchComponentsStateEvent');
+						store.dispatch('resetTransCirculationTaskStateEvent');
+						store.dispatch('resetTransDispatchTaskStateEvent');
+						store.dispatch('resetTransMedicalTaskStateEvent');
+						store.dispatch('resetTransTaskSchedulingStateEvent');
+						store.dispatch('resetTransTransLoginStateEvent');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetRegisterStore');
+						store.dispatch('resetGuestbookStore');
+						store.dispatch('resetSecurityPatrolLoginState');
+						store.dispatch('resetSecurityPatrolTaskStore');
+						this.$router.push({path: "/"});
 					} else {
             			this.modalShow = true;
 						this.modalContent = `${res.data.msg}`

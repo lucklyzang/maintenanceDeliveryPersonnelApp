@@ -104,7 +104,97 @@ const AttendanceStatistics = () =>
 const AttendanceTypeDetails = () =>
     import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/AttendanceTypeDetails')
 const PersonnelStatisticsDetails = () =>
-    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/PersonnelStatisticsDetails')               
+    import ('@/pages/cleanManagementPackage/environmentalManagement/cleaningManagement/PersonnelStatisticsDetails')
+// 设备巡检
+const EquipmentPatrolHome = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/Home')
+const PatrolTaskElectronicSignaturePage = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/PatrolTaskElectronicSignaturePage')
+const EquipmentPatrolDetails = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/EquipmentPatrolDetails')
+const EquipmentChecklist = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/EquipmentChecklist')
+const PatrolAbnormalCheckItemEventList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/PatrolAbnormalCheckItemEventList')
+const PatrolAbnormalRecord = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/PatrolAbnormalRecord')
+const HistoryEquipmPatroLTaskList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/HistoryEquipmPatroLTaskList')
+const HistoryEquipmentPatrolDetails = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/HistoryEquipmentPatrolDetails')
+const HistoryEquipmentChecklist = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/HistoryEquipmentChecklist')
+const HistoryPatrolAbnormalCheckItemEventList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/HistoryPatrolAbnormalCheckItemEventList')
+const HistoryPatrolAbnormalRecord = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/HistoryPatrolAbnormalRecord')
+const EditPatrolAbnormalRecord = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/patrolTask/EditPatrolAbnormalRecord')
+const EquipmentSpotCheck = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotCheckTask/EquipmentSpotCheck')
+const EquipmentSpotCheckTaskDetails = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotCheckTask/EquipmentSpotCheckTaskDetails')
+const SpotAbnormalRecord = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotCheckTask/SpotAbnormalRecord')
+const SpotAbnormalCheckItemEventList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotCheckTask/SpotAbnormalCheckItemEventList')
+const HistoryEquipmSpotTaskList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotCheckTask/HistoryEquipmSpotTaskList')
+const HistoryEquipmentSpotCheckTaskDetails = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotCheckTask/HistoryEquipmentSpotCheckTaskDetails')
+const HistorySpotAbnormalCheckItemEventList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotCheckTask/HistorySpotAbnormalCheckItemEventList')
+const HistorySpotAbnormalRecord = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotCheckTask/HistorySpotAbnormalRecord')
+const EquipmentSpotList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotTaskDispatchingManagement/EquipmentSpotList')
+const CreateSpotTask = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotTaskDispatchingManagement/CreateSpotTask')
+const EditSpotTask = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/spotTaskDispatchingManagement/EditSpotTask')
+const EquipmentList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/equipmentStatusManagement/EquipmentList')
+// 安全巡更
+const SecurityPatrolHome = () =>
+    import ('@/pages/securityPatrolManagementPackage/Home')
+const BeaconList = () =>
+  import ('@/pages/securityPatrolManagementPackage/BeaconList')
+const PatrolTaskElectronicSignaturePage = () =>
+    import ('@/pages/securityPatrolManagementPackage/patrolTask/PatrolTaskElectronicSignaturePage')
+const EventRegisterElectronicSignaturePage = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/EventRegisterElectronicSignaturePage')
+const PatrolTasklist = () =>
+    import ('@/pages/securityPatrolManagementPackage/patrolTask/PatrolTasklist')
+const WorkOrderDetails = () =>
+    import ('@/pages/securityPatrolManagementPackage/patrolTask/WorkOrderDetails')
+const ProblemRecord = () =>
+    import ('@/pages/securityPatrolManagementPackage/patrolTask/ProblemRecord')
+const AreaPatrolDetails = () =>
+    import ('@/pages/securityPatrolManagementPackage/patrolTask/AreaPatrolDetails')
+const EventList = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/EventList')
+const RepairsRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/RepairsRegister')
+const OtherRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/OtherRegister')
+const ClaimRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/ClaimRegister')
+const GuestBook = () =>
+    import ('@/pages/securityPatrolManagementPackage/guestBookPage/GuestBook')
+const PostMessage = () =>
+    import ('@/pages/securityPatrolManagementPackage/guestBookPage/postMessage')
+const HistoryClaimRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/HistoryClaimRegister')
+const MoreHistoryClaimRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/MoreHistoryClaimRegister')
+const HistoryRepairsRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/HistoryRepairsRegister')
+const MoreHistoryRepairsRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/MoreHistoryRepairsRegister')
+const HistoryOtherRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/HistoryOtherRegister')
+const MoreHistoryOtherRegister = () =>
+    import ('@/pages/securityPatrolManagementPackage/eventPage/MoreHistoryOtherRegister')                   
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -478,7 +568,8 @@ let baseRoute = [{
     {
         path: '/cleaningTask',
         name: 'cleaningTask',
-        component: CleaningTask
+        component: CleaningTask,
+        meta: { index: 4 }
     },
     {
         path: '/cleanTaskList',
@@ -495,22 +586,26 @@ let baseRoute = [{
     {
         path: '/forthwithCleaningTaskDetails',
         name: 'forthwithCleaningTaskDetails',
-        component: ForthwithCleaningTaskDetails
+        component: ForthwithCleaningTaskDetails,
+        meta: { index: 5 }
     },
     {
         path: '/choosePosition',
         name: 'choosePosition',
-        component: ChoosePosition
+        component: ChoosePosition,
+        meta: { index: 5 }
     },
     {
         path: '/specialCleaningTaskDetails',
         name: 'specialCleaningTaskDetails',
-        component: SpecialCleaningTaskDetails
+        component: SpecialCleaningTaskDetails,
+        meta: { index: 5 }
     },
     {
         path: '/pollingTaskDetails',
         name: 'pollingTaskDetails',
-        component: PollingTaskDetails
+        component: PollingTaskDetails,
+        meta: { index: 5 }
     },
     {
         path: '/pollingTaskDepartmentDetails',
@@ -530,7 +625,8 @@ let baseRoute = [{
     {
         path: '/scanQRCode',
         name: 'scanQRCode',
-        component: ScanQRCode
+        component: ScanQRCode,
+        meta: { index: 3 }
     },
     {
         path: '/attendanceManagement',
@@ -553,8 +649,253 @@ let baseRoute = [{
     {
         path: '/personnelStatisticsDetails',
         name: 'personnelStatisticsDetails',
-        component: PersonnelStatisticsDetails
-    }
+        component: PersonnelStatisticsDetails,
+        meta: { index: 5 }
+    },
+
+    // 设备巡检路由
+    {
+      path: '/equipmentPatrolHome',
+      name: 'equipmentPatrolHome',
+      component: EquipmentPatrolHome,
+      meta: { index: 3 }
+  },
+  {
+      path: '/patrolTaskElectronicSignaturePage',
+      name: 'patrolTaskElectronicSignaturePage',
+      component: PatrolTaskElectronicSignaturePage
+  },
+  {
+      path: '/equipmentPatrolDetails',
+      name: 'equipmentPatrolDetails',
+      component: EquipmentPatrolDetails,
+      meta: { index: 4 }
+  },
+  {
+      path: '/equipmentChecklist',
+      name: 'equipmentChecklist',
+      component: EquipmentChecklist,
+      meta: { index: 5 }
+  },
+  {
+      path: '/patrolAbnormalCheckItemEventList',
+      name: 'patrolAbnormalCheckItemEventList',
+      component: PatrolAbnormalCheckItemEventList
+  },
+  {
+      path: '/historyEquipmPatroLTaskList',
+      name: 'historyEquipmPatroLTaskList',
+      component: HistoryEquipmPatroLTaskList,
+      meta: { index: 5 }
+  },
+  {
+      path: '/historyEquipmentPatrolDetails',
+      name: 'historyEquipmentPatrolDetails',
+      component: HistoryEquipmentPatrolDetails
+  },
+  {
+      path: '/historyEquipmentChecklist',
+      name: 'historyEquipmentChecklist',
+      component: HistoryEquipmentChecklist
+  },
+  {
+      path: '/historyPatrolAbnormalCheckItemEventList',
+      name: 'historyPatrolAbnormalCheckItemEventList',
+      component: HistoryPatrolAbnormalCheckItemEventList
+  },
+  {
+      path: '/historyPatrolAbnormalRecord',
+      name: 'historyPatrolAbnormalRecord',
+      component: HistoryPatrolAbnormalRecord
+  },
+  {
+      path: '/patrolAbnormalRecord',
+      name: 'patrolAbnormalRecord',
+      component: PatrolAbnormalRecord
+  },
+  {
+      path: '/editPatrolAbnormalRecord',
+      name: 'editPatrolAbnormalRecord',
+      component: EditPatrolAbnormalRecord
+  },
+  {
+      path: '/equipmentSpotCheck',
+      name: 'equipmentSpotCheck',
+      component: EquipmentSpotCheck
+  },
+  {
+      path: '/equipmentSpotCheckTaskDetails',
+      name: 'equipmentSpotCheckTaskDetails',
+      component: EquipmentSpotCheckTaskDetails
+  },
+  {
+      path: '/spotAbnormalRecord',
+      name: 'spotAbnormalRecord',
+      component: SpotAbnormalRecord
+  },
+  {
+      path: '/spotAbnormalCheckItemEventList',
+      name: 'spotAbnormalCheckItemEventList',
+      component: SpotAbnormalCheckItemEventList
+  },
+  {
+      path: '/historyEquipmSpotTaskList',
+      name: 'historyEquipmSpotTaskList',
+      component: HistoryEquipmSpotTaskList
+  },
+  {
+      path: '/historyEquipmentSpotCheckTaskDetails',
+      name: 'historyEquipmentSpotCheckTaskDetails',
+      component: HistoryEquipmentSpotCheckTaskDetails
+  },
+  {
+      path: '/historySpotAbnormalCheckItemEventList',
+      name: 'historySpotAbnormalCheckItemEventList',
+      component: HistorySpotAbnormalCheckItemEventList
+  },
+  {
+      path: '/historySpotAbnormalRecord',
+      name: 'historySpotAbnormalRecord',
+      component: HistorySpotAbnormalRecord
+  },
+  {
+      path: '/equipmentSpotList',
+      name: 'equipmentSpotList',
+      component: EquipmentSpotList
+  },
+  {
+      path: '/createSpotTask',
+      name: 'createSpotTask',
+      component: CreateSpotTask
+  },
+  {
+      path: '/editSpotTask',
+      name: 'editSpotTask',
+      component: EditSpotTask
+  },
+  {
+      path: '/equipmentList',
+      name: 'equipmentList',
+      component: EquipmentList,
+      meta: { index: 4 }
+  },
+
+  // 安全巡更
+  {
+    path: '/securityPatrolHome',
+    name: 'securityPatrolHome',
+    component: SecurityPatrolHome
+  },
+  {
+      path: '/beaconList',
+      name: 'beaconList',
+      component: BeaconList
+  },
+  {
+      path: '/patrolTaskElectronicSignaturePage',
+      name: 'patrolTaskElectronicSignaturePage',
+      component: PatrolTaskElectronicSignaturePage
+  },
+  {
+      path: '/eventRegisterElectronicSignaturePage',
+      name: 'eventRegisterElectronicSignaturePage',
+      component: EventRegisterElectronicSignaturePage
+  },
+  {
+      path: '/patrolTasklist',
+      name: 'patrolTasklist',
+      component: PatrolTasklist
+  },
+  {
+      path: '/workOrderDetails',
+      name: 'workOrderDetails',
+      component: WorkOrderDetails
+  },
+  {
+      path: '/problemRecord',
+      name: 'problemRecord',
+      component: ProblemRecord
+  },
+  {
+      path: '/areaPatrolDetails',
+      name: 'areaPatrolDetails',
+      component: AreaPatrolDetails,
+      meta: {
+          keepAlive: true
+      }
+  },
+  {
+      path: '/eventList',
+      name: 'eventList',
+      component: EventList
+
+  },
+  {
+      path: '/repairsRegister',
+      name: 'repairsRegister',
+      component: RepairsRegister
+
+  },
+  {
+      path: '/otherRegister',
+      name: 'otherRegister',
+      component: OtherRegister
+
+  },
+  {
+      path: '/claimRegister',
+      name: 'claimRegister',
+      component: ClaimRegister
+
+  },
+  {
+      path: '/historyClaimRegister',
+      name: 'historyClaimRegister',
+      component: HistoryClaimRegister
+
+  },
+  {
+      path: '/guestBook',
+      name: 'guestBook',
+      component: GuestBook
+
+  },
+  {
+      path: '/postMessage',
+      name: 'postMessage',
+      component: PostMessage
+
+  },
+  {
+      path: '/moreHistoryClaimRegister',
+      name: 'moreHistoryClaimRegister',
+      component: MoreHistoryClaimRegister
+
+  },
+  {
+      path: '/historyRepairsRegister',
+      name: 'historyRepairsRegister',
+      component: HistoryRepairsRegister
+
+  },
+  {
+      path: '/moreHistoryRepairsRegister',
+      name: 'moreHistoryRepairsRegister',
+      component: MoreHistoryRepairsRegister
+
+  },
+  {
+      path: '/historyOtherRegister',
+      name: 'historyOtherRegister',
+      component: HistoryOtherRegister
+
+  },
+  {
+      path: '/moreHistoryOtherRegister',
+      name: 'moreHistoryOtherRegister',
+      component: MoreHistoryOtherRegister
+
+  }
 ];
 let router = new Router({
     routes: baseRoute,

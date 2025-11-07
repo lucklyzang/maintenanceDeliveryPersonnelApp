@@ -36,7 +36,7 @@
 					安全管理
 				</div>
 				<div class="service-management-content">
-					<div class="service-list" v-for="(item,index) in safeList" :key="index" @click="serviceManagementEvent(item,index)">
+					<div class="service-list" v-for="(item,index) in safeList" :key="index" @click="safeManagementEvent(item,index)">
 						<div class="list-top">
 							<img :src="item.url" />
 						</div>
@@ -252,7 +252,7 @@
 				if (item.text == '安全巡更') {
 					this.$router.push({ path: "/transIndex" })
 				} else if (item.text == '设备巡检') {
-					this.$router.push({ path: "/projectCallTask" })
+					this.$router.push({ path: "/equipmentPatrolHome" })
 				}
 			}
 		}

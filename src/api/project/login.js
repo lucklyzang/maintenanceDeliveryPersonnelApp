@@ -37,15 +37,15 @@ export function getWorkerMessage (data) {
 // 获取科室字典值ID
 export function getdepartmentList (proId) {
   return request({
-    url: `department/dict/${proId}`,
+    url: `project/department/dict/${proId}`,
     method: 'get'
   })
 }
 
 // 获取科室字典值编号
-export function getdepartmentListNo (proId) {
+export function getProjectdepartmentListNo (proId) {
   return request({
-    url: `department/dictNo/${proId}`,
+    url: `project/department/dictNo/${proId}`,
     method: 'get'
   })
 }
@@ -53,13 +53,13 @@ export function getdepartmentListNo (proId) {
 // 获取科室字典值
 export function getDepartmentMsg (proId) {
   return request({
-    url: `department/dict/${proId}`,
+    url: `project/department/dict/${proId}`,
     method: 'get'
   })
 }
 
 // 注册channel
-export function registerChannel (data) {
+export function registerProjectChannel (data) {
   return request({
     url: 'project/cloud/register',
     method: 'post',

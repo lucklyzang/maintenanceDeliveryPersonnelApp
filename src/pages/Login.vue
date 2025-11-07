@@ -51,6 +51,7 @@
 <script>
 	import { mapGetters, mapMutations } from 'vuex'
 	import { logIn, getTemplateType, getdepartmentList, getdepartmentListNo,registerChannel, getAppPermission } from '@/api/login.js'
+	import { getProjectdepartmentListNo, registerProjectChannel } from '@/api/project/login.js'
 	import { setStore, getStore, removeStore,IsPC } from '@/common/js/utils'
 	import ScrollSelection from "@/components/ScrollSelection";
   	import Qs from 'qs'
@@ -79,17 +80,30 @@
 				proId: ''
 			}
 		},
-		onReady () {
-		},
 		computed: {
 			...mapGetters([
 				'chooseHospitalArea',
 				'userInfo',
+				'baseURL'
 			])
 		},
-		onShow () {
-			 this.form.username = getStore('userName') ? getStore('userName') : '';
-			 this.form.password = getStore('userPassword') ? getStore('userPassword') : '';
+		mounted () {
+			// 监控键盘弹起
+			// let originalHeight = document.documentElement.clientHeight || document.body.clientHeight;
+			// window.onresize = ()=> {
+			// 	let resizeHeight = document.documentElement.clientHeight || document.body.clientHeight;
+			// 	if (resizeHeight < originalHeight) {
+			// 		return (()=>{
+			// 		this.$refs['bgIconWrapper'].style.cssText='flex:none;height:220px'
+			// 		})()
+			// 	} else {
+			// 		this.$refs['bgIconWrapper'].style.cssText='flex:1;height:0'
+			// 	}
+			// };
+			let me = this;
+			window['setDeviceInfo'] = (val) => {
+				me.setDeviceInfo(val);
+			};
 		},
 		methods: {
 			...mapMutations([
@@ -131,7 +145,7 @@
 				this.showHospitalCampus = false
 			},
 
-			// 获取科室字典id
+			// 获取科室字典id(中央运送)
 			queryDepartmentList () {
 				return new Promise((resolve,reject) => {
 					this.showLoadingHint = true;
@@ -163,7 +177,7 @@
 				})
 			},
 
-			// 获取科室字典编号
+			// 获取科室字典编号(中央运送)
 			queryDepartmentListNo () {
 				return new Promise((resolve,reject) => {
 					this.showLoadingHint = true;
@@ -172,8 +186,8 @@
 					this.showLoadingHint = false;
 					this.infoText = '';
 					if (res && res.data.code == 200) {
-						resolve(res.data.data);
-						setStore('departmentInfoNo', res.data.data);
+							resolve(res.data.data);
+							setStore('departmentInfoNo', res.data.data);
 						} else {
 							reject(res.data.msg);
 							this.$dialog.alert({
@@ -194,7 +208,7 @@
 				})
 			},
 
-			// 注册channel
+			// 注册channel(中央运送)
 			getChannel (data) {
 				return new Promise((resolve,reject) => {
 					this.showLoadingHint = true;
@@ -217,12 +231,12 @@
 				})
 			},
 
-			// 向客户端发送信标服务器地址
+			// 向客户端发送信标服务器地址(中央运送)
 			postUrl (workerId) {
 				return new Promise((resolve,reject) => {
-					let xinbiaoTimer = setTimeout(window.android.setPostUrl(`http://blink.blinktech.cn/trans/workerPositionLog/save/${workerId}`),100);
-					if (window.android.setPostUrl(`http://blink.blinktech.cn/trans/workerPositionLog/save/${workerId}`) == 'success') {
-					resolve(window.android.setPostUrl(`http://blink.blinktech.cn/trans/workerPositionLog/save/${workerId}`));
+					let xinbiaoTimer = setTimeout(window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${this.userInfo['worker'].id}`),100);
+					if (window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${this.userInfo['worker'].id}`) == 'success') {
+					resolve(window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${this.userInfo['worker'].id}`));
 					clearTimeout(xinbiaoTimer)
 					}
 				})
@@ -318,8 +332,8 @@
 									this.showHospitalCampus = true;
 								} else {
 									this.storeChooseHospitalArea({
-										text: this.userInfo['worker']['hospitalList'][0]['id'],
-										value: this.userInfo['worker']['hospitalList'][0]['name'],
+										value: this.userInfo['worker']['hospitalList'][0]['id'],
+										text: this.userInfo['worker']['hospitalList'][0]['name'],
 										id: 0
 									});
 									this.loginHandle()
@@ -365,17 +379,80 @@
 			  })
 			},
 
+			// 获取科室信息字典值(工程维修)
+			queryProjectDepartmentMsg (proId) {
+				this.showLoadingHint = true;
+				this.infoText = '查询中···';
+				return new Promise((resolve,reject) => {
+					getProjectdepartmentListNo(proId).then((res) => {
+						this.showLoadingHint = false;
+						this.infoText = '';
+						if (res && res.data.code == 200) {
+							resolve(res.data.data)
+						} else {
+							reject(res.data.msg);
+							this.$dialog.alert({
+								message: `${res.data.msg}`,
+								closeOnPopstate: true
+							}).then(() => {})
+						}
+					})
+					.catch((err) => {
+						reject(err);
+						this.showLoadingHint = false;
+						this.infoText = '';
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})
+					})
+				})
+			},
+
+			//获取设备编号(工程维修)
+			getDeviceNumber () {
+				window.android.getDeviceInfo()
+			},
+
+			//获取设备编号回调(工程维修)
+			setDeviceInfo (val) {
+				this.deviceNumber = val.IMEI
+			},
+
+			// 注册channel(工程维修)
+			getProjectChannel (data) {
+				this.showLoadingHint = true;
+				this.infoText = '注册中···';
+				return new Promise((resolve,reject) => {
+					registerProjectChannel(data)
+					.then((res) => {
+						this.showLoadingHint = false;
+						this.infoText = '';
+						resolve()
+					})
+					.catch((err) => {
+						reject(err);
+						this.showLoadingHint = false;
+						this.infoText = '';
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})
+					})
+				})
+			},
+
 			// 登录事件
 			async loginHandle () {
 				// 用户身份类别存入store和Locastorage
 				this.changeUserType(0);
 				setStore('userType', 0);
 				if (!IsPC()) {
-					// 注册channel
+					// 注册channel(中央运送)
 					if (window.android.getChannelId()) {
 						try {
 							await this.getChannel({
-								proId: this.queryTemplateType(this.chooseHospitalArea['value']),
+								proId: this.chooseHospitalArea['value'],
 								workerId: this.userInfo['worker'].id,
 								type: 0,
 								channelId: window.android.getChannelId()
@@ -390,7 +467,7 @@
 					} else {
 						this.$toast('未获取到channelId')
 					};
-					// 向客户端发送信标服务器地址
+					// 向客户端发送信标服务器地址(中央运送)
 					try {
 						let xinbiaoInfo = await this.postUrl(this.userInfo['worker'].id);
 					} catch (err) {
@@ -398,6 +475,35 @@
 							message: `${err}`,
 							closeOnPopstate: true
 						}).then(() => {})
+					};
+					// 调取安卓方法发送地址(设备巡检巡检任务信标打卡需要)
+					try {
+						let setUrl = `${this.baseURL}/nblink/hospital/beaconRecord/save/${this.userInfo['worker'].id}?proId=${this.chooseHospitalArea['value']}&system=6`;
+						let res = window.android.setPostUrl(setUrl);
+						if (res != 'success' ) {
+							this.$toast({
+								type: 'fail',
+								message: '设置失败'
+							})
+						}
+					} catch (err) {
+						this.$toast({
+							type: 'fail',
+							message: `${err}`
+						})
+					};
+					// 注册channel(工程维修)
+					if (window.android.getChannelId()) {
+						try {
+							await this.getProjectChannel({proId:this.chooseHospitalArea['value'],workerId:this.userInfo['worker'].id,type:2,channelId:window.android.getChannelId()});
+						} catch (err) {
+							this.$dialog.alert({
+								message: `${err.message}`,
+								closeOnPopstate: true
+							}).then(() => {})
+						}
+					} else {
+						this.$toast('未获取到channelId')
 					}
 				};
 				try {
@@ -407,11 +513,15 @@
 					await this.queryDepartmentList();
 					// 获取科室字典编号
 					await this.queryDepartmentListNo();
-					this.queryTemplateType(this.chooseHospitalArea['value']);
 					// 如果当前登录用户和上次登录用户不一致，则清除循环任务完成标本采集的科室信息
 					if (this.temporaryUsername != this.username) {
 						removeStore('completeDepartmentMessage')
-					}
+					};
+					// 工程维修
+					const resultTwo = await this.queryProjectDepartmentMsg(this.chooseHospitalArea['value']);
+					setStore('departmentMessage', resultTwo);
+					// 查询模板类型
+					this.queryTemplateType(this.chooseHospitalArea['value']);
 				} catch (err) {
 					this.$dialog.alert({
 						message: `${err}`,

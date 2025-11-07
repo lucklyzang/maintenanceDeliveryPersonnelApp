@@ -178,7 +178,7 @@
         'changeNewProjectTaskList'
       ]),
 
-       // 跳转到首页
+      // 跳转到首页
       backTo () {
         this.$router.push({path:'/home'});
       },

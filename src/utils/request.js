@@ -67,7 +67,33 @@ service.interceptors.response.use(
         if (Object.prototype.toString.call(error.response) === '[object Object]') {
             if (error.response.hasOwnProperty('status')) {
                 if (error.response.status === 401) {
+                    store.dispatch('resetAutoRepairTaskStore');
+                    store.dispatch('resetLoginState');
+                    store.dispatch('resetCleanManagementStore');
+                    store.dispatch('resetEquipmentPatroLoginStateEvent');
+                    store.dispatch('resetPatrolTaskStore');
+                    store.dispatch('resetSpotCheckTaskStore');
+                    store.dispatch('resetSpotTaskDispatchingManagementStore');
+                    store.dispatch('resetDepartmentServiceStateEvent');
+                    store.dispatch('resetDeviceServiceStateEvent');
+                    store.dispatch('resetRepairsWorkOrderStateEvent');
+                    store.dispatch('resetTaskSchedulingStateEvent');
+                    store.dispatch('resetTransAppointTaskStateEvent');
+                    store.dispatch('resetTransCatchComponentsStateEvent');
+                    store.dispatch('resetTransCirculationTaskStateEvent');
+                    store.dispatch('resetTransDispatchTaskStateEvent');
+                    store.dispatch('resetTransMedicalTaskStateEvent');
+                    store.dispatch('resetTransTaskSchedulingStateEvent');
+                    store.dispatch('resetTransTransLoginStateEvent');
+                    store.dispatch('resetLoginState');
+                    store.dispatch('resetRegisterStore');
+                    store.dispatch('resetGuestbookStore');
+                    store.dispatch('resetSecurityPatrolLoginState');
+                    store.dispatch('resetSecurityPatrolTaskStore');
                     removeAllLocalStorage();
+                    if(store.getters.globalTimer) {window.clearInterval(store.getters.globalTimer)};
+                    if(store.getters.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+                    if(store.getters.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
                     if (!store.getters.overDueWay) { 
                         Toast({
                             message: 'token已过期,请重新登录',

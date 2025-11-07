@@ -256,7 +256,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["changeIsLogin","storeCurrentCleanTaskName","storeCurrentCleanTaskDateVlue"]),
+    ...mapMutations(["changeIsLogin","storeLocationMessage","changeCatchComponent","storeCurrentCleanTaskName","storeCurrentCleanTaskDateVlue"]),
 
     // 格式化时间
     getNowFormatDate(currentDate,type) {
@@ -417,6 +417,8 @@ export default {
 
     // 新增任务事件
     addTaskEvent () {
+      this.storeLocationMessage([]);
+      this.changeCatchComponent(['dispatchTask']);
       this.$router.push({path: '/addTask'})
     }
   }

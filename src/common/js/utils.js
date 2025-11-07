@@ -810,6 +810,9 @@ export const removeAllLocalStorage = () => {
   removeStore('isLogin');
   removeStore('timeMessage');
   removeStore('ossMessage');
+  removeStore('globalTimer');
+  removeStore('chooseHospitalArea');
+  removeStore('appPermission');
   // 中央运送
   removeStore('currentTitle');
   removeStore('storeOverDueWay');
@@ -850,15 +853,16 @@ export const removeAllLocalStorage = () => {
 
   // 工程维护
   removeStore('newTaskList');
-  removeStore('completPhotoInfo'),
+  removeStore('completPhotoInfo');
   removeStore('isFillMaterialList');
-  removeStore('isDepartmentServiceVerifySweepCode'),
-  removeStore('isCurrentDepartmentServiceVerifySweepCode'),
-  removeStore('isCompleteDepartmentServiceOfficeInfo'),
-  removeStore('isCompleteDepartmentServiceCheckedItemList'),
-  removeStore('energyRecordList'),
-  removeStore('isCurrentDeviceCopyServiceVerifySweepCode'),
-  removeStore('isCompleteDeviceEnergyRecordServiceOfficeInfo')
+  removeStore('isDepartmentServiceVerifySweepCode');
+  removeStore('isCurrentDepartmentServiceVerifySweepCode');
+  removeStore('isCompleteDepartmentServiceOfficeInfo');
+  removeStore('isCompleteDepartmentServiceCheckedItemList');
+  removeStore('energyRecordList');
+  removeStore('isCurrentDeviceCopyServiceVerifySweepCode');
+  removeStore('isCompleteDeviceEnergyRecordServiceOfficeInfo');
+  removeStore('departmentMessage');
 
   // 保洁
   removeStore('permissionInfo');
@@ -871,7 +875,15 @@ export const removeAllLocalStorage = () => {
   removeStore('storageSpecialTaskMessage');
   removeStore('chooseProject');
   removeStore('attendanceTypeDetailsMessage');
-  removeStore('personnelStatisticsDetailsMessage')
+  removeStore('personnelStatisticsDetailsMessage');
+
+  // 安全巡更
+  removeStore('temporaryStorageClaimRegisterMessage');
+  removeStore('temporaryStorageRepairsRegisterMessage');
+  removeStore('temporaryStorageOtherRegisterMessage');
+  removeStore('temporaryStorageHistoryClaimRegisterMessage')
+
+  // 设备巡检
 }
 
 /*
@@ -885,11 +897,8 @@ export const removeExceptLoginMessageLocalStorage = () => {
   removeStore('currentCleanTaskName');
   removeStore('currentCleanTaskDateVlue');
   removeStore('cleanTaskDetails');
-  removeStore('timeMessage');
   removeStore('storageForthwithTaskMessage');
   removeStore('storageSpecialTaskMessage');
-  removeStore('ossMessage');
-  removeStore('chooseProject');
   removeStore('attendanceTypeDetailsMessage');
   removeStore('personnelStatisticsDetailsMessage')
 }

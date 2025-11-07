@@ -303,7 +303,8 @@ export default {
           path: "/cleanTaskList",
         })
       })
-    }
+    };
+    this.getWorkerList()
   },
 
   activated () {
@@ -348,7 +349,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["changeIsLogin","changeTimeMessage","changeOssMessage","storeLocationMessage"]),
+    ...mapMutations(["changeIsLogin","changeCatchComponent","changeTimeMessage","changeOssMessage","storeLocationMessage"]),
 
     // 时间栏点击事件
     datetimePickerClickEvent () {
@@ -401,6 +402,10 @@ export default {
             type: 'fail'
           })
         })
+      } else {
+         this.$toast({
+            message: '请选择位置'
+          })
       }
     },
 
@@ -415,6 +420,7 @@ export default {
 
     // 位置点击事件
     locationEvent () {
+      this.changeCatchComponent(['dispatchTask','AddTask']);
       this.$router.push({path: '/choosePosition'})  
     },
 

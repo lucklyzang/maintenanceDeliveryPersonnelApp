@@ -252,4 +252,97 @@ export function getDefaultEnvironmentManagementState() {
 		pollingTaskDepartmentFunctionalZoneMessage: {},
 		pollingTaskCurrentShowTime: ''
     }
+}
+
+
+/*
+ * 设备巡检相关模块store初始值
+*/
+
+
+// 登录信息store的初始值
+export function getEquipmentPatrolDefaultLoginState() {
+    return {
+        equipmentPatrolGlobalTimer: null
+    }
+}
+
+// 巡检任务模块store的初始值
+export function getDefaultPatrolTaskState() {
+    return {
+        patrolTaskListMessage: [], //巡查任务列表信息
+        enterPatrolAbnormalRecordPageSource: '',
+        devicePatrolDetailsSelectMessage: {}, // 设备巡检详情页选中的任务集名称和时间点信息
+        patrolTaskDeviceChecklist: [], // 巡检任务设备检查单信息
+        patrolTaskAbnormalCheckItemEventList: [], // 异常检查项事件列表信息
+        historyPatrolTaskAbnormalCheckItemEventList: [], // 历史异常检查项事件列表信息
+        historyPatrolTaskDetails: [], // 历史巡检任务详情信息
+        historyPatrolTaskAbnormalRecordDetails: {}, // 历史异常记录详情信息
+        historyPatrolTaskDeviceChecklist: [], // 历史巡检任务设备检查单信息
+        patrolTaskAbnormalRecordList: [], // 巡检任务异常记录列表信息
+        historyPatrolTaskDateMessage: {} // 历史巡检任务选择的日期信息
+    }
+}
+
+// 点检任务模块store的初始值
+export function getSpotCheckTaskState() {
+    return {
+        enterHistoryEquipmSpotTaskListPageSource: ''
+    }
+}
+
+// 点检任务调度管理模块store的初始值
+export function getSpotTaskDispatchingManagementState() {
+    return {
+    }
+}
+
+/*
+ * 安全巡更相关模块store初始值
+*/
+
+// 登录信息store的初始值
+export function getDefaultSecurityPatrolLoginState() {
+    return {
+        globalTimer: null
+    }
+};
+
+// 巡更模块store的初始值
+export function getDefaultSecurityPatrolPatrolTaskState() {
+    return {
+        taskType: {}, //任务类型
+        taskOrderType: {}, //任务工单类型
+        departmentCheckList: {
+            depId: '',
+            checkItemList: []
+        }, // 科室检查项信息
+        enterProblemRecordMessage: {}, //进入问题记录页时携带的相关信息
+        patrolTaskListMessage: {}, //巡查任务列表信息
+        currentElectronicSignature: null, // 工单完成时的签名信息
+        originalSignature: null //// 工单完成时原始签名信息
+    }
+};
+
+// 事件登记模块store的初始值
+export function getDefaultEventRegisterState() {
+    return {
+        temporaryStorageRepairsRegisterMessage: [], //暂存事件登记(工程报修)信息
+        temporaryStorageOtherRegisterMessage: [], //暂存事件登记(其他)信息
+        temporaryStorageClaimRegisterMessage: [], //暂存事件登记(拾金不昧)信息
+        temporaryStorageHistoryClaimRegisterMessage: [], //暂存历史事件登记(拾金不昧)信息
+        enterEventRegisterPageMessage: {}, // 进入事件登记页的信息
+        moreEventMessage: {}, // 更多信息
+        claimRegisterElectronicSignatureMessage: {receiverSignature:[]} //拾金不昧签名相关信息
+    }
+};
+
+// 留言簿模块store的初始值
+export function getDefaultGuestbookState() {
+    return {
+        enterPostMessagePageMessage: {}, // 进入留言发布页的信息,
+        isEnterGuestBookPageFromHomePage: false, // 是否从首页进入过留言簿页
+        lastMessageNumber: null, //上次留言数量
+        currentScrollTop: 0 // 留言簿列表当前滚动距离
+    }
 };

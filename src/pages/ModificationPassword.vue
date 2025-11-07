@@ -86,7 +86,10 @@
 				'userInfo',
 				'userBasicInfo',
 				'statusBarHeight',
-				'navigationBarHeight'
+				'navigationBarHeight',
+				'projectGlobalTimer',
+				'globalTimer',
+				'equipmentPatrolGlobalTimer'
 			]),
 			userName() {
 			  return this.userInfo['worker']['name']
@@ -196,8 +199,33 @@
 							this.$router.push({ path: '/' });
 						},2000);
 						// 清空store和localStorage
-						store.dispatch('resetLoginState');
+						if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+						if(this.globalTimer) {window.clearInterval(this.globalTimer)};
+						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
 						removeAllLocalStorage();
+						store.dispatch('resetAutoRepairTaskStore');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetCleanManagementStore');
+						store.dispatch('resetEquipmentPatroLoginStateEvent');
+						store.dispatch('resetPatrolTaskStore');
+						store.dispatch('resetSpotCheckTaskStore');
+						store.dispatch('resetSpotTaskDispatchingManagementStore');
+						store.dispatch('resetDepartmentServiceStateEvent');
+						store.dispatch('resetDeviceServiceStateEvent');
+						store.dispatch('resetRepairsWorkOrderStateEvent');
+						store.dispatch('resetTaskSchedulingStateEvent');
+						store.dispatch('resetTransAppointTaskStateEvent');
+						store.dispatch('resetTransCatchComponentsStateEvent');
+						store.dispatch('resetTransCirculationTaskStateEvent');
+						store.dispatch('resetTransDispatchTaskStateEvent');
+						store.dispatch('resetTransMedicalTaskStateEvent');
+						store.dispatch('resetTransTaskSchedulingStateEvent');
+						store.dispatch('resetTransTransLoginStateEvent');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetRegisterStore');
+						store.dispatch('resetGuestbookStore');
+						store.dispatch('resetSecurityPatrolLoginState');
+						store.dispatch('resetSecurityPatrolTaskStore');
 						this.$Alert({message:"修改成功!",type:'success'})
 					} else {
 						this.$Alert({message:"修改失败!",type:'error'})

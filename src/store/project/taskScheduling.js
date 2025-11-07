@@ -33,5 +33,9 @@ export default {
     }
   },
   
-  actions:{}
+  actions:{
+    resetTaskSchedulingStateEvent({ commit }) {
+      commit('resetTaskSchedulingState')
+    }
+  }
 }

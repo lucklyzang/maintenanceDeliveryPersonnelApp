@@ -18,6 +18,16 @@ import departmentService from './project/departmentService.js'
 import autoRepairTask from './project/autoRepairTask.js'
 // 保洁
 import environmentManagement from './clean/environmentManagement.js'
+// 设备巡检
+import equipmentPatrolLogin from './equipmentPatrol/equipmentPatrolLogin.js';
+import patrolTask from './equipmentPatrol/patrolTask.js';
+import spotCheckTask from './equipmentPatrol/spotCheckTask.js';
+import spotTaskDispatchingManagement from './equipmentPatrol/spotTaskDispatchingManagement.js';
+// 安全巡更
+import securityPatrolLogin from './securityPatrol/securityPatrolLogin.js';
+import securityPatrolPatrolTask from './securityPatrol/securityPatrolPatrolTask.js';
+import eventRegister from './securityPatrol/eventRegister.js';
+import guestBook from './securityPatrol/guestBook.js';
 Vue.use(Vuex);
 export default new Vuex.Store({
   modules:{
@@ -35,6 +45,14 @@ export default new Vuex.Store({
     deviceService,
     departmentService,
     autoRepairTask,
-    environmentManagement
+    environmentManagement,
+    equipmentPatrolLogin,
+    patrolTask,
+    spotCheckTask,
+    spotTaskDispatchingManagement,
+    securityPatrolLogin,
+    securityPatrolPatrolTask,
+    eventRegister,
+    guestBook
   }
 });

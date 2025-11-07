@@ -104,7 +104,7 @@ export function getDictionaryData (id) {
   // 注册channel
   export function registerChannel (data) {
 	return request({
-	  url: 'cloud/register',
+	  url: 'trans/cloud/register',
 	  method: 'post',
 	  data
 	})
