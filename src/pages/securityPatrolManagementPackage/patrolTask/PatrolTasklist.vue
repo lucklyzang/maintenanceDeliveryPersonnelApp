@@ -96,7 +96,7 @@
 <script>
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
-import {getAllTaskList} from '@/api/escortManagement.js'
+import {getAllTaskList} from '@/api/securityPatrol/escortManagement.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 export default {
   name: "PatrolTasklist",
@@ -130,9 +130,9 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn('/home');
-    if (this.taskType.taskTypeName) {
-        if (this.taskType.taskTypeName == 'backlogTask') {
+    this.deviceReturn('/securityPatrolHome');
+    if (this.securityPatrolTaskType.taskTypeName) {
+        if (this.securityPatrolTaskType.taskTypeName == 'backlogTask') {
             this.$nextTick(()=> {
                 this.initBacklogTaskScrollChange()
             })
@@ -159,13 +159,13 @@ export default {
 
   beforeRouteEnter(to, from, next) {
     next(vm=>{
-      if (from.path == '/home') {
+      if (from.path == '/securityPatrolHome') {
         vm.queryTaskList(1,vm.currentPage,vm.pageSize)
       } else {
-        if (vm.taskType.taskTypeName) {
-            vm.activeName = vm.taskType.taskTypeName
+        if (vm.securityPatrolTaskType.taskTypeName) {
+            vm.activeName = vm.securityPatrolTaskType.taskTypeName
         };
-        vm.queryTaskList(vm.taskType.taskTypeName ? vm.taskType.taskTypeName == 'backlogTask' ? 1 : 2 : 1,vm.currentPage,vm.pageSize)
+        vm.queryTaskList(vm.securityPatrolTaskType.taskTypeName ? vm.securityPatrolTaskType.taskTypeName == 'backlogTask' ? 1 : 2 : 1,vm.currentPage,vm.pageSize)
       }
 	});
     next() 
@@ -174,14 +174,35 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","taskType","enterPostMessagePageMessage"])
+    ...mapGetters(["userInfo","chooseHospitalArea","securityPatrolTaskType","enterPostMessagePageMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
+    },
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
+    }
   },
 
   methods: {
-    ...mapMutations(["changePatrolTaskListMessage","changeTaskType","changeEnterPostMessagePageMessage"]),
+    ...mapMutations(["changeSecurityPatrolTaskListMessage","changeSecurityPatrolTaskType","changeEnterPostMessagePageMessage"]),
 
     onClickLeft () {
-        this.$router.push({path: '/home'})
+        this.$router.push({path: '/securityPatrolHome'})
     },
 
     onClickRight () {
@@ -300,7 +321,7 @@ export default {
         this.completedEmptyShow = false;
         this.isShowBacklogTaskNoMoreData = false;
         this.isShowCompletetedTaskNoMoreData = false;
-		getAllTaskList({proId : this.userInfo.proIds[0], workerId: this.userInfo.id,taskType,system:6,page,pageSize})
+		getAllTaskList({proId : this.proId, workerId: this.workerId,taskType,system:6,page,pageSize})
         .then((res) => {
             this.loadingShow = false;
             this.overlayShow = false;
@@ -357,11 +378,11 @@ export default {
 
     // 点击进入任务详情事件
     taskDetailsEvent (item) {
-        this.changePatrolTaskListMessage(item);
-        let temporaryMessage = this.taskType;
+        this.changeSecurityPatrolTaskListMessage(item);
+        let temporaryMessage = this.securityPatrolTaskType;
         temporaryMessage['taskTypeName'] = this.activeName;
-        this.changeTaskType(temporaryMessage);
-        this.$router.push('/workOrderDetails')
+        this.changeSecurityPatrolTaskType(temporaryMessage);
+        this.$router.push('/securityPatrolManagementWorkOrderDetails')
     }
   }
 };

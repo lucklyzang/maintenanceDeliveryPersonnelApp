@@ -13,7 +13,7 @@
         <div class="content-box">
           <div class="current-area">
             <van-icon name="location" color="#1684FC" size="25" />
-            <span>当前区域: {{ patrolTaskListMessage.needSpaces.filter((item)=> { return item.id == departmentCheckList['depId'] })[0]['name'] }}</span>
+            <span>当前区域: {{ securityPatrolTaskListMessage.needSpaces.filter((item)=> { return item.id == departmentCheckList['depId'] })[0]['name'] }}</span>
           </div>
           <div class="patrol-item-box">
             <div class="patrol-item-list">
@@ -81,7 +81,7 @@
           </div> 
         </div>
     </div>
-    <div class="task-operation-box" v-show="patrolTaskListMessage.state != 4">
+    <div class="task-operation-box" v-show="securityPatrolTaskListMessage.state != 4">
       <div class="new-increase-btn" @click="eventTypeShow = true">新增</div>
       <div class="back-btn" @click="backEvent">返回</div>
     </div>
@@ -111,7 +111,7 @@
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
 import { mixinsDeviceReturn } from '@/mixins/deviceReturnFunction';
-import { getEventList } from '@/api/escortManagement.js'
+import { getEventList } from '@/api/securityPatrol/escortManagement.js'
 import { deepClone } from "@/common/js/utils";
 export default {
   name: "ProblemRecord",
@@ -173,9 +173,27 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","patrolTaskListMessage","temporaryStorageOtherRegisterMessage","temporaryStorageRepairsRegisterMessage","temporaryStorageClaimRegisterMessage","departmentCheckList","enterProblemRecordMessage","enterEventRegisterPageMessage"]),
-    userName () {
-      return this.userInfo.name
+    ...mapGetters(["userInfo","chooseHospitalArea","securityPatrolTaskListMessage","temporaryStorageOtherRegisterMessage","temporaryStorageRepairsRegisterMessage","temporaryStorageClaimRegisterMessage","departmentCheckList","enterProblemRecordMessage","enterEventRegisterPageMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
+    },
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
     }
   },
 
@@ -210,11 +228,11 @@ export default {
       temporaryEnterEventRegisterPageMessage['patrolItemName'] = this.enterProblemRecordMessage['issueInfo']['name'];
       temporaryEnterEventRegisterPageMessage['resultId'] = this.enterProblemRecordMessage['issueInfo']['resultId'];
       temporaryEnterEventRegisterPageMessage['depId'] = this.departmentCheckList['depId'];
-      temporaryEnterEventRegisterPageMessage['taskId'] = this.patrolTaskListMessage.id;
+      temporaryEnterEventRegisterPageMessage['taskId'] = this.securityPatrolTaskListMessage.id;
       temporaryEnterEventRegisterPageMessage['checkItemId'] = this.enterProblemRecordMessage['issueInfo']['id'];
       temporaryEnterEventRegisterPageMessage['enterRegisterEventPageSource'] = '/problemRecord';
       temporaryEnterEventRegisterPageMessage['structId'] = this.enterProblemRecordMessage['issueInfo']['structId'];
-      temporaryEnterEventRegisterPageMessage['depName'] = this.patrolTaskListMessage.needSpaces.filter((item)=> { return item.id == this.departmentCheckList['depId'] })[0]['name'];
+      temporaryEnterEventRegisterPageMessage['depName'] = this.securityPatrolTaskListMessage.needSpaces.filter((item)=> { return item.id == this.departmentCheckList['depId'] })[0]['name'];
       this.changeEnterEventRegisterPageMessage(temporaryEnterEventRegisterPageMessage)
     },
 
@@ -284,7 +302,7 @@ export default {
       this.loadText = '加载中';
       this.backlogEmptyShow = false;
       this.isShowBacklogTaskNoMoreData = false;
-      getEventList({proId:this.userInfo.proIds[0], system: 6, page,
+      getEventList({proId:this.proId, system: 6, page,
         name,limit:pageSize,registerType,checkResultId:this.enterProblemRecordMessage['issueInfo']['resultId']
       })
       .then((res) => {
@@ -298,7 +316,7 @@ export default {
           if (page == 1) {
             this.fullBacklogTaskList = [].concat(this.temporaryStorageOtherRegisterMessage,this.temporaryStorageRepairsRegisterMessage,this.temporaryStorageClaimRegisterMessage);
             this.fullBacklogTaskList = this.fullBacklogTaskList.filter((item) => { return item['checkItemId'] == this.enterProblemRecordMessage['issueInfo']['id'] && item['registerType'] == 1 
-            && item['depId'] == this.departmentCheckList['depId'] && item['taskId'] == this.patrolTaskListMessage['id']
+            && item['depId'] == this.departmentCheckList['depId'] && item['taskId'] == this.securityPatrolTaskListMessage['id']
             });
             this.fullBacklogTaskList = this.fullBacklogTaskList.concat(this.backlogTaskList)
           } else {
@@ -379,14 +397,14 @@ export default {
       };
       let temporaryEnterEventRegisterPageMessage = this.enterEventRegisterPageMessage;
       temporaryEnterEventRegisterPageMessage['patrolItemName'] = this.enterProblemRecordMessage['issueInfo']['name'];
-      temporaryEnterEventRegisterPageMessage['taskId'] = this.patrolTaskListMessage.id;
+      temporaryEnterEventRegisterPageMessage['taskId'] = this.securityPatrolTaskListMessage.id;
       temporaryEnterEventRegisterPageMessage['checkItemId'] = this.enterProblemRecordMessage['issueInfo']['id'];
       temporaryEnterEventRegisterPageMessage['enterRegisterEventPageSource'] = '/problemRecord';
       temporaryEnterEventRegisterPageMessage['registerType'] = '巡查';
       temporaryEnterEventRegisterPageMessage['resultId'] = this.enterProblemRecordMessage['issueInfo']['resultId'];
       temporaryEnterEventRegisterPageMessage['depId'] = this.departmentCheckList['depId'];
       temporaryEnterEventRegisterPageMessage['structId'] = this.enterProblemRecordMessage['issueInfo']['structId'];
-      temporaryEnterEventRegisterPageMessage['depName'] = this.patrolTaskListMessage.needSpaces.filter((item)=> { return item.id == this.departmentCheckList['depId'] })[0]['name'];
+      temporaryEnterEventRegisterPageMessage['depName'] = this.securityPatrolTaskListMessage.needSpaces.filter((item)=> { return item.id == this.departmentCheckList['depId'] })[0]['name'];
       this.changeEnterEventRegisterPageMessage(temporaryEnterEventRegisterPageMessage)
     }
   }

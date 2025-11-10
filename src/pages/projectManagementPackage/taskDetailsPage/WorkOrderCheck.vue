@@ -218,7 +218,7 @@
   import {queryOneRepairsProject,uploadRepairsTaskPhoto,queryAllMaterial,queryRepairsTaskPhoto,saveMate,completeRepairsTaskFinal,sureStartTask,queryMaterialById, dismissalTask} from '@/api/project/worker.js'
   import { formatTime, setStore, getStore, removeStore, IsPC, changeArrIndex, removeAllLocalStorage, deepClone, compress } from '@/common/js/utils'
   export default {
-    name: 'WorkOrderDetails',
+    name: 'WorkOrderCheck',
     components:{
       HeaderTop,
       FooterBottom,

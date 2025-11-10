@@ -125,7 +125,7 @@
 <script>
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
-import { queryStructure, queryBeaconList, setBeaconConfigRange, clearBeaconRange, beaconTest } from '@/api/escortManagement.js'
+import { queryStructure, queryBeaconList, setBeaconConfigRange, clearBeaconRange, beaconTest } from '@/api/securityPatrol/escortManagement.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
 import { IsPC } from '@/common/js/utils';
 import SelectSearch from "@/components/SelectSearch";
@@ -179,7 +179,7 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn("/home");
+    this.deviceReturn("/securityPatrolHome");
     this.$nextTick(()=> {
       this.initScrollChange()
     });
@@ -218,7 +218,7 @@ export default {
           setTimeout(this.judgeIsOpenBluetooth(), 0)
         }, 2000)
       };  
-      this.changeGlobalTimer(this.windowTimer)
+      this.changeSecurityPatrolGlobalTimer(this.windowTimer)
     }
   },
 
@@ -250,24 +250,33 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["userInfo"]),
-    proId () {
-      return this.userInfo.proIds[0]
+    ...mapGetters(["userInfo","chooseHospitalArea"]),
+    userName() {
+      return this.userInfo['worker']['name']
     },
-    userName () {
-      return this.userInfo.name
+    workerId() {
+      return this.userInfo['worker']['id']
     },
-    workerId () {
-      return this.userInfo.id
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
     }
   },
 
   methods: {
-    ...mapMutations(['changeGlobalTimer']),
+    ...mapMutations(['changeSecurityPatrolGlobalTimer']),
 
     // 顶部导航左边点击事件
     onClickLeft () {
-      this.$router.push({path: '/home'})
+      this.$router.push({path: '/securityPatrolHome'})
     },
 
     // 疑问点击事件

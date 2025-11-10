@@ -250,7 +250,7 @@
 			// 安全管理项点击事件
 			safeManagementEvent (item,index) {
 				if (item.text == '安全巡更') {
-					this.$router.push({ path: "/transIndex" })
+					this.$router.push({ path: "/securityPatrolHome" })
 				} else if (item.text == '设备巡检') {
 					this.$router.push({ path: "/equipmentPatrolHome" })
 				}

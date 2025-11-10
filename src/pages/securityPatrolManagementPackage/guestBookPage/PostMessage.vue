@@ -76,9 +76,9 @@
 import NavBar from "@/components/NavBar";
 import axios from 'axios'
 import { mapGetters, mapMutations } from "vuex";
-import { guestBookAdd } from '@/api/escortManagement.js'
+import { guestBookAdd } from '@/api/securityPatrol/escortManagement.js'
 import { compress,base64ImgtoFile } from "@/common/js/utils";
-import {getAliyunSign} from '@/api/login.js'
+import {getAliyunSign} from '@/api/securityPatrol/login.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
 export default {
   name: "PostMessage",
@@ -101,7 +101,6 @@ export default {
   },
 
   mounted() {
-    console.log('任务接',this.enterPostMessagePageMessage);
     // 控制设备物理返回按键
     this.deviceReturn(`${this.enterPostMessagePageMessage['enterPostMessagePageSource']}`)
   },
@@ -109,15 +108,27 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","timeMessage","ossMessage","enterPostMessagePageMessage"]),
-    proId () {
-      return this.userInfo.proIds[0]
+    ...mapGetters(["userInfo","chooseHospitalArea","timeMessage","ossMessage","enterPostMessagePageMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
     },
-    userName () {
-      return this.userInfo.name
+    workerId() {
+      return this.userInfo['worker']['id']
     },
-    workerId () {
-      return this.userInfo.id
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
     }
   },
 

@@ -1,6 +1,6 @@
 <template>
   <div class="page-box" ref="wrapper">
-    <div class="add-message" @click="addMessageEvent" v-if="patrolTaskListMessage.state !=4 ">
+    <div class="add-message" @click="addMessageEvent" v-if="securityPatrolTaskListMessage.state !=4 ">
       <img :src="addMessagePng" alt="">
     </div>
     <div class="in-positioning" v-show="positioningShow">
@@ -15,7 +15,7 @@
     <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">{{ loadText }}</van-loading>
     <van-overlay :show="overlayShow" />
     <div class="nav">
-      <van-nav-bar title="巡更详情" left-text="返回" left-arrow @click-left="onClickLeft" @click-right="onClickRight" :right-text="patrolTaskListMessage.state !=4 ? '事件登记' : ''" :border="false">
+      <van-nav-bar title="巡更详情" left-text="返回" left-arrow @click-left="onClickLeft" @click-right="onClickRight" :right-text="securityPatrolTaskListMessage.state !=4 ? '事件登记' : ''" :border="false">
       </van-nav-bar>
     </div>
     <div class="content">
@@ -25,29 +25,29 @@
         <div class="content-box">
             <div class="location task-number">
                 <span>任务编号</span>
-                <span>{{ patrolTaskListMessage.number }}</span>
+                <span>{{ securityPatrolTaskListMessage.number }}</span>
             </div>
             <div class="location">
                 <span>所属任务集名称</span>
-                <span>{{ patrolTaskListMessage.configName }}</span>
+                <span>{{ securityPatrolTaskListMessage.configName }}</span>
             </div>
             <div class="location">
                 <span>所属任务集生成时间类型</span>
-                <span>{{ taskSetTransition(patrolTaskListMessage.type) }}</span>
+                <span>{{ taskSetTransition(securityPatrolTaskListMessage.type) }}</span>
             </div>
             <div class="location task-create-time">
                 <span>预计开始时间</span>
-                <span>{{ patrolTaskListMessage.planStartTimeForApp }}</span>
+                <span>{{ securityPatrolTaskListMessage.planStartTimeForApp }}</span>
             </div>
             <div class="patrol-site">
                 <div>巡更地点</div>
                 <div class="patrol-site-list-box" v-if="queryDataSuccess">
-                    <div class="patrol-site-list" :class="{'patrolSiteListStyle': patrolTaskListMessage.allCheckItemOkDepArr.indexOf(Number(item.id)) != -1 }" v-for="(item,index) in patrolTaskListMessage.needSpaces" :key="index" @click="patrolSiteEvent(item)">
+                    <div class="patrol-site-list" :class="{'patrolSiteListStyle': securityPatrolTaskListMessage.allCheckItemOkDepArr.indexOf(Number(item.id)) != -1 }" v-for="(item,index) in securityPatrolTaskListMessage.needSpaces" :key="index" @click="patrolSiteEvent(item)">
                       {{ item.name }}
                     </div>
                 </div>
             </div>
-            <div class="signature-box" v-if="patrolTaskListMessage.state ==4">
+            <div class="signature-box" v-if="securityPatrolTaskListMessage.state ==4">
                 <div>任务结束签字</div>
                 <div class="image-box">
                   <img :src="completeElectronicSignature">
@@ -55,9 +55,9 @@
             </div>
         </div>
     </div>
-    <div class="task-operation-box" v-if="patrolTaskListMessage.state !=4 && isShowOperateBtn">
+    <div class="task-operation-box" v-if="securityPatrolTaskListMessage.state !=4 && isShowOperateBtn">
       <div class="task-no-complete" @click="clockInEvent">打卡</div>
-      <div class="task-complete" :class="{'operationStyle': patrolTaskListMessage['needSpaces'].length == patrolTaskListMessage['allCheckItemOkDepArr'].length }" v-show="patrolTaskListMessage.state !=4 " @click="completeTaskEvent">完成任务</div>
+      <div class="task-complete" :class="{'operationStyle': securityPatrolTaskListMessage['needSpaces'].length == securityPatrolTaskListMessage['allCheckItemOkDepArr'].length }" v-show="securityPatrolTaskListMessage.state !=4 " @click="completeTaskEvent">完成任务</div>
     </div>
      <!-- 定位失败提示框 -->
     <div class="location-fail-box">
@@ -134,11 +134,11 @@
 <script>
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
-import {getTaskDetails, clockingsSection, bluetoothPunchSection, departmentClockFinsh} from '@/api/escortManagement.js'
+import {getTaskDetails, clockingsSection, bluetoothPunchSection, departmentClockFinsh} from '@/api/securityPatrol/escortManagement.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
 import ScrollSelection from "@/components/ScrollSelection";
 export default {
-  name: "WorkOrderDetails",
+  name: "SecurityPatrolManagementWorkOrderDetails",
   components: {
     NavBar,
     ScrollSelection
@@ -186,7 +186,7 @@ export default {
   },
 
   mounted() {
-    console.log('大飒飒',this.patrolTaskListMessage);
+    console.log('大飒飒',this.securityPatrolTaskListMessage);
     // 控制设备物理返回按键
     this.deviceReturn("/patrolTasklist");
     // 获取任务详情
@@ -196,11 +196,32 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","patrolTaskListMessage","departmentCheckList","enterPostMessagePageMessage","enterEventRegisterPageMessage"])
+    ...mapGetters(["userInfo","chooseHospitalArea","securityPatrolTaskListMessage","departmentCheckList","enterPostMessagePageMessage","enterEventRegisterPageMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
+    },
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
+    }
   },
 
   methods: {
-    ...mapMutations(["changeDepartmentCheckList","changePatrolTaskListMessage","changeEnterPostMessagePageMessage","changeEnterEventRegisterPageMessage"]),
+    ...mapMutations(["changeDepartmentCheckList","changeSecurityPatrolTaskListMessage","changeEnterPostMessagePageMessage","changeEnterEventRegisterPageMessage"]),
 
     // 顶部导航左边点击事件
     onClickLeft () {
@@ -239,9 +260,9 @@ export default {
     addMessageEvent () {
       let temporaryEnterPostMessagePageMessage = this.enterPostMessagePageMessage;
       temporaryEnterPostMessagePageMessage['storageRadio'] = false;
-      temporaryEnterPostMessagePageMessage['collect'] = this.patrolTaskListMessage.configName;
-      temporaryEnterPostMessagePageMessage['workers'] = this.patrolTaskListMessage.workers;
-      temporaryEnterPostMessagePageMessage['enterPostMessagePageSource'] = '/workOrderDetails';
+      temporaryEnterPostMessagePageMessage['collect'] = this.securityPatrolTaskListMessage.configName;
+      temporaryEnterPostMessagePageMessage['workers'] = this.securityPatrolTaskListMessage.workers;
+      temporaryEnterPostMessagePageMessage['enterPostMessagePageSource'] = '/securityPatrolManagementWorkOrderDetails';
       this.changeEnterPostMessagePageMessage(temporaryEnterPostMessagePageMessage);
       this.$router.push({path: '/postMessage'})
     },
@@ -295,11 +316,11 @@ export default {
     // 巡查地点点击事件
     patrolSiteEvent (item) {
       // 该任务已完成
-      if (this.patrolTaskListMessage.state == 4) {
+      if (this.securityPatrolTaskListMessage.state == 4) {
         this.departmentFinshClock(item.id,'加载中')
       } else {
         // 该科室对应巡查项未全部勾选完毕
-        if (this.patrolTaskListMessage.allCheckItemOkDepArr.indexOf(Number(item.id)) == -1) {
+        if (this.securityPatrolTaskListMessage.allCheckItemOkDepArr.indexOf(Number(item.id)) == -1) {
           this.$Alert({message:"请先完成巡更!",duration:3000,type:'fail'})
         } else {
           // 该科室对应巡查项全部勾选完毕
@@ -330,7 +351,7 @@ export default {
 
     // 蓝牙打卡事件
     clockInEvent () {
-      if (this.patrolTaskListMessage.state == 4) {
+      if (this.securityPatrolTaskListMessage.state == 4) {
         return
       };
       this.isBluetoothPunch = true;
@@ -340,11 +361,11 @@ export default {
 
     // 完成任务事件
     completeTaskEvent () {
-      if (this.patrolTaskListMessage['needSpaces'].length != this.patrolTaskListMessage['allCheckItemOkDepArr'].length) {
+      if (this.securityPatrolTaskListMessage['needSpaces'].length != this.securityPatrolTaskListMessage['allCheckItemOkDepArr'].length) {
         this.$Alert({message:"请完成所有巡查项!",duration:3000,type:'fail'})
         return
       };
-      this.$router.push({path: '/patrolTaskElectronicSignaturePage'})
+      this.$router.push({path: '/securityPatrolManagementPatrolTaskElectronicSignaturePage'})
     },
 
     // 获取任务详情
@@ -354,7 +375,7 @@ export default {
       this.queryDataSuccess = false;
       this.loadText = '加载中';
       getTaskDetails(
-        this.patrolTaskListMessage.id
+        this.securityPatrolTaskListMessage.id
       ).then((res) => {
         if (res && res.data.code == 200) {
           this.isShowOperateBtn = true;
@@ -362,16 +383,16 @@ export default {
           this.overlayShow = false;
           this.loadText = '';
           this.queryDataSuccess = true;
-          this.changePatrolTaskListMessage(res.data.data);
+          this.changeSecurityPatrolTaskListMessage(res.data.data);
           this.completeElectronicSignature = res.data.data['signImage'];
           console.log('单条任务详情',res.data.data);
           // 选择打卡地点弹框的数据
           this.clockingPlaceOption = [];
-          for (let i = 0,len = this.patrolTaskListMessage['needSpaces'].length; i < len; i++) {
+          for (let i = 0,len = this.securityPatrolTaskListMessage['needSpaces'].length; i < len; i++) {
             this.clockingPlaceOption.push({
               id: i,
-              text: this.patrolTaskListMessage['needSpaces'][i]['name'],
-              value: this.patrolTaskListMessage['needSpaces'][i]['id']
+              text: this.securityPatrolTaskListMessage['needSpaces'][i]['name'],
+              value: this.securityPatrolTaskListMessage['needSpaces'][i]['id']
             })
           }
         } else {
@@ -398,11 +419,11 @@ export default {
       this.overlayShow = true;
       this.loadText = text;
       clockingsSection({
-        taskId: this.patrolTaskListMessage.id, //当前任务id
+        taskId: this.securityPatrolTaskListMessage.id, //当前任务id
         depId, // 当前扫描科室id
         depName,// 当前扫描科室名称
-        workerId: this.userInfo.id, // 当前登陆员工id
-        proId: this.userInfo.proIds[0], // 所属项目
+        workerId: this.workerId, // 当前登陆员工id
+        proId: this.proId, // 所属项目
         system: 6, // 所属系统
         punchCardReason, //如果是蓝牙连接，可以传空串
         punchCardType //打卡类型(1:蓝牙 2:手动)
@@ -441,7 +462,7 @@ export default {
     bluetoothPunchClock () {
       this.positioningShow = true;
       this.overlayShow = true
-      bluetoothPunchSection(this.patrolTaskListMessage.id,{ workerId: this.userInfo.id } // 当前登陆员工id
+      bluetoothPunchSection(this.securityPatrolTaskListMessage.id,{ workerId: this.workerId } // 当前登陆员工id
       ).then((res) => {
         if (this.isClickClose) { return };
         if (res && res.data.code == 200) {
@@ -481,10 +502,10 @@ export default {
       this.overlayShow = true;
       this.loadText = text;
       departmentClockFinsh({
-        taskId: this.patrolTaskListMessage.id, //当前任务id
+        taskId: this.securityPatrolTaskListMessage.id, //当前任务id
         depId, // 当前扫描科室id
-        workerId: this.userInfo.id, // 当前登陆员工id
-        proId: this.userInfo.proIds[0], // 所属项目
+        workerId: this.workerId, // 当前登陆员工id
+        proId: this.proId, // 所属项目
         system: 6 // 所属系统
       }).then((res) => {
         if (res && res.data.code == 200) {
@@ -531,11 +552,11 @@ export default {
             });
             done(false)
           } else {
-            this.codeDepartmentNoFinsh (this.patrolTaskListMessage.needSpaces.filter((item) => { return item['name'] == this.currentClockingPlace})[0]['id'],'加载中',this.currentClockingPlace,2,`其他-${this.explainMessage}`);
+            this.codeDepartmentNoFinsh (this.securityPatrolTaskListMessage.needSpaces.filter((item) => { return item['name'] == this.currentClockingPlace})[0]['id'],'加载中',this.currentClockingPlace,2,`其他-${this.explainMessage}`);
             done()
           }
         } else {
-          this.codeDepartmentNoFinsh (this.patrolTaskListMessage.needSpaces.filter((item) => { return item['name'] == this.currentClockingPlace})[0]['id'],'加载中',this.currentClockingPlace,2,this.manualClockingReasonRadioList.filter((item) => { return item.value == this.manualClockingReasonRadio})[0]['text']);
+          this.codeDepartmentNoFinsh (this.securityPatrolTaskListMessage.needSpaces.filter((item) => { return item['name'] == this.currentClockingPlace})[0]['id'],'加载中',this.currentClockingPlace,2,this.manualClockingReasonRadioList.filter((item) => { return item.value == this.manualClockingReasonRadio})[0]['text']);
           done()
         }
       } else {

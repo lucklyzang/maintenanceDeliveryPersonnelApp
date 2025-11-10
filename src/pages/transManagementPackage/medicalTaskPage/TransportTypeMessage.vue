@@ -336,7 +336,8 @@ import VanFieldSelectPicker from '@/components/VanFieldSelectPicker'
 import FooterBottom from '@/components/FooterBottom'
 import { queryTransConfig } from '@/api/trans/taskScheduling.js'
 import {queryAllDestination, queryTransportTypeClass, queryTransportTools, generateDispatchTask, quereDeviceMessage, queryTransportType, generateDispatchTaskMany} from '@/api/trans/medicalPort.js'
-import {userSignOut} from '@/api/trans/workerPort.js'
+import store from '@/store'
+import {userSignOut} from '@/api/login.js'
 import NoData from '@/components/NoData'
 import Vselect from '@/components/Vselect'
 import Ldselect from '@/components/Ldselect'
@@ -453,7 +454,11 @@ export default {
       'userInfo',
       'globalTimer',
       'templateType',
-      'chooseHospitalArea'
+      'chooseHospitalArea',
+      'projectGlobalTimer',
+      'globalTimer',
+      'equipmentPatrolGlobalTimer',
+      'securityPatrolGlobalTimer'
     ]),
     sex () {
       return this.userInfo['worker']['extendData']['sex']
@@ -556,8 +561,33 @@ export default {
         setStore('storeOverDueWay',true);
         userSignOut(proId,workerId).then((res) => {
           if (res && res.data.code == 200) {
-            if(this.globalTimer) {window.clearInterval(this.globalTimer)};
-            removeAllLocalStorage();
+            if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+						if(this.globalTimer) {window.clearInterval(this.globalTimer)};
+						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
+						if(this.securityPatrolGlobalTimer) {window.clearInterval(this.securityPatrolGlobalTimer)};
+						removeAllLocalStorage();
+						store.dispatch('resetAutoRepairTaskStore');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetCleanManagementStore');
+						store.dispatch('resetEquipmentPatroLoginStateEvent');
+						store.dispatch('resetPatrolTaskStore');
+						store.dispatch('resetSpotCheckTaskStore');
+						store.dispatch('resetSpotTaskDispatchingManagementStore');
+						store.dispatch('resetDepartmentServiceStateEvent');
+						store.dispatch('resetDeviceServiceStateEvent');
+						store.dispatch('resetRepairsWorkOrderStateEvent');
+						store.dispatch('resetTaskSchedulingStateEvent');
+						store.dispatch('resetTransAppointTaskStateEvent');
+						store.dispatch('resetTransCatchComponentsStateEvent');
+						store.dispatch('resetTransCirculationTaskStateEvent');
+						store.dispatch('resetTransDispatchTaskStateEvent');
+						store.dispatch('resetTransMedicalTaskStateEvent');
+						store.dispatch('resetTransTaskSchedulingStateEvent');
+						store.dispatch('resetTransTransLoginStateEvent');
+						store.dispatch('resetRegisterStore');
+						store.dispatch('resetGuestbookStore');
+						store.dispatch('resetSecurityPatrolLoginState');
+						store.dispatch('resetSecurityPatrolTaskStore');
             this.changeCatchComponent([]);
             this.$router.push({path:'/'})
           } else {

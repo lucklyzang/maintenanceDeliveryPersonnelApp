@@ -283,8 +283,10 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from "vuex";
-import { userSignOut,queryDispatchTaskCancelReason,queryTaskDelayReason } from '@/api/trans/workerPort.js'
+import { mapGetters, mapMutations } from "vuex";if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+import { userSignOut } from '@/api/login.js'
+import store from '@/store'
+import { queryDispatchTaskCancelReason,queryTaskDelayReason } from '@/api/trans/workerPort.js'
 import { queryAllDestination, taskReminder,getTransporter } from '@/api/trans/medicalPort.js'
 import { dispathSinglePatientList, dispathManyPatientList, appointList, assignDispathTask, delayDispathTask, cancelDispathTask, assignAppointTask, delayAppointTask, cancelAppointTask } from '@/api/trans/taskScheduling.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
@@ -444,7 +446,12 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","appPermission","chooseHospitalArea","schedulingTaskType","operateBtnClickRecord","templateType","schedulingTaskDetails"]),
+    ...mapGetters(["userInfo","appPermission","chooseHospitalArea","schedulingTaskType","operateBtnClickRecord","templateType","schedulingTaskDetails",
+      'projectGlobalTimer',
+      'globalTimer',
+      'equipmentPatrolGlobalTimer',
+      'securityPatrolGlobalTimer'
+    ]),
       userName() {
         return this.userInfo['worker']['name']
       },
@@ -1583,7 +1590,7 @@ export default {
             closeOnPopstate: true,
             showCancelButton: true
           }).then(() => {
-            this.userLoginOut(this.proId, this.userInfo.userName)
+            this.userLoginOut(this.proId, this.workerId)
           })
           .catch(() => {
           })
@@ -1595,6 +1602,32 @@ export default {
         setStore('storeOverDueWay',true);
         userSignOut(proId,workerId).then((res) => {
           if (res && res.data.code == 200) {
+            if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+            if(this.globalTimer) {window.clearInterval(this.globalTimer)};
+						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
+						if(this.securityPatrolGlobalTimer) {window.clearInterval(this.securityPatrolGlobalTimer)};
+						store.dispatch('resetAutoRepairTaskStore');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetCleanManagementStore');
+						store.dispatch('resetEquipmentPatroLoginStateEvent');
+						store.dispatch('resetPatrolTaskStore');
+						store.dispatch('resetSpotCheckTaskStore');
+						store.dispatch('resetSpotTaskDispatchingManagementStore');
+						store.dispatch('resetDepartmentServiceStateEvent');
+						store.dispatch('resetDeviceServiceStateEvent');
+						store.dispatch('resetRepairsWorkOrderStateEvent');
+						store.dispatch('resetTaskSchedulingStateEvent');
+						store.dispatch('resetTransAppointTaskStateEvent');
+						store.dispatch('resetTransCatchComponentsStateEvent');
+						store.dispatch('resetTransCirculationTaskStateEvent');
+						store.dispatch('resetTransDispatchTaskStateEvent');
+						store.dispatch('resetTransMedicalTaskStateEvent');
+						store.dispatch('resetTransTaskSchedulingStateEvent');
+						store.dispatch('resetTransTransLoginStateEvent');
+						store.dispatch('resetRegisterStore');
+						store.dispatch('resetGuestbookStore');
+						store.dispatch('resetSecurityPatrolLoginState');
+						store.dispatch('resetSecurityPatrolTaskStore');
             removeAllLocalStorage();
             this.changeCatchComponent([]);
             this.$router.push({path:'/'})

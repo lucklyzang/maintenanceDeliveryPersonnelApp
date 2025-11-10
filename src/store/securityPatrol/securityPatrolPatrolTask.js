@@ -8,12 +8,12 @@ export default {
             return state.enterProblemRecordMessage
         },
 
-        patrolTaskListMessage: (state) => {
-            return state.patrolTaskListMessage
+        securityPatrolTaskListMessage: (state) => {
+            return state.securityPatrolTaskListMessage
         },
 
-        taskType: (state) => {
-            return state.taskType
+        securityPatrolTaskType: (state) => {
+            return state.securityPatrolTaskType
         },
 
         taskOrderType: (state) => {
@@ -35,9 +35,9 @@ export default {
         },
 
         // 保存巡查任务列表页的信息
-        changePatrolTaskListMessage(state, playLoad) {
+        changeSecurityPatrolTaskListMessage(state, playLoad) {
             if (playLoad && playLoad != 'null') {
-                state.patrolTaskListMessage = playLoad
+                state.securityPatrolTaskListMessage = playLoad
             }
         },
 
@@ -47,8 +47,8 @@ export default {
         },
 
         // 保存任务切换类型
-        changeTaskType (state, payLoad) {
-            state.taskType = payLoad
+        changeSecurityPatrolTaskType (state, payLoad) {
+            state.securityPatrolTaskType = payLoad
         },
 
         // 保存任务工单列表切换类型

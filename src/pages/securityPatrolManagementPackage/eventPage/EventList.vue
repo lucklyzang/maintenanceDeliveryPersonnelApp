@@ -124,7 +124,7 @@
 <script>
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
-import { getEventList, queryRegisterUser } from '@/api/escortManagement.js'
+import { getEventList, queryRegisterUser } from '@/api/securityPatrol/escortManagement.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
 import ScrollSelection from "@/components/ScrollSelection";
 import SelectSearch from "@/components/SelectSearch";
@@ -214,7 +214,7 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn("/home");
+    this.deviceReturn("/securityPatrolHome");
     this.$nextTick(()=> {
       this.initScrollChange()
     });
@@ -224,7 +224,7 @@ export default {
 
   beforeRouteEnter(to, from, next) {
     next(vm=>{
-      if (from.path == '/home') {
+      if (from.path == '/securityPatrolHome') {
         vm.isOnlyMe = true;
         vm.storageRadio = false;
         // 获取事件列表
@@ -256,24 +256,36 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","patrolTaskListMessage","departmentCheckList","enterEventRegisterPageMessage","temporaryStorageRepairsRegisterMessage","temporaryStorageOtherRegisterMessage","temporaryStorageClaimRegisterMessage"]),
-    proId () {
-      return this.userInfo.proIds[0]
+    ...mapGetters(["userInfo","chooseHospitalArea","securityPatrolTaskListMessage","departmentCheckList","enterEventRegisterPageMessage","temporaryStorageRepairsRegisterMessage","temporaryStorageOtherRegisterMessage","temporaryStorageClaimRegisterMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
     },
-    userName () {
-      return this.userInfo.name
+    workerId() {
+      return this.userInfo['worker']['id']
     },
-    workerId () {
-      return this.userInfo.id
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
     }
   },
 
   methods: {
-    ...mapMutations(["changeDepartmentCheckList","changePatrolTaskListMessage","changeEnterEventRegisterPageMessage"]),
+    ...mapMutations(["changeDepartmentCheckList","changeSecurityPatrolTaskListMessage","changeEnterEventRegisterPageMessage"]),
 
     // 顶部导航左边点击事件
     onClickLeft () {
-      this.$router.push({path: '/home'})
+      this.$router.push({path: '/securityPatrolHome'})
     },
 
     // 是否暂存事件
@@ -347,7 +359,7 @@ export default {
       this.loadingShow = true;
       this.overlayShow = true;
       this.goalDepartmentOption = [];
-      queryRegisterUser({proId:this.userInfo.proIds[0],system:6})
+      queryRegisterUser({proId:this.proId,system:6})
       .then((res) => {
         this.registrantOption = [{
           text: '请选择',
@@ -812,8 +824,8 @@ export default {
       this.loadText = '加载中';
       this.backlogEmptyShow = false;
       this.isShowBacklogTaskNoMoreData = false;
-      getEventList({proId:this.userInfo.proIds[0], system: 6, 
-        workerId: this.userInfo.id,page, limit:pageSize, name,
+      getEventList({proId:this.proId, system: 6, 
+        workerId: this.workerId,page, limit:pageSize, name,
         startDate,endDate,eventType:eventType,registerType
       })
         .then((res) => {

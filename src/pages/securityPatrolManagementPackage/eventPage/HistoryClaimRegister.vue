@@ -420,11 +420,11 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
-import { eventDelete, getEventDetails,eventHandover, eventContact, eventReceive } from '@/api/escortManagement.js'
+import { eventDelete, getEventDetails,eventHandover, eventContact, eventReceive } from '@/api/securityPatrol/escortManagement.js'
 import _ from 'lodash'
 import axios from 'axios'
 import { base64ImgtoFile } from '@/common/js/utils'
-import {getAliyunSign} from '@/api/login.js'
+import {getAliyunSign} from '@/api/securityPatrol/login.js'
 import ScrollSelection from "@/components/ScrollSelection";
 import BottomSelect from "@/components/BottomSelect";
 export default {
@@ -550,15 +550,27 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["userInfo","transportantTaskMessage","ossMessage","enterEventRegisterPageMessage","timeMessage","claimRegisterElectronicSignatureMessage","temporaryStorageHistoryClaimRegisterMessage","moreEventMessage"]),
-    proId () {
-      return this.userInfo.proIds[0]
+    ...mapGetters(["userInfo","chooseHospitalArea","transportantTaskMessage","ossMessage","enterEventRegisterPageMessage","timeMessage","claimRegisterElectronicSignatureMessage","temporaryStorageHistoryClaimRegisterMessage","moreEventMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
     },
-    userName () {
-      return this.userInfo.name
+    workerId() {
+      return this.userInfo['worker']['id']
     },
-    workerId () {
-      return this.userInfo.id
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
     }
   },
 

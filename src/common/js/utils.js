@@ -881,11 +881,10 @@ export const removeAllLocalStorage = () => {
   removeStore('temporaryStorageClaimRegisterMessage');
   removeStore('temporaryStorageRepairsRegisterMessage');
   removeStore('temporaryStorageOtherRegisterMessage');
-  removeStore('temporaryStorageHistoryClaimRegisterMessage')
+  removeStore('temporaryStorageHistoryClaimRegisterMessage');
 
   // 设备巡检
 }
-
 /*
  * 
  *  清空除登录信息外的LocalStorage

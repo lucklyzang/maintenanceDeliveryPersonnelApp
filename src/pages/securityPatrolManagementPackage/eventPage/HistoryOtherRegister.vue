@@ -134,7 +134,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
-import { eventDelete,getEventDetails } from '@/api/escortManagement.js'
+import { eventDelete,getEventDetails } from '@/api/securityPatrol/escortManagement.js'
 import _ from 'lodash'
 import ScrollSelection from "@/components/ScrollSelection";
 import BottomSelect from "@/components/BottomSelect";
@@ -202,15 +202,27 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["userInfo","transportantTaskMessage","temporaryStorageRepairsRegisterMessage","enterEventRegisterPageMessage","moreEventMessage","claimRegisterElectronicSignatureMessage"]),
-    proId () {
-      return this.userInfo.proIds[0]
+    ...mapGetters(["userInfo","chooseHospitalArea","transportantTaskMessage","temporaryStorageRepairsRegisterMessage","enterEventRegisterPageMessage","moreEventMessage","claimRegisterElectronicSignatureMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
     },
-    userName () {
-      return this.userInfo.name
+    workerId() {
+      return this.userInfo['worker']['id']
     },
-    workerId () {
-      return this.userInfo.id
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
     }
   },
 

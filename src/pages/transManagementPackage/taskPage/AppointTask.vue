@@ -507,10 +507,10 @@
 <script>
   import HeaderTop from '@/components/HeaderTop'
   import FooterBottom from '@/components/FooterBottom'
-  import {getWorkerMessage} from '@/api/login.js'
-  import {queryAppointTaskMessage, updateAppointTaskMessage, cancelAppointTask, userSignOut, transferAppointTask,queryDispatchTaskCancelReason,sendbackAppointTask,queryAppointTaskSendbackReason} from '@/api/trans/workerPort.js'
-  import NoData from '@/components/NoData'
+  import {getWorkerMessage,userSignOut} from '@/api/login.js'
   import store from '@/store'
+  import {queryAppointTaskMessage, updateAppointTaskMessage, cancelAppointTask, transferAppointTask,queryDispatchTaskCancelReason,sendbackAppointTask,queryAppointTaskSendbackReason} from '@/api/trans/workerPort.js'
+  import NoData from '@/components/NoData'
   import QRCode from 'qrcodejs2'
   import Loading from '@/components/Loading'
   import SOtime from '@/common/js/SOtime.js'
@@ -610,7 +610,11 @@
         'catch_components',
         'isFreshAppointTaskPage',
         'appointTaskTransferIdList',
-        'chooseHospitalArea'
+        'chooseHospitalArea',
+        'projectGlobalTimer',
+        'globalTimer',
+        'equipmentPatrolGlobalTimer',
+        'securityPatrolGlobalTimer'
       ]),
       sex () {
         return this.userInfo['worker']['extendData']['sex']
@@ -992,6 +996,33 @@
             //   }).then(() => {
             //   })
             // };
+            if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+						if(this.globalTimer) {window.clearInterval(this.globalTimer)};
+						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
+						if(this.securityPatrolGlobalTimer) {window.clearInterval(this.securityPatrolGlobalTimer)};
+						removeAllLocalStorage();
+						store.dispatch('resetAutoRepairTaskStore');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetCleanManagementStore');
+						store.dispatch('resetEquipmentPatroLoginStateEvent');
+						store.dispatch('resetPatrolTaskStore');
+						store.dispatch('resetSpotCheckTaskStore');
+						store.dispatch('resetSpotTaskDispatchingManagementStore');
+						store.dispatch('resetDepartmentServiceStateEvent');
+						store.dispatch('resetDeviceServiceStateEvent');
+						store.dispatch('resetRepairsWorkOrderStateEvent');
+						store.dispatch('resetTaskSchedulingStateEvent');
+						store.dispatch('resetTransAppointTaskStateEvent');
+						store.dispatch('resetTransCatchComponentsStateEvent');
+						store.dispatch('resetTransCirculationTaskStateEvent');
+						store.dispatch('resetTransDispatchTaskStateEvent');
+						store.dispatch('resetTransMedicalTaskStateEvent');
+						store.dispatch('resetTransTaskSchedulingStateEvent');
+						store.dispatch('resetTransTransLoginStateEvent');
+						store.dispatch('resetRegisterStore');
+						store.dispatch('resetGuestbookStore');
+						store.dispatch('resetSecurityPatrolLoginState');
+						store.dispatch('resetSecurityPatrolTaskStore');
             removeAllLocalStorage();
             this.changeCatchComponent([]);
             this.$router.push({path:'/'})

@@ -3,7 +3,7 @@
     <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">{{ loadText }}</van-loading>
     <van-overlay :show="overlayShow" />
     <div class="nav">
-      <!-- <NavBar path="/workOrderDetails" title="工单完成签名" :leftArrow="false" :leftText="null" /> -->
+      <!-- <NavBar path="/securityPatrolManagementWorkOrderDetails" title="工单完成签名" :leftArrow="false" :leftText="null" /> -->
     </div>
     <div class="content">
       <div class="content-left">
@@ -66,7 +66,28 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","currentElectronicSignature","claimRegisterElectronicSignatureMessage","patrolTaskListMessage","ossMessage","timeMessage","originalSignature"])
+    ...mapGetters(["userInfo","chooseHospitalArea","currentElectronicSignature","claimRegisterElectronicSignatureMessage","securityPatrolTaskListMessage","ossMessage","timeMessage","originalSignature"]),
+    userName() {
+      return this.userInfo['worker']['name']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
+    },
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
+    }
   },
 
   methods: {
@@ -159,7 +180,6 @@ export default {
       }
     };
     this.changeClaimRegisterElectronicSignatureMessage(temporaryClaimRegisterElectronicSignatureMessage);
-    console.log('领取人签名信息',this.claimRegisterElectronicSignatureMessage);
     this.$router.push({path: '/historyClaimRegister'})
   },
 

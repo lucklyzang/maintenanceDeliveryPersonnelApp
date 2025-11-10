@@ -1077,7 +1077,8 @@
   import NoData from '@/components/NoData'
   import Loading from '@/components/Loading'
   import store from '@/store'
-  import {getAllTaskNumber, queryAllTaskMessage, userSignOut, getNewWork, getDispatchTaskComplete, queryAppointTaskMessage, queryCirculationTask, transferAppointTask} from '@/api/trans/workerPort.js'
+  import {userSignOut} from '@/api/login.js'
+  import {getAllTaskNumber, queryAllTaskMessage, getNewWork, getDispatchTaskComplete, queryAppointTaskMessage, queryCirculationTask, transferAppointTask} from '@/api/trans/workerPort.js'
   import {queryTransportTypeClass, collectDispatchTask, taskReminder, queryFeedback, submitFeedback, submitTaskFeedback} from '@/api/trans/medicalPort.js'
   import VanFieldSelectPicker from '@/components/VanFieldSelectPicker'
   import { mapGetters, mapMutations } from 'vuex'
@@ -1186,6 +1187,7 @@
     },
 
     mounted() {
+      this.changeTitleTxt({tit:'中央运送'});
       setStore('currentTitle','中央运送');
       // 控制设备物理返回按键测试
       if (!IsPC()) {
@@ -1213,13 +1215,15 @@
         this.parallelFunction(this.taskTypeTransfer(this.newTaskName));
         this.judgeTaskComplete();
         // 轮询是否有新任务
-        if (!windowTimer) {
+        if (!this.globalTimer) {
             windowTimer = window.setInterval(() => {
               if (this.isTimeoutContinue) {
-                setTimeout(this.queryNewWork(this.proId, this.workerId), 0)
+                setTimeout(this.queryNewWork(this.proId, this.workerId), 0);
+                this.changeGlobalTimer(windowTimer)
+              } else {
+                this.changeGlobalTimer(null)
               }
-            }, 3000);
-            this.changeGlobalTimer(windowTimer)
+            }, 3000)
         }
       } else {
         let me = this;
@@ -1301,13 +1305,16 @@
         'chooseHospitalArea',
         'userInfo',
         'newTaskName',
-        'globalTimer',
         'catch_components',
         'isFreshHomePage',
         'templateType',
         'isNewCircle',
         'isMedicalMan',
-        'appPermission'
+        'appPermission',
+        'projectGlobalTimer',
+        'globalTimer',
+        'equipmentPatrolGlobalTimer',
+        'securityPatrolGlobalTimer'
       ]),
       sex () {
         return this.userInfo['worker']['extendData']['sex']
@@ -1547,7 +1554,10 @@
         getNewWork(proId,workerId).then((res) => {
           // token过期,清楚定时器
           if (!res['headers']['token']) {
-            if(windowTimer) {window.clearInterval(windowTimer)}
+            if(windowTimer) {
+              window.clearInterval(windowTimer);
+              windowTimer = null
+            }
           };
           if (res && res.data.code == 200) {
             this.isTimeoutContinue = true;
@@ -1661,7 +1671,6 @@
         setStore('storeOverDueWay',true);
         userSignOut(proId,workerId).then((res) => {
           if (res && res.data.code == 200) {
-            if(this.globalTimer) {window.clearInterval(this.globalTimer)};
             // 退出信标服务器连接
             // try {
             //   window.android.logOut()
@@ -1672,7 +1681,34 @@
             //   }).then(() => {
             //   })
             // };
-            removeAllLocalStorage();
+            // 清空store和localStorage
+						if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+						if(this.globalTimer) {window.clearInterval(this.globalTimer)};
+						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
+						if(this.securityPatrolGlobalTimer) {window.clearInterval(this.securityPatrolGlobalTimer)};
+						removeAllLocalStorage();
+						store.dispatch('resetAutoRepairTaskStore');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetCleanManagementStore');
+						store.dispatch('resetEquipmentPatroLoginStateEvent');
+						store.dispatch('resetPatrolTaskStore');
+						store.dispatch('resetSpotCheckTaskStore');
+						store.dispatch('resetSpotTaskDispatchingManagementStore');
+						store.dispatch('resetDepartmentServiceStateEvent');
+						store.dispatch('resetDeviceServiceStateEvent');
+						store.dispatch('resetRepairsWorkOrderStateEvent');
+						store.dispatch('resetTaskSchedulingStateEvent');
+						store.dispatch('resetTransAppointTaskStateEvent');
+						store.dispatch('resetTransCatchComponentsStateEvent');
+						store.dispatch('resetTransCirculationTaskStateEvent');
+						store.dispatch('resetTransDispatchTaskStateEvent');
+						store.dispatch('resetTransMedicalTaskStateEvent');
+						store.dispatch('resetTransTaskSchedulingStateEvent');
+						store.dispatch('resetTransTransLoginStateEvent');
+						store.dispatch('resetRegisterStore');
+						store.dispatch('resetGuestbookStore');
+						store.dispatch('resetSecurityPatrolLoginState');
+						store.dispatch('resetSecurityPatrolTaskStore');
             this.changeCatchComponent([]);
             this.$router.push({path:'/'})
           } else {
@@ -1778,7 +1814,7 @@
       // 右边下拉框菜单点击
       leftLiCLick (index) {
         this.liIndex = index;
-        this.userLoginOut(this.proId, this.userInfo.userName)
+        this.userLoginOut(this.proId, this.userName)
       },
 
       // 跳转到首页
@@ -1806,7 +1842,7 @@
             closeOnPopstate: true,
             showCancelButton: true
           }).then(() => {
-            this.userLoginOut(this.proId, this.userInfo.userName)
+            this.userLoginOut(this.proId, this.workerId)
           })
           .catch(() => {
           })

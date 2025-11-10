@@ -13,7 +13,7 @@
         <div class="content-box">
             <div class="current-area">
                 <van-icon name="location" color="#1684FC" />
-                <span>当前区域: {{ patrolTaskListMessage.needSpaces.filter((item)=> { return item.id == departmentCheckList['depId'] })[0]['name'] }}</span>
+                <span>当前区域: {{ securityPatrolTaskListMessage.needSpaces.filter((item)=> { return item.id == departmentCheckList['depId'] })[0]['name'] }}</span>
             </div>
             <div class="patrol-item-box">
                 <div class="patrol-item-list" v-for="(item, index) in checkItemMessage.checkItemList" :key="index">
@@ -23,7 +23,7 @@
                     </div>
                     <div class="patrol-item-list-right">
                         <van-radio-group v-model="item.checkResult" direction="horizontal">
-                            <van-radio name="1" @click="(event) => passEvent(event,item,index)" :disabled="patrolTaskListMessage.state == 4">
+                            <van-radio name="1" @click="(event) => passEvent(event,item,index)" :disabled="securityPatrolTaskListMessage.state == 4">
                                 <template #icon="props">
                                     <img class="img-icon" :src="props.checked ? checkCheckboxPng : checkboxPng" />
                                 </template>
@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    <div class="task-operation-box" v-show="departmentCheckList.checkItemList.length > 0 && patrolTaskListMessage.state != 4">
+    <div class="task-operation-box" v-show="departmentCheckList.checkItemList.length > 0 && securityPatrolTaskListMessage.state != 4">
       <div class="task-complete" v-preventReClick="[sureEvent]">确 认</div>
     </div>
     <!-- 事件类型选择弹窗 -->
@@ -85,7 +85,7 @@
 <script>
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
-import { checkItemPass, checkItemNoPass, submitCheckItem, getIsHaveEventRegister } from '@/api/escortManagement.js'
+import { checkItemPass, checkItemNoPass, submitCheckItem, getIsHaveEventRegister } from '@/api/securityPatrol/escortManagement.js'
 import { mixinsDeviceReturn } from '@/mixins/deviceReturnFunction'
 import { deepClone } from '@/common/js/utils'
 export default {
@@ -115,16 +115,15 @@ export default {
   },
 
   mounted() {
-    console.log('大飒',this.patrolTaskListMessage);
     // 控制设备物理返回按键
-    this.deviceReturn('/workOrderDetails');
+    this.deviceReturn('/securityPatrolManagementWorkOrderDetails');
     // 判断该区域是否存在检查项
     if (this.departmentCheckList.checkItemList.length == 0) {
       this.$toast({
         type: 'fail',
         message: '该科室不存在巡查项!'
       });
-      setTimeout(() =>{ this.$router.push({path: '/workOrderDetails'}) },2000)
+      setTimeout(() =>{ this.$router.push({path: '/securityPatrolManagementWorkOrderDetails'}) },2000)
     } else {
       this.checkItemMessage = deepClone(this.departmentCheckList)
     }
@@ -132,12 +131,12 @@ export default {
 
   // activated () {
   //   // 控制设备物理返回按键
-  //   this.deviceReturn('/workOrderDetails')
+  //   this.deviceReturn('/securityPatrolManagementWorkOrderDetails')
   // },
 
   // beforeRouteEnter(to, from, next) {
   //   next(vm=>{
-  //     if (from.path == '/workOrderDetails') {
+  //     if (from.path == '/securityPatrolManagementWorkOrderDetails') {
   //       //此页面进入时重新请求数据
   //       console.log('重新请求数据');
   //     }
@@ -148,7 +147,28 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","enterProblemRecordMessage","departmentCheckList","patrolTaskListMessage","enterEventRegisterPageMessage"]),
+    ...mapGetters(["userInfo","chooseHospitalArea","enterProblemRecordMessage","departmentCheckList","securityPatrolTaskListMessage","enterEventRegisterPageMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
+    },
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
+    }
   },
 
   methods: {
@@ -160,12 +180,12 @@ export default {
       this.quitInfoShow = true;
         return
       };
-      this.$router.push({path: '/workOrderDetails'})
+      this.$router.push({path: '/securityPatrolManagementWorkOrderDetails'})
     },
 
     // 确定退出
     quitSure () {
-      this.$router.push({path: '/workOrderDetails'})
+      this.$router.push({path: '/securityPatrolManagementWorkOrderDetails'})
     },
 
     // 取消退出
@@ -188,14 +208,14 @@ export default {
         this.$router.push({path: '/otherRegister'})
       };
       temporaryEnterEventRegisterPageMessage['registerType'] = '巡查';
-      temporaryEnterEventRegisterPageMessage['taskId'] = this.patrolTaskListMessage.id;
+      temporaryEnterEventRegisterPageMessage['taskId'] = this.securityPatrolTaskListMessage.id;
       temporaryEnterEventRegisterPageMessage['patrolItemName'] = this.enterProblemRecordMessage['issueInfo']['name'];
       temporaryEnterEventRegisterPageMessage['resultId'] = this.resultId;
       temporaryEnterEventRegisterPageMessage['structId'] = this.enterProblemRecordMessage['issueInfo']['structId'];
       temporaryEnterEventRegisterPageMessage['depId'] = this.departmentCheckList['depId'];
       temporaryEnterEventRegisterPageMessage['checkItemId'] = this.enterProblemRecordMessage['issueInfo']['id'];
       temporaryEnterEventRegisterPageMessage['enterRegisterEventPageSource'] = '/areaPatrolDetails';
-      temporaryEnterEventRegisterPageMessage['depName'] = this.patrolTaskListMessage.needSpaces.filter((item)=> { return item.id == this.departmentCheckList['depId'] })[0]['name'];
+      temporaryEnterEventRegisterPageMessage['depName'] = this.securityPatrolTaskListMessage.needSpaces.filter((item)=> { return item.id == this.departmentCheckList['depId'] })[0]['name'];
       this.changeEnterEventRegisterPageMessage(temporaryEnterEventRegisterPageMessage)
     },
 
@@ -204,7 +224,7 @@ export default {
       this.loadingShow = true;
       this.overlayShow = true;
       this.loadText = '查询中';
-      getIsHaveEventRegister(this.userInfo.proIds[0],6,item.resultId).then((res) => {
+      getIsHaveEventRegister(this.proId,6,item.resultId).then((res) => {
         this.loadingShow = false;
         this.overlayShow = false;
         this.loadText = '';
@@ -222,7 +242,7 @@ export default {
           this.loadingShow = true;
           this.overlayShow = true;
           this.loadText = '反馈中';
-          checkItemPass({resultId:item.resultId,workerName: this.userInfo.name}).then((res) => {
+          checkItemPass({resultId:item.resultId,workerName: this.userName}).then((res) => {
             this.loadingShow = false;
             this.overlayShow = false;
             this.loadText = '';
@@ -272,7 +292,7 @@ export default {
     // 通过事件
     passEvent (event,item,index) {
       // 已完成的任务不可操作
-      if (this.patrolTaskListMessage.state == 4) {
+      if (this.securityPatrolTaskListMessage.state == 4) {
         return
       };
       // 判断该巡查项下是否有登记事件
@@ -282,7 +302,7 @@ export default {
     // 不通过事件
     noPassEvent (event,item,index) {
       // 已完成的任务
-      if (this.patrolTaskListMessage.state == 4) {
+      if (this.securityPatrolTaskListMessage.state == 4) {
         // 该检查项最终结果选为×,点击后直接进入异常检查项事件列表页
         if (this.departmentCheckList['checkItemList'][index]['checkResult'] == 3) {
           //保存进入问题记录页的相关信息
@@ -304,7 +324,7 @@ export default {
         this.loadingShow = true;
         this.overlayShow = true;
         this.loadText = '反馈中';
-        checkItemNoPass({resultId:item.resultId,workerName: this.userInfo.name}).then((res) => {
+        checkItemNoPass({resultId:item.resultId,workerName: this.userName}).then((res) => {
           this.loadingShow = false;
           this.overlayShow = false;
           this.loadText = '';
@@ -363,13 +383,13 @@ export default {
       this.overlayShow = true;
       this.loadText = '提交中';
       submitCheckItem({
-        taskId: this.patrolTaskListMessage.id,
+        taskId: this.securityPatrolTaskListMessage.id,
         depId: this.departmentCheckList.depId,
         punchCardType: this.departmentCheckList['punchCardType'],
         punchCardReason: this.departmentCheckList['punchCardReason']
       }).then((res) => {
         if (res && res.data.code == 200) {
-          this.$router.push({path: '/workOrderDetails'});
+          this.$router.push({path: '/securityPatrolManagementWorkOrderDetails'});
           this.loadingShow = false;
           this.overlayShow = false;
           this.$toast({

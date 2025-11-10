@@ -78,7 +78,7 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","submitAutoRepairTaskMessage","currentElectronicSignature","createAutoRepairTaskMessage","patrolTaskListMessage","ossMessage","timeMessage","originalSignature","devicePatrolDetailsSelectMessage","chooseHospitalArea"]),
+    ...mapGetters(["userInfo","submitAutoRepairTaskMessage","currentElectronicSignature","createAutoRepairTaskMessage","ossMessage","timeMessage","originalSignature","devicePatrolDetailsSelectMessage","chooseHospitalArea"]),
     name() {
       return this.userInfo['worker']['name']
     },
@@ -103,7 +103,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["changeOssMessage","changeTimeMessage","changePatrolTaskListMessage"]),
+    ...mapMutations(["changeOssMessage","changeTimeMessage"]),
 
 
     resizeScreen() {

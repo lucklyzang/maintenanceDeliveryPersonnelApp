@@ -114,7 +114,7 @@
 <script>
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
-import {queryGuestBook,guestBookDelete, guestCommentDelete, guestCommentAdd, guestSupport, guestCancel} from '@/api/escortManagement.js'
+import {queryGuestBook,guestBookDelete, guestCommentDelete, guestCommentAdd, guestSupport, guestCancel} from '@/api/securityPatrol/escortManagement.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
 export default {
   name: "GuestBook",
@@ -157,7 +157,7 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn("/home");
+    this.deviceReturn("/securityPatrolHome");
     this.$nextTick(()=> {
       this.initScrollChange()
     });
@@ -201,24 +201,36 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","patrolTaskListMessage","departmentCheckList","enterPostMessagePageMessage","currentScrollTop"]),
-    proId () {
-      return this.userInfo.proIds[0]
+    ...mapGetters(["userInfo","chooseHospitalArea","securityPatrolTaskListMessage","departmentCheckList","enterPostMessagePageMessage","currentScrollTop"]),
+    userName() {
+      return this.userInfo['worker']['name']
     },
-    userName () {
-      return this.userInfo.name
+    workerId() {
+      return this.userInfo['worker']['id']
     },
-    workerId () {
-      return this.userInfo.id
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
     }
   },
 
   methods: {
-    ...mapMutations(["changeDepartmentCheckList","changePatrolTaskListMessage","changeEnterPostMessagePageMessage","changeCurrentScrollTop"]),
+    ...mapMutations(["changeDepartmentCheckList","changeSecurityPatrolTaskListMessage","changeEnterPostMessagePageMessage","changeCurrentScrollTop"]),
 
     // 顶部导航左边点击事件
     onClickLeft () {
-      this.$router.push({path: '/home'})
+      this.$router.push({path: '/securityPatrolHome'})
     },
 
     // 外部评论框值变化事件

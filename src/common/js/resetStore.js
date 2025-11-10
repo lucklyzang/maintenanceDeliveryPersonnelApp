@@ -304,21 +304,21 @@ export function getSpotTaskDispatchingManagementState() {
 // 登录信息store的初始值
 export function getDefaultSecurityPatrolLoginState() {
     return {
-        globalTimer: null
+        securityPatrolGlobalTimer: null
     }
 };
 
 // 巡更模块store的初始值
 export function getDefaultSecurityPatrolPatrolTaskState() {
     return {
-        taskType: {}, //任务类型
+        securityPatrolTaskType: {}, //任务类型
         taskOrderType: {}, //任务工单类型
         departmentCheckList: {
             depId: '',
             checkItemList: []
         }, // 科室检查项信息
         enterProblemRecordMessage: {}, //进入问题记录页时携带的相关信息
-        patrolTaskListMessage: {}, //巡查任务列表信息
+        securityPatrolTaskListMessage: {}, //巡查任务列表信息
         currentElectronicSignature: null, // 工单完成时的签名信息
         originalSignature: null //// 工单完成时原始签名信息
     }

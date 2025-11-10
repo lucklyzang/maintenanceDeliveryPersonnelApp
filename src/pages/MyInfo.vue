@@ -86,7 +86,8 @@
 				'chooseHospitalArea',
 				'projectGlobalTimer',
 				'globalTimer',
-				'equipmentPatrolGlobalTimer'
+				'equipmentPatrolGlobalTimer',
+				'securityPatrolGlobalTimer'
 			]),
 			userName() {
 			  return this.userInfo['worker']['name']
@@ -146,6 +147,7 @@
 						if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
 						if(this.globalTimer) {window.clearInterval(this.globalTimer)};
 						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
+						if(this.securityPatrolGlobalTimer) {window.clearInterval(this.securityPatrolGlobalTimer)};
 						removeAllLocalStorage();
 						store.dispatch('resetAutoRepairTaskStore');
 						store.dispatch('resetLoginState');
@@ -165,7 +167,6 @@
 						store.dispatch('resetTransMedicalTaskStateEvent');
 						store.dispatch('resetTransTaskSchedulingStateEvent');
 						store.dispatch('resetTransTransLoginStateEvent');
-						store.dispatch('resetLoginState');
 						store.dispatch('resetRegisterStore');
 						store.dispatch('resetGuestbookStore');
 						store.dispatch('resetSecurityPatrolLoginState');

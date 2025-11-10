@@ -9,14 +9,6 @@ export function queryAllTaskMessage(data) {
   })
 };
 
-// 用户签退
-export function userSignOut(proId,workerId) {
-  return request({
-    url: `trans/login/signOut/${proId}/${workerId}`,
-    method: 'get'
-  })
-};
-
 // 获取是否有新任务
 export function getNewWork(proId,workerId) {
   return request({

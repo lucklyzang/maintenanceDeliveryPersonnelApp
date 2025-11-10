@@ -161,7 +161,7 @@
                         <span>检查</span>
                     </div>
                     <div class="message-two-right">
-                        {{ disposeCheckType(schedulingTaskDetails.checkItems) }}
+                        {{  schedulingTaskDetails.hasOwnProperty('checkItems') ? disposeCheckType(schedulingTaskDetails.checkItems) : '' }}
                     </div>
                 </div>
                 <div class="message-one message-two">
@@ -185,7 +185,8 @@
 </template>
 <script>
 import { mapGetters, mapMutations } from "vuex";
-import { userSignOut } from '@/api/trans/workerPort.js'
+import { userSignOut } from '@/api/login.js'
+import store from '@/store'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 import { setStore,removeAllLocalStorage } from '@/common/js/utils'
 import SelectSearch from "@/components/SelectSearch";
@@ -227,7 +228,12 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","chooseHospitalArea","schedulingTaskDetails","chooseHospitalArea","operateBtnClickRecord"]),
+    ...mapGetters(["userInfo","chooseHospitalArea","schedulingTaskDetails","chooseHospitalArea","operateBtnClickRecord",
+      'projectGlobalTimer',
+      'globalTimer',
+      'equipmentPatrolGlobalTimer',
+      'securityPatrolGlobalTimer'
+    ]),
      sex () {
         return this.userInfo['worker']['extendData']['sex']
       },
@@ -307,10 +313,12 @@ export default {
     // 处理预约任务检查项
     disposeCheckType (item) {
       let temporaryArray = [];
-      for (let item of item) {
-        temporaryArray.push(item.checkTypeName)
-      };
-      return temporaryArray.join('、')
+      if (Object.prototype.toString.call(item) === '[object Array]') {
+        for (let item of item) {
+          temporaryArray.push(item.checkTypeName)
+        };
+        return temporaryArray.join('、')
+      }
     },
 
     // 优先级转换
@@ -370,7 +378,7 @@ export default {
             closeOnPopstate: true,
             showCancelButton: true
           }).then(() => {
-            this.userLoginOut(this.proId, this.userInfo.userName)
+            this.userLoginOut(this.proId, this.workerId)
           })
           .catch(() => {
           })
@@ -382,6 +390,32 @@ export default {
         setStore('storeOverDueWay',true);
         userSignOut(proId,workerId).then((res) => {
           if (res && res.data.code == 200) {
+            if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+            if(this.globalTimer) {window.clearInterval(this.globalTimer)};
+						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
+						if(this.securityPatrolGlobalTimer) {window.clearInterval(this.securityPatrolGlobalTimer)};
+						store.dispatch('resetAutoRepairTaskStore');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetCleanManagementStore');
+						store.dispatch('resetEquipmentPatroLoginStateEvent');
+						store.dispatch('resetPatrolTaskStore');
+						store.dispatch('resetSpotCheckTaskStore');
+						store.dispatch('resetSpotTaskDispatchingManagementStore');
+						store.dispatch('resetDepartmentServiceStateEvent');
+						store.dispatch('resetDeviceServiceStateEvent');
+						store.dispatch('resetRepairsWorkOrderStateEvent');
+						store.dispatch('resetTaskSchedulingStateEvent');
+						store.dispatch('resetTransAppointTaskStateEvent');
+						store.dispatch('resetTransCatchComponentsStateEvent');
+						store.dispatch('resetTransCirculationTaskStateEvent');
+						store.dispatch('resetTransDispatchTaskStateEvent');
+						store.dispatch('resetTransMedicalTaskStateEvent');
+						store.dispatch('resetTransTaskSchedulingStateEvent');
+						store.dispatch('resetTransTransLoginStateEvent');
+						store.dispatch('resetRegisterStore');
+						store.dispatch('resetGuestbookStore');
+						store.dispatch('resetSecurityPatrolLoginState');
+						store.dispatch('resetSecurityPatrolTaskStore');
             removeAllLocalStorage();
             this.changeCatchComponent([]);
             this.$router.push({path:'/'})

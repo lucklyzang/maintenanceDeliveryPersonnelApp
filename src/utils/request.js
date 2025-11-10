@@ -92,8 +92,9 @@ service.interceptors.response.use(
                     store.dispatch('resetSecurityPatrolTaskStore');
                     removeAllLocalStorage();
                     if(store.getters.globalTimer) {window.clearInterval(store.getters.globalTimer)};
-                    if(store.getters.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
-                    if(store.getters.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
+                    if(store.getters.projectGlobalTimer) {window.clearInterval(store.getters.projectGlobalTimer)};
+                    if(store.getters.equipmentPatrolGlobalTimer) {window.clearInterval(store.getters.equipmentPatrolGlobalTime)};
+                    if(store.getters.securityPatrolGlobalTimer) {window.clearInterval(store.getters.securityPatrolGlobalTimer)};
                     if (!store.getters.overDueWay) { 
                         Toast({
                             message: 'token已过期,请重新登录',

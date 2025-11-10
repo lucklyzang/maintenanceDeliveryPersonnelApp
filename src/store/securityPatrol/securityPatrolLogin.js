@@ -4,13 +4,13 @@ export default {
     state: getDefaultSecurityPatrolLoginState(),
 
     getters: {
-        globalTimer: state => state.globalTimer
+        securityPatrolGlobalTimer: state => state.securityPatrolGlobalTimer
     },
 
     mutations: {
         // 保存全局定时器的状态
-        changeGlobalTimer (state, playLoad) {
-            state.globalTimer = playLoad
+        changeSecurityPatrolGlobalTimer (state, playLoad) {
+            state.securityPatrolGlobalTimer = playLoad
         },
 
         //重置login的store

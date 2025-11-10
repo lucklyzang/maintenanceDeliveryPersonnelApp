@@ -140,10 +140,11 @@
 <script>
   import HeaderTop from '@/components/HeaderTop'
   import FooterBottom from '@/components/FooterBottom'
-  import {queryCirculationTask,userSignOut} from '@/api/trans/workerPort.js'
+  import {userSignOut} from '@/api/login.js'
+  import store from '@/store'
+  import {queryCirculationTask} from '@/api/trans/workerPort.js'
   import NoData from '@/components/NoData'
   import Loading from '@/components/Loading'
-  import store from '@/store'
   import { mapGetters, mapMutations } from 'vuex'
   import { setStore, getStore, IsPC, removeBlock,  compareDateTime, removeAllLocalStorage } from '@/common/js/utils'
   let windowTimer
@@ -201,7 +202,11 @@
         'catch_components',
         'circulationDetails',
         'isNewCircle',
-        'chooseHospitalArea'
+        'chooseHospitalArea',
+        'projectGlobalTimer',
+        'globalTimer',
+        'equipmentPatrolGlobalTimer',
+        'securityPatrolGlobalTimer'
       ]),
       sex () {
         return this.userInfo['worker']['extendData']['sex']
@@ -369,7 +374,33 @@
             //   }).then(() => {
             //   })
             // };
-            removeAllLocalStorage();
+            if(this.projectGlobalTimer) {window.clearInterval(this.projectGlobalTimer)};
+						if(this.globalTimer) {window.clearInterval(this.globalTimer)};
+						if(this.equipmentPatrolGlobalTimer) {window.clearInterval(this.equipmentPatrolGlobalTimer)};
+						if(this.securityPatrolGlobalTimer) {window.clearInterval(this.securityPatrolGlobalTimer)};
+						removeAllLocalStorage();
+						store.dispatch('resetAutoRepairTaskStore');
+						store.dispatch('resetLoginState');
+						store.dispatch('resetCleanManagementStore');
+						store.dispatch('resetEquipmentPatroLoginStateEvent');
+						store.dispatch('resetPatrolTaskStore');
+						store.dispatch('resetSpotCheckTaskStore');
+						store.dispatch('resetSpotTaskDispatchingManagementStore');
+						store.dispatch('resetDepartmentServiceStateEvent');
+						store.dispatch('resetDeviceServiceStateEvent');
+						store.dispatch('resetRepairsWorkOrderStateEvent');
+						store.dispatch('resetTaskSchedulingStateEvent');
+						store.dispatch('resetTransAppointTaskStateEvent');
+						store.dispatch('resetTransCatchComponentsStateEvent');
+						store.dispatch('resetTransCirculationTaskStateEvent');
+						store.dispatch('resetTransDispatchTaskStateEvent');
+						store.dispatch('resetTransMedicalTaskStateEvent');
+						store.dispatch('resetTransTaskSchedulingStateEvent');
+						store.dispatch('resetTransTransLoginStateEvent');
+						store.dispatch('resetRegisterStore');
+						store.dispatch('resetGuestbookStore');
+						store.dispatch('resetSecurityPatrolLoginState');
+						store.dispatch('resetSecurityPatrolTaskStore');
             this.changeCatchComponent([]);
             this.$router.push({path:'/'})
           } else {

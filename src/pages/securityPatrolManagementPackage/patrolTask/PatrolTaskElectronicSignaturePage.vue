@@ -3,7 +3,7 @@
     <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">{{ loadText }}</van-loading>
     <van-overlay :show="overlayShow" />
     <div class="nav">
-      <!-- <NavBar path="/workOrderDetails" title="工单完成签名" :leftArrow="false" :leftText="null" /> -->
+      <!-- <NavBar path="/securityPatrolManagementWorkOrderDetails" title="工单完成签名" :leftArrow="false" :leftText="null" /> -->
     </div>
     <div class="content">
       <div class="content-left">
@@ -40,13 +40,13 @@
 import NavBar from "@/components/NavBar";
 import ElectronicSignature from '@/components/ElectronicSignature'
 import { mapGetters, mapMutations } from "vuex";
-import { taskComplete } from '@/api/escortManagement.js'
-import {getAliyunSign} from '@/api/login.js'
+import { taskComplete } from '@/api/securityPatrol/escortManagement.js'
+import {getAliyunSign} from '@/api/securityPatrol/login.js'
 import { base64ImgtoFile, rotateBase64Img } from '@/common/js/utils'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
 import axios from 'axios'
 export default {
-  name: "PatrolTaskElectronicSignaturePage",
+  name: "SecurityPatrolManagementPatrolTaskElectronicSignaturePage",
   components: {
     NavBar,
     ElectronicSignature
@@ -64,7 +64,7 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn("/workOrderDetails");
+    this.deviceReturn("/securityPatrolManagementWorkOrderDetails");
     // this.$nextTick(()=> {
     //   this.resizeScreen()
     // })
@@ -73,7 +73,28 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(["userInfo","currentElectronicSignature","patrolTaskListMessage","ossMessage","timeMessage","originalSignature"])
+    ...mapGetters(["userInfo","chooseHospitalArea","currentElectronicSignature","securityPatrolTaskListMessage","ossMessage","timeMessage","originalSignature"]),
+    userName() {
+      return this.userInfo['worker']['name']
+    },
+    workerId() {
+      return this.userInfo['worker']['id']
+    },
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
+    }
   },
 
   methods: {
@@ -154,9 +175,9 @@ export default {
       };
       // 完成任务接口
       taskComplete({
-        taskId: this.patrolTaskListMessage.id, // 当前任务id
+        taskId: this.securityPatrolTaskListMessage.id, // 当前任务id
         signImage: this.imgOnlinePathArr[0], // 签名路径
-        workerName: this.userInfo.name // 当前登陆员工
+        workerName: this.userName // 当前登陆员工
       }).then((res) => {
       if (res && res.data.code == 200) {
         this.loadingShow = false;
@@ -263,7 +284,7 @@ export default {
     cancel () {
       this.$refs.mychild.overwrite();
       this.$router.push({
-        path: "/workOrderDetails"
+        path: "/securityPatrolManagementWorkOrderDetails"
       })
     },
   }

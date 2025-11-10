@@ -1,7 +1,12 @@
 <template>
   <div class="page-box" ref="wrapper">
     <div class="nav">
-        <NavBar title="秩序维护系统" :leftArrow="false" leftText="" />
+         <HeaderTop title="安全巡更">
+            <div class="header-left" slot="left" @click="backTo">
+                <van-icon name="wap-home" color="#fff" size="22"></van-icon>
+                <span>首页</span>
+            </div>
+        </HeaderTop>
     </div>
     <div class="content">
         <div class="content-top-area">
@@ -12,10 +17,10 @@
 				</div>
 				<div class="user-message">
 					<div class="user-name">
-						{{ userInfo.name }}
+						{{ userName }}
 					</div>
 					<div class="account-name">
-						{{ hospitalMessage.hospitalName }} {{ `${hospitalMessage.name}` }}
+						{{ proName }}
 					</div>
 				</div>
 			</div>
@@ -37,16 +42,16 @@
   </div>
 </template>
 <script>
-    import NavBar from "@/components/NavBar";
-    import { queryNewCount } from '@/api/escortManagement.js'
+    import HeaderTop from '@/components/HeaderTop'
+    import { queryNewCount } from '@/api/securityPatrol/escortManagement.js'
     import {
         mapGetters,
         mapMutations
     } from 'vuex'
     export default {
-        name: 'Home',
+        name: 'SecurityPatrolHome',
         components: {
-            NavBar
+            HeaderTop
         },
         data() {
             return {
@@ -96,7 +101,7 @@
                         setTimeout(this.queryNewMessage, 0)
                     }
                 }, 3000);
-                this.changeGlobalTimer(this.windowTimer)
+                this.changeSecurityPatrolGlobalTimer(this.windowTimer)
             }
         },
 
@@ -106,31 +111,45 @@
             ...mapGetters([
                 'userInfo',
                 'isLogin',
-                'hospitalMessage',
                 'isEnterGuestBookPageFromHomePage',
-                'lastMessageNumber'
+                'lastMessageNumber',
+                'chooseHospitalArea'
             ]),
-
-            proId () {
-                return this.userInfo.proIds[0]
+            userName() {
+                return this.userInfo['worker']['name']
             },
-
-            userName () {
-                return this.userInfo.name
+            workerId() {
+                return this.userInfo['worker']['id']
             },
-
-            workerId () {
-                return this.userInfo.id
+            proName () {
+                return this.chooseHospitalArea['text']
+            },
+            proId() {
+                return this.chooseHospitalArea['value']
+            },
+            depId() {
+                return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+            },
+            depName() {
+                return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+            },
+            userAccount() {
+                return this.userInfo['worker']['account']
             }
         },
 
         methods: {
             ...mapMutations([
                 "changeChooseProject",
-                'changeGlobalTimer',
+                'changeSecurityPatrolGlobalTimer',
                 'changeIsEnterGuestBookPageFromHomePage',
                 'changeLastMessageNumber'
             ]),
+
+             // 跳转到首页
+            backTo () {
+                this.$router.push({path:'/home'});
+            },
 
             // 查询是否有当前登录用户参与任务集下新的留言
             queryNewMessage () {
@@ -209,17 +228,12 @@
             top: 0;
             z-index: 10;
             left: 0;
-            /deep/ .van-nav-bar {
-                .van-nav-bar__left {
-                    .van-nav-bar__text {
-                        color: #fff !important;
-                        margin-left: 8px !important;
+            .header {
+                .header-left {
+                    >span {
+                        font-size: 14px;
+                        color: #F8F9FA;
                     }
-                }
-                .van-nav-bar__title {
-                    color: #fff !important;
-                    font-size: 18px !important;
-                    font-weight: bold
                 }
             }
         };

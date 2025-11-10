@@ -232,8 +232,9 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
-import {userSignOut,getAliyunSign} from '@/api/login.js'
-import { eventregister, querySpace, queryDepartment, queryStructure} from '@/api/escortManagement.js'
+import {getAliyunSign} from '@/api/securityPatrol/login.js'
+import {userSignOut} from '@/api/login.js'
+import { eventregister, querySpace, queryDepartment, queryStructure} from '@/api/securityPatrol/escortManagement.js'
 import { setStore,removeAllLocalStorage,compress,deepClone, base64ImgtoFile } from '@/common/js/utils'
 import _ from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
@@ -335,15 +336,27 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["userInfo","transportantTaskMessage","ossMessage","timeMessage","departmentCheckList","enterProblemRecordMessage","temporaryStorageRepairsRegisterMessage","enterEventRegisterPageMessage"]),
-    proId () {
-      return this.userInfo.proIds[0]
+    ...mapGetters(["userInfo","chooseHospitalArea","transportantTaskMessage","ossMessage","timeMessage","departmentCheckList","enterProblemRecordMessage","temporaryStorageRepairsRegisterMessage","enterEventRegisterPageMessage"]),
+    userName() {
+      return this.userInfo['worker']['name']
     },
-    userName () {
-      return this.userInfo.name
+    workerId() {
+      return this.userInfo['worker']['id']
     },
-    workerId () {
-      return this.userInfo.id
+    proName () {
+      return this.chooseHospitalArea['text']
+    },
+    proId() {
+      return this.chooseHospitalArea['value']
+    },
+    depId() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
+    },
+    depName() {
+      return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
+    },
+    userAccount() {
+      return this.userInfo['worker']['account']
     }
   },
 
@@ -880,7 +893,7 @@ export default {
             closeOnPopstate: true,
             showCancelButton: true
           }).then(() => {
-            this.userLoginOut(this.proId, this.userInfo.userName)
+            this.userLoginOut(this.proId, this.userName)
           })
           .catch(() => {
           })

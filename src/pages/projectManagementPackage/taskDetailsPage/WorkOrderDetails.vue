@@ -1273,6 +1273,8 @@
     };
     .worker-show {
       .content-wrapper();
+      flex: 1;
+      height: 0;
       overflow: auto;
       .content-real {
         flex: 1;

@@ -159,13 +159,13 @@ const SecurityPatrolHome = () =>
     import ('@/pages/securityPatrolManagementPackage/Home')
 const BeaconList = () =>
   import ('@/pages/securityPatrolManagementPackage/BeaconList')
-const PatrolTaskElectronicSignaturePage = () =>
+const SecurityPatrolManagementPatrolTaskElectronicSignaturePage = () =>
     import ('@/pages/securityPatrolManagementPackage/patrolTask/PatrolTaskElectronicSignaturePage')
 const EventRegisterElectronicSignaturePage = () =>
     import ('@/pages/securityPatrolManagementPackage/eventPage/EventRegisterElectronicSignaturePage')
 const PatrolTasklist = () =>
     import ('@/pages/securityPatrolManagementPackage/patrolTask/PatrolTasklist')
-const WorkOrderDetails = () =>
+const SecurityPatrolManagementWorkOrderDetails = () =>
     import ('@/pages/securityPatrolManagementPackage/patrolTask/WorkOrderDetails')
 const ProblemRecord = () =>
     import ('@/pages/securityPatrolManagementPackage/patrolTask/ProblemRecord')
@@ -303,7 +303,8 @@ let baseRoute = [{
       {
         path: '/currentCirculationTaskSampleMessage',
         name: 'currentCirculationTaskSampleMessage',
-        component: CurrentCirculationTaskSampleMessage
+        component: CurrentCirculationTaskSampleMessage,
+        meta: { index: 5 }
       },
       {
         path: '/newCirculationTaskHistoryDetails',
@@ -313,7 +314,8 @@ let baseRoute = [{
       {
         path: '/circulationTaskCondition',
         name: 'circulationTaskCondition',
-        component: CirculationTaskCondition
+        component: CirculationTaskCondition,
+        meta: { index: 4 }
       },
       {
         path: '/transportTypeMessage',
@@ -353,17 +355,20 @@ let baseRoute = [{
       {
         path: '/circulationDetails',
         name: 'circulationDetails',
-        component: CirculationDetails
+        component: CirculationDetails,
+        meta: { index: 4 }
       },
       {
         path: '/dispatchDetails',
         name: 'dispatchDetails',
-        component: DispatchDetails
+        component: DispatchDetails,
+        meta: { index: 4 }
       },
       {
         path: '/appointDetails',
         name: 'appointDetails',
-        component: AppointDetails
+        component: AppointDetails,
+        meta: { index: 4 }
       },
       {
         path: '/dispatchTaskPhotoSure',
@@ -384,32 +389,38 @@ let baseRoute = [{
       {
         path: '/schedulingDispathTaskDetails',
         name: 'schedulingDispathTaskDetails',
-        component: SchedulingDispathTaskDetails
+        component: SchedulingDispathTaskDetails,
+        meta: { index: 4 }
       },
       {
         path: '/schedulingAppointTaskDetails',
         name: 'schedulingAppointTaskDetails',
-        component: SchedulingAppointTaskDetails
+        component: SchedulingAppointTaskDetails,
+        meta: { index: 4 }
       },
       {
         path: '/createDispathTask',
         name: 'createDispathTask',
-        component: CreateDispathTask
+        component: CreateDispathTask,
+        meta: { index: 4 }
       },
       {
         path: '/createAppointTask',
         name: 'createAppointTask',
-        component: CreateAppointTask
+        component: CreateAppointTask,
+        meta: { index: 4 }
       },
       {
         path: '/editDispathTask',
         name: 'editDispathTask',
-        component: EditDispathTask
+        component: EditDispathTask,
+        meta: { index: 4 }
       },
       {
         path: '/editAppintTask',
         name: 'editAppintTask',
-        component: EditAppointTask
+        component: EditAppointTask,
+        meta: { index: 4 }
       },
       // 工程维护路由
       {
@@ -559,11 +570,6 @@ let baseRoute = [{
         name: 'cleanHome',
         component: CleanHome,
         meta: { index: 2 }
-    },
-    {
-        path: '/myInfo',
-        name: 'myInfo',
-        component: MyInfo
     },
     {
         path: '/cleaningTask',
@@ -784,32 +790,38 @@ let baseRoute = [{
   {
     path: '/securityPatrolHome',
     name: 'securityPatrolHome',
-    component: SecurityPatrolHome
+    component: SecurityPatrolHome,
+    meta: { index: 3 }
   },
   {
       path: '/beaconList',
       name: 'beaconList',
-      component: BeaconList
+      component: BeaconList,
+      meta: { index: 4 }
   },
   {
-      path: '/patrolTaskElectronicSignaturePage',
-      name: 'patrolTaskElectronicSignaturePage',
-      component: PatrolTaskElectronicSignaturePage
+      path: '/securityPatrolManagementPatrolTaskElectronicSignaturePage',
+      name: 'securityPatrolManagementPatrolTaskElectronicSignaturePage',
+      component: SecurityPatrolManagementPatrolTaskElectronicSignaturePage,
+      meta: { index: 6 }
   },
   {
       path: '/eventRegisterElectronicSignaturePage',
       name: 'eventRegisterElectronicSignaturePage',
-      component: EventRegisterElectronicSignaturePage
+      component: EventRegisterElectronicSignaturePage,
+      meta: { index: 6 }
   },
   {
       path: '/patrolTasklist',
       name: 'patrolTasklist',
-      component: PatrolTasklist
+      component: PatrolTasklist,
+      meta: { index: 4 }
   },
   {
-      path: '/workOrderDetails',
-      name: 'workOrderDetails',
-      component: WorkOrderDetails
+      path: '/securityPatrolManagementWorkOrderDetails',
+      name: 'securityPatrolManagementWorkOrderDetails',
+      component: SecurityPatrolManagementWorkOrderDetails,
+      meta: { index: 5 }
   },
   {
       path: '/problemRecord',
@@ -827,73 +839,85 @@ let baseRoute = [{
   {
       path: '/eventList',
       name: 'eventList',
-      component: EventList
+      component: EventList,
+      meta: { index: 4 }
 
   },
   {
       path: '/repairsRegister',
       name: 'repairsRegister',
-      component: RepairsRegister
+      component: RepairsRegister,
+      meta: { index: 5 }
 
   },
   {
       path: '/otherRegister',
       name: 'otherRegister',
-      component: OtherRegister
+      component: OtherRegister,
+      meta: { index: 5 }
 
   },
   {
       path: '/claimRegister',
       name: 'claimRegister',
-      component: ClaimRegister
+      component: ClaimRegister,
+      meta: { index: 5 }
 
   },
   {
       path: '/historyClaimRegister',
       name: 'historyClaimRegister',
-      component: HistoryClaimRegister
+      component: HistoryClaimRegister,
+      meta: { index: 5 }
 
   },
   {
       path: '/guestBook',
       name: 'guestBook',
-      component: GuestBook
+      component: GuestBook,
+      meta: { index: 4 }
 
   },
   {
       path: '/postMessage',
       name: 'postMessage',
-      component: PostMessage
+      component: PostMessage,
+      meta: { index: 5 }
 
   },
   {
       path: '/moreHistoryClaimRegister',
       name: 'moreHistoryClaimRegister',
-      component: MoreHistoryClaimRegister
+      component: MoreHistoryClaimRegister,
+      meta: { index: 6 }
 
   },
   {
       path: '/historyRepairsRegister',
       name: 'historyRepairsRegister',
-      component: HistoryRepairsRegister
+      component: HistoryRepairsRegister,
+      meta: { index: 5 }
 
   },
   {
       path: '/moreHistoryRepairsRegister',
       name: 'moreHistoryRepairsRegister',
-      component: MoreHistoryRepairsRegister
+      component: MoreHistoryRepairsRegister,
+      meta: { index: 6 }
 
   },
   {
       path: '/historyOtherRegister',
       name: 'historyOtherRegister',
-      component: HistoryOtherRegister
+      component: HistoryOtherRegister,
+      meta: { index: 5 }
 
   },
   {
       path: '/moreHistoryOtherRegister',
       name: 'moreHistoryOtherRegister',
-      component: MoreHistoryOtherRegister
+      component: MoreHistoryOtherRegister,
+      meta: { index: 6 }
 
   }
 ];
