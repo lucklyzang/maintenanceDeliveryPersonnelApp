@@ -889,7 +889,7 @@
 
       // 完成审核
       async completeTask () {
-        if (!appPermission.projectAudit) {
+        if (!this.appPermission.projectAudit) {
           this.$toast('你暂无此权限!');
           return
         };
@@ -968,7 +968,7 @@
         this.$router.push({path: 'repairsWorkOrder'});
         this.changeTitleTxt({tit:'报修工单'});
         setStore('currentTitle','报修工单')
-        // if (!this.userInfo.extendData.projectAudit) {
+        // if (!this.appPermission.projectAudit) {
         //   this.$toast('你暂无此权限!');
         //   return
         // };          
@@ -1183,6 +1183,7 @@
     };
     .worker-show {
       .content-wrapper();
+      height: 0;
       overflow: auto;
       .content-real {
         flex: 1;

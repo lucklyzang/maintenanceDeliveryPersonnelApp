@@ -360,7 +360,7 @@
         setStore('departmentServiceMsg',item);
         this.$router.push({path: 'departmentWorkOrderDeatils'});
         this.changeTitleTxt({tit:'工单详情'});
-        setStore('currentTitle','工程详情')
+        setStore('currentTitle','工单详情')
       },
 
       // 返回上一页
@@ -378,6 +378,7 @@
   @import "~@/common/stylus/mixin.less";
   @import "~@/common/stylus/modifyUi.less";
   .content-wrapper {
+    height: 0;
     /deep/ .van-dialog {
       .van-dialog__content {
         margin-bottom: 6px;
@@ -461,8 +462,10 @@
       background: #f7f7f7;
       position: relative;
       overflow: auto;
+      padding-bottom: 10px;
+      box-sizing: border-box;
       /deep/ .van-pull-refresh {
-        overflow: auto
+        overflow: auto;
       };
       > div {
         width: 96%;

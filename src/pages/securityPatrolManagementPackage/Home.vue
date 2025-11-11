@@ -263,7 +263,7 @@
                     transform: translateX(-50%);
                     height: 125px;
                     margin: 0 auto;
-                    top: 80px;
+                    top: 64px;
                     border-radius: 10px;
                     display: flex;
                     flex-flow: row nowrap;
@@ -310,7 +310,7 @@
                 background: #fff;
                 border-radius: 8px;
                 margin: 0 auto;
-                margin-top: 40px;
+                margin-top: 20px;
                 padding-bottom: 10px;
                 box-sizing: border-box;
                 display: flex;

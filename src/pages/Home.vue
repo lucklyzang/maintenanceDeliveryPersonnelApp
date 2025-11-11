@@ -55,7 +55,6 @@
 		mapMutations
 	} from 'vuex'
 	import FooterBottom from "@/components/FooterBottom";
-	import NavBar from "@/components/NavBar";
 	export default{
 		components: {
 			FooterBottom
@@ -281,15 +280,19 @@
 			box-sizing: border-box;
 			align-items: center;
 			position: relative;
+			background: #fff;
 			.title-left {
 				padding-left: 8px;
 				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 				>img {
 					width: 23px;
 					margin-right: 2px;
 					vertical-align: middle;
 				};
-				>sapn {
+				>span {
 					font-size: 12px;
 					color: #3370FF;
 					vertical-align: middle;
@@ -303,7 +306,6 @@
 			}
 		};
 		.home-banner-area {
-			margin-top: 10px;
 			height: 150px;
 			>img {
 				width: 100%;
@@ -318,7 +320,7 @@
 			flex-direction: column;
 			margin-top: 10px;
 			.service-management {
-				padding: 10px 10px 20px 10px;
+				padding: 15px 10px 30px 10px;
 				box-sizing: border-box;
 				width: 98%;
 				max-height: 25vh;
@@ -330,7 +332,7 @@
 					font-size: 16px;
 					color: #242424;
 					font-weight: bold;
-					margin-bottom: 16px;
+					margin-bottom: 20px;
 				};
 				.service-management-content {
 					display: flex;

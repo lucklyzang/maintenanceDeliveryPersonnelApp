@@ -8,7 +8,7 @@ export default {
 			return state.isFreshDepartmentServicePage
 		},
     departmentServiceMsg:  (state) => {
-			state.departmentServiceMsg = getStore('departmentServiceMsg') ? getStore('departmentServiceMsg') : '';
+			state.departmentServiceMsg = JSON.parse(getStore('departmentServiceMsg')) ? JSON.parse(getStore('departmentServiceMsg')) : {};
 			return state.departmentServiceMsg
 		},
     isDepartmentServiceVerifySweepCode: (state) => {

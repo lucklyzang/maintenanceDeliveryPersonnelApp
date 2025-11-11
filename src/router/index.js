@@ -44,7 +44,7 @@ const CreateDispathTask = () => import('@/pages/transManagementPackage/taskSched
 const CreateAppointTask = () => import('@/pages/transManagementPackage/taskSchedulingPage/CreateAppointTask')
 const EditDispathTask = () => import('@/pages/transManagementPackage/taskSchedulingPage/EditDispathTask')
 const EditAppointTask = () => import('@/pages/transManagementPackage/taskSchedulingPage/EditAppointTask')
-// 工程维护
+// 工程维修
 const ProjectHome = () => import('@/pages/projectManagementPackage/Home')
 const RepairsWorkOrder = () => import('@/pages/projectManagementPackage/taskPage/RepairsWorkOrder')
 const DeviceService = () => import('@/pages/projectManagementPackage/taskPage/DeviceService')
@@ -422,7 +422,7 @@ let baseRoute = [{
         component: EditAppointTask,
         meta: { index: 4 }
       },
-      // 工程维护路由
+      // 工程维修路由
       {
         path: '/projectHome',
         name: 'projectHome',
@@ -465,12 +465,14 @@ let baseRoute = [{
       {
         path: '/workOrderCheck',
         name: 'workOrderCheck',
-        component:  workOrderCheck
+        component:  workOrderCheck,
+        meta: { index: 4 }
       },
       {
         path: '/departmentWorkOrderDeatils',
         name: 'departmentWorkOrderDeatils',
-        component:  DepartmentWorkOrderDeatils
+        component:  DepartmentWorkOrderDeatils,
+        meta: { index: 4 }
       },
       {
         path: '/departmentServiceSignature',
@@ -531,17 +533,20 @@ let baseRoute = [{
       {
         path: '/schedulingRepairsTaskDetails',
         name: 'schedulingRepairsTaskDetails',
-        component: SchedulingRepairsTaskDetails
+        component: SchedulingRepairsTaskDetails,
+        meta: { index: 4 }
       },
       {
         path: '/createRepairsTask',
         name: 'createRepairsTask',
-        component: CreateRepairsTask
+        component: CreateRepairsTask,
+        meta: { index: 4 }
       },
       {
         path: '/editRepairsTask',
         name: 'editRepairsTask',
-        component: EditRepairsTask
+        component: EditRepairsTask,
+        meta: { index: 4 }
       },
       {
         path: '/autoRepairList',
@@ -552,17 +557,20 @@ let baseRoute = [{
       {
         path: '/autoRepairHistoryRecord',
         name: 'autoRepairHistoryRecord',
-        component: AutoRepairHistoryRecord
+        component: AutoRepairHistoryRecord,
+        meta: { index: 4 }
       },
       { 
         path: '/autoRepairCreate',
         name: 'autoRepairCreate',
-        component: AutoRepairCreate
+        component: AutoRepairCreate,
+        meta: { index: 4 }
       },
       {
         path: '/autoRepairTaskSignature',
         name: 'autoRepairTaskSignature',
-        component: AutoRepairTaskSignature
+        component: AutoRepairTaskSignature,
+        meta: { index: 5 }
       },
       // 保洁管理路由
       {
@@ -616,12 +624,14 @@ let baseRoute = [{
     {
         path: '/pollingTaskDepartmentDetails',
         name: 'pollingTaskDepartmentDetails',
-        component: PollingTaskDepartmentDetails
+        component: PollingTaskDepartmentDetails,
+        meta: { index: 6 }
     },
     {
         path: '/pollingTaskDepartmentCornerDetails',
         name: 'pollingTaskDepartmentCornerDetails',
-        component: PollingTaskDepartmentCornerDetails
+        component: PollingTaskDepartmentCornerDetails,
+        meta: { index: 7 }
     },
     {
         path: '/pollingTaskNoCompleteReason',

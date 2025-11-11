@@ -8,7 +8,7 @@ export default {
 			return state.isFreshDeviceServicePage
 		},
     deviceServiceMsg:  (state) => {
-			state.deviceServiceMsg = getStore('deviceServiceMsg') ? getStore('deviceServiceMsg') : '';
+			state.deviceServiceMsg = JSON.parse(getStore('deviceServiceMsg')) ? JSON.parse(getStore('deviceServiceMsg')) : {};
 			return state.deviceServiceMsg
 		},
     energyRecordList: (state) => {

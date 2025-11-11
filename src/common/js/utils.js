@@ -695,7 +695,7 @@ export const judgeOverTime = (startTime,interVal) => {
   let startMillisecond = new Date(startTime).getTime();
   let audio = new Audio();
   audio.preloadc = "auto";
-  process.env.NODE_ENV == 'development' ? audio.src = "/static/audios/task-info-voice.wav" : audio.src = "/transWeb/static/audios/task-info-voice.wav";
+  process.env.NODE_ENV == 'development' ? audio.src = "/static/audios/task-info-voice.wav" : audio.src = "/wisdomLogisticsServePlatformApp/static/audios/task-info-voice.wav";
   let interValModule = setInterval(() => {
     let realMillisecond = new Date().getTime();
     if (realMillisecond - startMillisecond >= interVal*60*1000) {
@@ -869,7 +869,6 @@ export const removeAllLocalStorage = () => {
   removeStore('roleNameList');
   removeStore('changeOverDueWay');
   removeStore('currentCleanTaskName');
-  removeStore('currentCleanTaskDateVlue');
   removeStore('cleanTaskDetails');
   removeStore('storageForthwithTaskMessage');
   removeStore('storageSpecialTaskMessage');
@@ -894,7 +893,6 @@ export const removeAllLocalStorage = () => {
 
 export const removeExceptLoginMessageLocalStorage = () => {
   removeStore('currentCleanTaskName');
-  removeStore('currentCleanTaskDateVlue');
   removeStore('cleanTaskDetails');
   removeStore('storageForthwithTaskMessage');
   removeStore('storageSpecialTaskMessage');

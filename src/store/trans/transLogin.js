@@ -48,7 +48,7 @@ export default {
 			return state.isFreshHomePage
     },
     isNewCircle: (state) => {
-      state.isNewCircle = getStore('isNewCircle') ? getStore('isNewCircle') === 'false' ? false : true : false;
+      state.isNewCircle = JSON.parse(getStore('isNewCircle')) ? JSON.parse(getStore('isNewCircle'))['isNewCircle'] === 'false' ? false : true : false;
 			return state.isNewCircle
     }
   },
@@ -132,7 +132,7 @@ export default {
     // 修改是否是新循环任务状态
     changeIsNewCircle (state, payLoad) {
       if (payLoad != 'null') {
-				setStore('isNewCircle', payLoad);
+				setStore('isNewCircle', {isNewCircle: payLoad});
 				state.isNewCircle = payLoad
 			}
     },

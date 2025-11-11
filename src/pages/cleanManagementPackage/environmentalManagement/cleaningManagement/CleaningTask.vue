@@ -359,7 +359,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["userInfo","chooseHospitalArea","currentCleanTaskName","currentCleanTaskDateVlue","cleanTaskDetails"]),
+    ...mapGetters(["userInfo","chooseHospitalArea","currentCleanTaskName","cleanTaskDetails"]),
     userName() {
         return this.userInfo['worker']['name']
     },

@@ -95,7 +95,7 @@
                 <p class="describe-line-wrapper">
                   <span class="message-tit">语音备注 :&nbsp;</span>
                   <span class="message-tit-real-audio" v-if="showChildrenComponent">
-                    <MyAudio v-if="!dispatchTaskMessage.recordTime != true" :src="`http://show.blinktech.cn/trans/${dispatchTaskMessage.taskNumber}.mp3`"></MyAudio>
+                    <MyAudio v-if="!dispatchTaskMessage.recordTime != true" :src="`${baseURL}/trans/${dispatchTaskMessage.taskNumber}.mp3`"></MyAudio>
                   </span>
                   <span class="message-tit-real" v-show="!dispatchTaskMessage.recordTime">
                     无语音信息
@@ -297,7 +297,8 @@ export default {
       'catch_components',
       'isCompleteDispatchIssuePhotoList',
       'templateType',
-      'chooseHospitalArea'
+      'chooseHospitalArea',
+      'baseURL'
     ]),
 
     sex () {
@@ -653,7 +654,7 @@ export default {
           tempFlag: this.dispatchTaskMessage.tempFlag,
           state: this.dispatchTaskState, //更新后的状态 {0: '未分配', 1: '未查阅', 2: '未开始', 3: '进行中', 4: '未结束', 5: '已延迟', 6: '已取消', 7: '已完成'
           endType: 1, //1-安卓APP，2-微信小程序
-          endUser: this.userInfo.name //结束用户名
+          endUser: this.userName //结束用户名
         })
       }
     },

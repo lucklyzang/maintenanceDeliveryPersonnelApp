@@ -256,7 +256,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["changeIsLogin","storeLocationMessage","changeCatchComponent","storeCurrentCleanTaskName","storeCurrentCleanTaskDateVlue"]),
+    ...mapMutations(["changeIsLogin","storeLocationMessage","changeCatchComponent","storeCurrentCleanTaskName"]),
 
     // 格式化时间
     getNowFormatDate(currentDate,type) {
@@ -298,7 +298,6 @@ export default {
       temporaryMessage['specialTaskShow'] = this.specialTaskShow;
       temporaryMessage['pollingTaskShow'] = this.pollingTaskShow;
       this.storeCurrentCleanTaskName(temporaryMessage);
-      this.storeCurrentCleanTaskDateVlue(this.dateValue);
       this.$router.push({path: '/cleaningTask'})
     },
 

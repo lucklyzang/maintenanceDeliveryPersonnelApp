@@ -710,7 +710,7 @@ export default {
           id: this.dispatchTaskMessage.id, //当前任务ID
           tempFlag: this.dispatchTaskMessage.tempFlag,
           endType: 1, //1-安卓APP，2-微信小程序
-          endUser: this.userInfo.name, //结束用户名  
+          endUser: this.userName, //结束用户名  
           state: this.dispatchTaskState//更新后的状态 {0: '未分配', 1: '未查阅', 2: '未开始', 3: '进行中', 4: '未结束', 5: '已延迟', 6: '已取消', 7: '已完成'
         })
       } else if (this.dispatchTaskDepartmentType == 1) {
@@ -735,7 +735,7 @@ export default {
                 tempFlag: this.dispatchTaskMessage.tempFlag,
                 state: this.dispatchTaskState, //更新后的状态 {0: '未分配', 1: '未查阅', 2: '未开始', 3: '进行中', 4: '未结束', 5: '已延迟', 6: '已取消', 7: '已完成'
                 endType: 1, //1-安卓APP，2-微信小程序
-                endUser: this.userInfo.name //结束用户名  
+                endUser: this.userName //结束用户名  
               })
             }
           }

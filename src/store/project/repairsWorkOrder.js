@@ -12,7 +12,7 @@ export default {
 			return state.newProjectTaskName
 		},
     repairsWorkOrderMsg:  (state) => {
-			state.repairsWorkOrderMsg = getStore('repairsWorkOrderMsg') ? getStore('repairsWorkOrderMsg') : '';
+			state.repairsWorkOrderMsg = JSON.parse(getStore('repairsWorkOrderMsg')) ? JSON.parse(getStore('repairsWorkOrderMsg')) : {};
 			return state.repairsWorkOrderMsg
 		},
     completeRoomList: (state) => {

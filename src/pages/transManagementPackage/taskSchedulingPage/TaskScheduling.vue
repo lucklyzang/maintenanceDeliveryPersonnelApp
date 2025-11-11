@@ -391,7 +391,7 @@ export default {
 
   beforeRouteEnter(to, from, next) {
     next(vm=>{
-      if (from.path == '/home') {
+      if (from.path == '/transHome') {
         // 查询单病人调度任务列表(模板一)
         if (vm.templateType === 'template_one') {
           vm.getDispathSinglePatientList (false)
@@ -437,7 +437,7 @@ export default {
   },
 
    beforeRouteLeave(to, from, next) {
-   if (to.path == '/home') {
+   if (to.path == '/transHome') {
       this.resetBtnClickStatus()
    };
    next() 

@@ -22,7 +22,7 @@
           </p>
           <p class="content-top-userName-msg">
             <span class="real-name-one">{{name}}</span>
-            <span class="real-name-two">{{proName}}&emsp;&emsp;{{userType}}</span>
+            <span class="real-name-two">{{proName}}&emsp;&emsp;员工</span>
           </p>
         </div>
       </div>
@@ -230,7 +230,7 @@
         this.isTimeoutContinue = false;
         let audio = new Audio();
         audio.preloadc = "auto";
-        process.env.NODE_ENV == 'development' ? audio.src = "/static/audios/task-info-voice.wav" : audio.src = "/projectWeb/static/audios/task-info-voice.wav";
+        process.env.NODE_ENV == 'development' ? audio.src = "/static/audios/task-info-voice.wav" : audio.src = "/wisdomLogisticsServePlatformApp/static/audios/task-info-voice.wav";
         getNewWork(proId,workerId).then((res) => {
           // token过期,清除定时器
           if (!res['headers']['token']) {

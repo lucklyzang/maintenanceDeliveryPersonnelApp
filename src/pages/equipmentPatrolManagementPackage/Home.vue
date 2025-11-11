@@ -1,12 +1,14 @@
 <template>
   <div class="page-box" ref="wrapper">
     <!-- 顶部导航栏 -->
-    <HeaderTop title="设备巡检">
-        <div class="header-left" slot="left" @click="backTo">
-        <van-icon name="wap-home" color="#fff" size="22"></van-icon>
-        <span>首页</span>
+    <div class="nav">
+        <HeaderTop title="设备巡检">
+            <div class="header-left" slot="left" @click="backTo">
+                <van-icon name="wap-home" color="#fff" size="22"></van-icon>
+                <span>首页</span>
+            </div>
+        </HeaderTop>
     </div>
-    </HeaderTop>
     <div class="content">
         <div class="content-top-area">
 			<img :src="statusBackgroundPng" />
@@ -202,11 +204,18 @@
     .page-box {
         background: #F8F8F8;
         .content-wrapper();
-        .header {
-            .header-left {
-                >span {
-                    font-size: 14px;
-                    color: #F8F9FA;
+        .nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+            left: 0;
+            .header {
+                .header-left {
+                    >span {
+                        font-size: 14px;
+                        color: #F8F9FA;
+                    }
                 }
             }
         };
@@ -237,7 +246,7 @@
                     transform: translateX(-50%);
                     height: 125px;
                     margin: 0 auto;
-                    top: 60px;
+                    top: 64px;
                     border-radius: 10px;
                     display: flex;
                     flex-flow: row nowrap;

@@ -115,7 +115,8 @@
 				'storeChooseHospitalArea',
 				'changeIsMedicalMan',
 				'storeAppPermission',
-				'changeUserType'
+				'changeUserType',
+				'changeIsNewCircle'
 			]),
       
 			// 院区下拉选择框确认事件
@@ -256,10 +257,10 @@
 							this.storeAppPermission(res.data.data);
 							// 保存是否为新循环任务
 							if (res.data.data.circle == 1) {
-								// this.changeIsNewCircle(true);
+								this.changeIsNewCircle(true);
 								setStore('isNewCircle',{isNewCircle: true})
 							} else {
-								// this.changeIsNewCircle(false);
+								this.changeIsNewCircle(false);
 								setStore('isNewCircle',{isNewCircle: false})
 							}
 						} else {

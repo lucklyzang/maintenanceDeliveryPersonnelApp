@@ -1063,7 +1063,7 @@
             </div>
             <p class="medical-version">
               <span>{{versionNumber}}</span>
-              <span>{{this.userInfo.depName}}</span>
+              <span>{{userName}}</span>
             </p>
           </div>
         </div>
@@ -1281,7 +1281,7 @@
           this.queryCompleteDispatchTask(
             {
               proId:this.proId, workerId:'',state: -1,
-              departmentId: this.userInfo.depId
+              departmentId: this.depId
             },"任务跟踪"
           )
         };
@@ -1550,7 +1550,7 @@
         this.isTimeoutContinue = false;
         let audio = new Audio();
         audio.preloadc = "auto";
-        process.env.NODE_ENV == 'development' ? audio.src = "/static/audios/task-info-voice.wav" : audio.src = "/transWeb/static/audios/task-info-voice.wav";
+        process.env.NODE_ENV == 'development' ? audio.src = "/static/audios/task-info-voice.wav" : audio.src = "/wisdomLogisticsServePlatformApp/static/audios/task-info-voice.wav";
         getNewWork(proId,workerId).then((res) => {
           // token过期,清楚定时器
           if (!res['headers']['token']) {
@@ -2094,9 +2094,9 @@
           feedbackId : this.workerId, // 反馈者ID
           typeFlag: this.opinionTypeIndex + 1, //意见类型
           feedbackName : this.userName, // 反馈者名称
-          feedbackRole : this.userInfo.roleName, //反馈角色，暂定为医务人员的 role 字段
-          depId : this.userInfo.depId  , //反馈科室ID，医务人员depId字段
-          depName:  this.userInfo.depName , //反馈科室名称医务人员depName字段
+          feedbackRole : '', //反馈角色，暂定为医务人员的 role 字段
+          depId : this.depId  , //反馈科室ID，医务人员depId字段
+          depName:  this.depName , //反馈科室名称医务人员depName字段
           content : this.deedbackContent , //反馈内容，可以为空，点赞默认为空
           type : 1, //反馈类型(1-意见反馈，2-赞)
           terminal : 1, //反馈终端(1-客户端，2-小程序)
@@ -2130,9 +2130,9 @@
 				let data = {
 					feedbackId : this.workerId, // 反馈者ID
 					feedbackName : this.userName, // 反馈者名称
-					feedbackRole : this.userInfo.roleName, //反馈角色，暂定为医务人员的 role 字段
-					depId : this.userInfo.depId  , //反馈科室ID，医务人员depId字段
-					depName:  this.userInfo.depName , //反馈科室名称医务人员depName字段
+					feedbackRole : '', //反馈角色，暂定为医务人员的 role 字段
+					depId : this.depId  , //反馈科室ID，医务人员depId字段
+					depName:  this.depName , //反馈科室名称医务人员depName字段
 					content : this.stateCompleteList[index]['deedbackContent'] , //反馈内容，可以为空，点赞默认为空
 					type : 1, //反馈类型(1-意见反馈，2-赞)
 					terminal : 1, //反馈终端(1-客户端，2-小程序)
@@ -2158,7 +2158,7 @@
 					data['taskType'] = type;
 					data['taskStartDep'] = '';
 					data['taskCreateDep'] = item['setOutPlaceName'];
-					if (this.userInfo.pc == 'template_one') {
+					if (this.templateType == 'template_one') {
 						data['taskTransType'] = `${item.parentTypeName ? item.parentTypeName : ''}-${item.taskTypeName ? item.taskTypeName : ''}`;
 					} else {
 						if (item.patientInfoList.length > 0 && item.patientInfoList[0].typeList.length > 0) {
@@ -2168,7 +2168,7 @@
 							data['taskTransType'] = ''
 						}
 					};
-					data['taskTemplate'] = this.userInfo.pc == 'template_two' ? 2 : 1;
+					data['taskTemplate'] = this.templateType == 'template_two' ? 2 : 1;
 					this.submitTaskFeedBackEvent(data,index,type,text)
 				} else if (type == 2) {
 					data['taskCreateDep'] = item['setOutPlaceName'];
@@ -2229,11 +2229,11 @@
 				let data = {
 					feedbackId : this.workerId, // 反馈者ID
 					feedbackName : this.userName, // 反馈者名称
-					feedbackRole : this.userInfo.roleName, //反馈角色，暂定为医务人员的 role 字段
-					depId : this.userInfo.depId, //反馈科室ID，医务人员depId字段
+					feedbackRole : '', //反馈角色，暂定为医务人员的 role 字段
+					depId : this.depId, //反馈科室ID，医务人员depId字段
           isIssueFeedback: item.isIssueFeedback,
           isShowFeedBack: item.isShowFeedBack,
-					depName:  this.userInfo.depName , //反馈科室名称医务人员depName字段
+					depName:  this.depName , //反馈科室名称医务人员depName字段
 					content : '' , //反馈内容，可以为空，点赞默认为空
 					type : 2, //反馈类型(1-意见反馈，2-赞)
 					terminal : 1, //反馈终端(1-客户端，2-小程序)
@@ -2257,7 +2257,7 @@
 					data['taskType'] = type;
 					data['taskStartDep'] = '';
 					data['taskCreateDep'] = item['setOutPlaceName'];
-					if (this.userInfo.pc == 'template_one') {
+					if (this.templateType == 'template_one') {
 						data['taskTransType'] = `${item.parentTypeName ? item.parentTypeName : ''}-${item.taskTypeName ? item.taskTypeName : ''}`;
 					} else {
 						if (item.patientInfoList.length > 0 && item.patientInfoList[0].typeList.length > 0) {
@@ -2267,7 +2267,7 @@
 							data['taskTransType'] = ''
 						}
 					};
-					data['taskTemplate'] = this.userInfo.pc == 'template_two' ? 2 : 1;
+					data['taskTemplate'] = this.templateType == 'template_two' ? 2 : 1;
 					this.submitTaskFeedBackEvent(data,index,type,text)
 				} else if (type == 2) {
 					data['taskCreateDep'] = item['setOutPlaceName'];
@@ -2347,7 +2347,7 @@
             {
               proId: this.proId, workerId: '', state: 7,
               startDate: this.startTime, endDate: this.endTime,
-              departmentId: this.userInfo.depId
+              departmentId: this.depId
             }, "历史任务", name
           )
         } else if (this.taskCurrentName == '预约任务') {
@@ -2355,7 +2355,7 @@
             {
               proId: this.proId, workerId: '', state: 7,
               startDate: this.startTime, endDate: this.endTime,
-              departmentId: this.userInfo.depId
+              departmentId: this.depId
             }
           )
         } else if (this.taskCurrentName == '循环任务') {
@@ -2363,7 +2363,7 @@
             {
               proId: this.proId, workerId: '', state: 7,
               startDate: this.startTime, endDate: this.endTime,
-              departmentId: this.userInfo.depId
+              departmentId: this.depId
             }
           )
         }
@@ -2379,7 +2379,7 @@
               {
                 proId: this.proId, workerId: '', state: 6,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }, "历史任务", name
             )
           } else {
@@ -2387,7 +2387,7 @@
               {
                 proId: this.proId, workerId: '', state: 7,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }, "历史任务", name
             )
           }
@@ -2397,7 +2397,7 @@
               {
                 proId: this.proId, workerId: '', state: 6,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }
             )
           } else {
@@ -2405,7 +2405,7 @@
               {
                 proId: this.proId, workerId: '', state: 7,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }
             )
           }
@@ -2415,7 +2415,7 @@
               {
                 proId: this.proId, workerId: '', state: 6,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }
             )
           } else {
@@ -2423,7 +2423,7 @@
               {
                 proId: this.proId, workerId: '', state: 7,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }
             )
           }
@@ -2438,7 +2438,7 @@
               {
                 proId: this.proId, workerId: '', state: 7,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }, "历史任务", 0
             )
           } else {
@@ -2446,7 +2446,7 @@
               {
                 proId: this.proId, workerId: '', state: 6,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }, "历史任务", 1
             )
           }
@@ -2456,7 +2456,7 @@
               {
                 proId: this.proId, workerId: '', state: 7,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }
             )
           } else {
@@ -2464,7 +2464,7 @@
               {
                 proId: this.proId, workerId: '', state: 6,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }
             )
           }
@@ -2474,7 +2474,7 @@
               {
                 proId: this.proId, workerId: '', state: 7,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }
             )
           } else {
@@ -2482,7 +2482,7 @@
               {
                 proId: this.proId, workerId: '', state: 6,
                 startDate: this.startTime, endDate: this.endTime,
-                departmentId: this.userInfo.depId
+                departmentId: this.depId
               }
             )
           }
@@ -2515,7 +2515,7 @@
           this.queryCompleteDispatchTask(
             {
               proId:this.proId, workerId:'',state: -1,
-              departmentId: this.userInfo.depId
+              departmentId: this.depId
             },"任务跟踪"
           )
         } else if (index == 3) {
@@ -2533,7 +2533,7 @@
             {
               proId:this.proId, workerId:'',state:7,
               startDate: this.startTime, endDate: this.endTime,
-              departmentId: this.userInfo.depId
+              departmentId: this.depId
             },"历史任务",0
           )
         } else if (index == 4) {
@@ -2587,7 +2587,7 @@
         this.queryCompleteDispatchTask(
           {
             proId:this.proId, workerId:'',state: -1,
-            departmentId: this.userInfo.depId
+            departmentId: this.depId
           },"任务跟踪"
         )
       },

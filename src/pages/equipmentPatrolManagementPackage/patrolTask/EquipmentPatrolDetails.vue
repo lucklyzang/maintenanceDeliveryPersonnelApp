@@ -773,8 +773,8 @@ export default {
                     if (codeData[0] == this.currentTaskItemMessage['taskContentList'][0]['depId']) {
                         let temporaryData = {
                             taskId: this.currentTaskItemMessage['taskContentList'][0]['checkTaskId'],
-                            workerId: this.userInfo.id,
-                            workerName: this.userInfo.name,
+                            workerId: this.workerId,
+                            workerName: this.userName,
                             startTime: formatTime('YYYY-MM-DD HH:mm:ss'),
                             taskSite: this.currentTaskItemMessage['taskSite'],
                             deviceList: []

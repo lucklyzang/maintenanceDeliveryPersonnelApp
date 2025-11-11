@@ -314,8 +314,8 @@ export default {
     disposeCheckType (item) {
       let temporaryArray = [];
       if (Object.prototype.toString.call(item) === '[object Array]') {
-        for (let item of item) {
-          temporaryArray.push(item.checkTypeName)
+        for (let innerItem of item) {
+          temporaryArray.push(innerItem.checkTypeName)
         };
         return temporaryArray.join('、')
       }

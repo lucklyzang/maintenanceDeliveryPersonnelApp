@@ -186,7 +186,7 @@ export default {
       taskComplete({
         taskId: this.$route.query.taskId, // 当前任务id
         signImage: this.imgOnlinePathArr[0], // 签名路径
-        workerName: this.userInfo.name // 当前登陆员工
+        workerName: this.userName // 当前登陆员工
       }).then((res) => {
       if (res && res.data.code == 200) {
         this.loadingShow = false;

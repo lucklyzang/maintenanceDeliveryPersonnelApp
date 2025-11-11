@@ -129,7 +129,7 @@
         return this.userInfo['worker']['account']
       },
       taskId () {
-        return this.deviceServiceMsg.taskId
+        return this.departmentServiceMsg.id
       }
     },
 

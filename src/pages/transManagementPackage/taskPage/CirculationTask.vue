@@ -430,7 +430,7 @@
       // 右边下拉框菜单点击
       leftLiCLick (index) {
         this.liIndex = index;
-        this.userLoginOut(this.proId, this.userInfo.userName)
+        this.userLoginOut(this.proId, this.workerName)
       },
 
       // 跳转到我的页

@@ -757,7 +757,7 @@
       // 右边下拉框菜单点击
       leftLiCLick (index) {
         this.liIndex = index;
-        this.userLoginOut(this.proId, this.userInfo.userName)
+        this.userLoginOut(this.proId, this.workerName)
       },
 
       // 二维码弹框关闭事件
@@ -875,7 +875,7 @@
           workerId: this.workerId,
           reason:this.reasonText,
           endType: 1, //终止类型(0-web,1-安卓APP，2-微信小程序)
-          endUser: this.userInfo.userName // 取消者(当前登录用户名)
+          endUser: this.workerName // 取消者(当前登录用户名)
         })
         .then((res) => {
           this.overlayShow = false;

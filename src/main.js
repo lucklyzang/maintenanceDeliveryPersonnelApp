@@ -14,11 +14,13 @@ import echarts from 'echarts'
 import '../static/icon/iconfont.css'
 import Create from '@/common/js/create.js';
 import Alert from '@/components/LightHint.vue';
+import _ from 'lodash';
 Vue.use(Toast);
 Vue.config.productionTip = false;
 Vue.prototype.$Alert= ((obj) => {//挂载在原型上
     return Create(Alert,obj).show() //返回组件实例
 });
+Vue.prototype._ = _;
 import {  IsPC } from '@/common/js/utils.js'
 import '@/directives/preventReClick.js'
 if (process.env.NODE_ENV == 'development') {
@@ -30,7 +32,6 @@ if (process.env.NODE_ENV == 'development') {
 import VueLazyLoad from 'vue-lazyload';
 
 Vue.prototype.Base64 = require('js-base64').Base64;
-
 // 全局挂载时间格式化方法
 Vue.filter('dateformat', function(dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
     return moment(dataStr).format(pattern)

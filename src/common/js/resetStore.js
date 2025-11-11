@@ -184,7 +184,7 @@ export function getDefaultAutoRepairTaskState() {
 export function getDefaultDepartmentServiceState() {
     return {
         isFreshDepartmentServicePage: true,
-		departmentServiceMsg: '',
+		departmentServiceMsg: {},
 		isSingleDepartmentSignature: true,
 		isDepartmentServiceVerifySweepCode: [],
 		isCurrentDepartmentServiceVerifySweepCode: [],
@@ -199,7 +199,7 @@ export function getDefaultDepartmentServiceState() {
 export function getDefaultDeviceServiceState() {
     return {
         isFreshDeviceServicePage: true,
-		deviceServiceMsg: '',
+		deviceServiceMsg: {},
 		energyRecordList: [],
 		isCurrentDeviceCopyServiceVerifySweepCode: [],
 		currentDeviceCopyVerifySweepCodeDepNumber: '',
@@ -212,7 +212,7 @@ export function getDefaultRepairsWorkOrderState() {
     return {
 		newProjectTaskName: [],
 		isFreshRepairsWorkOrderPage: true,
-		repairsWorkOrderMsg: '',
+		repairsWorkOrderMsg: {},
 		completeRoomList: [],
 		isFillMaterialList: [],
 		isCompleteRepairsWorkOrderPhotoList: []
@@ -240,7 +240,6 @@ export function getDefaultEnvironmentManagementState() {
 		roleNameList: [], //角色列表
 		chooseProject: [], //选择的医院 
 		currentCleanTaskName: {},
-		currentCleanTaskDateVlue: '',
 		cleanTaskDetails: {},
 		attendanceTypeDetailsMessage: {},
 		personnelStatisticsDetailsMessage: {},

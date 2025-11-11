@@ -552,7 +552,7 @@ export default {
       // 右边下拉菜单点击事件
       leftLiCLick (index) {
         this.liIndex = index;
-        this.userLoginOut(this.proId, this.userInfo.userName)
+        this.userLoginOut(this.proId, this.userName)
       },
 
       // 用户签退
@@ -1145,10 +1145,10 @@ export default {
           //   return
           // };
           let taskMessage = {
-            // setOutPlaceId: this.userInfo.depId,  //出发地ID
-            // setOutPlaceName: this.userInfo.depName,  //出发地名称
-            setOutPlaceId: this.destinationListOneValue == '' ? this.userInfo.depId : this.destinationListOneValue, //出发地ID
-            setOutPlaceName: this.destinationListOneValue == '' ? this.userInfo.depName : this.getDepartmentNameById(this.destinationListOneValue),//出发地名称
+            // setOutPlaceId: this.depId,  //出发地ID
+            // setOutPlaceName: this.depName,  //出发地名称
+            setOutPlaceId: this.destinationListOneValue == '' ? this.depId : this.destinationListOneValue, //出发地ID
+            setOutPlaceName: this.destinationListOneValue == '' ? this.depName : this.getDepartmentNameById(this.destinationListOneValue),//出发地名称
             // destinationId: !this.destinationListOneValue ? '' : this.destinationListOneValue,   //目的地ID
             // destinationName: !this.destinationListOneValue ? '' : this.getDepartmentNameById(this.destinationListOneValue),  //目的地名称
             parentTypeId:  this.transportantTaskMessage.id, //运送父类型Id
@@ -1186,8 +1186,8 @@ export default {
           //   return
           // };
           let taskMessageTwo = {
-            setOutPlaceId: this.destinationListValue == '' ? this.userInfo.depId : this.destinationListValue, //出发地ID
-            setOutPlaceName: this.destinationListValue == '' ? this.userInfo.depName : this.getDepartmentNameById(this.destinationListValue),//出发地名称
+            setOutPlaceId: this.destinationListValue == '' ? this.depId : this.destinationListValue, //出发地ID
+            setOutPlaceName: this.destinationListValue == '' ? this.depName : this.getDepartmentNameById(this.destinationListValue),//出发地名称
             destinations: [],//多个目的地列表
             patientInfoList: [], //多个病人信息列表
             priority: this.checkResult, //优先级   0-正常, 1-重要,2-紧急, 3-紧急重要

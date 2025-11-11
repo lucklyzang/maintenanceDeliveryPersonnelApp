@@ -790,7 +790,6 @@ export default {
 
     // 回显暂存的信息
     async echoTemporaryStorageMessage (temporaryIndex) {
-      console.log('回显数据',this.temporaryStorageHistoryClaimRegisterMessage);
       let casuallyTemporaryStorageHistoryClaimRegisterMessage = _.cloneDeep(this.temporaryStorageHistoryClaimRegisterMessage);
       if (this.checkedStepIndex == 1) {
         this.handoverTime = new Date(casuallyTemporaryStorageHistoryClaimRegisterMessage[temporaryIndex]['handoverTime']);

@@ -428,14 +428,14 @@ export default {
           taskId: el.taskId,
           taskNumber: el.taskNumber,
           checkResult: el.checkResult,
-          workerName: this.userInfo.name,
+          workerName: this.userName,
           registerList: []
         })
       });
       // 把检查结果数据和备注挂载到整体数据(patrolTaskListMessage)上,方便在设备巡检详情页面上传该设备下的巡检数据
       this.storeCheckResultDataEvent(submitData['checkResultDtoList'])
       // 拼接每个检查项下面保存的异常记录
-      // submitCheckItem({resultId:innerItem.resultId,workerName: this.userInfo.name}).then((res) => {
+      // submitCheckItem({resultId:innerItem.resultId,workerName: this.userName}).then((res) => {
       //   this.loadingShow = false;
       //   this.overlayShow = false;
       //   this.loadText = '';

@@ -8,7 +8,7 @@ export default {
 			return state.statusBarHeight
 		},
 		navigationBarHeight:(state) => {
-			state.navigationBarHeight = getStore('navigationBarHeight') ? getStore('navigationBarHeight') : 40;
+			state.navigationBarHeight = getStore('navigationBarHeight') ? getStore('navigationBarHeight') : 46;
 			return state.navigationBarHeight
 		},
 		capsuleMessage:(state) => {

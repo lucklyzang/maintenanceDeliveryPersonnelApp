@@ -34,11 +34,6 @@ export default {
             return state.storageSpecialTaskMessage
         },
 
-        currentCleanTaskDateVlue : (state) => {
-            state.currentCleanTaskDateVlue = getStore('currentCleanTaskDateVlue') ? getStore('currentCleanTaskDateVlue') : 1;
-            return state.currentCleanTaskDateVlue
-        },
-
         cleanTaskDetails : (state) => {
             state.cleanTaskDetails = getStore('cleanTaskDetails') ? JSON.parse(getStore('cleanTaskDetails')) : {};
             return state.cleanTaskDetails
@@ -107,15 +102,6 @@ export default {
             if (playLoad && playLoad != 'null') {
                 setStore('currentCleanTaskName', playLoad);
                 state.currentCleanTaskName = playLoad
-            }
-        },
-
-
-        // 保存保洁管理任务列表选择的日期
-        storeCurrentCleanTaskDateVlue(state, playLoad) {
-            if (playLoad && playLoad != 'null') {
-                setStore('currentCleanTaskDateVlue', playLoad);
-                state.currentCleanTaskDateVlue = playLoad
             }
         },
 

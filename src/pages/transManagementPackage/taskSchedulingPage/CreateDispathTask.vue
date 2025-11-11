@@ -1311,7 +1311,7 @@ export default {
             closeOnPopstate: true,
             showCancelButton: true
           }).then(() => {
-            this.userLoginOut(this.proId, this.userInfo.userName)
+            this.userLoginOut(this.proId, this.workerId)
           })
           .catch(() => {
           })
