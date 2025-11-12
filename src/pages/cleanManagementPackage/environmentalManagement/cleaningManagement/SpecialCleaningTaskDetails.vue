@@ -934,7 +934,6 @@ export default {
 @import "~@/common/stylus/mixin.less";
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
-  height: 0;
   background: #F8F8F8;
   /deep/ .van-loading {
     z-index: 1000 !important

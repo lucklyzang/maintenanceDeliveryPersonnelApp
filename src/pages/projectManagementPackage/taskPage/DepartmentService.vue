@@ -378,7 +378,6 @@
   @import "~@/common/stylus/mixin.less";
   @import "~@/common/stylus/modifyUi.less";
   .content-wrapper {
-    height: 0;
     /deep/ .van-dialog {
       .van-dialog__content {
         margin-bottom: 6px;

@@ -773,7 +773,6 @@
         temporaryPhotoList[echoIndex]['completePhototList'] = temporaryPhotoId;
         temporaryPhotoList[echoIndex]['issuePhototList'] = temporaryPhotoId;
         this.changeIsCompletePhotoList(temporaryPhotoList);
-        setStore('completPhotoInfo', {"photoInfo": temporaryPhotoList});
       },
 
       // 清除该任务存储的照片信息
@@ -781,7 +780,6 @@
         if (this.isCompleteRepairsWorkOrderPhotoList.length == 0) { return };
         let temporaryPhotoList = this.isCompleteRepairsWorkOrderPhotoList.filter((item) => {return item.taskId !== this.taskId});
         this.changeIsCompletePhotoList(temporaryPhotoList);
-        setStore('completPhotoInfo', {"photoInfo": temporaryPhotoList});
       },
 
       // 是否确定完成确认
@@ -1183,7 +1181,6 @@
     };
     .worker-show {
       .content-wrapper();
-      height: 0;
       overflow: auto;
       .content-real {
         flex: 1;

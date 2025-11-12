@@ -394,6 +394,7 @@
     };
     .worker-show {
       .content-wrapper();
+      height: 0;
       .content-top {
         font-size: 14px;
         background: #fff;

@@ -296,7 +296,6 @@ export default {
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
   .content-wrapper();
-  height: 0;
   .van-overlay {
     z-index: 1000 !important
   };

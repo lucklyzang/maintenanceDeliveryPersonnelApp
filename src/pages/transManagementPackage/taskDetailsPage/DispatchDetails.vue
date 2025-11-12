@@ -516,8 +516,7 @@ export default {
           }
         )
       };
-      this.changeIsCompleteDispatchIssuePhotoList(temporaryPhotoList);
-      setStore('completdispatchIssuePhotoInfo', {"photoInfo": temporaryPhotoList})
+      this.changeIsCompleteDispatchIssuePhotoList(temporaryPhotoList)
     },
 
     // 获取任务详情

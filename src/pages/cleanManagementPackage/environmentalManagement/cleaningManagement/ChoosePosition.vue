@@ -19,7 +19,7 @@
     <div class="content">
       <van-empty description="暂无数据" v-show="emptyShow" />
       <!-- 建筑 -->
-      <div class="departments-name-list" v-for="(item) in architectureList" :key="item.id" v-show="architectureShow"
+      <div class="departments-name-list" v-for="(item) in architectureList" :key="`${item.id}-${item.structName}`" v-show="architectureShow"
         @click="architectureClickEvent(item)"
       >
           <div class="departments-name-left">
@@ -33,7 +33,7 @@
           </div>
       </div>
       <!-- 科室 -->
-      <div class="departments-name-list" v-for="(item) in departmentList" :key="item.id" v-show="departmentShow"
+      <div class="departments-name-list" v-for="(item) in departmentList" :key="`${item.id}-${item.departmentName}`" v-show="departmentShow"
         @click="departmentClickEvent(item)"
       >
           <div class="departments-name-left">
@@ -47,7 +47,7 @@
           </div>
       </div>
       <!-- 目的区域 -->
-      <div class="departments-name-list" v-for="(item) in goalAreaList" :key="item.id" v-show="goalAreaShow"
+      <div class="departments-name-list" v-for="(item) in goalAreaList" :key="`${item.id}-${item.itemName}`" v-show="goalAreaShow"
         @click="goalAreaClickEvent(item)"
       >
           <div class="departments-name-left">
@@ -61,7 +61,7 @@
           </div>
       </div>
       <!-- 功能区 -->
-      <div class="departments-name-list" v-for="(item) in functionAreaList" :key="item.id" v-show="functionAreaShow"
+      <div class="departments-name-list" v-for="(item) in functionAreaList" :key="`${item.id}-${item.name}`" v-show="functionAreaShow"
         @click="functionAreaClickEvent(item)"
       >
           <div class="departments-name-left">
@@ -170,13 +170,17 @@ export default {
     getArchitecture () {
       this.loadingShow = true;
       this.overlayShow = true;
+      this.emptyShow = false;
+      this.functionAreaShow = false;
+      this.goalAreaShow = false;
+      this.departmentShow = false;
+			this.architectureShow = true;
+			this.architectureList = [];
       getArchitectureMessage({proId: this.proId}).then((res) => {
           this.loadingShow = false;
           this.overlayShow = false;
 					if (res && res.data.code == 200) {
-            this.architectureList = [];
             if (res.data.data.length > 0) {
-              this.architectureShow = true;
               this.architectureList = res.data.data;
             } else {
               this.emptyShow = true
@@ -203,14 +207,16 @@ export default {
       this.emptyShow = false;
       this.loadingShow = true;
       this.overlayShow = true;
+      this.functionAreaShow = false;
+      this.goalAreaShow = false;
       this.architectureShow = false;
+      this.departmentShow = true;
+      this.departmentList = [];
       getDepartmentMessage({proId: this.proId,structId: this.selectArchitectureValue[0]['id']}).then((res) => {
           this.loadingShow = false;
           this.overlayShow = false;
 					if (res && res.data.code == 200) {
-            this.departmentList = [];
             if (res.data.data.length > 0) {
-              this.departmentShow = true;
               this.departmentList = res.data.data
             } else {
               this.emptyShow = true
@@ -238,13 +244,15 @@ export default {
       this.loadingShow = true;
       this.overlayShow = true;
       this.departmentShow = false;
+      this.functionAreaShow = false;
+      this.architectureShow = false;
+      this.goalAreaShow = true;
+      this.goalAreaList = [];
       getGoalAreaMessage({proId: this.proId,status: 1}).then((res) => {
           this.loadingShow = false;
           this.overlayShow = false;
 					if (res && res.data.code == 200) {
-            this.goalAreaList = [];
             if (res.data.data.length > 0) {
-              this.goalAreaShow = true;
               this.goalAreaList = res.data.data
             } else {
               this.emptyShow = true
@@ -272,13 +280,15 @@ export default {
       this.loadingShow = true;
       this.overlayShow = true;
       this.goalAreaShow = false;
+      this.departmentShow = false;
+      this.architectureShow = false;
+      this.functionAreaShow = true;
+      this.functionAreaList = [];
       getFunctionAreaMessage({hospitalId: this.proId}).then((res) => {
           this.loadingShow = false;
           this.overlayShow = false;
 					if (res && res.data.code == 200) {
-            this.functionAreaList = [];
             if (res.data.data.length > 0) {
-              this.functionAreaShow = true,
               this.functionAreaList = res.data.data
             } else {
               this.emptyShow = true

@@ -686,7 +686,6 @@ export default {
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
   height: 0;
-  position: relative;
   .content-wrapper();
   .img-dislog-box {
     .van-dialog {

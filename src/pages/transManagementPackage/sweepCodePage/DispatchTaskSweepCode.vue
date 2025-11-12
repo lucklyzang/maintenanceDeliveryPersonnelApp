@@ -398,7 +398,6 @@ export default {
         )
       };
       this.changeIsTransDispatchTaskCompletePhotoList(temporaryPhotoList);
-      setStore('completPhotoInfo', {"photoInfo": temporaryPhotoList});
       // this.viewPhoto()
     },
 
@@ -449,7 +448,6 @@ export default {
           if(this.photoAreaBoxShow) {
             let temporaryInfo = deepClone(this.isCompletePhotoList.filter((item) => {return item['taskId'] != this.taskId}));
             this.changeIsTransDispatchTaskCompletePhotoList(temporaryInfo);
-            setStore('completPhotoInfo', {"photoInfo": temporaryInfo});
             // 判断是否需要签字
             this.judgeIsSignature();
             this.changePhotoAreaBoxShow(false)

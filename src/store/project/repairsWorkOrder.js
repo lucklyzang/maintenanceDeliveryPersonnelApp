@@ -20,7 +20,6 @@ export default {
 			return state.completeRoomList
     },
     isCompleteRepairsWorkOrderPhotoList: (state) => {
-      state.isCompleteRepairsWorkOrderPhotoList = JSON.parse(getStore('completPhotoInfo')) ? JSON.parse(getStore('completPhotoInfo'))['photoInfo'] : [];
 			return state.isCompleteRepairsWorkOrderPhotoList
     },
     isFillMaterialList: (state) => {
@@ -58,9 +57,8 @@ export default {
 			}
     },
     // 改变已完成上传图片的状态
-    changeIsTransDispatchTaskCompletePhotoList (state, payLoad) {
+    changeIsCompletePhotoList (state, payLoad) {
       if ( payLoad && payLoad != 'null') {
-				setStore('completPhotoInfo', { photoInfo: payLoad });
 				state.isCompleteRepairsWorkOrderPhotoList = payLoad
 			}
     },

@@ -1,93 +1,117 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
-    <title>智慧后勤服务平台</title>
-    <meta name="screen-orientation" content="portrait" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="full-screen" content="yes">
-    <meta name="x5-fullscreen" content="true">
-    <style type="text/css">
-        html,
-        body {
-            touch-action: none;
-            touch-action: pan-y;
-            -webkit-overflow-scrolling: touch;
-        }
+    <head>
+        <meta charset="utf-8">
+        <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+        <title>智慧后勤服务平台</title>
+        <meta name="screen-orientation" content="portrait" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="full-screen" content="yes">
+        <meta name="x5-fullscreen" content="true">
+        <style type="text/css"></style>
+        <script>
+            // 禁止ios10以上H5页面手势、双击缩放
+            window.onload = function() {
+                // 阻止双击放大
+                var lastTouchEnd = 0;
+                document.addEventListener('touchstart', function(event) {
+                    if (event.touches.length > 1) {
+                        event.preventDefault();
+                    }
+                });
+                document.addEventListener('touchend', function(event) {
+                    var now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
         
-        #app {
-            overflow: hidden;
-            -webkit-overflow-scrolling: touch;
-            position: relative;
-        }
-        
-        ;
-    </style>
-    <script>
-        // 禁止ios10以上H5页面手势、双击缩放
-        window.onload = function() {
-            // 阻止双击放大
-            var lastTouchEnd = 0;
-            document.addEventListener('touchstart', function(event) {
-                if (event.touches.length > 1) {
+                // 阻止双指放大
+                document.addEventListener('gesturestart', function(event) {
                     event.preventDefault();
-                }
-            });
-            document.addEventListener('touchend', function(event) {
-                var now = (new Date()).getTime();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
-    
-            // 阻止双指放大
-            document.addEventListener('gesturestart', function(event) {
-                event.preventDefault();
-            });
-        };
-
-        function pushHistory() {
-            var state = {
-                title: '',
-                url: ''
+                });
             };
-            window.history.pushState(state, state.title, state.url);
-        };
-        // 判断是否为PC方法
-        function IsPC() {
-            let flag;　
-            let system = {　　
-                win: false,
-                　　mac: false,
-                　　xll: false,
-                　　ipad: false
-            };　 //检测平台
-            　
-            let p = navigator.platform;　　
-            system.win = p.indexOf("Win") == 0;　　
-            system.mac = p.indexOf("Mac") == 0;　　
-            system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);　　
-            system.ipad = (navigator.userAgent.match(/iPad/i) != null) ? true : false;　
-            if (system.win || system.mac || system.xll || system.ipad) {
-                flag = true　
-            } else {
-                flag = false　
-            }
-            return flag
-        };
-        if (!IsPC()) {
-            pushHistory();
-        };
-    </script>
-</head>
 
-<body>
-    <div id="app">
-    </div>
-</body>
+            function scanCode(callback){
+                var code = '';
+                var lastTime, nextTime;
+                var lastCode, nextCode;
+                var that = this;
+                window.document.onkeypress = function(event) {
+                    if (window.event) { // IE
+                        nextCode = event.key;
+                    } else if (event.which) { // Netscape/Firefox/Opera
+                        nextCode = event.which
+                    }
+                    if (event.which === 13) {
+                        if (code.length < 3) {// 手动输入的时间不会让code的长度大于2，所以这里只会对扫码枪有
+                            return
+                        }
+                        code = decodeURIComponent(code);
+                        console.log('扫码结束: ' + code);
+                        callback(code);
+                        //TODO
+                        code = '';
+                        lastCode = '';
+                        lastTime = '';
+                        return
+                    }
+                    nextTime = new Date().getTime();
+                    if (!lastTime && !lastCode) {
+                        console.log('扫码开始。。。');
+                        code += event.key;
+                    }
 
+                    if (lastCode && lastTime && nextTime - lastTime > 500) { // 当扫码前有keypress事件时,防止首字缺失
+                        console.log('防止首字缺失。。。');
+                        code = event.key
+                    } else if (lastCode && lastTime) {
+                        console.log('扫码中。。。');
+                        code += event.key
+                    }
+                    lastCode = nextCode;
+                    lastTime = nextTime;
+                }
+            };
+
+
+            function pushHistory() {
+                var state = {
+                    title: '',
+                    url: ''
+                };
+                window.history.pushState(state, state.title, state.url);
+            };
+            // 判断是否为PC方法
+            function IsPC() {
+                let flag;　
+                let system = {　　
+                    win: false,
+                    　　mac: false,
+                    　　xll: false,
+                    　　ipad: false
+                };　 //检测平台
+                　
+                let p = navigator.platform;　　
+                system.win = p.indexOf("Win") == 0;　　
+                system.mac = p.indexOf("Mac") == 0;　　
+                system.x11 = (p == "X11") || (p.indexOf("Linux") == 0);　　
+                system.ipad = (navigator.userAgent.match(/iPad/i) != null) ? true : false;　
+                if (system.win || system.mac || system.xll || system.ipad) {
+                    flag = true　
+                } else {
+                    flag = false　
+                }
+                return flag
+            };
+            if (!IsPC()) {
+                pushHistory();
+            };
+        </script>
+    </head>
+    <body>
+        <div id="app"></div>
+    </body>
 </html>

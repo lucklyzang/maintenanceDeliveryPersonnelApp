@@ -1457,7 +1457,6 @@ export default {
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
   .content-wrapper();
-  height: 0;
   .quit-info-box {
     /deep/ .van-dialog {
       .van-dialog__content {

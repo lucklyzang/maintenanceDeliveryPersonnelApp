@@ -25,17 +25,14 @@ export default {
         },
 
         storageForthwithTaskMessage: (state) => {
-            state.storageForthwithTaskMessage = getStore('storageForthwithTaskMessage') ? JSON.parse(getStore('storageForthwithTaskMessage')) : [];
             return state.storageForthwithTaskMessage
         },
 
         storageSpecialTaskMessage: (state) => {
-            state.storageSpecialTaskMessage = getStore('storageSpecialTaskMessage') ? JSON.parse(getStore('storageSpecialTaskMessage')) : [];
             return state.storageSpecialTaskMessage
         },
 
         cleanTaskDetails : (state) => {
-            state.cleanTaskDetails = getStore('cleanTaskDetails') ? JSON.parse(getStore('cleanTaskDetails')) : {};
             return state.cleanTaskDetails
         },
 
@@ -108,7 +105,6 @@ export default {
         // 保存暂存的即时保洁任务相关信息
         changeTemporaryStorageForthwithTaskMessage(state, playLoad) {
             if (playLoad && playLoad != 'null') {
-                setStore('storageForthwithTaskMessage', playLoad);
                 state.storageForthwithTaskMessage = playLoad
             }
         },
@@ -116,7 +112,6 @@ export default {
         // 保存暂存的专项保洁任务相关信息
         changeTemporaryStorageSpecialTaskMessage(state, playLoad) {
             if (playLoad && playLoad != 'null') {
-                setStore('storageSpecialTaskMessage', playLoad);
                 state.storageSpecialTaskMessage = playLoad
             }
         },
@@ -124,7 +119,6 @@ export default {
         // 保存保洁管理任务详情
         storeCleanTaskDetails(state, playLoad) {
             if (playLoad && playLoad != 'null') {
-                setStore('cleanTaskDetails', playLoad);
                 state.cleanTaskDetails = playLoad
             }
         },

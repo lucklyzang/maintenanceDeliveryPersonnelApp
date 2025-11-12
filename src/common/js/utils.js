@@ -826,8 +826,6 @@ export const removeAllLocalStorage = () => {
   removeStore('userType');
   removeStore('completAppointTaskSweepCodeDestinationInfo');
   removeStore('currentDepartmentId');
-  removeStore('completPhotoInfo');
-  removeStore('completdispatchIssuePhotoInfo');
   removeStore('completeDispatchSweepCodeDestinationInfo');
   removeStore('completAppointTaskSweepCodeDepartureInfo');
   removeStore('completAppointTaskCheckedItemInfo');
@@ -853,7 +851,6 @@ export const removeAllLocalStorage = () => {
 
   // 工程维护
   removeStore('newTaskList');
-  removeStore('completPhotoInfo');
   removeStore('isFillMaterialList');
   removeStore('isDepartmentServiceVerifySweepCode');
   removeStore('isCurrentDepartmentServiceVerifySweepCode');
@@ -869,18 +866,11 @@ export const removeAllLocalStorage = () => {
   removeStore('roleNameList');
   removeStore('changeOverDueWay');
   removeStore('currentCleanTaskName');
-  removeStore('cleanTaskDetails');
-  removeStore('storageForthwithTaskMessage');
-  removeStore('storageSpecialTaskMessage');
   removeStore('chooseProject');
   removeStore('attendanceTypeDetailsMessage');
   removeStore('personnelStatisticsDetailsMessage');
 
   // 安全巡更
-  removeStore('temporaryStorageClaimRegisterMessage');
-  removeStore('temporaryStorageRepairsRegisterMessage');
-  removeStore('temporaryStorageOtherRegisterMessage');
-  removeStore('temporaryStorageHistoryClaimRegisterMessage');
 
   // 设备巡检
 }

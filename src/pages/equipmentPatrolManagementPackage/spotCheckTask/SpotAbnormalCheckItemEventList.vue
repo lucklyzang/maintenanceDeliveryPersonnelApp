@@ -263,7 +263,6 @@ export default {
 @import "~@/common/stylus/mixin.less";
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
-  height: 0;
   .content-wrapper();
    .event-type-box {
     /deep/ .van-dialog {

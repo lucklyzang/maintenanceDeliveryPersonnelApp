@@ -777,7 +777,6 @@ export default {
 @import "~@/common/stylus/mixin.less";
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
-  height: 0;
   .content-wrapper();
   .choose-photo-box {
     position: fixed;

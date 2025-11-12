@@ -1946,14 +1946,6 @@
         if (getStore('completAppointTaskCheckedItemInfo')) {
           this.$store.commit('changeCompleteCheckedItemInfo', JSON.parse(getStore('completAppointTaskCheckedItemInfo'))['sweepCodeInfo']);
         };
-        // 重新存入调度任务完成上传的照片
-        if (getStore('completPhotoInfo')) {
-          this.$store.commit('changeIsTransDispatchTaskCompletePhotoList', JSON.parse(getStore('completPhotoInfo'))['photoInfo']);
-        };
-        // 重新存入调度任务上传的问题图片
-        if (getStore('completdispatchIssuePhotoInfo')) {
-          this.$store.commit('changeIsCompleteDispatchIssuePhotoList', JSON.parse(getStore('completdispatchIssuePhotoInfo'))['photoInfo']);
-        };
         // 重新存入调度任务当前扫码校验通过的科室编号
         if (getStore('completDepartmentNumber')) {
           this.$store.commit('changeCurrentDepartmentNumber', JSON.parse(getStore('completDepartmentNumber'))['number']);

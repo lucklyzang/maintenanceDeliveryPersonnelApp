@@ -904,7 +904,6 @@
           }
         };
         this.changeIsCompletePhotoList(temporaryPhotoList);
-        setStore('completPhotoInfo', {"photoInfo": temporaryPhotoList})
       },
 
       // 回显照片
@@ -985,7 +984,6 @@
         temporaryPhotoList[echoIndex]['completePhototList'] = temporaryPhotoId;
         temporaryPhotoList[echoIndex]['issuePhototList'] = temporaryPhotoId;
         this.changeIsCompletePhotoList(temporaryPhotoList);
-        setStore('completPhotoInfo', {"photoInfo": temporaryPhotoList});
       },
 
       // 清除该任务存储的照片信息
@@ -993,7 +991,6 @@
         if (this.isCompleteRepairsWorkOrderPhotoList.length == 0) { return };
         let temporaryPhotoList = this.isCompleteRepairsWorkOrderPhotoList.filter((item) => {return item.taskId !== this.taskId});
         this.changeIsCompletePhotoList(temporaryPhotoList);
-        setStore('completPhotoInfo', {"photoInfo": temporaryPhotoList});
       },
 
       // 填写耗材
@@ -1274,7 +1271,6 @@
     .worker-show {
       .content-wrapper();
       flex: 1;
-      height: 0;
       overflow: auto;
       .content-real {
         flex: 1;

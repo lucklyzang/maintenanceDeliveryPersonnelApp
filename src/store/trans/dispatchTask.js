@@ -40,7 +40,6 @@ export default {
 			return state.isDispatchTaskFirstSweepCode
     },
     isCompletePhotoList: (state) => {
-      state.isCompletePhotoList = JSON.parse(getStore('completPhotoInfo')) ? JSON.parse(getStore('completPhotoInfo'))['photoInfo'] : [];
 			return state.isCompletePhotoList
     },
     isBack: (state) => {
@@ -84,7 +83,6 @@ export default {
 			return state.isCallDispatchSweepcodeMethod
     },
     isCompleteDispatchIssuePhotoList: (state) => {
-      state.isCompleteDispatchIssuePhotoList = JSON.parse(getStore('completdispatchIssuePhotoInfo')) ? JSON.parse(getStore('completdispatchIssuePhotoInfo'))['photoInfo'] : [];
 			return state.isCompleteDispatchIssuePhotoList
     }
   },
@@ -172,7 +170,6 @@ export default {
     //改变完成上传的照片
      changeTransDispatchIsCompletePhotoList (state,payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('completPhotoInfo', { photoInfo: payLoad });
 				state.isCompletePhotoList = payLoad
 			}
     },
@@ -235,7 +232,6 @@ export default {
     // 改变已完成上传图片的状态
     changeIsCompleteDispatchIssuePhotoList (state, payLoad) {
       if (payLoad && payLoad != 'null') {
-				setStore('completdispatchIssuePhotoInfo', { photoInfo: payLoad});
 				state.isCompleteDispatchIssuePhotoList = payLoad
 			}
     },

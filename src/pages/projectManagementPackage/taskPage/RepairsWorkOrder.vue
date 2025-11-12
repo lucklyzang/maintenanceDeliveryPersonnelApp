@@ -719,7 +719,6 @@
   @import "~@/common/stylus/mixin.less";
   @import "~@/common/stylus/modifyUi.less";
   .content-wrapper {
-    height: 0;
     .checkDialog {
       /deep/ .van-dialog {
         width: 90% !important;

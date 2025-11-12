@@ -25,16 +25,7 @@
         return this.$route.matched.filter(r => r.meta && r.meta.keepAlive).map(r => r.name) // 获取需要缓存的路由名称数组
       }
     },
-    mounted () {
-      // if (!!window.ActiveXObject || 'ActiveXObject' in window) {
-      //   window.addEventListener('hashchange', () => {
-      //       let currentPath = window.location.hash.slice(1)
-      //       if (this.$route.path !== currentPath) {
-      //           this.$router.push(currentPath);// 主动更改路由界面
-      //       }
-      //   }, false);
-      // }
-    },
+    mounted () {},
 
     methods: {
     },
@@ -59,7 +50,6 @@
           this.transitionName = ''
         }
       }
-
     }
   };
   //App接口
@@ -77,11 +67,20 @@
   },false)
 </script>
 <style lang="less" scoped>
-  @import "~@/common/stylus/variable.less";
+ html,body{
+      height: 100%;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      touch-action: none;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
+  };
   #app {
-    position: relative;
-    min-height: 100vh;
-    width: 100%
+      height: 100vh;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      position: relative;
   };
   .slide-right-leave-active,
   .slide-left-enter,

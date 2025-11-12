@@ -181,7 +181,6 @@ export default {
 @import "~@/common/stylus/mixin.less";
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
-  height: 0;
   position: relative;
   .content-wrapper();
   /deep/ .van-overlay {
