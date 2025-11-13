@@ -40,19 +40,19 @@
     </van-popup>
     <!-- 起点科室 -->
     <div class="transport-rice-box" v-if="showStartDepartment">
-      <ScrollSelection :columns="startDepartmentList" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" :isShowSearch="true" />
+      <ScrollSelection :columns="startDepartmentList" :pickerValues="startDepartmentDefaultIndex" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" :isShowSearch="true" />
     </div>
     <!-- 运送员 -->
     <div class="transport-rice-box" v-if="showTransporter">
-      <ScrollSelection :columns="transporterList" title="运送员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
+      <ScrollSelection :columns="transporterList" :pickerValues="transporterDefaultIndex" title="运送员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
     </div>
     <!-- 转运工具 -->
     <div class="transport-rice-box" v-if="showTransportTool">
-      <ScrollSelection :columns="transportToolList" title="转运工具" @sure="transportToolSureEvent" @cancel="transportToolCancelEvent" @close="transportToolCloseEvent" />
+      <ScrollSelection :columns="transportToolList" :pickerValues="transportToolDefaultIndex" title="转运工具" @sure="transportToolSureEvent" @cancel="transportToolCancelEvent" @close="transportToolCloseEvent" />
     </div>
      <!-- 性别 -->
     <div class="transport-rice-box" v-if="showGender">
-      <ScrollSelection :columns="genderList" title="性别" @sure="genderSureEvent" @cancel="genderCancelEvent" @close="genderCloseEvent" />
+      <ScrollSelection :columns="genderList" :pickerValues="genderDefaultIndex" title="性别" @sure="genderSureEvent" @cancel="genderCancelEvent" @close="genderCloseEvent" />
     </div>
     <div class="nav">
        <van-nav-bar
@@ -243,17 +243,21 @@ export default {
       currentTaskStartTime: new Date(),
       showStartDepartment: false,
       currentStartDepartment: '请选择',
+      startDepartmentDefaultIndex: 0,
       startDepartmentList: [],
       isContactisolationValue: null,
       showTransporter: false,
       currentTransporter: '请选择',
-       currentTransporterValue: '',
+      currentTransporterValue: '',
+      transporterDefaultIndex: 0,
       transporterList: [],
       showTransportTool: false,
       currentTransportTool: '无工具',
+      transportToolDefaultIndex: 0,
       transportToolList: [],
       showGender: false,
       currentGender: '未选择',
+      genderDefaultIndex: 0,
       genderList: [
         { 
           id: '2',
@@ -361,6 +365,10 @@ export default {
     // 回显暂存的信息
     echoTemporaryStorageMessage () {
       let casuallyTemporaryStorageCreateDispathTaskMessage = this.temporaryStorageCreateAppointTaskMessage;
+      this.startDepartmentDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['startDepartmentDefaultIndex'];
+      this.transporterDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['transporterDefaultIndex'];
+      this.transportToolDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['transportToolDefaultIndex'];
+      this.genderDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['genderDefaultIndex'];
       this.priorityRadioValue = casuallyTemporaryStorageCreateDispathTaskMessage['priorityRadioValue'];
       this.transportTypeList = casuallyTemporaryStorageCreateDispathTaskMessage['transportTypeList'];
       this.currentStartDepartment = casuallyTemporaryStorageCreateDispathTaskMessage['currentStartDepartment'];
@@ -583,11 +591,13 @@ export default {
     },
 
     // 起点科室下拉选择框确认事件
-    startDepartmentSureEvent (val) {
+    startDepartmentSureEvent (val,value,id) {
       if (val) {
-        this.currentStartDepartment =  val
+        this.currentStartDepartment =  val;
+        this.startDepartmentDefaultIndex = id;
       } else {
-        this.currentStartDepartment = '请选择'
+        this.currentStartDepartment = '请选择';
+        this.startDepartmentDefaultIndex = 0;
       };
       this.showStartDepartment = false
     },
@@ -603,12 +613,14 @@ export default {
     },
 
     // 运送员下拉选择框确认事件
-    transporterSureEvent (val,value) {
+    transporterSureEvent (val,value,id) {
       if (val) {
         this.currentTransporter =  val;
-        this.currentTransporterValue = value
+        this.currentTransporterValue = value;
+        this.transporterDefaultIndex = id;
       } else {
         this.currentTransporter = '请选择';
+        this.transporterDefaultIndex = 0;
         this.currentTransporterValue = ''
       };
       this.showTransporter = false
@@ -625,11 +637,13 @@ export default {
     },
 
     // 转运工具下拉选择框确认事件
-    transportToolSureEvent (val) {
+    transportToolSureEvent (val,value,id) {
       if (val) {
-        this.currentTransportTool =  val
+        this.currentTransportTool =  val;
+        this.transportToolDefaultIndex = id;
       } else {
-        this.currentTransportTool = '无工具'
+        this.currentTransportTool = '无工具';
+        this.transportToolDefaultIndex = 0;
       };
       this.showTransportTool = false
     },
@@ -645,11 +659,13 @@ export default {
     },
 
     // 性别下拉选择框确认事件
-    genderSureEvent (val) {
-      if (val) {
-        this.currentGender =  val
+    genderSureEvent (val,value,id) {
+      if (val,value,id) {
+        this.currentGender =  val;
+        this.genderDefaultIndex = id;
       } else {
-        this.currentGender = '请选择'
+        this.currentGender = '请选择';
+        this.genderDefaultIndex = 0;
       };
       this.showGender = false
     },
@@ -911,6 +927,10 @@ export default {
     // 暂存事件
     temporaryStorageEvent () {
       let casuallyTemporaryStorageCreateDispathTaskMessage = this.temporaryStorageCreateAppointTaskMessage;
+      casuallyTemporaryStorageCreateDispathTaskMessage['startDepartmentDefaultIndex'] = this.startDepartmentDefaultIndex;
+      casuallyTemporaryStorageCreateDispathTaskMessage['transporterDefaultIndex'] = this.transporterDefaultIndex;
+      casuallyTemporaryStorageCreateDispathTaskMessage['transportToolDefaultIndex'] = this.transportToolDefaultIndex;
+      casuallyTemporaryStorageCreateDispathTaskMessage['genderDefaultIndex'] = this.genderDefaultIndex
       casuallyTemporaryStorageCreateDispathTaskMessage['priorityRadioValue'] = this.priorityRadioValue;
       casuallyTemporaryStorageCreateDispathTaskMessage['transportTypeList'] = this.transportTypeList;
       casuallyTemporaryStorageCreateDispathTaskMessage['currentStartDepartment'] = this.currentStartDepartment;

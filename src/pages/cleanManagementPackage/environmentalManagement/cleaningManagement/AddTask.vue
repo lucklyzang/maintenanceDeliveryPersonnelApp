@@ -150,7 +150,7 @@
             @change="previewFileOne"
             ref="inputFile"
             type="file"
-            accept="image/album"
+            accept="image/*"
           />从图库中选择
         </div>
         <div class="photo-graph">
@@ -160,7 +160,7 @@
             id="demo2"
             @change="previewFileTwo"
             type="file"
-            accept="image/camera"
+            accept="image/*,.camera"
             capture="camera"
           />拍照
         </div>

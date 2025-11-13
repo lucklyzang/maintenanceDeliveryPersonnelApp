@@ -148,10 +148,8 @@ export default {
     },
     //改变是否完成扫码的状态(出发地和单一目的地的id)
     changeisCompleteSweepCode (state,payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('completeDispatchSweepCodeInfo', {sweepCodeInfo: payLoad});
 				state.isCompleteSweepCode = payLoad
-			}
     },
     //改变是否完成非单一目的地扫码的状态
     changeIsCompleteSweepCodeDestinationList (state,payLoad) {

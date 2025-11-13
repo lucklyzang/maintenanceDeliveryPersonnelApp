@@ -27,9 +27,7 @@ export default {
 
         // 保存全局globalTimer
         changeProjectGlobalTimer (state, payLoad) {
-            if ( payLoad && payLoad != 'null') {
-                    state.projectGlobalTimer = payLoad
-                }
+            state.projectGlobalTimer = payLoad
         },
 
         //重置自主报修任务状态

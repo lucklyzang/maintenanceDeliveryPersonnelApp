@@ -71,7 +71,7 @@
           </div>
         </div>
         <div class="transport-type-child-box">
-          <div class="transport-type-child-content" v-for="(innerItem,innerIndex) in patienModalMessage.transportList"
+          <div class="transport-type-child-content" v-for="(innerItem,innerIndex) in patienModalMessage['transportList']"
                :key="innerItem.text">
             <div :class="{'transTypeListStyle': innerItem.typerNumber > 0 }">
               {{innerItem.text}}
@@ -105,15 +105,15 @@
     </van-popup>
     <!-- 运送大类 -->
     <div class="transport-rice-box" v-if="showTransportRice">
-      <ScrollSelection :columns="transportRiceList" title="运送大类" @sure="transportRiceSureEvent" @cancel="transportRiceCancelEvent" @close="transportRiceCloseEvent" />
+      <ScrollSelection :columns="transportRiceList" :pickerValues="transportRiceDefaultIndex" title="运送大类" @sure="transportRiceSureEvent" @cancel="transportRiceCancelEvent" @close="transportRiceCloseEvent" />
     </div>
     <!-- 起点科室 -->
     <div class="transport-rice-box" v-if="showStartDepartment">
-      <ScrollSelection :columns="startDepartmentList" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" :isShowSearch="true" />
+      <ScrollSelection :columns="startDepartmentList" :pickerValues="startDepartmentDefaultIndex" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" :isShowSearch="true"/>
     </div>
-    <!-- 终点科室(模板一多选) -->
+    <!-- 终点科室(模板一单选) -->
     <div class="transport-rice-box" v-if="showEndDepartment">
-      <ScrollSelection :columns="endDepartmentList" title="终点科室" @sure="endDepartmentSureEvent" @cancel="endDepartmentCancelEvent" @close="endDepartmentCloseEvent" :isShowSearch="true" />
+      <ScrollSelection :columns="endDepartmentList" :pickerValues="endDepartmentDefaultIndex" title="终点科室" @sure="endDepartmentSureEvent" @cancel="endDepartmentCancelEvent" @close="endDepartmentCloseEvent" :isShowSearch="true" />
     </div>
     <!-- 终点科室(模板二多选) -->
     <div class="transport-rice-box" v-if="showGoalSpaces">
@@ -121,15 +121,15 @@
     </div>
     <!-- 运送员 -->
     <div class="transport-rice-box" v-if="showTransporter">
-      <ScrollSelection :columns="transporterList" title="运送员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
+      <ScrollSelection :columns="transporterList" :pickerValues="transporterDefaultIndex" title="运送员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
     </div>
     <!-- 转运工具 -->
     <div class="transport-rice-box" v-if="showTransportTool">
-      <ScrollSelection :columns="transportToolList" title="转运工具" @sure="transportToolSureEvent" @cancel="transportToolCancelEvent" @close="transportToolCloseEvent" />
+      <ScrollSelection :columns="transportToolList" :pickerValues="transportToolDefaultIndex" title="转运工具" @sure="transportToolSureEvent" @cancel="transportToolCancelEvent" @close="transportToolCloseEvent" />
     </div>
      <!-- 性别 -->
     <div class="transport-rice-box" v-if="showGender">
-      <ScrollSelection :columns="genderList" title="性别" @sure="genderSureEvent" @cancel="genderCancelEvent" @close="genderCloseEvent" />
+      <ScrollSelection :columns="genderList" :pickerValues="genderDefaultIndex" title="性别" @sure="genderSureEvent" @cancel="genderCancelEvent" @close="genderCloseEvent" />
     </div>
     <div class="nav">
        <van-nav-bar
@@ -409,19 +409,24 @@ export default {
       isContactisolationValue: null,
       showStartDepartment: false,
       currentStartDepartment: '请选择',
+      startDepartmentDefaultIndex: 0,
       startDepartmentList: [],
       showEndDepartment: false,
       currentEndDepartment: '请选择',
+      endDepartmentDefaultIndex: 0,
       endDepartmentList: [],
       showTransporter: false,
       currentTransporter: '请选择',
+      transporterDefaultIndex: 0,
       currentTransporterValue: '',
       transporterList: [],
       showTransportTool: false,
       currentTransportTool: '无工具',
+      transportToolDefaultIndex: 0,
       transportToolList: [],
       showGender: false,
       currentGender: '未选择',
+      genderDefaultIndex: 0,
       genderList: [
         { 
           id: '2',
@@ -438,6 +443,7 @@ export default {
       ],
       showTransportRice: false,
       currentTransportRice: '请选择',
+      transportRiceDefaultIndex: 0,
       currentTransportRiceValue: '',
       transportRiceList: [],
       transportTypeIndex: null,
@@ -488,7 +494,6 @@ export default {
   },
 
   mounted() {
-    console.log('调度信息',this.schedulingTaskDetails);
     // 控制设备物理返回按键测试
     if (!IsPC()) {
       let that = this;
@@ -648,7 +653,7 @@ export default {
               typerNumber: innerItem['quantity']
             })
           }
-        };
+        }
         this.querytransportChildByTransportParent(0, casuallyTemporaryStorageCreateDispathTaskMessage['parentTypeId'], this.templateType,true);
       }
     },
@@ -704,17 +709,25 @@ export default {
 			});
       //病人信息展示框运送大类、运送小类为空时,给编辑病人信息模态框的运送大类和小类赋值)
       if (!this.templatelistTwo[index]['sampleValue']) {
-        this.patienModalMessage['sampleList']  = this.transportTypeParent; //病人信息模态框中运送大类列表 
-        this.patienModalMessage['sampleValue'] = this.currentTransportRice; //病人信息模态框中选中的运送大类名称
-        this.patienModalMessage['sampleId'] = this.currentTransportRiceValue; //病人信息模态框中选中的运送大类id
-        this.patienModalMessage['transportList'] = _.cloneDeep(this.commonTransportList) //病人信息模态框中根据运送大类查询出的运送小类列表
+        this.$nextTick(() => {
+          this.patienModalMessage['sampleList']  = this.transportTypeParent; //病人信息模态框中运送大类列表 
+          this.patienModalMessage['sampleValue'] = this.currentTransportRice; //病人信息模态框中选中的运送大类名称
+          this.patienModalMessage['sampleId'] = this.currentTransportRiceValue; //病人信息模态框中选中的运送大类id
+          this.patienModalMessage['transportList'] = _.cloneDeep(this.commonTransportList) //病人信息模态框中根据运送大类查询出的运送小类列表
+        })
       };
+      this.patienModalMessage['sampleValue'] = this.currentTransportRice; //病人信息模态框中选中的运送大类名称
+      this.patienModalMessage['sampleId'] = this.currentTransportRiceValue; //病人信息模态框中选中的运送大类id
       //运送大类列表为空时,给编辑病人信息模态框的运送大类赋值
       if (this.templatelistTwo[index]['sampleList'].length == 0) {
-        this.patienModalMessage['sampleList']  = this.transportTypeParent //病人信息模态框中运送大类列表 
+        this.$nextTick(() => {
+          this.patienModalMessage['sampleList']  = this.transportTypeParent //病人信息模态框中运送大类列表 
+        })
       };
       if (this.templatelistTwo[index].actualData == 0) {
-        this.patienModalMessage['transportList'] = _.cloneDeep(this.commonTransportList) //病人信息模态框中根据运送大类查询出的运送小类列表
+        this.$nextTick(() => {
+          this.patienModalMessage['transportList'] = _.cloneDeep(this.commonTransportList) //病人信息模态框中根据运送大类查询出的运送小类列表
+        })
       }
     },
 
@@ -1178,15 +1191,17 @@ export default {
     },
 
     // 运送大类下拉选择框确认事件
-    transportRiceSureEvent (val,value) {
+    transportRiceSureEvent (val,value,id) {
       if (val) {
         this.currentTransportRice = val;
         this.currentTransportRiceValue = value;
+        this.transportRiceDefaultIndex = id;
         this.synchronizationPatientTransportType(val);
         // 根据运送大类查询运送小类
         this.querytransportChildByTransportParent(0,value,this.templateType,false);
       } else {
         this.currentTransportRice = '请选择';
+        this.transportRiceDefaultIndex = 0;
         this.currentTransportRiceValue = ''
       };
       this.showTransportRice = false
@@ -1212,11 +1227,13 @@ export default {
     },
 
     // 起点科室下拉选择框确认事件
-    startDepartmentSureEvent (val) {
+    startDepartmentSureEvent (val,value,id) {
       if (val) {
-        this.currentStartDepartment =  val
+        this.currentStartDepartment =  val;
+        this.startDepartmentDefaultIndex = id;
       } else {
-        this.currentStartDepartment = '请选择'
+        this.currentStartDepartment = '请选择';
+        this.startDepartmentDefaultIndex = 0;
       };
       this.showStartDepartment = false
     },
@@ -1232,11 +1249,13 @@ export default {
     },
 
     // 终点科室下拉选择框确认事件(模板一)
-    endDepartmentSureEvent (val) {
+    endDepartmentSureEvent (val,value,id) {
       if (val) {
-        this.currentEndDepartment =  val
+        this.currentEndDepartment =  val;
+        this.endDepartmentDefaultIndex = id;
       } else {
-        this.currentEndDepartment = '请选择'
+        this.currentEndDepartment = '请选择';
+        this.endDepartmentDefaultIndex = 0;
       };
       this.showEndDepartment = false
     },
@@ -1252,12 +1271,14 @@ export default {
     },
 
     // 运送员下拉选择框确认事件
-    transporterSureEvent (val,value) {
+    transporterSureEvent (val,value,id) {
       if (val) {
         this.currentTransporter =  val;
-        this.currentTransporterValue = value
+        this.currentTransporterValue = value;
+        this.transporterDefaultIndex = id;
       } else {
         this.currentTransporter = '请选择';
+        this.transporterDefaultIndex = 0;
         this.currentTransporterValue = ''
       };
       this.showTransporter = false
@@ -1274,11 +1295,13 @@ export default {
     },
 
     // 转运工具下拉选择框确认事件
-    transportToolSureEvent (val) {
+    transportToolSureEvent (val,value,id) {
       if (val) {
-        this.currentTransportTool =  val
+        this.currentTransportTool =  val;
+        this.transportToolDefaultIndex = id;
       } else {
-        this.currentTransportTool = '无工具'
+        this.currentTransportTool = '无工具';
+        this.transportToolDefaultIndex = 0;
       };
       this.showTransportTool = false
     },
@@ -1294,11 +1317,13 @@ export default {
     },
 
     // 性别下拉选择框确认事件
-    genderSureEvent (val) {
+    genderSureEvent (val,value,id) {
       if (val) {
-        this.currentGender =  val
+        this.currentGender =  val;
+        this.genderDefaultIndex = id;
       } else {
-        this.currentGender = '请选择'
+        this.currentGender = '请选择';
+        this.genderDefaultIndex = 0;
       };
       this.showGender = false
     },

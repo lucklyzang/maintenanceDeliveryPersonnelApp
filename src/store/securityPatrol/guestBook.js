@@ -33,7 +33,7 @@ export default {
 
         // 保存是否从首页进入过留言簿页的信息
         changeIsEnterGuestBookPageFromHomePage(state, playLoad) {
-            if (playLoad && playLoad != 'null') {
+            if (playLoad != 'null') {
                 state.isEnterGuestBookPageFromHomePage = playLoad
             }
         },

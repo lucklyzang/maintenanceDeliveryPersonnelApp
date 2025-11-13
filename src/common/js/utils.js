@@ -810,7 +810,6 @@ export const removeAllLocalStorage = () => {
   removeStore('isLogin');
   removeStore('timeMessage');
   removeStore('ossMessage');
-  removeStore('globalTimer');
   removeStore('chooseHospitalArea');
   removeStore('appPermission');
   // 中央运送

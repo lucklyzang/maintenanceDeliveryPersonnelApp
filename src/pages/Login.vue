@@ -116,7 +116,8 @@
 				'changeIsMedicalMan',
 				'storeAppPermission',
 				'changeUserType',
-				'changeIsNewCircle'
+				'changeIsNewCircle',
+				'changeRoleNameList'
 			]),
       
 			// 院区下拉选择框确认事件
@@ -320,6 +321,8 @@
 								// 登录用户信息存入store
 								this.changeIsLogin(true);
 								this.storeUserInfo(res.data.data);
+								// 存入用户角色列表
+								this.changeRoleNameList(res.data.data.roleNameList);
 								this.hospitalCampusOption = [];
 								this.changeIsMedicalMan(false);
 								if (this.userInfo['worker']['hospitalList'].length > 1) {

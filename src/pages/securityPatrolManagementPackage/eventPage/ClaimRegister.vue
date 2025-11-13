@@ -92,11 +92,11 @@
       <div class="choose-photo-box" v-show="photoBox">
         <div class="choose-photo">
           <van-icon name="photo" />
-          <input name="uploadImg1" ref="inputFile" id="demo1" @change="previewFileOne" type="file" accept="image/album"/>从图库中选择
+          <input name="uploadImg1" ref="inputFile" id="demo1" @change="previewFileOne" type="file" accept="image/*"/>从图库中选择
         </div>
         <div class="photo-graph">
           <van-icon name="photograph" />
-          <input name="uploadImg2" id="demo2"  @change="previewFileTwo" type="file" accept="image/camera" capture="camera"/>拍照
+          <input name="uploadImg2" id="demo2"  @change="previewFileTwo" type="file" accept="image/*,.camera" capture="camera"/>拍照
         </div>
         <div class="photo-cancel" @click="photoCancel">取消</div>
       </div>

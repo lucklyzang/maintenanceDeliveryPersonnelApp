@@ -29,7 +29,7 @@
 				</div>
 				<div class="account-area account-area-bottom-border">
 					<div class="account-area-left">
-						所属科室
+						所属部门
 					</div>
 					<div class="account-area-right">
 						{{ depName }}

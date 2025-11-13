@@ -31,7 +31,7 @@ export default {
 
     // 保存任务调度切换类型
     changeSchedulingTaskType (state, payLoad) {
-      if (payLoad&& payLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('schedulingTaskType', payLoad);
 				state.schedulingTaskType = payLoad
 			}
@@ -39,14 +39,14 @@ export default {
 
     // 保存任务调度详情
     changeSchedulingTaskDetails (state, payLoad) {
-      if (payLoad&& payLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				state.schedulingTaskDetails = payLoad
 			}
     },
 
     // 保存操作按钮点击记录
     changeOperateBtnClickRecord (state, payLoad) {
-      if (payLoad&& payLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				setStore('operateBtnClickRecord', payLoad);
 				state.operateBtnClickRecord = payLoad
 			}
@@ -54,14 +54,14 @@ export default {
 
     // 保存暂存创建调度任务的信息
     changeTemporaryStorageCreateDispathTaskMessage (state, payLoad) {
-      if (payLoad&& payLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				state.temporaryStorageCreateDispathTaskMessage = payLoad
 			}
     },
 
     // 保存暂存创建预约任务的信息
     changeTemporaryStorageCreateAppointTaskMessage (state, payLoad) {
-      if (payLoad&& payLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				state.temporaryStorageCreateAppointTaskMessage = payLoad
 			}
     },

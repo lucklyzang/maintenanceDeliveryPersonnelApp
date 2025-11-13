@@ -36,7 +36,6 @@ export default {
 			return state.taskType
 		},
     globalTimer: (state) => {
-      state.globalTimer = getStore('globalTimer') ? getStore('globalTimer') : null;
 			return state.globalTimer
     },
     globalCircleTimer: (state) => {
@@ -68,10 +67,8 @@ export default {
     },
     // 修改用户状态
     changeUserType (state, payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('userType', payLoad);
 				state.userType = payLoad
-			}
     },
     // 改变科室信息状态id
     changeDepartmentInfoList (state, payLoad) {
@@ -89,10 +86,8 @@ export default {
     },
     // 改变新任务列表状态
     changeNewTaskList (state, payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('newTaskName', payLoad);
 				state.newTaskName = payLoad
-			}
     },
     // 改变历史任务详情
     changeTaskDetailsMessage (state, payLoad) {
@@ -110,17 +105,12 @@ export default {
     },
     // 改变全局定时器的状态
     changeGlobalTimer (state, payLoad) {
-      if (payLoad && payLoad != 'null') {
-				setStore('globalTimer', payLoad);
-				state.globalTimer = payLoad
-			}
+			state.globalTimer = payLoad
     },
     // 改变全局定时器的状态
     changeGlobalCircleTimer (state, payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('globalCircleTimer', payLoad);
 				state.globalCircleTimer = payLoad
-			}
     },
     // 改变是否刷新首页的状态
     changeIsFreshHomePage (state, payLoad) {

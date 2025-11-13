@@ -10,10 +10,8 @@ export default {
   },
   mutations:{
     changeCatchComponent(state,payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('catch_components', payLoad);
 				state.catch_components = payLoad
-			}
     },
 		resetTransCatchComponentsState(state) {
       Object.assign(state, getDefaultTransCatchComponentsState())

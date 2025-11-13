@@ -157,7 +157,7 @@ export function getDefaultTransTransLoginState() {
 		userType: '',
 		departmentInfoList: {},
 		departmentInfoListNo: {},
-		newTaskName: [],
+		newTaskName: '',
 		taskDetailsMessage: {},
 		taskType: '',
 		globalTimer: null,

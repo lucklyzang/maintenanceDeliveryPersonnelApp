@@ -1572,7 +1572,7 @@
                 audio.onended = () => {
                   // 更新任务数量和排名
                   this.isHaveTask = this.taskTypeTransfer(item);
-                  this.parallelFunction(this.taskTypeTransfer(item))
+                  this.parallelFunction(this.taskTypeTransfer(item));
                 }
               }
             })

@@ -50,10 +50,8 @@ export default {
     },
     // 改变原始签名状态
     changeOriginalSignature (state,payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('originalSignature', payLoad);
 				state.originalSignature = payLoad
-			}
     },
     //改变完成扫码目的地信息的状态
     changeCompleteSweepcodeDestinationInfo (state,payLoad) {

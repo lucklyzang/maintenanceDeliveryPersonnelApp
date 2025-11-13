@@ -65,7 +65,7 @@
           <div>运送类型</div>
           <div v-if="xflSelectShow">
             <Vselect :list="patienModalMessage.sampleList" disabled :clearable="false" :showItemNum="5" :isCanInput="true" :showList="transportParentControlListShow"
-              :style_Container="'height: 50px; font-size: 16px;'" :initValue="patienModalMessage.sampleValue" @change="transportParentChange"
+              :style_Container="'height: 50px; font-size: 16px;'" :initValue="patienModalMessage['sampleValue']" @change="transportParentChange"
               @input="transportParentInputEvent" @visible-change="transportParentVisibleChange">
             </Vselect>
           </div>
@@ -105,15 +105,15 @@
     </van-popup>
     <!-- 运送大类 -->
     <div class="transport-rice-box" v-if="showTransportRice">
-      <ScrollSelection :columns="transportRiceList" title="运送大类" @sure="transportRiceSureEvent" @cancel="transportRiceCancelEvent" @close="transportRiceCloseEvent" />
+      <ScrollSelection :columns="transportRiceList" :pickerValues="transportRiceDefaultIndex" title="运送大类" @sure="transportRiceSureEvent" @cancel="transportRiceCancelEvent" @close="transportRiceCloseEvent" />
     </div>
     <!-- 起点科室 -->
     <div class="transport-rice-box" v-if="showStartDepartment">
-      <ScrollSelection :columns="startDepartmentList" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" :isShowSearch="true"/>
+      <ScrollSelection :columns="startDepartmentList" :pickerValues="startDepartmentDefaultIndex" title="起点科室" @sure="startDepartmentSureEvent" @cancel="startDepartmentCancelEvent" @close="startDepartmentCloseEvent" :isShowSearch="true"/>
     </div>
     <!-- 终点科室(模板一单选) -->
     <div class="transport-rice-box" v-if="showEndDepartment">
-      <ScrollSelection :columns="endDepartmentList" title="终点科室" @sure="endDepartmentSureEvent" @cancel="endDepartmentCancelEvent" @close="endDepartmentCloseEvent" :isShowSearch="true" />
+      <ScrollSelection :columns="endDepartmentList" :pickerValues="endDepartmentDefaultIndex" title="终点科室" @sure="endDepartmentSureEvent" @cancel="endDepartmentCancelEvent" @close="endDepartmentCloseEvent" :isShowSearch="true" />
     </div>
     <!-- 终点科室(模板二多选) -->
     <div class="transport-rice-box" v-if="showGoalSpaces">
@@ -121,15 +121,15 @@
     </div>
     <!-- 运送员 -->
     <div class="transport-rice-box" v-if="showTransporter">
-      <ScrollSelection :columns="transporterList" title="运送员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
+      <ScrollSelection :columns="transporterList" :pickerValues="transporterDefaultIndex" title="运送员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
     </div>
     <!-- 转运工具 -->
     <div class="transport-rice-box" v-if="showTransportTool">
-      <ScrollSelection :columns="transportToolList" title="转运工具" @sure="transportToolSureEvent" @cancel="transportToolCancelEvent" @close="transportToolCloseEvent" />
+      <ScrollSelection :columns="transportToolList" :pickerValues="transportToolDefaultIndex" title="转运工具" @sure="transportToolSureEvent" @cancel="transportToolCancelEvent" @close="transportToolCloseEvent" />
     </div>
      <!-- 性别 -->
     <div class="transport-rice-box" v-if="showGender">
-      <ScrollSelection :columns="genderList" title="性别" @sure="genderSureEvent" @cancel="genderCancelEvent" @close="genderCloseEvent" />
+      <ScrollSelection :columns="genderList" :pickerValues="genderDefaultIndex" title="性别" @sure="genderSureEvent" @cancel="genderCancelEvent" @close="genderCloseEvent" />
     </div>
     <div class="nav">
        <van-nav-bar
@@ -410,19 +410,24 @@ export default {
       isContactisolationValue: null,
       showStartDepartment: false,
       currentStartDepartment: '请选择',
+      startDepartmentDefaultIndex: 0,
       startDepartmentList: [],
       showEndDepartment: false,
       currentEndDepartment: '请选择',
+      endDepartmentDefaultIndex: 0,
       endDepartmentList: [],
       showTransporter: false,
       currentTransporter: '请选择',
       currentTransporterValue: '',
+      transporterDefaultIndex: 0,
       transporterList: [],
       showTransportTool: false,
       currentTransportTool: '无工具',
+      transportToolDefaultIndex: 0,
       transportToolList: [],
       showGender: false,
       currentGender: '未选择',
+      genderDefaultIndex: 0,
       genderList: [
         { 
           id: '2',
@@ -439,6 +444,7 @@ export default {
       ],
       showTransportRice: false,
       currentTransportRice: '请选择',
+      transportRiceDefaultIndex: 0,
       currentTransportRiceValue: '',
       transportRiceList: [],
       transportTypeIndex: null,
@@ -590,11 +596,17 @@ export default {
     // 回显暂存的信息
     echoTemporaryStorageMessage () {
       let casuallyTemporaryStorageCreateDispathTaskMessage = this.temporaryStorageCreateDispathTaskMessage;
+      this.transportRiceDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['transportRiceDefaultIndex'];
+      this.startDepartmentDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['startDepartmentDefaultIndex'];
+      this.transporterDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['transporterDefaultIndex'];
+      this.transportToolDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['transportToolDefaultIndex'];
       if (this.templateType === 'template_one') {
         this.priorityRadioValue = casuallyTemporaryStorageCreateDispathTaskMessage['priorityRadioValue'];
         this.currentTransportRice = casuallyTemporaryStorageCreateDispathTaskMessage['currentTransportRice'];
         this.currentTransportRiceValue = casuallyTemporaryStorageCreateDispathTaskMessage['currentTransportRiceValue'];
         this.transportTypeIndex = casuallyTemporaryStorageCreateDispathTaskMessage['transportTypeIndex'];
+        this.endDepartmentDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['endDepartmentDefaultIndex'];
+        this.genderDefaultIndex = casuallyTemporaryStorageCreateDispathTaskMessage['genderDefaultIndex'];
         this.patientAgeValue = casuallyTemporaryStorageCreateDispathTaskMessage['patientAgeValue'];
         this.currentTransportType = casuallyTemporaryStorageCreateDispathTaskMessage['currentTransportType'];
         this.transportTypeList = casuallyTemporaryStorageCreateDispathTaskMessage['transportTypeList'];
@@ -1100,15 +1112,17 @@ export default {
     },
 
     // 运送大类下拉选择框确认事件
-    transportRiceSureEvent (val,value) {
+    transportRiceSureEvent (val,value, id) {
       if (val) {
         this.currentTransportRice = val;
         this.currentTransportRiceValue = value;
         this.synchronizationPatientTransportType(val);
+        this.transportRiceDefaultIndex = id;
         // 根据运送大类查询运送小类
         this.querytransportChildByTransportParent(0,this.currentTransportRiceValue,this.templateType);
       } else {
         this.currentTransportRice = '请选择';
+        this.transportRiceDefaultIndex = 0;
         this.currentTransportRiceValue = ''
       };
       this.showTransportRice = false
@@ -1134,11 +1148,13 @@ export default {
     },
 
     // 起点科室下拉选择框确认事件
-    startDepartmentSureEvent (val) {
+    startDepartmentSureEvent (val,value,id) {
       if (val) {
-        this.currentStartDepartment =  val
+        this.currentStartDepartment =  val;
+        this.startDepartmentDefaultIndex = id;
       } else {
-        this.currentStartDepartment = '请选择'
+        this.currentStartDepartment = '请选择';
+        this.startDepartmentDefaultIndex = 0
       };
       this.showStartDepartment = false
     },
@@ -1154,11 +1170,13 @@ export default {
     },
 
     // 终点科室下拉选择框确认事件(模板一)
-    endDepartmentSureEvent (val) {
+    endDepartmentSureEvent (val,value,id) {
       if (val) {
-        this.currentEndDepartment =  val
+        this.currentEndDepartment = val;
+        this.endDepartmentDefaultIndex = id;
       } else {
-        this.currentEndDepartment = '请选择'
+        this.currentEndDepartment = '请选择';
+        this.endDepartmentDefaultIndex = 0;
       };
       this.showEndDepartment = false
     },
@@ -1205,12 +1223,14 @@ export default {
     },
 
     // 运送员下拉选择框确认事件
-    transporterSureEvent (val,value) {
+    transporterSureEvent (val,value,id) {
       if (val) {
         this.currentTransporter =  val;
-        this.currentTransporterValue = value
+        this.currentTransporterValue = value;
+        this.transporterDefaultIndex = id;
       } else {
         this.currentTransporter = '请选择';
+        this.transporterDefaultIndex = 0;
         this.currentTransporterValue = ''
       };
       this.showTransporter = false
@@ -1227,11 +1247,13 @@ export default {
     },
 
     // 转运工具下拉选择框确认事件
-    transportToolSureEvent (val) {
+    transportToolSureEvent (val,value,id) {
       if (val) {
-        this.currentTransportTool =  val
+        this.currentTransportTool =  val;
+        this.transportToolDefaultIndex = id;
       } else {
-        this.currentTransportTool = '无工具'
+        this.currentTransportTool = '无工具';
+        this.transportToolDefaultIndex = 0;
       };
       this.showTransportTool = false
     },
@@ -1247,11 +1269,13 @@ export default {
     },
 
     // 性别下拉选择框确认事件
-    genderSureEvent (val) {
+    genderSureEvent (val,value,id) {
       if (val) {
-        this.currentGender =  val
+        this.currentGender =  val;
+        this.genderDefaultIndex = id;
       } else {
-        this.currentGender = '请选择'
+        this.currentGender = '请选择';
+        this.genderDefaultIndex = 0;
       };
       this.showGender = false
     },
@@ -1668,10 +1692,16 @@ export default {
     temporaryStorageEvent () {
       //模板一单个病人,模板二多个病人
       let casuallyTemporaryStorageCreateDispathTaskMessage = this.temporaryStorageCreateDispathTaskMessage;
+      casuallyTemporaryStorageCreateDispathTaskMessage['transportRiceDefaultIndex'] = this.transportRiceDefaultIndex;
+      casuallyTemporaryStorageCreateDispathTaskMessage['startDepartmentDefaultIndex'] = this.startDepartmentDefaultIndex;
+      casuallyTemporaryStorageCreateDispathTaskMessage['transporterDefaultIndex'] = this.transporterDefaultIndex;
+      casuallyTemporaryStorageCreateDispathTaskMessage['transportToolDefaultIndex'] = this.transportToolDefaultIndex;
       if (this.templateType === 'template_one') {
         casuallyTemporaryStorageCreateDispathTaskMessage['priorityRadioValue'] = this.priorityRadioValue;
         casuallyTemporaryStorageCreateDispathTaskMessage['currentTransportRice'] = this.currentTransportRice;
         casuallyTemporaryStorageCreateDispathTaskMessage['currentTransportRiceValue'] = this.currentTransportRiceValue;
+        casuallyTemporaryStorageCreateDispathTaskMessage['endDepartmentDefaultIndex'] = this.endDepartmentDefaultIndex;
+        casuallyTemporaryStorageCreateDispathTaskMessage['genderDefaultIndex'] = this.genderDefaultIndex
         casuallyTemporaryStorageCreateDispathTaskMessage['transportTypeIndex'] = this.transportTypeIndex;
         casuallyTemporaryStorageCreateDispathTaskMessage['currentTransportType'] = this.currentTransportType;
         casuallyTemporaryStorageCreateDispathTaskMessage['transportTypeList'] = this.transportTypeList;

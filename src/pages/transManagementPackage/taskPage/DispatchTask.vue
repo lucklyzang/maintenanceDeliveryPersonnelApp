@@ -1205,6 +1205,7 @@
       // 提取靠前的运送类型
       extractTransportType (transParent) {
         if (transParent.length == 0) { return "无-无"};
+        if (transParent[0]['typeList'].length == 0) { return };
         let temporaryParentTypeName = transParent[0]['typeList'][0]['parentTypeName'];
         let temporaryTaskTypeName = [];
         for (let i = 0, len = transParent.length; i < len; i++) {

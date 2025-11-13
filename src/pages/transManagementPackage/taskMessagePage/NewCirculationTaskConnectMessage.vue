@@ -259,7 +259,7 @@ export default {
           let temporaryCollectSampleInfo = deepClone(this.isCompleteSampleList);
           temporaryCollectSampleInfo = temporaryCollectSampleInfo.filter((item) => { return item.taskId != this.circulationTaskId});
           this.changeIsCompleteSampleList(temporaryCollectSampleInfo);
-          setStore('completeCollectSample', {"sampleInfo": changeIsCompleteSampleList});
+          setStore('completeCollectSample', {"sampleInfo": temporaryCollectSampleInfo});
 
           this.$router.push({path:'/circulationTask'});
           this.changeTitleTxt({tit:'循环任务'});
