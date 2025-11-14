@@ -68,15 +68,15 @@
     <van-overlay :show="overlayShow" z-index="100000" />
     <!-- 目的建筑 -->
     <div class="transport-rice-box" v-if="showStructure">
-      <ScrollSelection :columns="structureOption" title="目的建筑" @sure="structureSureEvent" @cancel="structureCancelEvent" @close="structureCloseEvent" />
+      <ScrollSelection :columns="structureOption" :pickerValues="structureDefaultIndex"  title="目的建筑" @sure="structureSureEvent" @cancel="structureCancelEvent" @close="structureCloseEvent" />
     </div>
     <!-- 目的科室 -->
     <div class="transport-rice-box" v-if="showGoalDepartment">
-      <ScrollSelection :columns="goalDepartmentOption" title="目的科室" @sure="goalDepartmentSureEvent" @cancel="goalDepartmentCancelEvent" @close="goalDepartmentCloseEvent" />
+      <ScrollSelection :columns="goalDepartmentOption" :pickerValues="goalDepartmentDefaultIndex" title="目的科室" @sure="goalDepartmentSureEvent" @cancel="goalDepartmentCancelEvent" @close="goalDepartmentCloseEvent" />
     </div>
     <!-- 目的房间 -->
     <div class="transport-rice-box" v-if="showGoalSpaces">
-      <ScrollSelection :columns="goalSpacesOption" title="目的房间" @sure="goalSpacesSureEvent" @cancel="goalSpacesCancelEvent" @close="goalSpacesCloseEvent" />
+      <ScrollSelection :columns="goalSpacesOption" :pickerValues="goalSpacesDefaultIndex" title="目的房间" @sure="goalSpacesSureEvent" @cancel="goalSpacesCancelEvent" @close="goalSpacesCloseEvent" />
     </div>
     <div class="nav">
        <van-nav-bar
@@ -280,15 +280,18 @@ export default {
 
       goalDepartmentOption: [],
       showGoalDepartment: false,
+      goalDepartmentDefaultIndex: 0,
       currentGoalDepartment: '请选择',
 
       goalSpacesOption: [],
+      goalSpacesDefaultIndex: 0,
       showGoalSpaces: false,
       currentGoalSpaces: '请选择',
 
 
       structureOption: [],
       showStructure: false,
+      structureDefaultIndex: 0,
       currentStructure: '请选择',
       overlayShow: false,
       statusBackgroundPng: require("@/common/images/home/status-background.png")
@@ -413,6 +416,9 @@ export default {
     // 回显暂存的信息
     echoTemporaryStorageMessage (temporaryIndex) {
       let casuallyTemporaryStorageOtherRegisterMessage = this.temporaryStorageOtherRegisterMessage;
+      this.structureDefaultIndex = casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['structureDefaultIndex'];
+      this.goalSpacesDefaultIndex = casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['goalSpacesDefaultIndex'];
+      this.goalDepartmentDefaultIndex = casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['goalDepartmentDefaultIndex'];
       this.currentFindTime = new Date(casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['createTime']);
       this.currentStructure = casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['structureName']  == '' ? '请选择' : casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['structureName'];
       this.currentGoalDepartment = casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['depName']  == '' ? '请选择' : casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['depName'];
@@ -757,16 +763,20 @@ export default {
       },
 
     // 目的建筑下拉选择框确认事件
-    structureSureEvent (val) {
+    structureSureEvent (val,value,id) {
       if (val) {
         this.currentStructure =  val;
         this.currentGoalDepartment = '请选择';
         this.currentGoalSpaces = '请选择';
+        this.structureDefaultIndex = id;
         this.goalSpacesOption = [];
         this.getDepartmentByStructureId(this.structureOption.filter((item) => { return item['text'] == this.currentStructure})[0]['value'],false,false)
       } else {
-        this.currentStructure = '请选择'
+        this.currentStructure = '请选择';
+        this.structureDefaultIndex = 0;
       };
+      this.goalSpacesDefaultIndex = 0;
+      this.goalDepartmentDefaultIndex = 0;
       this.showStructure = false
     },
 
@@ -781,14 +791,17 @@ export default {
     },
 
     // 目的科室下拉选择框确认事件
-    goalDepartmentSureEvent (val) {
+    goalDepartmentSureEvent (val,value,id) {
       if (val) {
         this.currentGoalDepartment =  val;
         this.currentGoalSpaces = '请选择';
+        this.goalDepartmentDefaultIndex = id;
         this.getSpacesByDepartmentId(this.goalDepartmentOption.filter((item) => { return item['text'] == this.currentGoalDepartment})[0]['value'],this.structureOption.filter((item) => { return item['text'] == this.currentStructure})[0]['value'],false)
       } else {
-        this.currentGoalDepartment = '请选择'
+        this.currentGoalDepartment = '请选择';
+        this.goalDepartmentDefaultIndex = 0;
       };
+      this.goalSpacesDefaultIndex = 0;
       this.showGoalDepartment = false
     },
 
@@ -831,11 +844,13 @@ export default {
     },
 
     // 目的房间下拉选择框确认事件
-    goalSpacesSureEvent (val) {
-      if (val.length > 0) {
+    goalSpacesSureEvent (val,value,id) {
+      if (val) {
         this.currentGoalSpaces =  val;
+        this.goalSpacesDefaultIndex = id;
       } else {
-        this.currentGoalSpaces = '请选择'
+        this.currentGoalSpaces = '请选择';
+        this.goalSpacesDefaultIndex = 0;
       };
       this.showGoalSpaces = false
     },
@@ -1048,6 +1063,9 @@ export default {
       if (this.temporaryStorageOtherRegisterMessage.length > 0 ) {
           let temporaryIndex = this.temporaryStorageOtherRegisterMessage.findIndex((item) => { return item.id == this.$route.query.eventId});
           if (temporaryIndex != -1) {
+            casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['structureDefaultIndex'] = this.structureDefaultIndex;
+            casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['goalSpacesDefaultIndex'] = this.goalSpacesDefaultIndex;
+            casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['goalDepartmentDefaultIndex'] = this.goalDepartmentDefaultIndex;
             casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['createTime'] = this.getNowFormatDate(this.currentFindTime);
             casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['roomName'] = this.currentGoalSpaces == '请选择' ? '' : this.currentGoalSpaces;
             casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['address'] = this.detailsSite;
@@ -1056,10 +1074,12 @@ export default {
             casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['images'] = this.problemPicturesList;
             casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['structureName'] = this.currentStructure == '请选择' ? '' : this.currentStructure;
             casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['depName'] = this.currentGoalDepartment == '请选择' ? '' : this.currentGoalDepartment;
-            casuallyTemporaryStorageOtherRegisterMessage[temporaryIndex]['roomName'] = this.currentGoalSpaces == '请选择' ? '' : this.currentGoalSpaces
           } else {
             casuallyTemporaryStorageOtherRegisterMessage.push({
               id: uuidv4(),
+              structureDefaultIndex: this.structureDefaultIndex,
+              goalSpacesDefaultIndex: this.goalSpacesDefaultIndex,
+              goalDepartmentDefaultIndex: this.goalDepartmentDefaultIndex,
               checkItemId: this.enterEventRegisterPageMessage['checkItemId'],
               resultId: this.enterEventRegisterPageMessage['resultId'],
               taskId: this.enterEventRegisterPageMessage['taskId'],
@@ -1082,6 +1102,9 @@ export default {
         } else {
           casuallyTemporaryStorageOtherRegisterMessage.push({
             id: uuidv4(),
+            structureDefaultIndex: this.structureDefaultIndex,
+            goalSpacesDefaultIndex: this.goalSpacesDefaultIndex,
+            goalDepartmentDefaultIndex: this.goalDepartmentDefaultIndex,
             checkItemId: this.enterEventRegisterPageMessage['checkItemId'],
             resultId: this.enterEventRegisterPageMessage['resultId'],
             taskId: this.enterEventRegisterPageMessage['taskId'],

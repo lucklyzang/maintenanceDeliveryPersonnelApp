@@ -257,19 +257,22 @@ export default {
       transportToolList: [],
       showGender: false,
       currentGender: '未选择',
-      genderDefaultIndex: 0,
+      genderDefaultIndex: '',
       genderList: [
         { 
-          id: '2',
-          text: '女'
+          value: '2',
+          text: '女',
+          id: 0
         },
         { 
-          id: '1',
-          text: '男'
+          value: '1',
+          text: '男',
+          id: 1
         },
         {
-          id: '0',
-          text: '未知'
+          value: '0',
+          text: '未知',
+          id: 2
         }
       ],
       transportTypeList: [],
@@ -665,7 +668,7 @@ export default {
         this.genderDefaultIndex = id;
       } else {
         this.currentGender = '请选择';
-        this.genderDefaultIndex = 0;
+        this.genderDefaultIndex = '';
       };
       this.showGender = false
     },

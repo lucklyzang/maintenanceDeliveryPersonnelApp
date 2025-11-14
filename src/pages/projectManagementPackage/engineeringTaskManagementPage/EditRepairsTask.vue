@@ -18,11 +18,11 @@
     </van-popup>
     <!-- 目的建筑 -->
     <div class="transport-rice-box" v-if="showStructure">
-      <ScrollSelection :columns="structureOption" title="目的建筑" @sure="structureSureEvent" @cancel="structureCancelEvent" @close="structureCloseEvent" />
+      <ScrollSelection :columns="structureOption" :pickerValues="structureDefaultIndex" title="目的建筑" @sure="structureSureEvent" @cancel="structureCancelEvent" @close="structureCloseEvent" />
     </div>
     <!-- 目的科室 -->
     <div class="transport-rice-box" v-if="showGoalDepartment">
-      <ScrollSelection :columns="goalDepartmentOption" title="目的科室" @sure="goalDepartmentSureEvent" @cancel="goalDepartmentCancelEvent" @close="goalDepartmentCloseEvent" :isShowSearch="true" />
+      <ScrollSelection :columns="goalDepartmentOption" :pickerValues="goalDepartmentDefaultIndex" title="目的科室" @sure="goalDepartmentSureEvent" @cancel="goalDepartmentCancelEvent" @close="goalDepartmentCloseEvent" :isShowSearch="true" />
     </div>
     <!-- 目的房间 -->
     <div class="transport-rice-box" v-if="showGoalSpaces">
@@ -30,11 +30,11 @@
     </div>
     <!-- 任务类型 -->
     <div class="transport-rice-box" v-if="showTaskType">
-      <ScrollSelection :columns="taskTypeOption" title="任务类型" @sure="taskTypeSureEvent" @cancel="taskTypeCancelEvent" @close="taskTypeCloseEvent" />
+      <ScrollSelection :columns="taskTypeOption" :pickerValues="taskTypeDefaultIndex" title="任务类型" @sure="taskTypeSureEvent" @cancel="taskTypeCancelEvent" @close="taskTypeCloseEvent" />
     </div>
     <!-- 维修员 -->
     <div class="transport-rice-box" v-if="showTransporter">
-      <ScrollSelection :columns="transporterOption" title="维修员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
+      <ScrollSelection :columns="transporterOption" :pickerValues="transporterDefaultIndex" title="维修员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
     </div>
     <!-- 使用工具 -->
     <div class="transport-rice-box" v-if="showUseTool">
@@ -355,6 +355,7 @@ export default {
 
       goalDepartmentOption: [],
       showGoalDepartment: false,
+      goalDepartmentDefaultIndex: 0,
       currentGoalDepartment: '请选择',
 
       goalSpacesOption: [],
@@ -363,14 +364,17 @@ export default {
 
       taskTypeOption: [],
       showTaskType: false,
+      taskTypeDefaultIndex: 0,
       currentTaskType: '请选择',
 
       structureOption: [],
+      structureDefaultIndex: 0,
       showStructure: false,
       currentStructure: '请选择',
 
       transporterOption: [],
       showTransporter: false,
+      transporterDefaultIndex: 0,
       currentTransporter: '请选择',
       moveInfo: {
         startX: ''
@@ -445,6 +449,27 @@ export default {
 
     onClickLeft() {
       this.$router.push({ path: "/engineeringTaskManagement"})
+    },
+
+    // 通过value获取索引
+    queryIndexesByValue (targetText,targetArr) {
+      if (targetText === '' || targetText === undefined || targetText === null || targetText === '请选择') { return };
+      if (Object.prototype.toString.call(targetArr) !== '[object Array]') { return };
+      if (targetArr.length == 0) { return };
+      try {
+        let targetIndexes;
+        targetIndexes = targetArr.filter((item) => { return item.text ==  targetText})[0]['id'];
+        return targetIndexes;
+      } catch (err) {
+        this.$toast(err);
+      }
+    },
+
+    // 统一获取索引
+    unifyGetIndexes () {
+      this.structureDefaultIndex = this.queryIndexesByValue(this.currentStructure,this.structureOption);
+      this.taskTypeDefaultIndex = this.queryIndexesByValue(this.currentTaskType,this.taskTypeOption);
+      this.transporterDefaultIndex = this.queryIndexesByValue(this.currentTransporter,this.transporterOption);
     },
 
     // 回显编辑信息
@@ -548,6 +573,7 @@ export default {
               })
             };
             if (isInitial) {
+              this.goalDepartmentDefaultIndex = this.queryIndexesByValue(this.currentGoalDepartment,this.goalDepartmentOption);
               if (this.currentGoalDepartment != '请选择' && this.currentGoalDepartment) {
                 this.getSpacesByDepartmentId(this.goalDepartmentOption.filter((item) => { return item['text'] == this.currentGoalDepartment})[0]['value'],false)
               }
@@ -690,6 +716,8 @@ export default {
               this.changeSchedulingTaskDetails(item6);
               //回显要编辑的信息
               this.echoEditMessage();
+              // 同一获取对应选项的索引字段
+              this.unifyGetIndexes();
               // tools字段返回的值可能为null
               if (!this.schedulingTaskDetails['tools']) {
                 this.currentUseTool = []
@@ -882,11 +910,13 @@ export default {
     },
 
     // 任务类型下拉选择框确认事件
-    taskTypeSureEvent (val) {
+    taskTypeSureEvent (val,value,id) {
       if (val) {
-        this.currentTaskType =  val
+        this.currentTaskType =  val;
+        this.taskTypeDefaultIndex = id;
       } else {
-        this.currentTaskType = '请选择'
+        this.currentTaskType = '请选择';
+        this.taskTypeDefaultIndex = 0;
       };
       this.showTaskType = false
     },
@@ -902,16 +932,19 @@ export default {
     },
 
     // 目的建筑下拉选择框确认事件
-    structureSureEvent (val) {
+    structureSureEvent (val,value,id) {
       if (val) {
         this.currentStructure =  val;
+        this.structureDefaultIndex = id;
         this.currentGoalDepartment = '请选择';
         this.currentGoalSpaces = [];
         this.goalSpacesOption = [];
         this.getDepartmentByStructureId(this.structureOption.filter((item) => { return item['text'] == this.currentStructure})[0]['value'],false,false)
       } else {
-        this.currentStructure = '请选择'
+        this.currentStructure = '请选择';
+        this.structureDefaultIndex = 0;
       };
+      this.goalDepartmentDefaultIndex = 0;
       this.showStructure = false
     },
 
@@ -926,20 +959,21 @@ export default {
     },
 
     // 目的科室下拉选择框确认事件
-    goalDepartmentSureEvent (val) {
+    goalDepartmentSureEvent (val,value,id) {
       if (val) {
         this.currentGoalDepartment =  val;
         this.currentGoalSpaces = [];
+        this.goalDepartmentDefaultIndex = id;
         this.getSpacesByDepartmentId(this.goalDepartmentOption.filter((item) => { return item['text'] == this.currentGoalDepartment})[0]['value'],false)
       } else {
-        this.currentGoalDepartment = '请选择'
+        this.currentGoalDepartment = '请选择';
+        this.goalDepartmentDefaultIndex = 0;
       };
       this.showGoalDepartment = false
     },
 
     // 目的科室列点击事件
     goalDepartmentClickEvent () {
-      console.log('sasa',this.structureOption,this.currentStructure);
       if (this.currentStructure == '请选择') {
         this.$toast('请选择建筑')
       } else {
@@ -995,10 +1029,12 @@ export default {
 
 
     // 运送员下拉选择框确认事件
-    transporterSureEvent (val) {
+    transporterSureEvent (val,value,id) {
       if (val) {
+        this.transporterDefaultIndex = id;
         this.currentTransporter =  val
       } else {
+        this.transporterDefaultIndex = 0;
         this.currentTransporter = '请选择'
       };
       this.showTransporter = false

@@ -256,19 +256,22 @@ export default {
       transportToolList: [],
       showGender: false,
       currentGender: '未选择',
-      genderDefaultIndex: 0,
+      genderDefaultIndex: '',
       genderList: [
         { 
-          id: '2',
-          text: '女'
+          value: '2',
+          text: '女',
+          id: 0
         },
         { 
-          id: '1',
-          text: '男'
+          value: '1',
+          text: '男',
+          id: 1
         },
         {
-          id: '0',
-          text: '未知'
+          value: '0',
+          text: '未知',
+          id: 2
         }
       ],
       transportTypeList: [],
@@ -355,6 +358,29 @@ export default {
     onClickLeft() {
       this.$router.push({ path: "/taskScheduling"})
     },
+
+    // 通过value获取索引
+    queryIndexesByValue (targetText,targetArr) {
+      if (targetText === '' || targetText === undefined || targetText === null || targetText === '请选择') { return };
+      if (Object.prototype.toString.call(targetArr) !== '[object Array]') { return };
+      if (targetArr.length == 0) { return };
+      try {
+        let targetIndexes;
+        targetIndexes = targetArr.filter((item) => { return item.text ==  targetText})[0]['id'];
+        return targetIndexes;
+      } catch (err) {
+        this.$toast(err);
+      }
+    },
+
+    // 统一获取索引
+    unifyGetIndexes () {
+      this.startDepartmentDefaultIndex = this.queryIndexesByValue(this.currentStartDepartment,this.startDepartmentList);
+      this.transporterDefaultIndex = this.queryIndexesByValue(this.currentTransporter,this.transporterList);
+      this.transportToolDefaultIndex = this.queryIndexesByValue(this.currentTransportTool,this.transportToolList);
+      this.genderDefaultIndex = this.queryIndexesByValue(this.currentGender,this.genderList);
+    },
+
 
     // 回显编辑的信息
     echoTemporaryStorageMessage () {
@@ -489,7 +515,9 @@ export default {
                   }
                 }
               }
-            }
+            };
+            // 获取对应选择项的索引
+            this.unifyGetIndexes()
           }
         })
         .catch((err) => {
@@ -670,7 +698,7 @@ export default {
         this.genderDefaultIndex = id;
       } else {
         this.currentGender = '请选择';
-        this.genderDefaultIndex = 0;
+        this.genderDefaultIndex = '';
       };
       this.showGender = false
     },

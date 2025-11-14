@@ -18,11 +18,11 @@
     </van-popup>
     <!-- 目的建筑 -->
     <div class="transport-rice-box" v-if="showStructure">
-      <ScrollSelection :columns="structureOption" title="目的建筑" @sure="structureSureEvent" @cancel="structureCancelEvent" @close="structureCloseEvent" />
+      <ScrollSelection :columns="structureOption" :pickerValues="structureDefaultIndex" title="目的建筑" @sure="structureSureEvent" @cancel="structureCancelEvent" @close="structureCloseEvent" />
     </div>
     <!-- 目的科室 -->
     <div class="transport-rice-box" v-if="showGoalDepartment">
-      <ScrollSelection :columns="goalDepartmentOption" title="目的科室" @sure="goalDepartmentSureEvent" @cancel="goalDepartmentCancelEvent" @close="goalDepartmentCloseEvent" :isShowSearch="true" />
+      <ScrollSelection :columns="goalDepartmentOption" :pickerValues="goalDepartmentDefaultIndex" title="目的科室" @sure="goalDepartmentSureEvent" @cancel="goalDepartmentCancelEvent" @close="goalDepartmentCloseEvent" :isShowSearch="true" />
     </div>
     <!-- 目的房间 -->
     <div class="transport-rice-box" v-if="showGoalSpaces">
@@ -30,11 +30,11 @@
     </div>
     <!-- 任务类型 -->
     <div class="transport-rice-box" v-if="showTaskType">
-      <ScrollSelection :columns="taskTypeOption" title="任务类型" @sure="taskTypeSureEvent" @cancel="taskTypeCancelEvent" @close="taskTypeCloseEvent" />
+      <ScrollSelection :columns="taskTypeOption" :pickerValues="taskTypeDefaultIndex" title="任务类型" @sure="taskTypeSureEvent" @cancel="taskTypeCancelEvent" @close="taskTypeCloseEvent" />
     </div>
     <!-- 维修员 -->
     <div class="transport-rice-box" v-if="showTransporter">
-      <ScrollSelection :columns="transporterOption" title="维修员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
+      <ScrollSelection :columns="transporterOption" :pickerValues="transporterDefaultIndex" title="维修员" @sure="transporterSureEvent" @cancel="transporterCancelEvent" @close="transporterCloseEvent" />
     </div>
     <!-- 使用工具 -->
     <div class="transport-rice-box" v-if="showUseTool">
@@ -355,6 +355,7 @@ export default {
 
       goalDepartmentOption: [],
       showGoalDepartment: false,
+      goalDepartmentDefaultIndex: 0,
       currentGoalDepartment: '请选择',
 
       goalSpacesOption: [],
@@ -363,14 +364,17 @@ export default {
 
       taskTypeOption: [],
       showTaskType: false,
+      taskTypeDefaultIndex: 0,
       currentTaskType: '请选择',
 
       structureOption: [],
       showStructure: false,
+      structureDefaultIndex: 0,
       currentStructure: '请选择',
 
       transporterOption: [],
       showTransporter: false,
+      transporterDefaultIndex: 0,
       currentTransporter: '请选择',
       moveInfo: {
         startX: ''
@@ -456,6 +460,10 @@ export default {
     // 回显暂存的信息
     async echoTemporaryStorageMessage () {
       let casuallyTemporaryStorageCreateRepairsTaskMessage = this.temporaryStorageCreateRepairsTaskMessage;
+      this.structureDefaultIndex = casuallyTemporaryStorageCreateRepairsTaskMessage['structureDefaultIndex'];
+      this.taskTypeDefaultIndex = casuallyTemporaryStorageCreateRepairsTaskMessage['taskTypeDefaultIndex'];
+      this.goalDepartmentDefaultIndex = casuallyTemporaryStorageCreateRepairsTaskMessage['goalDepartmentDefaultIndex'];
+      this.transporterDefaultIndex = casuallyTemporaryStorageCreateRepairsTaskMessage['transporterDefaultIndex'];
       this.priorityRadioValue = casuallyTemporaryStorageCreateRepairsTaskMessage['priorityRadioValue'];
       this.currentTaskType = casuallyTemporaryStorageCreateRepairsTaskMessage['currentTaskType'];
       this.currentStructure = casuallyTemporaryStorageCreateRepairsTaskMessage['currentStructure'];
@@ -870,12 +878,13 @@ export default {
     },
 
     // 任务类型下拉选择框确认事件
-    taskTypeSureEvent (val) {
-      console.log(val);
+    taskTypeSureEvent (val,value,id) {
       if (val) {
-        this.currentTaskType =  val
+        this.currentTaskType =  val;
+        this.taskTypeDefaultIndex = id;
       } else {
-        this.currentTaskType = '请选择'
+        this.currentTaskType = '请选择';
+        this.taskTypeDefaultIndex = 0;
       };
       this.showTaskType = false
     },
@@ -891,16 +900,19 @@ export default {
     },
 
     // 目的建筑下拉选择框确认事件
-    structureSureEvent (val) {
+    structureSureEvent (val,value,id) {
       if (val) {
         this.currentStructure =  val;
         this.currentGoalDepartment = '请选择';
+        this.structureDefaultIndex = id;
         this.currentGoalSpaces = [];
         this.goalSpacesOption = [];
         this.getDepartmentByStructureId(this.structureOption.filter((item) => { return item['text'] == this.currentStructure})[0]['value'],false,false)
       } else {
-        this.currentStructure = '请选择'
+        this.currentStructure = '请选择';
+        this.structureDefaultIndex = 0;
       };
+      this.goalDepartmentDefaultIndex = 0;
       this.showStructure = false
     },
 
@@ -915,13 +927,15 @@ export default {
     },
 
     // 目的科室下拉选择框确认事件
-    goalDepartmentSureEvent (val) {
+    goalDepartmentSureEvent (val,value,id) {
       if (val) {
         this.currentGoalDepartment =  val;
         this.currentGoalSpaces = [];
+        this.goalDepartmentDefaultIndex = id;
         this.getSpacesByDepartmentId(this.goalDepartmentOption.filter((item) => { return item['text'] == this.currentGoalDepartment})[0]['value'],false)
       } else {
-        this.currentGoalDepartment = '请选择'
+        this.currentGoalDepartment = '请选择';
+        this.goalDepartmentDefaultIndex = 0;
       };
       this.showGoalDepartment = false
     },
@@ -976,11 +990,13 @@ export default {
 
 
     // 运送员下拉选择框确认事件
-    transporterSureEvent (val) {
+    transporterSureEvent (val,value,id) {
       if (val) {
-        this.currentTransporter =  val
+        this.currentTransporter =  val;
+        this.transporterDefaultIndex = id;
       } else {
-        this.currentTransporter = '请选择'
+        this.currentTransporter = '请选择';
+        this.transporterDefaultIndex = 0;
       };
       this.showTransporter = false
     },
@@ -1318,6 +1334,10 @@ export default {
     // 暂存事件
     temporaryStorageEvent () {
       let casuallyTemporaryStorageCreateRepairsTaskMessage = this.temporaryStorageCreateRepairsTaskMessage;
+      casuallyTemporaryStorageCreateRepairsTaskMessage['structureDefaultIndex'] = this.structureDefaultIndex;
+      casuallyTemporaryStorageCreateRepairsTaskMessage['taskTypeDefaultIndex'] = this.taskTypeDefaultIndex;
+      casuallyTemporaryStorageCreateRepairsTaskMessage['goalDepartmentDefaultIndex'] = this.goalDepartmentDefaultIndex;
+      casuallyTemporaryStorageCreateRepairsTaskMessage['transporterDefaultIndex'] = this.transporterDefaultIndex;
       casuallyTemporaryStorageCreateRepairsTaskMessage['priorityRadioValue'] = this.priorityRadioValue;
       casuallyTemporaryStorageCreateRepairsTaskMessage['currentTaskType'] = this.currentTaskType;
       casuallyTemporaryStorageCreateRepairsTaskMessage['currentStructure'] = this.currentStructure;
