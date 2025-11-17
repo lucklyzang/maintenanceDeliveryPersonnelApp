@@ -77,7 +77,8 @@
 				modalShow: false,
 				modalContent: '',
 				temporaryUsername: '',
-				proId: ''
+				proId: '',
+				deviceNumber: ''
 			}
 		},
 		computed: {
@@ -132,6 +133,7 @@
 					});
 					this.loginHandle();
 				} else {
+					this.hospitalCampusDefaultIndex = '';
 					this.currentGoalSpaces = '请选择'
 				};
 				this.showHospitalCampus = false
@@ -236,10 +238,10 @@
 			// 向客户端发送信标服务器地址(中央运送)
 			postUrl (workerId) {
 				return new Promise((resolve,reject) => {
-					let xinbiaoTimer = setTimeout(window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${this.userInfo['worker'].id}`),100);
-					if (window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${this.userInfo['worker'].id}`) == 'success') {
-					resolve(window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${this.userInfo['worker'].id}`));
-					clearTimeout(xinbiaoTimer)
+					let xinbiaoTimer = setTimeout(window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${workerId}`),100);
+					if (window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${workerId}`) == 'success') {
+						resolve(window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${workerId}`));
+						clearTimeout(xinbiaoTimer)
 					}
 				})
 			},
@@ -283,7 +285,6 @@
 					})
 				})
 			},
-
 				
 			// 账号密码事件
 			sure () {
@@ -334,6 +335,7 @@
 										})
 									};
 									this.showHospitalCampus = true;
+									this.hospitalCampusDefaultIndex = 0;
 								} else {
 									this.storeChooseHospitalArea({
 										value: this.userInfo['worker']['hospitalList'][0]['id'],

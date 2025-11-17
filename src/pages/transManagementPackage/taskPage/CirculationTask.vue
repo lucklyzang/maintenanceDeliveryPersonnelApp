@@ -767,8 +767,7 @@
                     }
                   }
                 }
-              };
-              console.log('任务信息',this.circulationTaskList)
+              }
             } else {
               this.circulationTaskListShow = false;
               this.noDataShow = true
@@ -958,6 +957,7 @@
       overflow: auto;
       margin: 0 auto;
       width: 100%;
+      overflow-x: hidden;
       background: #f6f6f6;
       .circulation-task-list {
         .wait-handle-list {

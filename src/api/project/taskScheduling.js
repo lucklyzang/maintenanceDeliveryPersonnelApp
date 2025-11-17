@@ -81,18 +81,20 @@ export function editRepairsTask (data) {
 };
 
 // 维修任务取消原因查询
-export function queryRepairsTaskCancelReason(proId) {
+export function queryRepairsTaskCancelReason(data) {
   return request({
-    url: `project/cancel/queryAll?proId=${proId}`,
-    method: 'get'
+    url: 'project/cancel/queryAll',
+    method: 'get',
+    params: data
   })
 };
 
 // 维修任务延迟原因查询
-export function queryRepairsTaskDelayReason(proId) {
+export function queryRepairsTaskDelayReason(data) {
   return request({
-    url: `project/delay/queryAll?proId=${proId}`,
-    method: 'get'
+    url: 'project/delay/queryAll',
+    method: 'get',
+    params: data
   })
 };
 

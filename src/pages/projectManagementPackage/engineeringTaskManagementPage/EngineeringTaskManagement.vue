@@ -701,7 +701,7 @@ export default {
     // 获取取消原因列表
     getCancelReason (type) {
        return new Promise((resolve,reject) => {
-        queryRepairsTaskCancelReason(this.proId)
+        queryRepairsTaskCancelReason({proId: this.proId,state: 0,reason: ''})
         .then((res) => {
           if (res && res.data.code == 200) {
             resolve(res.data.data)
@@ -716,7 +716,7 @@ export default {
     // 获取延迟原因列表
     getDelayReason (type) {
        return new Promise((resolve,reject) => {
-        queryRepairsTaskDelayReason(this.proId)
+        queryRepairsTaskDelayReason({proId: this.proId,state: 0})
         .then((res) => {
           if (res && res.data.code == 200) {
             resolve(res.data.data)

@@ -812,6 +812,13 @@ export const removeAllLocalStorage = () => {
   removeStore('ossMessage');
   removeStore('chooseHospitalArea');
   removeStore('appPermission');
+  removeStore('departmentServiceMsg');
+  removeStore('repairsWorkOrderMsg');
+  removeStore('circulationDetails');
+  removeStore('originalSignature');
+  removeStore('operateBtnClickRecord');
+  removeStore('appointTaskMessage');
+  removeStore('currentDispatchTaskMessage')
   // 中央运送
   removeStore('currentTitle');
   removeStore('storeOverDueWay');

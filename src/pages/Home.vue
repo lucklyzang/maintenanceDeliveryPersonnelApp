@@ -18,7 +18,7 @@
             <img :src="homeBannerPng" />
 		</div>
 		<div class="content-box">
-			<div class="service-management">
+			<div class="service-management" v-show="hasAuthserviceManagementSystemsList.length > 0">
 				<div class="service-management-title">
 					服务管理
 				</div>
@@ -31,12 +31,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="service-management safe-management">
+			<div class="service-management safe-management" v-show="hasAuthSafeManagementSystemsList.length > 0">
 				<div class="service-management-title">
 					安全管理
 				</div>
 				<div class="service-management-content">
-					<div class="service-list" v-for="(item,index) in safeList" :key="index" @click="safeManagementEvent(item,index)">
+					<div class="service-list" v-for="(item,index) in hasAuthSafeManagementSystemsList" :key="index" @click="safeManagementEvent(item,index)">
 						<div class="list-top">
 							<img :src="item.url" />
 						</div>
@@ -100,27 +100,27 @@
 						url: require('@/common/images/home/clean-icon.png')
 					}
 				],
-				hasAuthsafeManagementSystemsList: [
+				hasAuthSafeManagementSystemsList: [
 					{
 						text: '安全巡更',
-						value: 'safePatrol',
+						value: 'safety',
 						url: require('@/common/images/home/safe-patrol-icon.png')
 					},
 					{
 						text: '设备巡检',
-						value: 'equipmentPatrol',
+						value: 'device',
 						url: require('@/common/images/home/equipment-patrol-icon.png')
 					}
 				],
 				safeList: [
 					{
 						text: '安全巡更',
-						value: 'safePatrol',
+						value: 'safety',
 						url: require('@/common/images/home/safe-patrol-icon.png')
 					},
 					{
 						text: '设备巡检',
-						value: 'equipmentPatrol',
+						value: 'device',
 						url: require('@/common/images/home/equipment-patrol-icon.png')
 					}
 				]
@@ -160,7 +160,7 @@
 		},
 		
 		mounted() {
-			// this.controlServiceManageModuleShowEvent()
+			this.controlModuleShowEvent()
 		},
 		
 		methods: {
@@ -169,14 +169,32 @@
 				'storeCurrentIndex',
 				'storeLocationMessage'
 			]),
+
+			// 控制模块权限事件
+			controlModuleShowEvent () {
+				this.controlServiceManageModuleShowEvent();
+				this.controlSafeManageModuleShowEvent()
+			},
 			
-			// 控制服务管理模块显示隐藏
+			// 控制服务管理模块权限
 			controlServiceManageModuleShowEvent () {
 				this.hasAuthserviceManagementSystemsList = [];
 				if (this.appPermission.hasOwnProperty('systems')) {
 					this.serviceList.map((value,index,arr) => {
 						if (this.appPermission['systems'].indexOf(value['value']) != -1) {
 							this.hasAuthserviceManagementSystemsList.push(value)
+						}
+					})
+				}
+			},
+
+			// 控制安全管理模块权限
+			controlSafeManageModuleShowEvent () {
+				this.hasAuthSafeManagementSystemsList = [];
+				if (this.appPermission.hasOwnProperty('systems')) {
+					this.safeList.map((value,index,arr) => {
+						if (this.appPermission['systems'].indexOf(value['value']) != -1) {
+							this.hasAuthSafeManagementSystemsList.push(value)
 						}
 					})
 				}
