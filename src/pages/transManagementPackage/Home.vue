@@ -15,10 +15,6 @@
           <span>首页</span>
         </div>
       </HeaderTop>
-      <!-- 右边下拉框菜单 -->
-      <ul class="left-dropDown" v-show="leftDownShow">
-        <li v-for="(item, index) in leftDropdownDataList" :key="index" :class="{liStyle:liIndex == index}" @click="leftLiCLick(index)">{{item}}</li>
-      </ul>
       <!-- 内容部分 -->
       <div class="content-top">
         <div class="content-top-userName">
@@ -84,10 +80,6 @@
       <HeaderTop :title="navTopTitle">
         <van-icon name="manager-o" slot="right" @click="skipMyInfo"></van-icon>
       </HeaderTop>
-       <!-- 右边下拉框菜单 -->
-      <ul class="left-dropDown" v-show="leftDownShow">
-        <li v-for="(item, index) in leftDropdownDataList" :key="index" :class="{liStyle:liIndex == index}" @click="leftLiCLick(index)">{{item}}</li>
-      </ul>
       <div class="medical-worker-operate">
         <div class="medical-worker-operate-left">
           <div class="medical-worker-operate-list">
@@ -1130,7 +1122,6 @@
         isHaveTask: '',
         opinionTypeList: ['运送人员','功能故障','其它意见'],
         opinionTypeIndex: null,
-        leftDropdownDataList: ['退出登录'],
         taskTypeList: [],
         startTime: '',
         endTime: '',
@@ -1197,23 +1188,17 @@
         this.getVersionNumber()
       };
 
-    // 二维码回调方法绑定到window下面,提供给外部调用
-    let me = this;
-    window['scanQRcodeCallback'] = (code) => {
-      me.scanQRcodeCallback(code);
-    };
-    window['scanQRcodeCallbackCanceled'] = () => {
-      me.scanQRcodeCallbackCanceled();
-    };
-      document.addEventListener('click',(e) => {
-        if(e.target.className!='van-icon van-icon-manager-o' && e.target.className!='left-dropDown'){
-          this.leftDownShow = false;
-        }
-      });
+      // 二维码回调方法绑定到window下面,提供给外部调用
+      let me = this;
+      window['scanQRcodeCallback'] = (code) => {
+        me.scanQRcodeCallback(code);
+      };
+      window['scanQRcodeCallbackCanceled'] = () => {
+        me.scanQRcodeCallbackCanceled();
+      };
       if (this.userTypeId == 0) {
         this.isHaveTask = this.newTaskName;
         this.parallelFunction(this.taskTypeTransfer(this.newTaskName));
-        this.judgeTaskComplete();
         // 轮询是否有新任务
         if (!this.globalTimer) {
             windowTimer = window.setInterval(() => {
@@ -1264,7 +1249,6 @@
         this.leftDownShow = false;
         this.isHaveTask = this.newTaskName;
         this.parallelFunction(this.taskTypeTransfer(this.newTaskName));
-        this.judgeTaskComplete();
       } else {
         let me = this;
         window['setDeviceInfo'] = (val) => {
@@ -1287,14 +1271,6 @@
         };
         this.isShowFeedbackEvent()
       };
-      document.addEventListener('click',(e) => {
-        if(e.target.className!='status-name'){
-          this.stateListShow = false;
-        };
-        if(e.target.className!='van-icon van-icon-manager-o' && e.target.className!='left-dropDown'){
-          this.leftDownShow = false;
-        }
-      });
       this.controlModuleShow()
     },
 
@@ -1811,12 +1787,6 @@
         }
       },
 
-      // 右边下拉框菜单点击
-      leftLiCLick (index) {
-        this.liIndex = index;
-        this.userLoginOut(this.proId, this.userName)
-      },
-
       // 跳转到首页
       backTo () {
         this.$router.push({path:'/home'});
@@ -1850,117 +1820,6 @@
           this.$router.push({path:'/taskScheduling'});
           this.changeTitleTxt({tit:'中央运送任务管理'});
           setStore('currentTitle','中央运送任务管理')
-        }
-      },
-
-      // 判断每种任务是否收集完成
-      judgeTaskComplete () {
-        // 重新存入用户信息
-        if (getStore('userInfo')) {
-          this.$store.commit('storeUserInfo',JSON.parse(getStore('userInfo')));
-        };
-        if (getStore('userType')) {
-          this.$store.commit('changeUserType',getStore('userType'));
-        };
-        // 重新存入当前标题
-        if (getStore('currentTitle')) {
-          this.$store.commit('changeTitleTxt', {tit: getStore('currentTitle')});
-        };
-        // 重新存入模板信息
-        if (getStore('templateType')) {
-          this.$store.commit('changeTemplateType', getStore('templateType'));
-        };
-        // 重新存入请求token
-        if (getStore('questToken')) {
-          this.$store.commit('changeToken', getStore('questToken'));
-        };
-        // 重新存入调度任务具体信息
-        if (getStore('currentDispatchTaskMessage')) {
-          this.$store.commit('changeDispatchTaskMessage', {DtMsg: getStore('currentDispatchTaskMessage')});
-        };
-        // 重新存入预约任务具体信息
-        if (getStore('currentAppointTaskMessage')) {
-          this.$store.commit('changeAppointTaskMessage', {DtMsg: getStore('currentAppointTaskMessage')});
-        };
-        // 重新存入循环任务科室采集信息
-        if (getStore('currentCirculationCollectMessage')) {
-          this.$store.commit('changeCirculationCollectMessageList', {DtMsg: (JSON.parse(getStore('currentCirculationCollectMessage'))['innerMessage'])})
-        };
-        // 重新存入循环任务科室交接信息
-        if (getStore('currentCirculationConnectMessage')) {
-          this.$store.commit('changeCirculationConnectMessageList', {DtMsg: (JSON.parse(getStore('currentCirculationConnectMessage'))['innerMessage'])})
-        };
-        // 重新存入医护人员生成运送类型信息
-        if (getStore('currentTransportTypeMessage')) {
-          this.$store.commit('changetransportTypeMessage', {DtMsg: getStore('currentTransportTypeMessage')});
-        };
-        // 重新存入循环任务完成采集科室信息
-        if (getStore('completeDepartmentMessage')) {
-          this.$store.commit('changeCompleteDeparnmentInfo', {DtMsg: JSON.parse(getStore('completeDepartmentMessage'))['sureInfo']});
-        };
-        // 重新存入送达的科室id
-        if (getStore('currentDepartmentId')) {
-          this.$store.commit('changeStoreArriveDeparnmentId',getStore('currentDepartmentId'));
-        };
-        // 重新存入过期方式
-        if (getStore('storeOverDueWay')) {
-          this.$store.commit('changeOverDueWay',JSON.parse(getStore('storeOverDueWay')));
-        };
-        // 重新存入是否循环采集页面取消按钮回显生效
-        if (getStore('isDeleteCancel')) {
-          this.$store.commit('changeIsDeleteCancel',JSON.parse(getStore('isDeleteCancel')));
-        };
-        // 重新存入是否循环采集页面生命周期回显生效
-        if (getStore('isDeleteEcho')) {
-          this.$store.commit('changeIsDeleteEcho',JSON.parse(getStore('isDeleteEcho')));
-        };
-        // 重新存入是否循环采集页面弹框确定按钮确定按钮点击状态
-        if (getStore('isClickSure')) {
-          this.$store.commit('changeIsClickSure',JSON.parse(getStore('isClickSure')));
-        };
-        // 重新存入新循环任务完成标本采集信息的状态
-        if (getStore('completeCollectSample')) {
-          this.$store.commit('changeIsCompleteSampleList',JSON.parse(getStore('completeCollectSample'))['sampleInfo']);
-        };
-        // 重新存入调度任务完成扫码的出发地和单一目的地科室信息(id)
-        if (getStore('completeDispatchSweepCodeInfo')) {
-          this.$store.commit('changeisCompleteSweepCode', JSON.parse(getStore('completeDispatchSweepCodeInfo'))['sweepCodeInfo']);
-        };
-        // 页面刷新重新存入调度任务完成扫码的非单一目的地科室信息
-        if (getStore('completeDispatchSweepCodeDestinationInfo')) {
-          this.$store.commit('changeIsCompleteSweepCodeDestinationList', JSON.parse(getStore('completeDispatchSweepCodeDestinationInfo'))['sweepCodeInfo']);
-        };
-        // 重新存入调度任务是否第一次扫码
-        if (getStore('isDispatchFirstSweepCode')) {
-          this.$store.commit('changeIsDispatchTaskFirstSweepCode', JSON.parse(getStore('isDispatchFirstSweepCode')));
-        };
-        // 页面刷新重新存入预约任务完成扫码的目的地科室信息
-        if (getStore('completAppointTaskSweepCodeDestinationInfo')) {
-          this.$store.commit('changeCompleteSweepcodeDestinationInfo', JSON.parse(getStore('completAppointTaskSweepCodeDestinationInfo'))['sweepCodeInfo']);
-        };
-        // 页面刷新重新存入预约任务完成扫码起始地科室信息
-        if (getStore('completAppointTaskSweepCodeDepartureInfo')) {
-          this.$store.commit('changeCompleteSweepcodeDepartureInfo', JSON.parse(getStore('completAppointTaskSweepCodeDepartureInfo'))['sweepCodeInfo']);
-        };
-        // 页面刷新重新存入预约任务完成检查的科室信息
-        if (getStore('completAppointTaskCheckedItemInfo')) {
-          this.$store.commit('changeCompleteCheckedItemInfo', JSON.parse(getStore('completAppointTaskCheckedItemInfo'))['sweepCodeInfo']);
-        };
-        // 重新存入调度任务当前扫码校验通过的科室编号
-        if (getStore('completDepartmentNumber')) {
-          this.$store.commit('changeCurrentDepartmentNumber', JSON.parse(getStore('completDepartmentNumber'))['number']);
-        };
-        // 页面刷新重新存入科室信息id
-        if (getStore('departmentInfo')) {
-          this.$store.commit('changeDepartmentInfoList', JSON.parse(getStore('departmentInfo')));
-        };
-        // 页面刷新重新存入科室信息编号
-        if (getStore('departmentInfoNo')) {
-          this.$store.commit('changeDepartmentInfoListNo', JSON.parse(getStore('departmentInfoNo')));
-        };
-        // 页面刷新重新存入是否为新任务状态
-        if (JSON.parse(getStore('isNewCircle'))['isNewCircle']) {
-          this.$store.commit('changeIsNewCircle', JSON.parse(getStore('isNewCircle'))['isNewCircle']);
         }
       },
 

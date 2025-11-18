@@ -242,6 +242,30 @@
 					if (window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${workerId}`) == 'success') {
 						resolve(window.android.setPostUrl(`${this.baseURL}/trans/workerPositionLog/save/${workerId}`));
 						clearTimeout(xinbiaoTimer)
+					} else {
+						this.$toast({
+							type: 'fail',
+							message: '设置失败'
+						});
+						reject()
+					}
+				})
+			},
+
+			// 调取安卓方法发送地址(设备巡检巡检任务信标打卡需要)
+			equipmentPatrolPostUrl (workerId) {
+				return new Promise((resolve,reject) => {
+					let setUrl = `${this.baseURL}/nblink/hospital/beaconRecord/save/${workerId}?proId=${this.chooseHospitalArea['value']}&system=6`;
+					let quipmentPatrolXinbiaoTimer = setTimeout(window.android.setPostUrl(setUrl),100);
+					if (window.android.setPostUrl(setUrl) == 'success') {
+						resolve(window.android.setPostUrl(setUrl));
+						clearTimeout(quipmentPatrolXinbiaoTimer)
+					} else {
+						this.$toast({
+							type: 'fail',
+							message: '设置失败'
+						});
+						reject()
 					}
 				})
 			},
@@ -484,24 +508,22 @@
 					};
 					// 调取安卓方法发送地址(设备巡检巡检任务信标打卡需要)
 					try {
-						let setUrl = `${this.baseURL}/nblink/hospital/beaconRecord/save/${this.userInfo['worker'].id}?proId=${this.chooseHospitalArea['value']}&system=6`;
-						let res = window.android.setPostUrl(setUrl);
-						if (res != 'success' ) {
-							this.$toast({
-								type: 'fail',
-								message: '设置失败'
-							})
-						}
+						let equipmentPatrolXinbiaoInfo = await this.equipmentPatrolPostUrl(this.userInfo['worker'].id);
 					} catch (err) {
-						this.$toast({
-							type: 'fail',
-							message: `${err}`
-						})
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})
 					};
 					// 注册channel(工程维修)
 					if (window.android.getChannelId()) {
 						try {
-							await this.getProjectChannel({proId:this.chooseHospitalArea['value'],workerId:this.userInfo['worker'].id,type:2,channelId:window.android.getChannelId()});
+							await this.getProjectChannel({
+								proId: this.chooseHospitalArea['value'],
+								workerId: this.userInfo['worker'].id,
+								type: 2,
+								channelId: window.android.getChannelId()
+							});
 						} catch (err) {
 							this.$dialog.alert({
 								message: `${err.message}`,
