@@ -37,7 +37,7 @@ export function getDefaultCommonState() {
 		// 准生产环境：http://ver.blinktech.cn
 		// 生产环境：http://blinktech.cn
 		// 新测试环境  http://act.blinktech.cn
-		baseURL: 'https://show.blinktech.cn'
+		baseURL: 'http://act.blinktech.cn'
 	}
 }
 

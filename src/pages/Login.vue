@@ -89,6 +89,8 @@
 			])
 		},
 		mounted () {
+			this.form.username = getStore('userName') ? getStore('userName') : '';
+			this.form.password = getStore('userPassword') ? getStore('userPassword') : '';
 			// 监控键盘弹起
 			// let originalHeight = document.documentElement.clientHeight || document.body.clientHeight;
 			// window.onresize = ()=> {
@@ -341,8 +343,8 @@
 									setStore('userName', this.form.username);
 									setStore('userPassword', this.form.password);
 								} else {
-									getStore('userName', this.form.username);
-									getStore('userPassword', this.form.password);
+									removeStore('userName');
+									removeStore('userPassword');
 								};
 								// 登录用户信息存入store
 								this.changeIsLogin(true);

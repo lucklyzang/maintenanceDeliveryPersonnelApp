@@ -450,7 +450,8 @@ let baseRoute = [{
       {
         path: '/workOrderDetails',
         name: 'workOrderDetails',
-        component:  WorkOrderDetails
+        component:  WorkOrderDetails,
+        meta: { index: 4 }
       },
       {
         path: '/fillConsumable',
@@ -460,7 +461,8 @@ let baseRoute = [{
       {
         path: '/workOrderSignature',
         name: 'workOrderSignature',
-        component:  WorkOrderSignature
+        component:  WorkOrderSignature,
+        meta: { index: 5 }
       },
       {
         path: '/workOrderCheck',

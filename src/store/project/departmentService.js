@@ -98,7 +98,7 @@ export default {
 			}
     },
     // 改变是否是单个科室的签字状态
-    changeIsSingleDepartmentSignature (state, playLoad) {
+    changeIsSingleDepartmentSignature (state, payLoad) {
       if (payLoad != 'null') {
 				setStore('isSingleDepartmentSignature', payLoad);
 				state.isSingleDepartmentSignature = payLoad
