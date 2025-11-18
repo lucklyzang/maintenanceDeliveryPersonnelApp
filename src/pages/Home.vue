@@ -311,7 +311,7 @@
 			flex-direction: column;
 			margin-top: 10px;
 			.service-management {
-				padding: 15px 10px 30px 10px;
+				padding: 18px 10px 30px 10px;
 				box-sizing: border-box;
 				width: 98%;
 				max-height: 25vh;
@@ -346,7 +346,7 @@
 							}
 						};
 						.list-bottom {
-							margin-top: 10px;
+							margin-top: 14px;
 							font-size: 12px;
 							color: #101010;
 						}
