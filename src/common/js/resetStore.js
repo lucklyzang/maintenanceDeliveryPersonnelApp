@@ -32,10 +32,11 @@ export function getDefaultCommonState() {
 			projectCancelReason: {},
 			affairCancelReason: {}
 		},
-		// 生产域名 https://blinktech.cn
-		// 开发域名 https://blink.blinktech.cn
-		// 准生产域名 https://ver.blinktech.cn
-		// 测试域名 https://show.blinktech.cn
+		// 开发环境： http://blink.blinktech.cn
+		// 测试环境：http://show.blinktech.cn
+		// 准生产环境：http://ver.blinktech.cn
+		// 生产环境：http://blinktech.cn
+		// 新测试环境  http://act.blinktech.cn
 		baseURL: 'https://show.blinktech.cn'
 	}
 }

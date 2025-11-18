@@ -326,6 +326,7 @@
 					});
 					this.temporaryUsername = getStore('userName') ? getStore('userName') : '无';
 					this.showLoadingHint = true;
+					this.infoText = '登录中···';
 					logIn(loginMessage).then((res) => {
 						this.showLoadingHint = false;
 						this.infoText = '';
