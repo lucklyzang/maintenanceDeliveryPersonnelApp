@@ -42,12 +42,12 @@
         <div class="choose-photo">
           <!-- accept="video/mp4" -->
           <van-icon name="photo" />
-          <input name="uploadImg1" ref="inputFileThree" id="demo3" @change="previewFileThree" type="file" accept="video/*" />从图库中选择
+          <input name="uploadImg3" ref="inputFileThree" id="demo3" @change="previewFileThree" type="file" accept="video/*" />从图库中选择
         </div>
         <div class="photo-graph">
           <!-- accept="video/mp4" -->
           <van-icon name="photograph" />
-          <input name="uploadImg2" ref="inputFileFour" id="demo4"  @change="previewFileFour" type="file" accept="video/*,.camera"  capture="camcorder" />拍摄
+          <input name="uploadImg4" ref="inputFileFour" id="demo4"  @change="previewFileFour" type="file" accept="video/*,.camera"  capture="camcorder" />拍摄
         </div>
         <div class="photo-cancel" @click="videoCancel">取消</div>
       </div>

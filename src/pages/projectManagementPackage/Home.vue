@@ -103,11 +103,13 @@
       this.changeTitleTxt({tit:'工程维修'});
       setStore('currentTitle','工程维修');
       // 控制设备物理返回按键
-      if (!IsPC()) {
+      pushHistory();
+      this.gotoURL(() => {
         pushHistory();
-        this.gotoURL(() => {
+        this.$router.push({
+          path: '/home'
         })
-      };
+      });
       // this.temporaryNumList = this.newProjectTaskName;
       // 获取任务数量
       if (!this.projectGlobalTimer) {

@@ -14,13 +14,13 @@ export default {
   mutations:{
     // 改变运送任务信息状态
     changetransportTypeMessage (state,payLoad) {
-      if (payLoad&& payLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				state.transportantTaskMessage = payLoad.DtMsg
 			}
     },
     // 改变任务跟踪信息的状态
     changeTaskTranceMsg (state,payLoad) {
-      if (payLoad&& payLoad != 'null') {
+      if (payLoad && payLoad != 'null') {
 				state.taskTranceMsg = payLoad
 			}
     },

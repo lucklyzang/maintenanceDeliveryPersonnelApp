@@ -44,6 +44,7 @@
 <script>
     import HeaderTop from '@/components/HeaderTop'
     import { queryNewCount } from '@/api/securityPatrol/escortManagement.js'
+    import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
     import {
         mapGetters,
         mapMutations
@@ -53,6 +54,7 @@
         components: {
             HeaderTop
         },
+        mixins:[mixinsDeviceReturn],
         data() {
             return {
                 messageNumber: 0,
@@ -63,26 +65,26 @@
                 cleaningManagementList: [
                     {
                         name: '巡更任务',
-                        imgUrl: require("@/common/images/home/task-list.png")
+                        imgUrl: require("@/common/images/home/security-patrol-home-icon.png")
                     },
                     {
                         name: '事件登记',
-                        imgUrl: require("@/common/images/home/event-registration.png")
+                        imgUrl: require("@/common/images/home/security-patrol-event-registration.png")
                     },
                     {
                         name: '排班管理',
-                        imgUrl: require("@/common/images/home/workforce-management.png")
+                        imgUrl: require("@/common/images/home/security-patrol-workforce-management.png")
                     },
                     {
                         name: '留言簿',
-                        imgUrl: require("@/common/images/home/guest-book.png")
+                        imgUrl: require("@/common/images/home/security-patrol-guest-book.png")
                     },
                     {
                         name: '打卡范围测定工具',
-                        imgUrl: require("@/common/images/home/guest-book.png")
+                        imgUrl: require("@/common/images/home/security-patrol-guest-book.png")
                     }
                 ],
-                defaultPersonPng: require("@/common/images/home/default-person.png"),
+                defaultPersonPng: require("@/common/images/home/security-patrol-default-person.png"),
                 statusBackgroundPng: require("@/common/images/home/status-background.png")
             }
         },
@@ -94,6 +96,8 @@
         },
 
         mounted() {
+            // 控制设备物理返回按键
+            this.deviceReturn("/home");
             // 轮询是否有当前登录用户参与任务集下新的留言
             if (!this.windowTimer) {
                 this.windowTimer = window.setInterval(() => {
@@ -274,15 +278,14 @@
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        width: 85px;
+                        width: 80px;
                         margin: 0 20px;
-                        height: 85px;
-                        border-radius: 50%;
+                        height: 80px;
                         z-index: 1000;
                         img {
                             vertical-align: middle;
-                            width: 85px;
-                            height: 85px;
+                            width: 80px;
+                            height: 80px;
                         }
                     };
                     .user-message {

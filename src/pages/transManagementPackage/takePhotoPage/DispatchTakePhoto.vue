@@ -7,7 +7,7 @@
     <div class="photo-title">
       <div class="uploadPhoto" @click="uploadPhoto">上传照片</div>
       <div class="choose-photo">
-        <input name="uploadImg1" id="demo1" @change="previewFileOne" type="file" accept="image/camera"/>拍照
+        <input name="uploadImg1" id="demo1" @change="previewFileOne" type="file" capture="camera" accept="image/*,.camera"/>拍照
       </div>
     </div>
     <div class="photo-list">

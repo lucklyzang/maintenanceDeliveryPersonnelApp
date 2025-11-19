@@ -145,7 +145,6 @@ export default {
   },
 
   mounted () {
-    console.log('详细信息',this.circulationDetails);
     // 控制设备物理返回按键测试
     if (!IsPC()) {
       let that = this;

@@ -44,6 +44,7 @@
 </template>
 <script>
     import HeaderTop from '@/components/HeaderTop'
+    import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
     import {
         mapGetters,
         mapMutations
@@ -53,6 +54,7 @@
         components: {
             HeaderTop
         },
+        mixins:[mixinsDeviceReturn],
         data() {
             return {
                 loadingShow: false,
@@ -65,7 +67,7 @@
                 cleaningManagementList: [
                     {
                         name: '设备巡检',
-                        imgUrl: require("@/common/images/home/task-list.png")
+                        imgUrl: require("@/common/images/home/equipment-patrol-home-icon.png")
                     },
                     // {
                     //     name: '设备点检',
@@ -80,7 +82,7 @@
                     //     imgUrl: require("@/common/images/home/guest-book.png")
                     // }
                 ],
-                defaultPersonPng: require("@/common/images/home/default-person.png"),
+                defaultPersonPng: require("@/common/images/home/equipment-patrol-default-person.png"),
                 statusBackgroundPng: require("@/common/images/home/status-background.png")
             }
         },
@@ -89,6 +91,8 @@
         },
 
         mounted() {
+            // 控制设备物理返回按键
+            this.deviceReturn("/home");
             // 二维码回调方法绑定到window下面,提供给外部调用
             let me = this;
             window['scanQRcodeCallback'] = (code) => {
@@ -258,12 +262,13 @@
                         justify-content: center;
                         align-items: center;
                         width: 68px;
+                        height: 68px;
                         margin: 0 20px;
-                        border-radius: 50%;
                         z-index: 1000;
                         img {
                             vertical-align: middle;
-                            width: 68px
+                            width: 68px;
+                            height: 68px;
                         }
                     };
                     .user-message {
