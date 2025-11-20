@@ -189,8 +189,9 @@
 					return
 				};
 				this.showLoadingHint = true;
+				this.infoText = '提交中···';
 				modificationPassword({
-					username: this.userName,
+					username: this.userAccount,
 					password: this.formerPasswordValue,
 					newPassword: this.newPasswordValue
 				}).then((res) => {
@@ -229,13 +230,16 @@
 						store.dispatch('resetSecurityPatrolTaskStore');
 						this.$Alert({message:"修改成功!",type:'success'})
 					} else {
-						this.$Alert({message:"修改失败!",type:'error'})
+						this.$Alert({message:`${res.data.msg}!`,type:'error'})
 					}
 				})
 				.catch((err) => {
 					this.showLoadingHint = false;
-					this.modalShow = true;
-					this.modalContent = err.message;
+					this.$dialog.alert({
+						message: `${err}`,
+						closeOnPopstate: true,
+					})
+					.then(() => {})
 				})
 			}
 		}

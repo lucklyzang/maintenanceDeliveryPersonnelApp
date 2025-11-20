@@ -233,6 +233,7 @@
             z-index: 10;
             left: 0;
             .header {
+                background: transparent !important;
                 .header-left {
                     >span {
                         font-size: 14px;
@@ -249,7 +250,7 @@
                 position: relative;
                 width: 100%;
                 margin: 0 auto;
-                height: 189px;
+                height: 199px;
                 > img {
                     width: 100%;
                     height: 100%;
@@ -267,7 +268,7 @@
                     transform: translateX(-50%);
                     height: 125px;
                     margin: 0 auto;
-                    top: 64px;
+                    top: 84px;
                     border-radius: 10px;
                     display: flex;
                     flex-flow: row nowrap;
@@ -313,7 +314,7 @@
                 background: #fff;
                 border-radius: 8px;
                 margin: 0 auto;
-                margin-top: 20px;
+                margin-top: 30px;
                 padding-bottom: 10px;
                 box-sizing: border-box;
                 display: flex;

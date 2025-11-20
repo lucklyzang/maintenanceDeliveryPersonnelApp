@@ -127,29 +127,25 @@ export default {
     },
     // 改变调度任务状态的状态
     changeDispatchTaskState (state,payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('dispatchTaskState', payLoad);
 				state.dispatchTaskState = payLoad
-			}
     },
     // 改变调度任务科室类型的状态
     changeDispatchTaskDepartmentType (state,payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('dispatchTaskDepartmentType', payLoad);
 				state.dispatchTaskDepartmentType = payLoad
-			}
     },
     //改变是否强制拍照的状态
     changeIsCoerceTakePhoto (state,payLoad) {
-      if (payLoad != 'null') {
 				setStore('isCoerceTakePhoto', payLoad);
 				state.isCoerceTakePhoto = payLoad
-			}
     },
     //改变是否完成扫码的状态(出发地和单一目的地的id)
     changeisCompleteSweepCode (state,payLoad) {
+      if (payLoad && payLoad != 'null') {
 				setStore('completeDispatchSweepCodeInfo', {sweepCodeInfo: payLoad});
 				state.isCompleteSweepCode = payLoad
+      }  
     },
     //改变是否完成非单一目的地扫码的状态
     changeIsCompleteSweepCodeDestinationList (state,payLoad) {
@@ -173,24 +169,18 @@ export default {
     },
     //改变是否返回出发地的状态
     changeIsBack (state,payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('isBack', payLoad);
 				state.isBack = payLoad
-			}
     },
     //改变是否签字的状态
     changeIsSign (state,payLoad) {
-      if (payLoad && payLoad != 'null') {
 				setStore('isSign', payLoad);
 				state.isSign = payLoad
-			}
     },
     //改变是否是单一目的地状态
     changeIsSingleDestination (state,payLoad) {
-      if (payLoad != 'null') {
 				setStore('isSingleDestination', payLoad);
 				state.isSingleDestination = payLoad
-			}
     },
     // 改变是否显示结束任务按钮状态
     changeShowEndTaskBtn (state,payLoad) {

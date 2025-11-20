@@ -181,12 +181,11 @@ export default {
       positioningPng: require("@/common/images/home/positioning.png"),
       statusBackgroundPng: require("@/common/images/home/status-background.png"),
       exclamationPointPng: require("@/common/images/home/exclamation-point.png"),
-      addMessagePng: require("@/common/images/home/add-message.png")
+      addMessagePng: require("@/common/images/home/add-task.png")
     }
   },
 
   mounted() {
-    console.log('大飒飒',this.securityPatrolTaskListMessage);
     // 控制设备物理返回按键
     this.deviceReturn("/patrolTasklist");
     // 获取任务详情
