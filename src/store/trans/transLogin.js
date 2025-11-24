@@ -47,7 +47,7 @@ export default {
 			return state.isFreshHomePage
     },
     isNewCircle: (state) => {
-      state.isNewCircle = JSON.parse(getStore('isNewCircle')) ? JSON.parse(getStore('isNewCircle'))['isNewCircle'] === 'false' ? false : true : false;
+      state.isNewCircle = JSON.parse(getStore('isNewCircle')) ? JSON.parse(getStore('isNewCircle'))['isNewCircle'] === false ? false : true : false;
 			return state.isNewCircle
     }
   },

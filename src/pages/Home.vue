@@ -107,7 +107,8 @@
 				'navigationBarHeight',
 				'capsuleMessage',
 				'chooseHospitalArea',
-				'appPermission'
+				'appPermission',
+				'isNewCircle'
 			]),
 			userName() {
 			  return this.userInfo['worker']['name']
@@ -133,6 +134,7 @@
 		},
 		
 		mounted() {
+			console.log('dsa',this.isNewCircle);
 			this.controlModuleShowEvent()
 		},
 		

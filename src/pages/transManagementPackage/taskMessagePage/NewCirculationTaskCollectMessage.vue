@@ -216,7 +216,7 @@ export default {
     scanQRcodeCallback(code) {
       if (code) {
         this.gatherSampleMessage({
-          code,     // 标本箱编码，必输，扫描条码所得
+          code, // 标本箱编码，必输，扫描条码所得
           proId: this.proId,
           spaceId: this.verifyNewCirculationOfficeId,  // 收集科室 ID 必输
           spaceName: this.departmentName, // 收集科室名称  必输
