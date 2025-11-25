@@ -1300,6 +1300,9 @@ export default {
         box-sizing: border-box;
         padding-left: 10px;
         /deep/ .van-checkbox {
+            .van-checkbox__label {
+                font-size: 16px !important;
+            }
         }
     };
     .content-bottom {

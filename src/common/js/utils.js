@@ -321,7 +321,7 @@ export const repeArray = (targetArray) => {
 }
 
 /* 
-  * 数组去重方法(重复2的对象)
+  * 数组去重方法(重复的对象)
   * @param{Array} obj
 */
 export const deteleObject = (obj) => {

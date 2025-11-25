@@ -1221,6 +1221,16 @@ export default {
             border: none !important
           }
         }
+      };
+      .location-other-right-other {
+        flex: 1;
+        text-align: right;
+        line-height: 24px;
+        padding-left: 8px;
+        box-sizing: border-box;
+        font-size: 14px;
+        color: #101010;
+        word-break: break-all;
       }
     };
     .problem-description {

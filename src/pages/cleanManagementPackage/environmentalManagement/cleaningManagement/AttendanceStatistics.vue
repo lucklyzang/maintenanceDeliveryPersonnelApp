@@ -102,7 +102,7 @@
                             </div>
                             <div class="attendance-situation-right">
                                 <span>出勤:</span>
-                                <span>{{ `${item.morning == 1 ? '上午' : ''}、${item.afternoon == 1 ? '下午' : ''}` }}</span>
+                                <span>{{ `${item.morning == 1 ? '上午' : ''}${item.morning == 1 && item.afternoon == 1 ? '、' : ''}${item.afternoon == 1 ? '下午' : ''}` }}</span>
                             </div>
                         </div>
                     </van-tab>
@@ -114,7 +114,7 @@
                             </div>
                             <div class="attendance-situation-right">
                                 <span>外派:</span>
-                                <span>{{ `${item.morning == 1 ? '上午' : ''}、${item.afternoon == 1 ? '下午' : ''}` }}</span>
+                                <span>{{ `${item.morning == 2 ? '上午' : ''}${item.morning == 2 && item.afternoon == 2 ? '、' : ''}${item.afternoon == 2 ? '下午' : ''}` }}</span>
                             </div>
                         </div>
                     </van-tab>

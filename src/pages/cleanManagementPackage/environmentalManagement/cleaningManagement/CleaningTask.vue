@@ -1145,6 +1145,7 @@ export default {
                         width: 61px;
                         height: 27px;
                         text-align: center;
+                        font-size: 14px;
                         line-height: 27px;
                         background: #BBBBBB;
                         color: #fff;
@@ -1210,6 +1211,7 @@ export default {
                     width: 61px;
                     height: 27px;
                     text-align: center;
+                    font-size: 14px;
                     line-height: 27px;
                     background: #174E97;
                     color: #fff;

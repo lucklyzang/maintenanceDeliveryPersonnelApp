@@ -7,9 +7,9 @@
                 <van-icon name="wap-home" color="#fff" size="22"></van-icon>
                 <span>首页</span>
             </div>
-            <div class="header-right" slot="right" @click="scanQRCodeEvent">
+            <!-- <div class="header-right" slot="right" @click="scanQRCodeEvent">
                 <van-icon name="scan" color="#fff" size="22" />
-            </div>
+            </div> -->
         </HeaderTop>
         <div class="content-box">
             <div class="banner-box">

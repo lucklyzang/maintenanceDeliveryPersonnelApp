@@ -642,7 +642,8 @@ export default {
                     h1 {
                         height: 30px;
                         line-height: 30px;
-                        font-weight: bold
+                        font-weight: bold;
+                        font-size: 14px;
                     };
                     .calendar-week {
                         .cw-inner {
@@ -652,6 +653,7 @@ export default {
                             .cw-item {
                                 flex: 1;
                                 padding: 8px 0;
+                                font-size: 14px;
                             }
                         }
                     }
@@ -678,6 +680,7 @@ export default {
                                 position: relative;
                                 color: #101010;
                                 > span {
+                                    font-size: 14px;
                                     &:nth-child(1) {
                                         position: absolute;
                                         width: 30px;
