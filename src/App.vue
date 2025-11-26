@@ -90,7 +90,7 @@
   }
   .slide-left-enter, .slide-right-leave-active {
     opacity: 0;
-    transition: all 0.5s ease;
+    transition: all 0.4s ease;
     -webkit-transform: translate3d(-100%, 0, 0);
     transform: translate3d(-100%, 0, 0);
   }

@@ -545,7 +545,7 @@ export default {
         this.isLoadMore = true;
         if (res && res.data.code == 200) {
           if (res.data.data.length == 0) {
-            this.emptyShow = true
+            this.emptyShow = true;
           } else {
             this.temporaryBeaconList = res.data.data;
             this.totalCount = res.data.data.length;
@@ -576,15 +576,19 @@ export default {
     // 轮询询信标列表
     pollingGetBeaconList (stucId,workerId) {
       this.isTimeoutContinue = false;
-      this.emptyShow = false;
+      if (!this.emptyShow) { 
+        this.emptyShow = false;
+      };
       queryBeaconList({proId:this.proId,stucId,workerId}).then((res) => {
         this.loadingShow = false;
         this.overlayShow = false;
         if (res && res.data.code == 200) {
           this.isTimeoutContinue = true;
           if (res.data.data.length == 0) {
-            // this.emptyShow = true
+            if (this.emptyShow) { return };
+            this.emptyShow = true;
           } else {
+            this.emptyShow = false;
             if (!this.currentBuilding) {
               if (this.currentDepName != this.currentBuilding) { return };
             } else {
