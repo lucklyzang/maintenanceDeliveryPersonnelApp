@@ -22,7 +22,8 @@ Vue.prototype.$Alert= ((obj) => {//挂载在原型上
 });
 Vue.prototype._ = _;
 import {  IsPC } from '@/common/js/utils.js'
-import '@/directives/preventReClick.js'
+import preventReClick from '@/directives/preventReClick.js'
+Vue.use(preventReClick);
 if (process.env.NODE_ENV == 'development') {
     Vue.config.devtools = true;
 } else {

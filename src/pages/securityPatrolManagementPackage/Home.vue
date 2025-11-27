@@ -71,10 +71,10 @@
                         name: '事件登记',
                         imgUrl: require("@/common/images/home/security-patrol-event-registration.png")
                     },
-                    {
-                        name: '排班管理',
-                        imgUrl: require("@/common/images/home/security-patrol-workforce-management.png")
-                    },
+                    // {
+                    //     name: '排班管理',
+                    //     imgUrl: require("@/common/images/home/security-patrol-workforce-management.png")
+                    // },
                     {
                         name: '留言簿',
                         imgUrl: require("@/common/images/home/security-patrol-guest-book.png")

@@ -717,7 +717,10 @@ export default {
               return '已报修'
               break;
           case 3 :
-              return '已完成/已取消'
+              return '已完成'
+              break;
+          case 6 :
+              return '已取消'
               break
         }
       } else if (eventType == 2) {
@@ -761,8 +764,8 @@ export default {
       if (item.eventType == 1) {
         if (item.state == -1) {
           this.$router.push({path: '/repairsRegister',query:{eventId: item.id}})
-          //已报修
-        } else if (item.state == 0 || item.state == 3) {
+          //已报修、已取消、已完成
+        } else if (item.state == 0 || item.state == 3 || item.state == 6) {
           this.$router.push({path: '/historyRepairsRegister',query:{eventId: item.id}})
         }
       } else if (item.eventType == 2) {
@@ -1164,11 +1167,11 @@ export default {
                       .no-wrap()
                   };
                   .backlog-task-top-right {
-                      width: 70px;
-                      text-align: center;
+                      width: 150px;
+                      text-align: right;
                       span {
                           display: inline-block;
-                          width: 62px;
+                          width:100%;
                           height: 22px;
                           text-align: right;
                           line-height: 22px;
