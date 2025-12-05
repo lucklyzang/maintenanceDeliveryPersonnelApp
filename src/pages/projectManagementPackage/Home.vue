@@ -85,7 +85,7 @@
         isTimeoutContinue: true,
         taskList: [
           {tit:'报修工单', imgUrl: repairsWorkOrderOnePng},
-          {tit:'设备巡检', imgUrl: deviceServiceOnePng},
+          // {tit:'设备巡检', imgUrl: deviceServiceOnePng},
           {tit:'区域巡检', imgUrl: departmentServiceOnePng},
           {tit:'调度管理', imgUrl: dispatchingManagementPng},
           {tit:'自主报修', imgUrl: autoRepairPng}

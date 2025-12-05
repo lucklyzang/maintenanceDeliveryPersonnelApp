@@ -134,7 +134,6 @@
 		},
 		
 		mounted() {
-			console.log('dsa',this.isNewCircle);
 			this.controlModuleShowEvent()
 		},
 		

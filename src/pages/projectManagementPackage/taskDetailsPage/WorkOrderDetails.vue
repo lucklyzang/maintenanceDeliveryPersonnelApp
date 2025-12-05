@@ -30,7 +30,7 @@
               {{oneRepairsMsg.typeName}}
             </span>
           </p>
-          <div class="task-attribution-box">
+          <!-- <div class="task-attribution-box">
             <p>任务归属</p>
             <p>
               <van-checkbox-group v-model="taskAttributionResult" :plain="true" :max="1">
@@ -39,7 +39,7 @@
                 <van-checkbox name="2">电梯任务</van-checkbox>
               </van-checkbox-group>
             </p>
-          </div>
+          </div> -->
           <p class="content-top-other">
             <span>时间</span>
             <span>
