@@ -7,18 +7,15 @@ export default {
       inserted(el, binding) {
         let timer = null;
         const delay = binding.value || 3000;
-        
         const clickHandler = (event) => {
           if (timer) {
             event.preventDefault();
             event.stopPropagation();
             return;
-          }
-          
+          };
           el.style.pointerEvents = 'none';
           el.setAttribute('data-original-cursor', el.style.cursor);
           el.style.cursor = 'not-allowed';
-          
           timer = setTimeout(() => {
             el.style.pointerEvents = '';
             el.style.cursor = el.getAttribute('data-original-cursor') || '';
@@ -30,7 +27,6 @@ export default {
         el._preventReClickHandler = clickHandler;
         el.addEventListener('click', clickHandler);
       },
-      
       unbind(el) {
         if (el._preventReClickHandler) {
           el.removeEventListener('click', el._preventReClickHandler);

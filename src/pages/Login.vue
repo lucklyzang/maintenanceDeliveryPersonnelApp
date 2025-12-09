@@ -41,9 +41,9 @@
           <van-checkbox v-model="checked" checked-color="#1864FF">记住账户密码</van-checkbox>
          </div>
       </div>
-			<div class="form-btn">
-        <div @click="sure">登 录</div>
-			</div>
+	<div class="form-btn">
+        <div v-preventReClick @click="sure">登 录</div>
+	</div>
 		</div>
 	</div>
 </template>
