@@ -1408,11 +1408,11 @@
               let innerItem = item1;
               Object.keys(innerItem).forEach((item) => {
                 if (item == 'resTask') {
-                  this.taskTypeList.push({text: '预约任务',number: innerItem[item]})
+                  this.taskTypeList.push({text: '预约任务',number: innerItem[item]});
                 } else if (item == 'transTask') {
-                  this.taskTypeList.push({text: '调度任务',number: innerItem[item]})
+                  this.taskTypeList.push({text: '调度任务',number: innerItem[item]});
                 } else if (item == 'circleTask') {
-                  this.taskTypeList.push({text: '循环任务',number: innerItem[item]})
+                  this.taskTypeList.push({text: '循环任务',number: innerItem[item]});
                 }
               });
               if (type == '' || type == undefined) {return};
