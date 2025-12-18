@@ -28,7 +28,7 @@ export default {
 			return state.dispatchTaskDepartmentType
 		},
     isCoerceTakePhoto: (state) => {
-      state.isCoerceTakePhoto = getStore('isCoerceTakePhoto') ? getStore('isCoerceTakePhoto') === 'false' ? false : true : false;
+      state.isCoerceTakePhoto = getStore('isCoerceTakePhoto') ? Number(getStore('isCoerceTakePhoto')) : '' ;
 			return state.isCoerceTakePhoto
     },
     isCompleteSweepCode: (state) => {

@@ -665,7 +665,7 @@ export default {
             setStore('completeDispatchSweepCodeInfo', {"sweepCodeInfo": temporaryOfficeList})
           };
           // 判断是否需要拍照0不拍照1拍照
-          if (this.isCoerceTakePhoto == 0) {
+          if (this.isCoerceTakePhoto === 0) {
             // 判断是否需要签字
             this.judgeIsSignature()
           } else {
@@ -831,7 +831,7 @@ export default {
           isExistOfficeId = this.isCompleteSweepCode[isExistTaskId]['officeList'].indexOf(this.currentSiteId);
         };
         if (isExistTaskId !== -1 && isExistOfficeId !== -1 && isExistOfficeId !== '') {
-          if (this.isCoerceTakePhoto == 1) {
+          if (this.isCoerceTakePhoto === 1) {
             this.$dialog.alert({
               message: '该科室校验已验证通过,请拍照或上传照片',
               closeOnPopstate: true
