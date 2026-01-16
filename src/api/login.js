@@ -2,7 +2,7 @@ import request from '@/utils/request'
 // 账号密码登录
 export function logIn(data) {
 	return request({
-	    url: 'nblink/auth/login',
+	    url: 'auth/login',
 	    method: 'post',
 	    data
 	  })
@@ -11,7 +11,7 @@ export function logIn(data) {
 // 获取用户权限
 export function getAppPermission(username) {
 	return request({
-	    url: `nblink/user/app-permission/${username}`,
+	    url: `user/app-permission/${username}`,
 	    method: 'get'
 	  })
 }

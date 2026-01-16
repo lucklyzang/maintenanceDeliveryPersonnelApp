@@ -32,12 +32,12 @@ export function getDefaultCommonState() {
 			projectCancelReason: {},
 			affairCancelReason: {}
 		},
-		// 开发环境： http://blink.blinktech.cn
-		// 测试环境：http://show.blinktech.cn
-		// 准生产环境：http://ver.blinktech.cn
-		// 生产环境：http://blinktech.cn
-		// 新测试环境  http://act.blinktech.cn
-		baseURL: 'http://act.blinktech.cn'
+		// 开发环境： http://blink.blinktech.cn/nblink
+		// 测试环境：http://show.blinktech.cn/nblink
+		// 准生产环境：http://ver.blinktech.cn/nblink
+		// 生产环境：http://blinktech.cn/nblink
+		// 新测试环境  http://act.blinktech.cn/nblink
+		baseURL: 'http://show.blinktech.cn/nblink'
 	}
 }
 
