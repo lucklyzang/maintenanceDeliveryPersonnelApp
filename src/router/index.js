@@ -194,7 +194,10 @@ const MoreHistoryRepairsRegister = () =>
 const HistoryOtherRegister = () =>
     import ('@/pages/securityPatrolManagementPackage/eventPage/HistoryOtherRegister')
 const MoreHistoryOtherRegister = () =>
-    import ('@/pages/securityPatrolManagementPackage/eventPage/MoreHistoryOtherRegister')                   
+    import ('@/pages/securityPatrolManagementPackage/eventPage/MoreHistoryOtherRegister')
+// 物资管理
+const SuppliesHome = () =>
+    import ('@/pages/suppliesManagementPackage/Home')                       
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -932,7 +935,14 @@ let baseRoute = [{
       component: MoreHistoryOtherRegister,
       meta: { index: 6 }
 
-  }
+  },
+  // 物资管理
+   {
+    path: '/suppliesHome',
+    name: 'suppliesHome',
+    component: SuppliesHome,
+    meta: { index: 3 }
+  },
 ];
 let router = new Router({
     routes: baseRoute,

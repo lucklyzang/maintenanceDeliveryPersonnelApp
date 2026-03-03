@@ -44,6 +44,19 @@
 					</div>
 				</div>
 			</div>
+			<div class="service-management cost-management" v-show="hasAuthCostManagementSystemsList.length > 0">
+				<div class="service-management-title">
+					成本管理
+				</div>
+				<div class="service-management-content">
+					<div class="service-list" v-for="(item,index) in hasAuthCostManagementSystemsList" :key="index" @click="costManagementEvent(item,index)">
+						<div class="list-top">
+							<img :src="item.url" />
+						</div>
+						<div class="list-bottom">{{ item.text }}</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<van-loading size="24px" vertical v-show="showLoadingHint">{{ infoText }}</van-loading>
 		<FooterBottom></FooterBottom>  
@@ -95,6 +108,20 @@
 						text: '设备巡检',
 						value: 'device',
 						url: require('@/common/images/home/equipment-patrol-icon.png')
+					}
+				],
+				costList: [
+					{
+						text: '物资管理',
+						value: 'supplies',
+						url: require('@/common/images/home/supplies-management-icon.png')
+					}
+				],
+				hasAuthCostManagementSystemsList: [
+					{
+						text: '物资管理',
+						value: 'supplies',
+						url: require('@/common/images/home/supplies-management-icon.png')
 					}
 				]
 			}
@@ -245,6 +272,13 @@
 				} else if (item.text == '设备巡检') {
 					this.$router.push({ path: "/equipmentPatrolHome" })
 				}
+			},
+
+			// 成本管理项点击事件
+			costManagementEvent (item,index) {
+				if (item.text == '物资管理') {
+					this.$router.push({ path: "/suppliesHome" })
+				}
 			}
 		}
 	}
@@ -374,6 +408,18 @@
 					&:nth-child(2) {
 							.list-top {
 								background: #4CC9E4 !important;
+							} 
+						};
+				}
+			};
+			.cost-management {
+				margin-top: 10px;
+				max-height: 25vh;
+				overflow: auto;
+				>div {
+					&:nth-child(2) {
+							.list-top {
+								background: #FC8F66 !important;
 							} 
 						};
 				}
