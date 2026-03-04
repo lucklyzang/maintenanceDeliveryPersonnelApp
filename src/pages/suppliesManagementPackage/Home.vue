@@ -11,7 +11,6 @@
     </div>
     <div class="content">
         <div class="content-top-area">
-			<img :src="statusBackgroundPng" />
 		</div>
         <div class="user-box" @click="userInfoEvent">
             <div class="user-photo">
@@ -33,10 +32,19 @@
                     :key="index"
                     @click="patrolTaskEvent(item,index)"
                 >
-                    <img :src="item.imgUrl" alt="">
                     <span>{{ item.name }}</span>
-                    <span class="message-number" v-show="isShowMessageNumber && item.name == '留言簿' ">{{ messageNumber }}</span>
+                    <p>
+                        <span class="message-number">2</span>
+                    </p>
                 </div> 
+            </div>
+        </div>
+        <div class="functional-zone">
+            <div class="service-list" v-for="(item,index) in safeList" :key="index" @click="safeManagementEvent(item,index)">
+                <div class="list-top">
+                    <img :src="item.url" />
+                </div>
+                <div class="list-bottom">{{ item.text }}</div>
             </div>
         </div>
     </div>
@@ -66,22 +74,32 @@
                 isTimeoutContinue: true,
                 cleaningManagementList: [
                     {
-                        name: '设备巡检',
-                        imgUrl: require("@/common/images/home/equipment-patrol-home-icon.png")
+                        name: '待送货',
+                        value: 1
                     },
-                    // {
-                    //     name: '设备点检',
-                    //     imgUrl: require("@/common/images/home/event-registration.png")
-                    // },
                     {
-                        name: '设备管理',
-                        imgUrl: require("@/common/images/home/workforce-management.png")
+                        name: '待确认',
+                        value: 2
                     }
-                    // {
-                    //     name: '调度管理',
-                    //     imgUrl: require("@/common/images/home/guest-book.png")
-                    // }
                 ],
+                safeList: [
+					{
+						text: '订单',
+						url: require('@/common/images/home/supplies-order-icon.png')
+					},
+					{
+						text: '送货',
+						url: require('@/common/images/home/supplies-delivery-icon.png')
+					},
+                    {
+						text: '退换货',
+						url: require('@/common/images/home/supplies-barter-icon.png')
+					},
+					{
+						text: '盘点',
+						url: require('@/common/images/home/supplies-stock-tacking-icon.png')
+					}
+				],
                 defaultPersonPng: require("@/common/images/home/equipment-patrol-default-person.png"),
                 statusBackgroundPng: require("@/common/images/home/status-background.png")
             }
@@ -215,7 +233,6 @@
             z-index: 10;
             left: 0;
             .header {
-                background: transparent !important;
                 .header-left {
                     >span {
                         font-size: 14px;
@@ -234,17 +251,11 @@
                 width: 100%;
                 margin: 0 auto;
                 height: 60px;
-                > img {
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                }
+                background: #3B9DF9;
             };
             .user-box {
                 width: 100%;
-                padding: 20px 0 0 20px;
+                padding: 16px;
                 box-sizing: border-box;
                 overflow: auto;
                 display: flex;
@@ -254,61 +265,51 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    width: 68px;
-                    height: 68px;
-                    margin-right: 20px;
+                    width: 48px;
+                    height: 48px;
+                    margin-right: 10px;
+                    border-radius: 50%;
+                    background: #E5E5E5;
                     img {
                         vertical-align: middle;
-                        width: 68px;
-                        height: 68px;
+                        width: 40px;
+                        height: 40px;
                     }
                 };
                 .user-message {
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
+                    justify-content: center;
                     z-index: 100;
                     color: #101010;
                     height: 60px;
                     flex: 1;
+                    font-size: 13px;
                     .user-name {
                         width: 98%;
                         word-break: break-all;
-                        font-size: 16px;
-                        font-weight: bold
                     }
                     .account-name {
                         width: 98%;
                         word-break: break-all;
-                        font-size: 14px;
-                        margin-top: 20px;
-                        color: #BEC7D1;
+                        margin-top: 10px;
                         line-height: 20px
                     }
                 }
             };
            .task-board {
-                width: 95%;
-                background: #fff;
-                border-radius: 8px;
-                max-height: 50vh;
-                margin: 0 auto;
-                margin-top: 30px;
-                padding-bottom: 10px;
-                overflow: auto;
+                width: 100%;
+                padding: 0 16px 10px 16px;
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 h2 {
                     width: 100%;
-                    height: 55px;
-                    padding-left: 26px;
-                    box-sizing: border-box;
-                    line-height: 55px;
-                    font-size: 16px;
-                    color: #242424;
-                    font-weight: bold;
+                    height: 40px;
+                    line-height: 40px;
+                    font-size: 12px;
+                    color: #101010;
                 };
                 .subproject-list-box {
                     width: 100%;
@@ -318,40 +319,74 @@
                     align-content: flex-start;
                     .subproject-list {
                         position: relative;
-                        width: 33.3%;
+                        width: 100px;
+                        height: 50px;
+                        margin-right: 20px;
                         display: flex;
-                        margin-bottom: 25px;
+                        background: #F0F2FE;
+                        border-radius: 6px;
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
-                        >img {
-                            width: 50px;
-                            height: 50px;
-                            margin-left: 6px;
-                        };
                         >span {
                             &:nth-child(2){
                                 margin-top: 14px;
                                 font-size: 16px;
                                 color: #101010;
                                 text-align: center
-                            };
-                            &:nth-child(3) {
-                                position: absolute;
-                                width: 70px;
+                            }
+                        };
+                        >p {
+                            position: absolute;
+                            width: 17px;
+                            height: 17px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            background: #E86F50;
+                            border-radius: 50%;
+                            top: -10px;
+                            right: 0;
+                            span {
                                 .no-wrap();
-                                top: -10px;
-                                right: -10px;
-                                font-size: 16px;
-                                color: red;
-                                padding-left: 22px;
-                                display: inline-block;
-                                box-sizing: border-box
+                                font-size: 12px;
+                                color: #fff;
                             }
                         }
                     };
                     >div:nth-child(5) {
                         width: 35% !important
+                    }
+                }
+            };
+            .functional-zone {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                margin-top: 20px;
+                .service-list {
+                    width: 25%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    .list-top {
+                        width: 50px;
+                        height: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: #3B9DF9;
+                        border-radius: 12px;
+                        >img {
+                            width: 25px;
+                            height: 25px;
+                        }
+                    };
+                    .list-bottom {
+                        margin-top: 14px;
+                        font-size: 12px;
+                        color: #101010;
                     }
                 }
             }
