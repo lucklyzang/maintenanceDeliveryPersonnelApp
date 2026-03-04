@@ -40,7 +40,7 @@
             </div>
         </div>
         <div class="functional-zone">
-            <div class="service-list" v-for="(item,index) in safeList" :key="index" @click="safeManagementEvent(item,index)">
+            <div class="service-list" v-for="(item,index) in safeList" :key="index" @click="functionalZoneEvent(item,index)">
                 <div class="list-top">
                     <img :src="item.url" />
                 </div>
@@ -179,8 +179,8 @@
                 window.android.scanQRcode()
             },
 
-            // 巡查任务点击事件
-            patrolTaskEvent (item, index) {
+            // 功能区点击事件
+            functionalZoneEvent (item, index) {
                 if (item.name == '设备巡检') {
                     this.$router.push({path: '/equipmentPatrolDetails'})
                 } else if (item.name == '设备点检') {
