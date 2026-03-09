@@ -37,7 +37,7 @@ export function getDefaultCommonState() {
 		// 准生产环境：http://ver.blinktech.cn/nblink
 		// 生产环境：http://blinktech.cn/nblink
 		// 新测试环境  http://act.blinktech.cn/nblink
-		baseURL: 'http://show.blinktech.cn/nblink'
+		baseURL: 'http://act.blinktech.cn/nblink'
 	}
 }
 
