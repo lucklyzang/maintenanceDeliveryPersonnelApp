@@ -163,13 +163,12 @@
 							resolve(res.data.data);
 							setStore('departmentInfo', res.data.data);
 						} else {
+							reject(res.data.msg);
 							this.$dialog.alert({
 								message: `${res.data.msg}`,
 								closeOnPopstate: true
 							}).then(() => {})
-						};
-						this.showLoadingHint = false;
-						reject(res.data.msg);
+						}
 					})
 					.catch((err) => {
 						reject(err);
