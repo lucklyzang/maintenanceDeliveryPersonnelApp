@@ -481,25 +481,34 @@
 				this.changeUserType(0);
 				setStore('userType', 0);
 				if (!IsPC()) {
+					let channelId; 
 					// 注册channel(中央运送)
-					if (window.android.getChannelId()) {
-						try {
-							await this.getChannel({
-								proId: this.chooseHospitalArea['value'],
-								workerId: this.userInfo['worker'].id,
-								type: 0,
-								channelId: window.android.getChannelId()
-							})
-						} catch (err) {
-							this.$dialog.alert({
-								message: `${err.message}`,
-								closeOnPopstate: true
-							}).then(() => {
-							})
-						}
-					} else {
-						this.$toast('未获取到channelId')
-					};
+					try {
+						let channelId = window.android.getChannelId();
+						if (channelId) {
+							try {
+								await this.getChannel({
+									proId: this.chooseHospitalArea['value'],
+									workerId: this.userInfo['worker'].id,
+									type: 0,
+									channelId: channelId
+								})
+							} catch (err) {
+								this.$dialog.alert({
+									message: `${err}`,
+									closeOnPopstate: true
+								}).then(() => {
+								})
+							}
+						} else {
+							this.$toast('未获取到channelId')
+						};
+					} catch(err) {
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})	
+					};	
 					// 向客户端发送信标服务器地址(中央运送)
 					try {
 						let xinbiaoInfo = await this.postUrl(this.userInfo['worker'].id);
@@ -519,23 +528,31 @@
 						}).then(() => {})
 					};
 					// 注册channel(工程维修)
-					if (window.android.getChannelId()) {
-						try {
-							await this.getProjectChannel({
-								proId: this.chooseHospitalArea['value'],
-								workerId: this.userInfo['worker'].id,
-								type: 2,
-								channelId: window.android.getChannelId()
-							});
-						} catch (err) {
-							this.$dialog.alert({
-								message: `${err.message}`,
-								closeOnPopstate: true
-							}).then(() => {})
+					try {
+						let channelId = window.android.getChannelId();
+						if (channelId) {
+							try {
+								await this.getProjectChannel({
+									proId: this.chooseHospitalArea['value'],
+									workerId: this.userInfo['worker'].id,
+									type: 2,
+									channelId: channelId
+								});
+							} catch (err) {
+								this.$dialog.alert({
+									message: `${err}`,
+									closeOnPopstate: true
+								}).then(() => {})
+							}
+						} else {
+							this.$toast('未获取到channelId')
 						}
-					} else {
-						this.$toast('未获取到channelId')
-					}
+					} catch(err) {
+						this.$dialog.alert({
+							message: `${err}`,
+							closeOnPopstate: true
+						}).then(() => {})	
+					};	
 				};
 				try {
 					// 获取用户权限
