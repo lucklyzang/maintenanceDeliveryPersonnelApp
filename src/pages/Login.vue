@@ -484,6 +484,7 @@
 					// 注册channel(中央运送)
 					if (window.android.getChannelId()) {
 						try {
+							nsa = 1;
 							await this.getChannel({
 								proId: this.chooseHospitalArea['value'],
 								workerId: this.userInfo['worker'].id,
@@ -492,7 +493,7 @@
 							})
 						} catch (err) {
 							this.$dialog.alert({
-								message: `${err.message}`,
+								message: `${err}`,
 								closeOnPopstate: true
 							}).then(() => {
 							})
@@ -529,7 +530,7 @@
 							});
 						} catch (err) {
 							this.$dialog.alert({
-								message: `${err.message}`,
+								message: `${err}`,
 								closeOnPopstate: true
 							}).then(() => {})
 						}
