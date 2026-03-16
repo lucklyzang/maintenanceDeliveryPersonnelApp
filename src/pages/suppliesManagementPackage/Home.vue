@@ -181,40 +181,9 @@
 
             // 功能区点击事件
             functionalZoneEvent (item, index) {
-                if (item.name == '设备巡检') {
-                    this.$router.push({path: '/equipmentPatrolDetails'})
-                } else if (item.name == '设备点检') {
-                    this.$router.push({path: '/equipmentSpotCheck'})
-                } else if (item.name == '设备管理') {
-                    this.$router.push({path: '/equipmentList'})
-                } else if (item.name == '调度管理') {
-                    this.$router.push({path: '/equipmentSpotList'}) 
+                if (item.text == '订单') {
+                    this.$router.push({path: '/suppliesOrderList'})
                 }
-            },
-
-            // 摄像头扫码后的回调
-            scanQRcodeCallback(code) {
-                if (code) {
-                    let codeData = code.split('|');
-                    try {
-                
-                    } catch (err) {
-                        this.$toast({
-                            message: `${err}`,
-                            type: 'fail'
-                        })
-                    }  
-                } else {
-                    this.$dialog.alert({
-                        message: '当前没有扫描到任何信息,请重新扫描'
-                    }).then(() => {
-                        this.scanQRCode()
-                    })
-                }
-            },
-
-            // 摄像头取消扫码后的回调
-            scanQRcodeCallbackCanceled () {
             }
         }
     }

@@ -197,7 +197,13 @@ const MoreHistoryOtherRegister = () =>
     import ('@/pages/securityPatrolManagementPackage/eventPage/MoreHistoryOtherRegister')
 // 物资管理
 const SuppliesHome = () =>
-    import ('@/pages/suppliesManagementPackage/Home')                       
+    import ('@/pages/suppliesManagementPackage/Home') 
+const SuppliesOrderList= () =>
+    import ('@/pages/suppliesManagementPackage/orderForm/orderList')
+const SuppliesOrderDetails= () =>
+    import ('@/pages/suppliesManagementPackage/orderForm/OrderDetails')
+const SuppliesCreateDeliveryOrder= () =>
+    import ('@/pages/suppliesManagementPackage/orderForm/createDeliveryOrder')                                  
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -943,6 +949,24 @@ let baseRoute = [{
     component: SuppliesHome,
     meta: { index: 3 }
   },
+  {
+    path: '/suppliesOrderList',
+    name: 'suppliesOrderList',
+    component: SuppliesOrderList,
+    meta: { index: 4 }
+  },
+  {
+    path: '/suppliesOrderDetails',
+    name: 'suppliesOrderDetails',
+    component: SuppliesOrderDetails,
+    meta: { index: 5 }
+  },
+  {
+    path: '/suppliesCreateDeliveryOrder',
+    name: 'suppliesCreateDeliveryOrder',
+    component: SuppliesCreateDeliveryOrder,
+    meta: { index: 5 }
+  }
 ];
 let router = new Router({
     routes: baseRoute,
