@@ -3,7 +3,7 @@
     <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">加载中...</van-loading>
     <van-overlay :show="overlayShow" z-index="100000" />
     <div class="nav">
-        <van-nav-bar title="订单详情" left-text="返回" left-arrow @click-left="onClickLeft"  :border="false">
+        <van-nav-bar title="送货单详情" left-text="返回" left-arrow @click-left="onClickLeft"  :border="false">
         </van-nav-bar>
     </div>
     <div class="content">
@@ -86,8 +86,35 @@
 						<span>大苏打的</span>
 					</div>
 				</div>
+                <div class="create-delivery-date">
+					<div class="create-delivery-date-left">
+						<span>科室电话:</span>
+						<span>打卡善良的凯撒</span>
+					</div>
+					<div class="create-delivery-date-left">
+						<span>关联订单:</span>
+						<span>大苏打的</span>
+					</div>
+				</div>
+			</div>
+            <div class="dashed-box"></div>
+            <div class="order-message">
+				<div class="create-delivery-date">
+					<div class="create-delivery-date-left">
+						<span>配送人:</span>
+						<span>05-31 17:21</span>
+					</div>
+					<div class="create-delivery-date-left">
+						<span>联系方式:</span>
+						<span>05-31</span>
+					</div>
+				</div>
 				<div class="product-list remark-box">
 					<span>备注:</span>
+					<span>沙龙课傻了傻了时间</span>
+				</div>
+                <div class="product-list remark-box delivery-time">
+					<span>送货时间:</span>
 					<span>沙龙课傻了傻了时间</span>
 				</div>
 			</div>
@@ -137,7 +164,7 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn('/suppliesOrderList');
+    this.deviceReturn('/suppliesDeliverGoodsList');
   },
 
   beforeRouteEnter(to, from, next) {
@@ -175,7 +202,7 @@ export default {
     ...mapMutations([]),
 
     onClickLeft () {
-        this.$router.push({path: '/suppliesOrderList'})
+        this.$router.push({path: '/suppliesDeliverGoodsList'})
     },
 
     //任务状态转换
@@ -348,12 +375,13 @@ export default {
             width: 99%;
             padding: 0 10px;
             box-sizing: border-box;
-            flex: 1;
+            height: 460px;
             margin: 0 auto;
             border-radius: 6px;
             background: #F0F2FE;
             overflow: auto;
             position: relative;
+            margin-bottom: 10px;
             /deep/ .van-empty {
                 position: absolute;
                 top: 50%;
@@ -439,8 +467,7 @@ export default {
             }
         };
         .order-message {
-            margin: 10px 0;
-            padding: 0 6px;
+            padding: 0 6px 16px 6px;
             box-sizing: border-box;
             .create-delivery-date {
                     display: flex;
@@ -492,7 +519,24 @@ export default {
                         display: inline-block;
                         font-size: 12px;
                         &:nth-child(1) {
-                            color: #9E9E9A;
+                            color: #000000 !important;
+                            margin-right: 6px;
+                        };
+                        &:nth-child(2) {
+                            word-break: break-all;
+                            flex: 1;
+                            color: #000000 !important;
+                        }
+                }
+            };
+            .delivery-time {
+                display: flex;
+                margin-top: 16px;
+                >span {
+                        display: inline-block;
+                        font-size: 12px;
+                        &:nth-child(1) {
+                            color: #9C9C9C !important;
                             margin-right: 6px;
                         };
                         &:nth-child(2) {
@@ -502,6 +546,9 @@ export default {
                         }
                 }
             }	
+        };
+        .dashed-box {
+            border: 1px dashed #BBBBBB;
         }
     }
   }

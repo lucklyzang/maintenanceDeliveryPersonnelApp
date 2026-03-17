@@ -15,7 +15,7 @@
 			</div>
 			<div class="content-center">
 				<div class="empty-info" v-if="chooseMaterialList.length == 0">
-					<van-empty span="暂无产品" />
+					<van-empty description="暂无产品" />
 				</div>
 				<div class="product-list" v-for="(item,index) in chooseMaterialList" :key="item.productName">
 					<div class="product-left">
@@ -33,15 +33,6 @@
 									{{ item.specification }}
 								</span>
 							</div>
-							<div class="product-specification-right">
-								<span>￥</span>
-								<span>
-									{{ item.unitPrice }}
-								</span>
-								<span>
-									{{ `/${item.unit}` }}
-								</span>
-							</div>
 						</div>
 					</div>
 					<div class="product-right">
@@ -49,8 +40,14 @@
 							<van-stepper v-model="item.quantity" @change="function(val){productNumberBoxChange(item,index,val)}" integer min="0" />
 						</div>
 						<div class="product-total-price">
-							<span>￥</span>
-							<span>{{ item.showTotalPrice }}</span>
+              <div class="total-demand">
+                <span>总需求数</span>
+                <span>200</span>
+              </div>
+              <div class="surplus-demand">
+                <span>剩余需求数</span>
+                <span>100</span>
+              </div>
 						</div>
 					</div>
 				</div>
@@ -58,7 +55,7 @@
 			<div class="total-prices">
 				<div class="total-prices-right">
 					<span>总数量:</span>
-					<span>{{ `￥${formatPrice(allChooseProductPrice)}` }}</span>
+					<span>{{ `${allChooseProductPrice}` }}</span>
 				</div>
 			</div>
         </div>
@@ -70,6 +67,41 @@
         <div class="btn-right" @click="submitEvent">
             <span>提交</span>
         </div>
+    </div>
+    <!-- 确定生成送货单弹框	 -->
+    <div class="create-delivery-order-modal">
+        <van-dialog v-model="createDeliveryOrderModalShow" :showConfirmButton="false">
+            <div class="evaluate-model-content">
+                <div class="evaluate-modal-top">
+                    <span></span>
+                    <van-icon name="cross" color="#101010" size="20" @click="createDeliveryOrderModalShow = false" />
+                </div>
+                <div class="evaluate-modal-center">
+                   <div class="modal-center-title">
+                     确定要生成送货单吗？
+                   </div>
+                   <div class="modal-center-content">
+                     <span>
+                       订单号不变，选中的物品生成新的送货单，新生成的送货单号为
+                     </span>
+                     <span>【SHD456332】</span>
+                   </div>
+                   <div class="modal-center-info">
+                     您可以继续生成新的送货单
+                   </div>
+                </div>
+                <div class="evaluate-modal-bottom">
+                    <div class="evaluate-modal-btn">
+                        <div class="cancel-left" @click.stop="createDeliveryOrderModalShowCancelEvent">
+                            <span>取消</span>
+                        </div>
+                        <div class="submit-right" @click.stop="createDeliveryOrderModalShowSubmitEvent">
+                            <span>生成</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </van-dialog>
     </div>
   </div>
 </template>
@@ -88,6 +120,7 @@ export default {
       loadingShow: false,
       overlayShow: false,
       allChooseProductPrice: 0,
+      createDeliveryOrderModalShow: false,
       chooseMaterialList: [
           {
             productName: '洗手液',
@@ -153,7 +186,7 @@ export default {
     ...mapMutations([]),
 
     onClickLeft () {
-        this.$router.push({path: '/suppliesOrderList'})
+      this.$router.push({path: '/suppliesOrderList'})
     },
 
     // 求和函数(计算所有添加产品总价格)
@@ -162,7 +195,7 @@ export default {
             return item.quantity > 0
         });
         this.allChooseProductPrice = targetMsg.reduce((accumulator, currentValue) => {
-            return accumulator + currentValue.totalPrice
+            return accumulator + currentValue.quantity
         }, 0);
     },
 
@@ -175,20 +208,32 @@ export default {
 
     // 产品步进器change事件
     productNumberBoxChange(item,index,val) {
-        if (val['value'] == 0) {
-            this.chooseMaterialList.splice(index,1);
+        if (val === 0) {
+          this.chooseMaterialList.splice(index,1);
         };
-        item['showTotalPrice'] = this.formatPrice(item['unitPrice'] * val['value']);
-        item['totalPrice'] = item['unitPrice'] * val['value'];
-        item['quantity'] = val['value'];
+        item['quantity'] = val;
         this.reduceTotal();
     },
 
+    // 确定生成送货单弹框取消事件
+    createDeliveryOrderModalShowCancelEvent () {
+      this.createDeliveryOrderModalShow = false;
+    },
+
+    // 确定生成送货单弹框确定事件
+    createDeliveryOrderModalShowSubmitEvent () {
+      this.createDeliveryOrderModalShow = false;
+    },
+
     // 退出事件
-    quitEvent() {},
+    quitEvent() {
+      this.$router.push({path: '/suppliesOrderList'});
+    },
 
     // 提交事件
-    submitEvent() {}
+    submitEvent() {
+      this.createDeliveryOrderModalShow = true;
+    }
   }
 };
 </script>
@@ -199,11 +244,7 @@ export default {
 .page-box {
   .content-wrapper();
   .nav {
-    position: fixed;
     width: 100%;
-    top: 0;
-    z-index: 10;
-    left: 0;
     background: #3B9DF9;
     /deep/ .van-nav-bar {
         background: transparent !important;
@@ -222,6 +263,97 @@ export default {
         }
     }
   };
+   .create-delivery-order-modal {
+      /deep/ .van-dialog {
+          border-top-left-radius: 4px !important;
+          border-top-right-radius: 4px !important;
+          border-bottom-left-radius: 4px !important;
+          border-bottom-right-radius: 4px !important;
+          .van-dialog__content {
+              .evaluate-model-content {
+                  width: 100%;
+                  .evaluate-modal-top {
+                      height: 37px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 0 10px;
+                      box-sizing: border-box;
+                      background: #F6F9FB;
+                      >span {
+                          font-size: 14px;
+                          color: #101010;
+                      }
+                  };
+                  .evaluate-modal-center {
+                      padding: 20px 40px;
+                      box-sizing: border-box;
+                     .modal-center-title {
+                       text-align: center;
+                       font-size: 14px;
+                       color: #101010;
+                     };
+                     .modal-center-content {
+                       margin: 20px 0;
+                       word-break: break-all;
+                       >span {
+                        font-size: 14px;
+                        color: #989999;
+                        &:nth-child(2) {
+                          margin-left: 4px;
+                          color: red;
+                        }
+                       }
+                     };
+                     .modal-center-info {
+                       word-break: break-all;
+                       font-size: 14px;
+                       color: #989999;
+                     }
+                  };
+                  .evaluate-modal-bottom {
+                      padding: 15px 70px;
+                      box-sizing: border-box;
+                      display: flex;
+                      align-items: center;
+                      .evaluate-modal-btn {
+                          width: 100%;
+                          display: flex;
+                          align-items: center;
+                          justify-content: space-between;
+                          .cancel-left {
+                              width: 74px;
+                              height: 28px;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              border: 1px solid #BBBBBB;
+                              box-sizing: border-box;
+                              border-radius: 5px;
+                              >span {
+                                  font-size: 12px;
+                                  color: #BBBBBB;
+                              }
+                          };
+                          .submit-right {
+                              width: 74px;
+                              height: 28px;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              background: #3B9DF9;
+                              border-radius: 5px;
+                              >span {
+                                  font-size: 12px;
+                                  color: #fff
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  };
   /deep/ .van-loading {
     z-index: 1000000
   };  
@@ -232,13 +364,12 @@ export default {
     position: relative;
     .content-box {
         flex: 1;
-        margin-top: 50px;
         box-sizing: border-box;
         background: #fff;
         display: flex;
         flex-direction: column;
         padding:  0 6px;
-        .content-top {
+      .content-top {
 			 height: 40px;
 			 padding: 0 4px;
 			 box-sizing: border-box;
@@ -260,17 +391,12 @@ export default {
 			 background: #F0F2FE;
 			 overflow: auto;
 			 position: relative;
-			 .empty-info {
-                width: 100px;
-                height: 120px;
-                position: absolute;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                margin: auto;
-                z-index: 100;
-			 };
+      /deep/ .van-empty {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%)
+      };
 			 .product-list {
 				 padding: 10px 4px;
 				 box-sizing: border-box;
@@ -289,7 +415,7 @@ export default {
 					 .no-wrap;
 					 .product-name {
 						 .no-wrap;
-						 margin-bottom: 4px;
+						 margin-bottom: 10px;
 						 >span {
 							 width: 100%;
 							 display: inline-block;
@@ -302,18 +428,9 @@ export default {
 						 display: flex;
 						 .no-wrap;
 						 .product-specification-left {
-							 margin-right: 10px;
 							 >span {
 								 font-size: 12px;
 								 color: #777575;
-							 }
-						 };
-						 .product-specification-right {
-							 flex: 1;
-							 .no-wrap;
-							 >span {
-								 font-size: 12px;
-								 color: #F44E23;
 							 }
 						 }
 					 }
@@ -322,22 +439,21 @@ export default {
 					 display: flex;
 					 flex-direction: column;
 					 justify-content: center;
-					 width: 130px;
+					 width: 180px;
 					 .product-number-box {
 						 margin-bottom: 4px;
+             display: flex;
+             justify-content: flex-end;
 						 /deep/ .van-stepper{
-                             width: 100%;
-                             display: flex;
+                width: 70%;
+                display: flex;
 							 .van-stepper__minus {
 								 background: transparent !important;
-								 .u-icon {
-									 .u-icon__icon {
-										 color: #3B9DF9 !important;
-										 font-size: 18px !important;
-										 line-height: 18px !important;
-									 }
-								 }
 							 };
+               .van-stepper__minus::before {
+                 background: #3B9DF9 !important;
+                 height: 2px;
+               };
 							 .van-stepper__input {
 								 border-radius: 5px;
 								 height: 25px !important;
@@ -349,22 +465,40 @@ export default {
 							 };
 							 .van-stepper__plus {
 								background: transparent !important;
-								.u-icon {
-									.u-icon__icon {
-										 color: #3B9DF9 !important;
-										 font-size: 18px !important;
-										 line-height: 18px !important;
-									}
-								}
-							 }
+							 };
+               .van-stepper__plus::before {
+                 background: #3B9DF9 !important;
+                 height: 2px;
+               };
+               .van-stepper__plus::after {
+                 background: #3B9DF9 !important;
+                 width: 2px;
+               };
 						 }
 					 };
 					 .product-total-price {
-						 text-align: center;
-						 >span {
-							 font-size: 12px;
-							 color: #F44E23;
-						 }
+             display: flex;
+             align-items: center;
+             .total-demand {
+               flex: 1;
+               >span {
+                font-size: 10px;
+                color: #777575;
+                &:nth-child(1) {
+                  margin-right: 4px;
+                }
+               }
+             };
+             .surplus-demand {
+               flex: 1;
+                >span {
+                font-size: 10px;
+                color: #777575;
+                &:nth-child(1) {
+                  margin-right: 4px;
+                }
+               }
+             }
 					 }
 				 }
 			 }
@@ -379,7 +513,7 @@ export default {
 			 .total-prices-right {
 				>span {
 				 font-size: 14px;
-				 color: #E86F50;
+				 color: #3B9DF9;
 				 &:nth-child(1) {
 					 margin-right: 4px;
 				 }

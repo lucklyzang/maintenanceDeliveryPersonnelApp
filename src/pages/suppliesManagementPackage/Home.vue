@@ -98,6 +98,10 @@
 					{
 						text: '盘点',
 						url: require('@/common/images/home/supplies-stock-tacking-icon.png')
+					},
+                    {
+						text: '评价',
+						url: require('@/common/images/home/supplies-evaluate-icon.png')
 					}
 				],
                 defaultPersonPng: require("@/common/images/home/equipment-patrol-default-person.png"),
@@ -183,6 +187,8 @@
             functionalZoneEvent (item, index) {
                 if (item.text == '订单') {
                     this.$router.push({path: '/suppliesOrderList'})
+                } else if(item.text == '送货') {
+                    this.$router.push({path: '/suppliesDeliverGoodsList'})
                 }
             }
         }
@@ -339,6 +345,7 @@
                     flex-direction: column;
                     justify-content: center;
                     align-items: center;
+                    margin-bottom: 20px;
                     .list-top {
                         width: 50px;
                         height: 50px;

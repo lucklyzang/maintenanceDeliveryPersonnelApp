@@ -3,7 +3,7 @@
     <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">加载中...</van-loading>
     <van-overlay :show="overlayShow" z-index="100000" />
     <div class="nav">
-        <van-nav-bar title="订单" left-text="返回" left-arrow @click-left="onClickLeft" @click-right="onClickRight"  :border="false">
+        <van-nav-bar title="送货" left-text="返回" left-arrow @click-left="onClickLeft" @click-right="onClickRight"  :border="false">
             <template #right>
                 <van-icon name="underway-o" size="18" color="#fff" />
                 <span class="history-span">历史</span>
@@ -82,6 +82,16 @@
 								<span>{{ item.deliveryAddress }}</span>
 							</div>
 						</div>
+                        <div class="create-delivery-date delivery-address">
+                            <div class="create-delivery-date-left">
+								<span>科室电话:</span>
+								<span>{{ item.deliveryAddress }}</span>
+							</div>
+							<div class="create-delivery-date-left">
+								<span>关联订单:</span>
+								<span>{{ item.deliveryAddress }}</span>
+							</div>
+						</div>
 						<div class="product-list remark-box">
 							<span>备注:</span>
 							<span>{{ item.remark }}</span>
@@ -89,17 +99,17 @@
 					</div>
 					<div class="order-list-bottom">
 						<div class="order-list-btn">
-							<div class="delete-left" @click.stop="revocationSureEvent(item,index)">
-								<span>撤销确认</span>
+							<div class="delete-left" @click.stop="revocationDeliverGoodsEvent(item,index)">
+								<span>撤销送货</span>
 							</div>
-							<div class="delete-left" v-if="false" @click.stop="refuseEvent(item,index)">
-								<span>拒绝订单</span>
+							<div class="delete-left" v-if="false" @click.stop="cancelDeliverOrderEvent(item,index)">
+								<span>取消送货单</span>
 							</div>
-							<div class="edit-right" @click.stop="createDeliveryOrderEvent(item,index)">
-								<span>生成送货单</span>
+							<div class="edit-right" v-if="false" @click.stop="deliverGoodsEvent(item,index)">
+								<span>送货</span>
 							</div>
-							<div class="edit-right" v-if="false" @click.stop="sureEvent(item,index)">
-								<span>确认订单</span>
+							<div class="edit-other" @click.stop="deliveryEvent(item,index)">
+								<span>送达</span>
 							</div>
 						</div>
 					</div>
@@ -107,23 +117,50 @@
 			</div>
         </div>
     </div>
-    <!-- 拒绝弹框	 -->
-    <div class="refuse-modal">
-        <van-dialog v-model="refuseModalShow" :showConfirmButton="false">
+    <!-- 送货弹框 -->
+    <div class="deliver-goods-modal">
+        <van-dialog v-model="deliverGoodsModalShow" :showConfirmButton="false">
             <div class="evaluate-model-content">
                 <div class="evaluate-modal-top">
-                    <span>拒绝订单</span>
-                    <van-icon name="cross" color="#101010" size="20" @click="refuseModalShow = false" />
+                    <span>送货</span>
+                    <van-icon name="cross" color="#101010" size="20" @click="deliverGoodsModalShow = false" />
                 </div>
                 <div class="evaluate-modal-center">
-                    <div class="evaluate-box">
+                    <div class="evaluate-box delivery-person">
                         <div class="evaluate-span">
                             <span>*</span>
-                            <span>拒绝理由:</span>
+                            <span>配送人:</span>
+                        </div>
+                        <div class="evaluate-content" @click="deliveryPersonShow = !deliveryPersonShow">
+                            <div>
+                                <span class="delivery-person-content">{{ currentdeliveryPerson }}</span>
+						        <van-icon :name="deliveryPersonShow ? 'arrow-down' : 'arrow-up'" color="#101010" size="16" />
+                            </div>
+                           <div class="delivery-person-list-box" v-if="deliveryPersonShow">
+                                <div class="delivery-person-list" v-for="(item,index) in deliveryPersonList" @click.stop="deliveryPersonListEvent(item,index)" :key="index">
+                                    <span :class="{'deliveryPersonspanStyle': index == currentDeliveryPersonIndex }">{{ item }}</span>
+                                </div>
+					        </div>
+                        </div>
+                    </div>
+                    <div class="evaluate-box contact-information">
+                        <div class="evaluate-span">
+                            <span>联系方式:</span>
                         </div>
                         <div class="evaluate-content">
                             <van-field
-                                v-model="refuseReasonValue"
+                                v-model="contactInformationValue"
+                                placeholder="请输入"
+                            />
+                        </div>
+                    </div>
+                    <div class="evaluate-box">
+                        <div class="evaluate-span">
+                            <span>备注:</span>
+                        </div>
+                        <div class="evaluate-content">
+                            <van-field
+                                v-model="deliverGoodsValue"
                                 type="textarea"
                                 placeholder="请输入"
                             />
@@ -132,10 +169,10 @@
                 </div>
                 <div class="evaluate-modal-bottom">
                     <div class="evaluate-modal-btn">
-                        <div class="cancel-left" @click.stop="refuseModalCancelEvent">
+                        <div class="cancel-left" @click.stop="deliverGoodsModalCancelEvent">
                             <span>取消</span>
                         </div>
-                        <div class="submit-right" @click.stop="refuseModalSubmitEvent">
+                        <div class="submit-right" @click.stop="deliverGoodsModalSubmitEvent">
                             <span>提交</span>
                         </div>
                     </div>
@@ -143,17 +180,19 @@
             </div>
         </van-dialog>
     </div>
-      <!-- 撤销确认送货单弹框	 -->
+      <!-- 撤销送货单弹框	 -->
     <div class="revocation-delivery-order-modal">
         <van-dialog v-model="revocationDeliveryOrderModalShow" :showConfirmButton="false">
             <div class="evaluate-model-content">
                 <div class="evaluate-modal-top">
-                    <span>撤销确认</span>
+                    <span>撤销送货</span>
                     <van-icon name="cross" color="#101010" size="20" @click="revocationDeliveryOrderModalShow = false" />
                 </div>
                 <div class="evaluate-modal-center">
                   <img :src="revocationInfoImage"  />
-                  <div class="modal-center-content">请再次确认是否要撤销确认订单？</div>
+                  <div class="modal-center-content">
+                    请再次确认是否要撤销该<br>【6533366113】送货单？
+                  </div>
                 </div>
                 <div class="evaluate-modal-bottom">
                     <div class="evaluate-modal-btn">
@@ -189,9 +228,11 @@ export default {
       loadingShow: false,
       overlayShow: false,
       backlogEmptyShow: false,
-      refuseModalShow: false,
+      deliverGoodsModalShow: false,
       showCalendar: false,
       revocationDeliveryOrderModalShow: false,
+      currentdeliveryPerson: '请选择',
+      deliveryPersonShow: false,
       revocationInfoImage: require('@/common/images/home/revocation-info-icon.png'),
       defaultDateArr: [],
       startDate: '',
@@ -201,7 +242,15 @@ export default {
       currentStatusspan: '全部状态',
       currentStatusIndex: 0,
       orderStatusListShow: false,
-      refuseReasonValue: '',
+      deliverGoodsValue: '',
+      contactInformationValue: '',
+      deliveryPersonList: [
+            '全部状态',
+            '待确认',
+            '待审核',
+            '已审核'
+      ],
+      currentDeliveryPersonIndex: 0,
       orderStatusList: [
         '全部状态',
         '待确认',
@@ -210,7 +259,7 @@ export default {
       ],
       orderList: [
             {
-                orderType: '计划订单',
+                orderType: '送货单号',
                 orderNumber: '5552H5552',
                 status: 0,
                 productList: 'XXX、XXX、XXXX',
@@ -220,7 +269,7 @@ export default {
                 remark: '一周一送'
             },
             {
-                orderType: '计划订单',
+                orderType: '送货单号',
                 orderNumber: '5552H5552',
                 status: 1,
                 productList: 'XXX、XXX、XXXX',
@@ -230,19 +279,9 @@ export default {
                 remark: '一周一送'
             },
             {
-                orderType: '计划订单',
+                orderType: '送货单号',
                 orderNumber: '5552H5552',
                 status: 2,
-                productList: 'XXX、XXX、XXXX',
-                createTime: '05-31 17:21',
-                deliveryDate: '05-31',
-                deliveryAddress: '检验科',
-                remark: '一周一送'
-            },
-            {
-                orderType: '计划订单',
-                orderNumber: '5552H5552',
-                status: 3,
                 productList: 'XXX、XXX、XXXX',
                 createTime: '05-31 17:21',
                 deliveryDate: '05-31',
@@ -309,6 +348,13 @@ export default {
     onClickRight () {
     },
 
+    // 配送人列表点击事件
+    deliveryPersonListEvent(item,index) {
+        this.currentdeliveryPerson = item;
+        this.currentDeliveryPersonIndex = index;
+        this.deliveryPersonShow = false;
+    },
+
     // 订单状态点击事件
     statusListEvent(item,index) {
         this.currentStatusspan = item;
@@ -349,7 +395,7 @@ export default {
         } 
     },
 
-    // 撤销生成送货单确认弹框取消事件
+    // 撤销送货单确认弹框取消事件
     revocationDeliveryOrderModalShowCancelEvent () {
       this.revocationDeliveryOrderModalShow = false;
     },
@@ -359,14 +405,14 @@ export default {
       this.revocationDeliveryOrderModalShow = false
     },
 
-    // 拒绝弹框取消事件
-    refuseModalCancelEvent () {
-        this.refuseModalShow = false
+    // 送货弹框取消事件
+    deliverGoodsModalCancelEvent () {
+        this.deliverGoodsModalShow = false
     },
     
-    // 拒绝弹提交事件
-    refuseModalSubmitEvent () {
-        this.refuseModalShow = false
+    // 送货弹框提交事件
+    deliverGoodsModalSubmitEvent () {
+        this.deliverGoodsModalShow = false
     },
     
     // 进入历史订单事件
@@ -417,29 +463,29 @@ export default {
         this.orderStatusListShow = false;
     },
     
-    //进入订单详情事件
+    //进入送货单详情事件
     enterOrderDetailsEvent(item,index) {
-        this.$router.push('/suppliesOrderDetails')
+        this.$router.push('/suppliesDeliverGoodsDetails')
     },
     
-    // 撤销确认订单事件
-    revocationSureEvent(item,index) {
+    // 撤销送货事件
+    revocationDeliverGoodsEvent(item,index) {
         this.revocationDeliveryOrderModalShow = true;
     },
     
-    // 生成送货单事件
-    createDeliveryOrderEvent(item,index) {
-        this.$router.push('/suppliesCreateDeliveryOrder')
+    // 送货事件
+    deliverGoodsEvent(item,index) {
+        this.deliverGoodsModalShow = true;
     },
 
-    // 拒绝订单事件
-    refuseEvent(item,index) {
-      this.refuseModalShow = true 
+    // 取消送货单事件
+    cancelDeliverOrderEvent(item,index) {
+      this.revocationDeliveryOrderModalShow = true 
     },
 
-    // 确认订单事件
-    sureEvent(item,index) {
-
+    // 送达事件
+    deliveryEvent(item,index) {
+        this.$router.push('/suppliesDelivery')
     },
 
     // 获取订单列表
@@ -495,7 +541,7 @@ export default {
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
   .content-wrapper();
-   .refuse-modal {
+   .deliver-goods-modal {
         /deep/ .van-dialog {
             border-top-left-radius: 4px !important;
             border-top-right-radius: 4px !important;
@@ -520,17 +566,86 @@ export default {
                     .evaluate-modal-center {
                         padding: 10px 40px;
                         box-sizing: border-box;
+                        .delivery-person {
+                            .evaluate-span {
+                                >span {
+                                    &:nth-child(1) {
+                                        color: red
+                                    }
+                                }
+                            };
+                            .evaluate-content {
+                                height: 30px;
+                                border: 1px solid #BBBBBB;
+                                border-radius: 3px;
+                                padding: 0 4px;
+                                position: relative;
+                                >div {
+                                    width: 100%;
+                                    &:nth-child(1) {
+                                        height: 30px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: space-between;
+                                         >span {
+                                            margin-right: 4px;
+                                            font-size: 14px;
+                                            color: #BBBBBB;
+                                        }
+                                    }
+                                };
+                                .delivery-person-list-box {
+                                    width: 100%;
+                                    background: #fff;
+                                    position: absolute;
+                                    left: 0;
+                                    top: 34px;
+                                    max-height: 160px;
+                                    overflow: auto;
+                                    z-index: 100;
+                                    .delivery-person-list {
+                                        height: 20px;
+                                        width: 100%;
+                                        display: flex;
+                                        align-items: center;
+                                        >span {
+                                            display: inline-block;
+                                            height: 20px;
+                                            width: 70px;
+                                            font-size: 12px;
+                                            color: #101010
+                                        };
+                                        .deliveryPersonspanStyle {
+                                            color: #3B9DF9 !important;
+                                        }
+                                    }
+                                }
+                            }
+                        };
+                        .contact-information {
+                            margin: 20px 0;
+                            .evaluate-content {
+                                border: none !important;
+                                display: flex;
+                                .van-cell {
+                                    padding: 4px 6px !important;
+                                    line-height: 30px !important;
+                                    height: 30px;
+                                    border: 1px solid #888888 !important;
+                                    border-radius: 3px !important;
+                                    box-sizing: border-box;
+                                }
+                            }
+                        };
                         .evaluate-box {
                             display: flex;
-                            flex-direction: column;
                             .evaluate-span {
-                                margin-bottom: 10px;
+                               width: 70px;
+                               text-align: right;
+                               margin-right: 4px;
                                 >span {
                                    font-size: 14px;
                                    color: #101010;
-                                    &:nth-child(1) {
-                                        color: red !important;
-                                    };
                                 }
                             };
                             .evaluate-content {
@@ -947,18 +1062,32 @@ export default {
                                 }
                         };
                         .edit-right {
-                                width: 65px;
-                                height: 28px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                background: #3B9DF9;
-                                border-radius: 4px;
-                                margin-right: 10px;
-                                >span {
-                                    font-size: 12px;
-                                    color: #fff
-                                }
+                            width: 65px;
+                            height: 28px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: #3B9DF9;
+                            border-radius: 4px;
+                            margin-right: 10px;
+                            >span {
+                                font-size: 12px;
+                                color: #fff
+                            }
+                        };
+                        .edit-other {
+                            width: 65px;
+                            height: 28px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: #35D897;
+                            border-radius: 4px;
+                            margin-right: 10px;
+                            >span {
+                                font-size: 12px;
+                                color: #fff
+                            }
                         }
                     }
                 }

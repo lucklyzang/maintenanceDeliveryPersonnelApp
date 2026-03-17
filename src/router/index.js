@@ -203,7 +203,13 @@ const SuppliesOrderList= () =>
 const SuppliesOrderDetails= () =>
     import ('@/pages/suppliesManagementPackage/orderForm/OrderDetails')
 const SuppliesCreateDeliveryOrder= () =>
-    import ('@/pages/suppliesManagementPackage/orderForm/createDeliveryOrder')                                  
+    import ('@/pages/suppliesManagementPackage/orderForm/createDeliveryOrder')
+const SuppliesDeliverGoodsList= () =>
+    import ('@/pages/suppliesManagementPackage/deliverGoods/deliverGoodsList')
+const SuppliesDeliverGoodsDetails= () =>
+    import ('@/pages/suppliesManagementPackage/deliverGoods/deliverGoodsDetails')
+const SuppliesDelivery= () =>
+    import ('@/pages/suppliesManagementPackage/deliverGoods/delivery')                                     
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -965,6 +971,24 @@ let baseRoute = [{
     path: '/suppliesCreateDeliveryOrder',
     name: 'suppliesCreateDeliveryOrder',
     component: SuppliesCreateDeliveryOrder,
+    meta: { index: 5 }
+  },
+  {
+    path: '/suppliesDeliverGoodsList',
+    name: 'suppliesDeliverGoodsList',
+    component: SuppliesDeliverGoodsList,
+    meta: { index: 4 }
+  },
+  {
+    path: '/suppliesDeliverGoodsDetails',
+    name: 'suppliesDeliverGoodsDetails',
+    component: SuppliesDeliverGoodsDetails,
+    meta: { index: 5 }
+  },
+  {
+    path: '/suppliesDelivery',
+    name: 'suppliesDelivery',
+    component: SuppliesDelivery,
     meta: { index: 5 }
   }
 ];
