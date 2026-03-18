@@ -9,17 +9,11 @@
     <div class="content">
         <div class="content-box">
             <div class="order-details-top">
-                <div class="order-type">
-                    <span>计划订单</span>
-                    <span>552342432</span>
-                </div>
-                <div class="order-status">
-                    <span>{{ stateTransfer(2) }}</span>
-                </div>
+               <van-divider dashed :style="{ color: '#EB7D61', borderColor: '#EB7D61', padding: '0 16px' }">退货</van-divider>
             </div>
             <div class="order-details-title">
 				<div class="content-top-left">
-					<span>产品清单</span>
+					<span>退货清单</span>
 				</div>
 			</div>
 			<div class="order-details-center">
@@ -153,6 +147,17 @@
                 </div>
                 <div class="delivery-time-content">2025-02-03 16:00</div>
             </div>
+            <div class="dashed-box"></div>
+            <div class="changing-refunding-message">
+                <div class="changing-refunding-reason">
+                    <span>退换原因:</span>
+                    <span>下错单了</span>
+                </div>
+                <div class="changing-refunding-date">
+                    <span>退货时间:</span>
+                    <span>2025-02-03 18:00</span>
+                </div>
+            </div>
         </div>
     </div>
   </div>
@@ -200,7 +205,7 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn('/suppliesDeliverGoodsList');
+    this.deviceReturn('/suppliesChangingOrRefundingList');
   },
 
   beforeRouteEnter(to, from, next) {
@@ -238,7 +243,7 @@ export default {
     ...mapMutations([]),
 
     onClickLeft () {
-        this.$router.push({path: '/suppliesDeliverGoodsList'})
+        this.$router.push({path: '/suppliesChangingOrRefundingList'})
     },
 
     //任务状态转换
@@ -329,55 +334,10 @@ export default {
             display: flex;
             height: 50px;
             align-items: center;
-            justify-content: space-between;
             padding: 0 12px;
             box-sizing: border-box;
-            .order-type {
-                flex: 1;
-                margin-right: 10px;
-                .no-wrap();
-                >span {
-                    font-size: 16px;
-                    color: #3B9DF9;
-                }
-            };
-            .order-status {
-                display: flex;
-                height: 40px;
-                align-items: center;
-                justify-content: center;
-                width: 67px;
-                height: 25px;
-                background: rgba(232,203,81,0.16);
-                border-radius: 4px;
-                >span {
-                    font-size: 14px;
-                    color: #E8CB51;
-                }
-            };
-            .noStartStyle {
-            background: #BBBBBB !important
-            };
-            .underwayStyle {
-            background: #289E8E !important
-            };
-            .completeStyle {
-            background: #242424 !important
-            };
-            .redivStyle {
-            background: #F2A15F !important
-            };
-            .haveRedivStyle {
-            background: #9B7D31 !important
-            };
-            .waitRedivStyle {
-            background: orange !important
-            };
-            .cancelStyle {
-            background: #E8CB51 !important
-            };
-            .completeStyle {
-            background: #101010 !important
+            /deep/ .van-divider {
+                width: 100%;
             }
         };
         .order-details-title {
@@ -631,7 +591,7 @@ export default {
         };
         .delivery-time-message {
             display: flex;
-            margin-top: 16px;
+            margin: 16px 0;
             padding: 0 6px;
             box-sizing: border-box;
             .delivery-time-title {
@@ -644,6 +604,37 @@ export default {
                 color: #000000;
                 flex: 1;
                 .no-wrap();
+            }
+        };
+        .changing-refunding-message {
+            margin-top: 16px;
+            padding: 0 6px;
+            box-sizing: border-box;
+            .changing-refunding-reason {
+                display: flex;
+                >span {
+                    font-size: 12px;
+                    color: #9C9C9C;
+                    &:nth-child(2) {
+                      margin-left: 6px;  
+                     flex: 1;
+                     word-break: break-all;
+                    } 
+                }
+            };
+            .changing-refunding-date {
+                margin-top: 20px;
+                display: flex;
+                >span {
+                    font-size: 12px;
+                    color: #9C9C9C;
+                    &:nth-child(2) {
+                      margin-left: 6px;    
+                     color: #000000 !important; 
+                     flex: 1;
+                     word-break: break-all;
+                    } 
+                }
             }
         }
     }

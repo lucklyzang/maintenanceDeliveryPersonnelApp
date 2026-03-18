@@ -200,16 +200,28 @@ const SuppliesHome = () =>
     import ('@/pages/suppliesManagementPackage/Home') 
 const SuppliesOrderList= () =>
     import ('@/pages/suppliesManagementPackage/orderForm/orderList')
+const SuppliesHistoryOrderList= () =>
+    import ('@/pages/suppliesManagementPackage/orderForm/historyOrderList')
 const SuppliesOrderDetails= () =>
     import ('@/pages/suppliesManagementPackage/orderForm/OrderDetails')
 const SuppliesCreateDeliveryOrder= () =>
     import ('@/pages/suppliesManagementPackage/orderForm/createDeliveryOrder')
 const SuppliesDeliverGoodsList= () =>
     import ('@/pages/suppliesManagementPackage/deliverGoods/deliverGoodsList')
+const SuppliesDeliverHistoryGoodsList= () =>
+    import ('@/pages/suppliesManagementPackage/deliverGoods/deliverHistoryGoodsList')
 const SuppliesDeliverGoodsDetails= () =>
     import ('@/pages/suppliesManagementPackage/deliverGoods/deliverGoodsDetails')
 const SuppliesDelivery= () =>
-    import ('@/pages/suppliesManagementPackage/deliverGoods/delivery')                                     
+    import ('@/pages/suppliesManagementPackage/deliverGoods/delivery')
+const SuppliesChangingOrRefundingList= () =>
+    import ('@/pages/suppliesManagementPackage/changingOrRefundingGoods/changingOrRefundingList')
+const SuppliesChangingOrRefundingDetails= () =>
+    import ('@/pages/suppliesManagementPackage/changingOrRefundingGoods/changingOrRefundingDetails')
+const SuppliesMyEvaluate= () =>
+    import ('@/pages/suppliesManagementPackage/myEvaluate/myEvaluate')
+const SuppliesTakeStock= () =>
+    import ('@/pages/suppliesManagementPackage/takeStock/takeStock')                                           
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -962,6 +974,12 @@ let baseRoute = [{
     meta: { index: 4 }
   },
   {
+    path: '/suppliesHistoryOrderList',
+    name: 'suppliesHistoryOrderList',
+    component: SuppliesHistoryOrderList,
+    meta: { index: 5 }
+  },
+  {
     path: '/suppliesOrderDetails',
     name: 'suppliesOrderDetails',
     component: SuppliesOrderDetails,
@@ -980,6 +998,12 @@ let baseRoute = [{
     meta: { index: 4 }
   },
   {
+    path: '/suppliesDeliverHistoryGoodsList',
+    name: 'suppliesDeliverHistoryGoodsList',
+    component: SuppliesDeliverHistoryGoodsList,
+    meta: { index: 5 }
+  },
+  {
     path: '/suppliesDeliverGoodsDetails',
     name: 'suppliesDeliverGoodsDetails',
     component: SuppliesDeliverGoodsDetails,
@@ -990,6 +1014,30 @@ let baseRoute = [{
     name: 'suppliesDelivery',
     component: SuppliesDelivery,
     meta: { index: 5 }
+  },
+  {
+    path: '/suppliesChangingOrRefundingList',
+    name: 'suppliesChangingOrRefundingList',
+    component: SuppliesChangingOrRefundingList,
+    meta: { index: 4 }
+  },
+  {
+    path: '/suppliesChangingOrRefundingDetails',
+    name: 'suppliesChangingOrRefundingDetails',
+    component: SuppliesChangingOrRefundingDetails,
+    meta: { index: 5 }
+  },
+  {
+    path: '/suppliesMyEvaluate',
+    name: 'suppliesMyEvaluate',
+    component: SuppliesMyEvaluate,
+    meta: { index: 4 }
+  },
+  {
+    path: '/suppliesTakeStock',
+    name: 'suppliesTakeStock',
+    component: SuppliesTakeStock,
+    meta: { index: 4 }
   }
 ];
 let router = new Router({

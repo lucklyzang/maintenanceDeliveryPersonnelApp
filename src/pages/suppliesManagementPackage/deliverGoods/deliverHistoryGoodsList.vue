@@ -3,7 +3,7 @@
     <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">加载中...</van-loading>
     <van-overlay :show="overlayShow" z-index="100000" />
     <div class="nav">
-        <van-nav-bar title="订单" left-text="返回" left-arrow @click-left="onClickLeft" @click-right="enterHistoryOrderEvent"  :border="false">
+        <van-nav-bar title="历史" left-text="返回" left-arrow @click-left="onClickLeft" :border="false">
             <template #right>
                 <van-icon name="underway-o" size="18" color="#fff" />
                 <span class="history-span">历史</span>
@@ -13,17 +13,6 @@
     <div class="content">
         <div class="content-box">
           <div class="status-date-box">
-				<div class="status-box">
-					<div class="status-span" @click="orderStatusListShow = !orderStatusListShow">
-						<span>{{ currentStatusspan }}</span>
-						<van-icon :name="orderStatusListShow ? 'arrow-down' : 'arrow-up'" color="#101010" size="16" />
-					</div>
-					<div class="status-list-box" v-if="orderStatusListShow">
-						<div class="status-list" v-for="(item,index) in orderStatusList" @click="statusListEvent(item,index)" :key="index">
-							<span :class="{'statusspanStyle': index == currentStatusIndex }">{{ item }}</span>
-						</div>
-					</div>
-				</div>
 				<div class="data-box">
 					<div class="date-span">
 						<span>日期:</span>
@@ -82,91 +71,24 @@
 								<span>{{ item.deliveryAddress }}</span>
 							</div>
 						</div>
+                        <div class="create-delivery-date delivery-address">
+                            <div class="create-delivery-date-left">
+								<span>科室电话:</span>
+								<span>{{ item.deliveryAddress }}</span>
+							</div>
+							<div class="create-delivery-date-left">
+								<span>关联订单:</span>
+								<span>{{ item.deliveryAddress }}</span>
+							</div>
+						</div>
 						<div class="product-list remark-box">
 							<span>备注:</span>
 							<span>{{ item.remark }}</span>
 						</div>
 					</div>
-					<div class="order-list-bottom">
-						<div class="order-list-btn">
-							<div class="delete-left" @click.stop="revocationSureEvent(item,index)">
-								<span>撤销确认</span>
-							</div>
-							<div class="delete-left" v-if="false" @click.stop="refuseEvent(item,index)">
-								<span>拒绝订单</span>
-							</div>
-							<div class="edit-right" @click.stop="createDeliveryOrderEvent(item,index)">
-								<span>生成送货单</span>
-							</div>
-							<div class="edit-right" v-if="false" @click.stop="sureEvent(item,index)">
-								<span>确认订单</span>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
         </div>
-    </div>
-    <!-- 拒绝弹框	 -->
-    <div class="refuse-modal">
-        <van-dialog v-model="refuseModalShow" :showConfirmButton="false">
-            <div class="evaluate-model-content">
-                <div class="evaluate-modal-top">
-                    <span>拒绝订单</span>
-                    <van-icon name="cross" color="#101010" size="20" @click="refuseModalShow = false" />
-                </div>
-                <div class="evaluate-modal-center">
-                    <div class="evaluate-box">
-                        <div class="evaluate-span">
-                            <span>*</span>
-                            <span>拒绝理由:</span>
-                        </div>
-                        <div class="evaluate-content">
-                            <van-field
-                                v-model="refuseReasonValue"
-                                type="textarea"
-                                placeholder="请输入"
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div class="evaluate-modal-bottom">
-                    <div class="evaluate-modal-btn">
-                        <div class="cancel-left" @click.stop="refuseModalCancelEvent">
-                            <span>取消</span>
-                        </div>
-                        <div class="submit-right" @click.stop="refuseModalSubmitEvent">
-                            <span>提交</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </van-dialog>
-    </div>
-      <!-- 撤销确认送货单弹框	 -->
-    <div class="revocation-delivery-order-modal">
-        <van-dialog v-model="revocationDeliveryOrderModalShow" :showConfirmButton="false">
-            <div class="evaluate-model-content">
-                <div class="evaluate-modal-top">
-                    <span>撤销确认</span>
-                    <van-icon name="cross" color="#101010" size="20" @click="revocationDeliveryOrderModalShow = false" />
-                </div>
-                <div class="evaluate-modal-center">
-                  <img :src="revocationInfoImage"  />
-                  <div class="modal-center-content">请再次确认是否要撤销确认订单？</div>
-                </div>
-                <div class="evaluate-modal-bottom">
-                    <div class="evaluate-modal-btn">
-                        <div class="cancel-left" @click.stop="revocationDeliveryOrderModalShowCancelEvent">
-                            <span>取消</span>
-                        </div>
-                        <div class="submit-right" @click.stop="revocationDeliveryOrderModalShowSureEvent">
-                            <span>确定</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </van-dialog>
     </div>
     <!-- 日历 --> 
     <van-calendar v-model="showCalendar" :min-date="minDate" :max-date="maxDate" :default-date="defaultDateArr" type="range" @confirm="calendarConfirm" />
@@ -189,29 +111,15 @@ export default {
       loadingShow: false,
       overlayShow: false,
       backlogEmptyShow: false,
-      refuseModalShow: false,
       showCalendar: false,
-      revocationDeliveryOrderModalShow: false,
-      revocationInfoImage: require('@/common/images/home/revocation-info-icon.png'),
-      sourcePath: '',
       defaultDateArr: [],
       startDate: '',
       endDate: '',
       minDate: new Date('2026-03-16'),
       maxDate: new Date('2027-03-16'),
-      currentStatusspan: '全部状态',
-      currentStatusIndex: 0,
-      orderStatusListShow: false,
-      refuseReasonValue: '',
-      orderStatusList: [
-        '全部状态',
-        '待确认',
-        '待审核',
-        '已审核'
-      ],
       orderList: [
             {
-                orderType: '计划订单',
+                orderType: '送货单号',
                 orderNumber: '5552H5552',
                 status: 0,
                 productList: 'XXX、XXX、XXXX',
@@ -221,7 +129,7 @@ export default {
                 remark: '一周一送'
             },
             {
-                orderType: '计划订单',
+                orderType: '送货单号',
                 orderNumber: '5552H5552',
                 status: 1,
                 productList: 'XXX、XXX、XXXX',
@@ -231,19 +139,9 @@ export default {
                 remark: '一周一送'
             },
             {
-                orderType: '计划订单',
+                orderType: '送货单号',
                 orderNumber: '5552H5552',
                 status: 2,
-                productList: 'XXX、XXX、XXXX',
-                createTime: '05-31 17:21',
-                deliveryDate: '05-31',
-                deliveryAddress: '检验科',
-                remark: '一周一送'
-            },
-            {
-                orderType: '计划订单',
-                orderNumber: '5552H5552',
-                status: 3,
                 productList: 'XXX、XXX、XXXX',
                 createTime: '05-31 17:21',
                 deliveryDate: '05-31',
@@ -256,14 +154,11 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn('/suppliesHome');
+    this.deviceReturn('/suppliesDeliverGoodsList');
     this.getDateRange();
   },
 
   beforeRouteEnter(to, from, next) {
-    next(vm=>{
-        vm.sourcePath = from.path
-    });
     next() 
   },
 
@@ -298,11 +193,7 @@ export default {
     ...mapMutations([]),
 
     onClickLeft () {
-        this.$router.push({path: '/suppliesHome'})
-    },
-
-    enterHistoryOrderEvent () {
-        this.$router.push({path: '/suppliesHistoryOrderList'})
+        this.$router.push({path: '/suppliesDeliverGoodsList'})
     },
 
     //任务状态转换
@@ -336,31 +227,6 @@ export default {
                         return '复核中'
                         break
         } 
-    },
-
-    // 撤销生成送货单确认弹框取消事件
-    revocationDeliveryOrderModalShowCancelEvent () {
-      this.revocationDeliveryOrderModalShow = false;
-    },
-
-    // 撤销生成送货单确认弹框确认事件
-    revocationDeliveryOrderModalShowSureEvent () {
-      this.revocationDeliveryOrderModalShow = false
-    },
-
-    // 拒绝弹框取消事件
-    refuseModalCancelEvent () {
-        this.refuseModalShow = false
-    },
-    
-    // 拒绝弹提交事件
-    refuseModalSubmitEvent () {
-        this.refuseModalShow = false
-    },
-    
-    // 进入历史订单事件
-    enterHistoryOrderEvent () {
-        this.$router.push({path: '/suppliesHistoryOrderList'})
     },
     
     // 日历日期选择确认事件
@@ -397,36 +263,9 @@ export default {
         return `${y}-${m}-${d}`;
     },
     
-    // 订单列表点击事件
-    statusListEvent(item,index) {
-        this.currentStatusspan = item;
-        this.currentStatusIndex = index;
-        this.orderStatusListShow = false;
-    },
-    
-    //进入订单详情事件
+    //进入送货单详情事件
     enterOrderDetailsEvent(item,index) {
-        this.$router.push('/suppliesOrderDetails')
-    },
-    
-    // 撤销确认订单事件
-    revocationSureEvent(item,index) {
-        this.revocationDeliveryOrderModalShow = true;
-    },
-    
-    // 生成送货单事件
-    createDeliveryOrderEvent(item,index) {
-        this.$router.push('/suppliesCreateDeliveryOrder')
-    },
-
-    // 拒绝订单事件
-    refuseEvent(item,index) {
-      this.refuseModalShow = true 
-    },
-
-    // 确认订单事件
-    sureEvent(item,index) {
-
+        this.$router.push('/suppliesDeliverGoodsDetails')
     },
 
     // 获取订单列表
@@ -482,178 +321,6 @@ export default {
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
   .content-wrapper();
-   .refuse-modal {
-        /deep/ .van-dialog {
-            border-top-left-radius: 4px !important;
-            border-top-right-radius: 4px !important;
-            border-bottom-left-radius: 4px !important;
-            border-bottom-right-radius: 4px !important;
-            .van-dialog__content {
-                .evaluate-model-content {
-                    width: 100%;
-                    .evaluate-modal-top {
-                        height: 37px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        padding: 0 10px;
-                        box-sizing: border-box;
-                        background: #F6F9FB;
-                        >span {
-                            font-size: 14px;
-                            color: #101010;
-                        }
-                    };
-                    .evaluate-modal-center {
-                        padding: 10px 40px;
-                        box-sizing: border-box;
-                        .evaluate-box {
-                            display: flex;
-                            flex-direction: column;
-                            .evaluate-span {
-                                margin-bottom: 10px;
-                                >span {
-                                   font-size: 14px;
-                                   color: #101010;
-                                    &:nth-child(1) {
-                                        color: red !important;
-                                    };
-                                }
-                            };
-                            .evaluate-content {
-                                flex: 1;
-                                border: 1px solid #888888;
-                                .van-cell {
-                                    padding: 6px !important;
-                                }
-                            }
-                        }
-                    };
-                    .evaluate-modal-bottom {
-                        padding: 15px 70px;
-                        box-sizing: border-box;
-                        display: flex;
-                        align-items: center;
-                        .evaluate-modal-btn {
-                            width: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            .cancel-left {
-                                width: 74px;
-                                height: 28px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                border: 1px solid #BBBBBB;
-                                box-sizing: border-box;
-                                border-radius: 5px;
-                                >span {
-                                    font-size: 12px;
-                                    color: #BBBBBB;
-                                }
-                            };
-                            .submit-right {
-                                width: 74px;
-                                height: 28px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                background: #3B9DF9;
-                                border-radius: 5px;
-                                >span {
-                                    font-size: 12px;
-                                    color: #fff
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    };
-    .revocation-delivery-order-modal {
-      /deep/ .van-dialog {
-          border-top-left-radius: 4px !important;
-          border-top-right-radius: 4px !important;
-          border-bottom-left-radius: 4px !important;
-          border-bottom-right-radius: 4px !important;
-          .van-dialog__content {
-              .evaluate-model-content {
-                  width: 100%;
-                  .evaluate-modal-top {
-                      height: 37px;
-                      display: flex;
-                      align-items: center;
-                      justify-content: space-between;
-                      padding: 0 10px;
-                      box-sizing: border-box;
-                      background: #F6F9FB;
-                      >span {
-                          font-size: 14px;
-                          color: #101010;
-                      }
-                  };
-                  .evaluate-modal-center {
-                      padding: 20px 40px;
-                      box-sizing: border-box;
-                      display: flex;
-                      flex-direction: column;
-                      justify-content: center;
-                      align-items: center;
-                      >img {
-                        width: 70px;
-                        height: 70px;
-                      };
-                     .modal-center-content {
-                       margin-top: 20px;
-                       font-size: 14px;
-                       color: #101010;
-                     }
-                  };
-                  .evaluate-modal-bottom {
-                      padding: 15px 70px;
-                      box-sizing: border-box;
-                      display: flex;
-                      align-items: center;
-                      .evaluate-modal-btn {
-                          width: 100%;
-                          display: flex;
-                          align-items: center;
-                          justify-content: space-between;
-                          .cancel-left {
-                              width: 74px;
-                              height: 28px;
-                              display: flex;
-                              align-items: center;
-                              justify-content: center;
-                              border: 1px solid #BBBBBB;
-                              box-sizing: border-box;
-                              border-radius: 5px;
-                              >span {
-                                  font-size: 12px;
-                                  color: #BBBBBB;
-                              }
-                          };
-                          .submit-right {
-                              width: 74px;
-                              height: 28px;
-                              display: flex;
-                              align-items: center;
-                              justify-content: center;
-                              background: #3B9DF9;
-                              border-radius: 5px;
-                              >span {
-                                  font-size: 12px;
-                                  color: #fff
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      }
-  };
   .nav {
     width: 100%;
     background: #3B9DF9;
@@ -701,51 +368,10 @@ export default {
             align-items: center;
             justify-content: space-between;
             margin-top: 10px;
-            .status-box {
-                width: 70px;
-                margin-right: 20px;
-                position: relative;
-                .status-span {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    >span {
-                        margin-right: 4px;
-                        font-size: 12px;
-                        color: #101010
-                    }
-                };
-                .status-list-box {
-                    width: 70px;
-                    background: #fff;
-                    position: absolute;
-                    left: 0;
-                    top: 20px;
-                    max-height: 160px;
-                    overflow: auto;
-                    .status-list {
-                        height: 20px;
-                        width: 70px;
-                        display: flex;
-                        align-items: center;
-                        >span {
-                            display: inline-block;
-                            height: 20px;
-                            width: 70px;
-                            font-size: 12px;
-                            color: #101010
-                        };
-                        .statusspanStyle {
-                            color: #7BE9A0 !important;
-                        }
-                    }
-                }
-            };
             .data-box {
-                width: 0;
+                width: 70%;
                 display: flex;
                 align-items: center;
-                flex: 1;
                 .date-span {
                     font-size: 12px;
                     color: #101010;
@@ -805,11 +431,11 @@ export default {
                         justify-content: center;
                         width: 67px;
                         height: 25px;
-                        background: rgba(232,203,81,0.16);
+                        background:#9EA1B6;
                         border-radius: 4px;
                         >span {
                             font-size: 14px;
-                            color: #E8CB51;
+                            color: #101010;
                         }
                     };
                     .noStartStyle {
@@ -908,44 +534,6 @@ export default {
                             &:nth-child(2) {
                                 color: #9E9E9A !important;
                             }
-                        }
-                    }
-                };
-                .order-list-bottom {
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                    .order-list-btn {
-                        display: flex;
-                        align-items: center;
-                        .delete-left {
-                                width: 65px;
-                                height: 28px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                border: 1px solid #E86F50;
-                                box-sizing: border-box;
-                                border-radius: 4px;
-                                margin-right: 10px;
-                                >span {
-                                    font-size: 12px;
-                                    color: #E86F50
-                                }
-                        };
-                        .edit-right {
-                                width: 65px;
-                                height: 28px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                background: #3B9DF9;
-                                border-radius: 4px;
-                                margin-right: 10px;
-                                >span {
-                                    font-size: 12px;
-                                    color: #fff
-                                }
                         }
                     }
                 }

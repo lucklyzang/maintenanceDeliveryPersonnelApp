@@ -189,7 +189,13 @@
                     this.$router.push({path: '/suppliesOrderList'})
                 } else if(item.text == '送货') {
                     this.$router.push({path: '/suppliesDeliverGoodsList'})
-                }
+                } else if(item.text == '退换货') {
+                    this.$router.push({path: '/suppliesChangingOrRefundingList'})
+                } else if(item.text == '评价') {
+                    this.$router.push({path: '/suppliesMyEvaluate'})
+                } else if(item.text == '盘点') {
+                    this.$router.push({path: '/suppliesTakeStock'})
+                } 
             }
         }
     }
