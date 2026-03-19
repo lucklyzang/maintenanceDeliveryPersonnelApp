@@ -221,7 +221,13 @@ const SuppliesChangingOrRefundingDetails= () =>
 const SuppliesMyEvaluate= () =>
     import ('@/pages/suppliesManagementPackage/myEvaluate/myEvaluate')
 const SuppliesTakeStock= () =>
-    import ('@/pages/suppliesManagementPackage/takeStock/takeStock')                                           
+    import ('@/pages/suppliesManagementPackage/takeStock/takeStock')
+const SuppliesTakeStockRecord= () =>
+    import ('@/pages/suppliesManagementPackage/takeStock/takeStockRecord')
+const SuppliesTakeStockRecordDetails= () =>
+    import ('@/pages/suppliesManagementPackage/takeStock/takeStockRecordDetails')
+const SuppliesEditTakeStock= () =>
+    import ('@/pages/suppliesManagementPackage/takeStock/editTakeStock')                                                
 Vue.use(Router)
 let baseRoute = [{
         path: '/',
@@ -1038,7 +1044,25 @@ let baseRoute = [{
     name: 'suppliesTakeStock',
     component: SuppliesTakeStock,
     meta: { index: 4 }
-  }
+  },
+  {
+    path: '/suppliesTakeStockRecord',
+    name: 'suppliesTakeStockRecord',
+    component: SuppliesTakeStockRecord,
+    meta: { index: 5 }
+  },
+  {
+    path: '/suppliesTakeStockRecordDetails',
+    name: 'suppliesTakeStockRecordDetails',
+    component: SuppliesTakeStockRecordDetails,
+    meta: { index: 6 }
+  },
+  {
+    path: '/suppliesEditTakeStock',
+    name: 'suppliesEditTakeStock',
+    component: SuppliesEditTakeStock,
+    meta: { index: 6 }
+  },
 ];
 let router = new Router({
     routes: baseRoute,

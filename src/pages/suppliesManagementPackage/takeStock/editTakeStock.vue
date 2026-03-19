@@ -3,10 +3,7 @@
     <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">加载中...</van-loading>
     <van-overlay :show="overlayShow" z-index="100000" />
     <div class="nav">
-        <van-nav-bar title="盘点" left-text="返回" left-arrow @click-left="onClickLeft" @click-right="enterTakeStockRecordEvent" :border="false">
-            <template #right>
-                <span class="history-span">盘点记录</span>
-            </template>
+        <van-nav-bar title="盘点编辑" left-text="返回" left-arrow @click-left="onClickLeft" :border="false">
         </van-nav-bar>
     </div>
     <div class="content">
@@ -199,7 +196,7 @@ export default {
 
   mounted() {
     // 控制设备物理返回按键
-    this.deviceReturn('/suppliesHome');
+    this.deviceReturn('/suppliesTakeStockRecord');
   },
 
   beforeRouteEnter(to, from, next) {
@@ -237,12 +234,7 @@ export default {
     ...mapMutations([]),
 
     onClickLeft () {
-      this.$router.push({path: '/suppliesHome'})
-    },
-
-    // 进入盘点记录事件
-    enterTakeStockRecordEvent () {
-       this.$router.push({path: '/suppliesTakeStockRecord'})
+      this.$router.push({path: '/suppliesTakeStockRecord'})
     },
 
     // 库房下拉框点击事件
