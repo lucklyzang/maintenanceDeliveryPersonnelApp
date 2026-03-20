@@ -27,13 +27,13 @@
               <div class="take-stock-warehouse-text">
                 盘点库房:
               </div>
-              <div class="take-stock-warehouse-content"  @click="warehouseListShow = !warehouseListShow">
+              <div class="take-stock-warehouse-content" ref="myElement" @click="warehouseListShow = !warehouseListShow">
                 <div class="warehouse-message">
                   <span>{{ currentWarehouseName }}</span>
 						      <van-icon :name="warehouseListShow ? 'arrow-down' : 'arrow-up'" color="#101010" size="16" />
                 </div>
                 <div class="warehouse-list-box" v-if="warehouseListShow">
-                  <div class="warehouse-list" v-for="(item,index) in warehouseList" @click="warehouseListtEvent(item,index)" :key="index">
+                  <div class="warehouse-list" v-for="(item,index) in warehouseList" @click.stop="warehouseListtEvent(item,index)" :key="index">
                     <span :class="{'warehouseSpanStyle': index == currentWarehouseIndex }">{{ item }}</span>
                   </div>
                 </div>
@@ -171,7 +171,7 @@ import {getAllTaskList} from '@/api/securityPatrol/escortManagement.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 import SOtime from '@/common/js/SOtime.js'
 export default {
-  name: "PatrolTasklist",
+  name: "suppliesTakeStock",
   components: {
     NavBar
   },
@@ -200,6 +200,13 @@ export default {
   mounted() {
     // 控制设备物理返回按键
     this.deviceReturn('/suppliesHome');
+    const el = this.$refs.myElement;
+    //点击库房区域以外的地方时，库房列表收起
+		document.addEventListener('click', (event) => {
+			if (el && !el.contains(event.target)){
+				this.warehouseListShow = false;
+			}
+		}, false)
   },
 
   beforeRouteEnter(to, from, next) {
@@ -562,7 +569,7 @@ export default {
                 }
               };
               .warehouse-list-box {
-                width: 70px;
+                width: 120px;
                 background: #fff;
                 position: absolute;
                 left: 0;
@@ -570,14 +577,11 @@ export default {
                 max-height: 160px;
                 overflow: auto;
                 .warehouse-list {
-                  height: 20px;
-                  width: 70px;
+                  height: 30px;
                   display: flex;
                   align-items: center;
+                  justify-content: center;
                   >span {
-                    display: inline-block;
-                    height: 20px;
-                    width: 70px;
                     font-size: 12px;
                     color: #101010
                   };

@@ -90,7 +90,7 @@ import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 import ElectronicSignature from '@/components/ElectronicSignature'
 import { compress, base64ImgtoFile } from "@/common/js/utils";
 export default {
-  name: "PatrolTasklist",
+  name: "suppliesDelivery",
   components: {
     NavBar,
     ElectronicSignature

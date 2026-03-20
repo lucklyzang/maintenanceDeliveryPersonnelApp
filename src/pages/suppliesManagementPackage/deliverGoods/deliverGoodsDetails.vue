@@ -162,7 +162,7 @@ import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 export default {
-  name: "PatrolTasklist",
+  name: "suppliesDeliverGoodsDetails",
   components: {
     NavBar
   },

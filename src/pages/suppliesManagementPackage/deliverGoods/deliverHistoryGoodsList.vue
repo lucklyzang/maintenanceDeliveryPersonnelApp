@@ -101,7 +101,7 @@ import {getAllTaskList} from '@/api/securityPatrol/escortManagement.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 import SOtime from '@/common/js/SOtime.js'
 export default {
-  name: "PatrolTasklist",
+  name: "suppliesDeliverHistoryGoodsList",
   components: {
     NavBar
   },

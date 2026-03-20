@@ -58,7 +58,7 @@
         mapMutations
     } from 'vuex'
     export default {
-        name: 'EquipmentPatrolHome',
+        name: 'suppliesHome',
         components: {
             HeaderTop
         },
