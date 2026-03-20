@@ -699,15 +699,24 @@
               this.storeId = this.inventoryMsgList[0]['storeId'];
               this.systemId = this.inventoryMsgList[0]['systemId'];
             } else {
+              this.toolShow = false;
               this.$dialog.alert({
                 message: '没有查询到对应的物料信息',
                 closeOnPopstate: true
               }).then(() => {
               })
             }
+          } else {
+             this.toolShow = false;
+             this.$dialog.alert({
+                message: res.data.msg,
+                closeOnPopstate: true
+              }).then(() => {
+              })
           }
         })
         .catch((err) => {
+          this.toolShow = false;
           this.$dialog.alert({
             message: `${err.message}`,
             closeOnPopstate: true
