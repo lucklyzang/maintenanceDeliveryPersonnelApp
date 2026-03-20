@@ -13,7 +13,7 @@
     <div class="content">
         <div class="content-box">
           <div class="status-date-box">
-				<div class="status-box">
+				<div class="status-box" ref="myElement">
 					<div class="status-span" @click="orderStatusListShow = !orderStatusListShow">
 						<span>{{ currentStatusspan }}</span>
 						<van-icon :name="orderStatusListShow ? 'arrow-down' : 'arrow-up'" color="#101010" size="16" />
@@ -258,6 +258,13 @@ export default {
     // 控制设备物理返回按键
     this.deviceReturn('/suppliesHome');
     this.getDateRange();
+    const el = this.$refs.myElement;
+    //点击状态栏区域以外的地方时，库房列表收起
+    document.addEventListener('click', (event) => {
+        if (el && !el.contains(event.target)){
+            this.orderStatusListShow = false;
+        }
+    }, false)
   },
 
   beforeRouteEnter(to, from, next) {
@@ -724,19 +731,16 @@ export default {
                     max-height: 160px;
                     overflow: auto;
                     .status-list {
-                        height: 20px;
+                        height: 30px;
                         width: 70px;
                         display: flex;
                         align-items: center;
                         >span {
-                            display: inline-block;
-                            height: 20px;
-                            width: 70px;
                             font-size: 12px;
                             color: #101010
                         };
                         .statusspanStyle {
-                            color: #7BE9A0 !important;
+                            color: #3B9DF9 !important;
                         }
                     }
                 }
