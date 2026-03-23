@@ -5,7 +5,7 @@ import request from '@/utils/request'
 // 获取巡更任务列表
 export function getPatrolTaskDetailsList(data) {
     return request({
-        url: 'nblink/patrol/checkTask/deviceDetails4App',
+        url: 'patrol/checkTask/deviceDetails4App',
         method: 'get',
         params: data
     })
@@ -14,7 +14,7 @@ export function getPatrolTaskDetailsList(data) {
 // 重置日历
 export function resetPatrolTaskCalendarData (data) {
     return request({
-        url: 'nblink/patrol/checkTask/deviceCalendar4App',
+        url: 'patrol/checkTask/deviceCalendar4App',
         method: 'get',
         params: data
     })
@@ -23,7 +23,7 @@ export function resetPatrolTaskCalendarData (data) {
 // 设备巡检打卡
 export function patrolTaskPunchCard(data) {
     return request({
-        url: 'nblink/patrol/checkTask/device/app/clockIn',
+        url: 'patrol/checkTask/device/app/clockIn',
         method: 'put',
         data
     })
@@ -32,7 +32,7 @@ export function patrolTaskPunchCard(data) {
 // 检查项通过
 export function checkItemPass(data) {
     return request({
-        url: 'nblink/patrol/checkResult/check/2Yes',
+        url: 'patrol/checkResult/check/2Yes',
         method: 'put',
         data
     })
@@ -41,7 +41,7 @@ export function checkItemPass(data) {
 // 检查项不通过
 export function checkItemNoPass(data) {
     return request({
-        url: 'nblink/patrol/checkResult/check/2No',
+        url: 'patrol/checkResult/check/2No',
         method: 'put',
         data
     })
@@ -50,7 +50,7 @@ export function checkItemNoPass(data) {
 // 提交检查项
 export function submitCheckItem(data) {
     return request({
-        url: 'nblink/patrol/checkResult/device/app/batchSubmit',
+        url: 'patrol/checkResult/device/app/batchSubmit',
         method: 'put',
         data
     })
@@ -59,7 +59,7 @@ export function submitCheckItem(data) {
 // 提交异常信息记录
 export function saveDeviceAbnormalRecord(data) {
     return request({
-        url: 'nblink/patrol/eventregister/device/save',
+        url: 'patrol/eventregister/device/save',
         method: 'post',
         data
     })
@@ -68,7 +68,7 @@ export function saveDeviceAbnormalRecord(data) {
 // 异常信息记录删除
 export function deleteDeviceAbnormalRecord(id) {
     return request({
-        url: `nblink/patrol/eventregister/device/${id}`,
+        url: `patrol/eventregister/device/${id}`,
         method: 'delete'
     })
 }
@@ -76,7 +76,7 @@ export function deleteDeviceAbnormalRecord(id) {
 // 上传问题工单
 export function problemWorkOrderUpload(data) {
     return request({
-        url: 'nblink/patrol/problemTask/problem',
+        url: 'patrol/problemTask/problem',
         method: 'post',
         data
     })
@@ -86,7 +86,7 @@ export function problemWorkOrderUpload(data) {
 // 本次任务问题工单
 export function getCurrentTaskProblemWorkerOrder(taskId) {
     return request({
-        url: `nblink/patrol/problemTask/app/current/${taskId}`,
+        url: `patrol/problemTask/app/current/${taskId}`,
         method: 'get'
     })
 }
@@ -94,7 +94,7 @@ export function getCurrentTaskProblemWorkerOrder(taskId) {
 // 所有任务问题工单
 export function getAllTaskProblemWorkerOrder(data) {
     return request({
-        url: 'nblink/patrol/problemTask/app/all',
+        url: 'patrol/problemTask/app/all',
         method: 'get',
         params: data
     })
@@ -103,7 +103,7 @@ export function getAllTaskProblemWorkerOrder(data) {
 // 查询任务问题工单详情
 export function getTaskProblemWorkerOrderDetails(data) {
     return request({
-        url: 'nblink/patrol/problemTask/app/one',
+        url: 'patrol/problemTask/app/one',
         method: 'get',
         params: data
     })
@@ -112,7 +112,7 @@ export function getTaskProblemWorkerOrderDetails(data) {
 // 任务完成
 export function taskComplete(data) {
     return request({
-        url: 'nblink/patrol/checkTask/app/confirm',
+        url: 'patrol/checkTask/app/confirm',
         method: 'put',
         data
     })
@@ -121,7 +121,7 @@ export function taskComplete(data) {
 // 根据检查项ID判断该检查项下是否有注册事件
 export function getIsHaveEventRegister(proId,system,resultId) {
     return request({
-        url: `nblink/patrol/checkResult/isHaveEventRegister/${proId}/${system}/${resultId}`,
+        url: `patrol/checkResult/isHaveEventRegister/${proId}/${system}/${resultId}`,
         method: 'get'
     })
 }
@@ -132,7 +132,7 @@ export function getIsHaveEventRegister(proId,system,resultId) {
 // 设备列表查询
 export function getdevicesList(data) {
     return request({
-        url: 'nblink/patrol/device/initAllByPage',
+        url: 'patrol/device/initAllByPage',
         method: 'get',
         params: data
     })
@@ -141,7 +141,7 @@ export function getdevicesList(data) {
 // 设备操作记录添加
 export function addDeviceOperateRecord(data) {
     return request({
-        url: 'nblink/patrol/deviceOperateRecord/',
+        url: 'patrol/deviceOperateRecord/',
         method: 'post',
         data
     })
@@ -150,7 +150,7 @@ export function addDeviceOperateRecord(data) {
 // 设备操作记录添加
 export function getDeviceOperateRecordList(data) {
     return request({
-        url: 'nblink/patrol/deviceOperateRecord/list',
+        url: 'patrol/deviceOperateRecord/list',
         method: 'get',
         params: data
     })
