@@ -2,7 +2,7 @@ import request from '@/utils/request'
 // 用户退出登录
 export function userSignOut() {
     return request({
-      url: 'nblink/auth/logout',
+      url: 'auth/logout',
       method: 'post'
     })
 };
@@ -10,7 +10,7 @@ export function userSignOut() {
 // 账号密码登录
 export function logIn(data) {
 	return request({
-	    url: 'nblink/auth/login',
+	    url: 'auth/login',
 	    method: 'post',
 	    data
 	})
@@ -20,7 +20,7 @@ export function logIn(data) {
 // 查询医院信息
 export function getHospitalMessage(proId) {
 	return request({
-	    url: `nblink/hospital/hospitalAreaQueryById/${proId}`,
+	    url: `hospital/hospitalAreaQueryById/${proId}`,
 	    method: 'get'
 	})
 }
@@ -28,7 +28,7 @@ export function getHospitalMessage(proId) {
 // 获取阿里云签名接口
 export function getAliyunSign() {
 	return request({
-	    url: 'nblink/patrol/oss/getSign',
+	    url: 'patrol/oss/getSign',
 	    method: 'get'
 	})
 }

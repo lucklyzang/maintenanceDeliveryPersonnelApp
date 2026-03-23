@@ -5,7 +5,7 @@ import request from '@/utils/request'
 // 获取巡更任务列表
 export function getAllTaskList(data) {
     return request({
-        url: 'nblink/patrol/checkTask/app/page',
+        url: 'patrol/checkTask/app/page',
         method: 'get',
         params: data
     })
@@ -14,7 +14,7 @@ export function getAllTaskList(data) {
 // 获取任务详情
 export function getTaskDetails(taskId) {
     return request({
-        url: `nblink/patrol/checkTask/app/detail/one/${taskId}`,
+        url: `patrol/checkTask/app/detail/one/${taskId}`,
         method: 'get'
     })
 }
@@ -22,7 +22,7 @@ export function getTaskDetails(taskId) {
 // 打卡科室(手动打卡)
 export function clockingsSection(data) {
     return request({
-        url: 'nblink/patrol/checkTask/app/punch',
+        url: 'patrol/checkTask/app/punch',
         method: 'put',
         data
     })
@@ -31,7 +31,7 @@ export function clockingsSection(data) {
 // 打卡科室(蓝牙打卡)
 export function bluetoothPunchSection(id,data) {
     return request({
-        url: `nblink/patrol/checkTask/position/${id}`,
+        url: `patrol/checkTask/position/${id}`,
         method: 'get',
         params: data
     })
@@ -40,7 +40,7 @@ export function bluetoothPunchSection(id,data) {
 // 已完成打卡的科室点击
 export function departmentClockFinsh(data) {
     return request({
-        url: 'nblink/patrol/checkTask/app/hasSpace/itemsDetail',
+        url: 'patrol/checkTask/app/hasSpace/itemsDetail',
         method: 'get',
         params: data
     })
@@ -49,7 +49,7 @@ export function departmentClockFinsh(data) {
 // 检查项通过
 export function checkItemPass(data) {
     return request({
-        url: 'nblink/patrol/checkResult/check/2Yes',
+        url: 'patrol/checkResult/check/2Yes',
         method: 'put',
         data
     })
@@ -58,7 +58,7 @@ export function checkItemPass(data) {
 // 检查项不通过
 export function checkItemNoPass(data) {
     return request({
-        url: 'nblink/patrol/checkResult/check/2No',
+        url: 'patrol/checkResult/check/2No',
         method: 'put',
         data
     })
@@ -67,7 +67,7 @@ export function checkItemNoPass(data) {
 // 提交检查项
 export function submitCheckItem(data) {
     return request({
-        url: 'nblink/patrol/checkResult/check/confirm',
+        url: 'patrol/checkResult/check/confirm',
         method: 'put',
         data
     })
@@ -76,7 +76,7 @@ export function submitCheckItem(data) {
 // 上传问题工单
 export function problemWorkOrderUpload(data) {
     return request({
-        url: 'nblink/patrol/problemTask/problem',
+        url: 'patrol/problemTask/problem',
         method: 'post',
         data
     })
@@ -86,7 +86,7 @@ export function problemWorkOrderUpload(data) {
 // 本次任务问题工单
 export function getCurrentTaskProblemWorkerOrder(taskId) {
     return request({
-        url: `nblink/patrol/problemTask/app/current/${taskId}`,
+        url: `patrol/problemTask/app/current/${taskId}`,
         method: 'get'
     })
 }
@@ -94,7 +94,7 @@ export function getCurrentTaskProblemWorkerOrder(taskId) {
 // 所有任务问题工单
 export function getAllTaskProblemWorkerOrder(data) {
     return request({
-        url: 'nblink/patrol/problemTask/app/all',
+        url: 'patrol/problemTask/app/all',
         method: 'get',
         params: data
     })
@@ -103,7 +103,7 @@ export function getAllTaskProblemWorkerOrder(data) {
 // 查询任务问题工单详情
 export function getTaskProblemWorkerOrderDetails(data) {
     return request({
-        url: 'nblink/patrol/problemTask/app/one',
+        url: 'patrol/problemTask/app/one',
         method: 'get',
         params: data
     })
@@ -112,7 +112,7 @@ export function getTaskProblemWorkerOrderDetails(data) {
 // 任务完成
 export function taskComplete(data) {
     return request({
-        url: 'nblink/patrol/checkTask/app/confirm',
+        url: 'patrol/checkTask/app/confirm',
         method: 'put',
         data
     })
@@ -121,7 +121,7 @@ export function taskComplete(data) {
 // 根据检查项ID判断该检查项下是否有注册事件
 export function getIsHaveEventRegister(proId,system,resultId) {
     return request({
-        url: `nblink/patrol/checkResult/isHaveEventRegister/${proId}/${system}/${resultId}`,
+        url: `patrol/checkResult/isHaveEventRegister/${proId}/${system}/${resultId}`,
         method: 'get'
     })
 }
@@ -132,7 +132,7 @@ export function getIsHaveEventRegister(proId,system,resultId) {
 // 获取事件列表
 export function getEventList(data) {
     return request({
-        url: 'nblink/patrol/eventregister/listForApp',
+        url: 'patrol/eventregister/listForApp',
         method: 'get',
         params: data
     })
@@ -141,7 +141,7 @@ export function getEventList(data) {
 // 获取事件详情
 export function getEventDetails(id) {
     return request({
-        url: `nblink/patrol/eventregister/${id}`,
+        url: `patrol/eventregister/${id}`,
         method: 'get'
     })
 }
@@ -149,7 +149,7 @@ export function getEventDetails(id) {
 // 登记事件
 export function eventregister(data) {
     return request({
-        url: 'nblink/patrol/eventregister/',
+        url: 'patrol/eventregister/',
         method: 'post',
         data
     })
@@ -158,7 +158,7 @@ export function eventregister(data) {
 // 拾金不昧交接
 export function eventHandover(data) {
     return request({
-        url: 'nblink/patrol/eventregister/handover',
+        url: 'patrol/eventregister/handover',
         method: 'put',
         data
     })
@@ -167,7 +167,7 @@ export function eventHandover(data) {
 // 拾金不昧联系
 export function eventContact(data) {
     return request({
-        url: 'nblink/patrol/eventregister/contact',
+        url: 'patrol/eventregister/contact',
         method: 'put',
         data
     })
@@ -176,7 +176,7 @@ export function eventContact(data) {
 // 拾金不昧领取
 export function eventReceive(data) {
     return request({
-        url: 'nblink/patrol/eventregister/receive',
+        url: 'patrol/eventregister/receive',
         method: 'put',
         data
     })
@@ -185,7 +185,7 @@ export function eventReceive(data) {
 // 事件删除
 export function eventDelete(id) {
     return request({
-        url: `nblink/patrol/eventregister/${id}`,
+        url: `patrol/eventregister/${id}`,
         method: 'delete'
     })
 }
@@ -193,7 +193,7 @@ export function eventDelete(id) {
 // 查询建筑信息
 export function queryStructure(proId) {
     return request({
-        url: `nblink/hospital/structures/${proId}`,
+        url: `hospital/structures/${proId}`,
         method: 'get'
     })
 };
@@ -201,7 +201,7 @@ export function queryStructure(proId) {
 // 查询科室信息
 export function queryDepartment(data) {
     return request({
-        url: 'nblink/hospital/departments',
+        url: 'hospital/departments',
         method: 'get',
         params: data
     })
@@ -210,7 +210,7 @@ export function queryDepartment(data) {
 // 查询空间信息
 export function querySpace(data) {
     return request({
-        url: 'nblink/hospital/spaces',
+        url: 'hospital/spaces',
         method: 'get',
         params: data
     })
@@ -219,7 +219,7 @@ export function querySpace(data) {
 // 查询登记用户
 export function queryRegisterUser(data) {
     return request({
-        url: 'nblink/patrol/eventregister/queryRegisterUser',
+        url: 'patrol/eventregister/queryRegisterUser',
         method: 'get',
         params: data
     })
@@ -231,7 +231,7 @@ export function queryRegisterUser(data) {
 // 留言查询
 export function queryGuestBook(data) {
     return request({
-        url: 'nblink/patrol/guestBook/initAllByPage',
+        url: 'patrol/guestBook/initAllByPage',
         method: 'get',
         params: data
     })
@@ -240,7 +240,7 @@ export function queryGuestBook(data) {
 // 查询新留言数量
 export function queryNewCount(data) {
     return request({
-        url: 'nblink/patrol/guestBook/app/newCount',
+        url: 'patrol/guestBook/app/newCount',
         method: 'get',
         params: data
     })
@@ -249,7 +249,7 @@ export function queryNewCount(data) {
 // 留言删除
 export function guestBookDelete(id) {
     return request({
-        url: `nblink/patrol/guestBook/${id}`,
+        url: `patrol/guestBook/${id}`,
         method: 'delete'
     })
 };
@@ -257,7 +257,7 @@ export function guestBookDelete(id) {
 // 评论删除
 export function guestCommentDelete(id) {
     return request({
-        url: `nblink/patrol/guestComment/${id}`,
+        url: `patrol/guestComment/${id}`,
         method: 'delete'
     })
 };
@@ -265,7 +265,7 @@ export function guestCommentDelete(id) {
 // 评论添加
 export function guestCommentAdd(data) {
     return request({
-        url: 'nblink/patrol/guestComment/',
+        url: 'patrol/guestComment/',
         method: 'post',
         data
     })
@@ -274,7 +274,7 @@ export function guestCommentAdd(data) {
 // 留言添加
 export function guestBookAdd(data) {
     return request({
-        url: 'nblink/patrol/guestBook/',
+        url: 'patrol/guestBook/',
         method: 'post',
         data
     })
@@ -283,7 +283,7 @@ export function guestBookAdd(data) {
 // 点赞
 export function guestSupport(data) {
     return request({
-        url: 'nblink/patrol/guestSupport/',
+        url: 'patrol/guestSupport/',
         method: 'post',
         data
     })
@@ -292,7 +292,7 @@ export function guestSupport(data) {
 // 取消点赞
 export function guestCancel(id) {
     return request({
-        url: `nblink/patrol/guestSupport/${id}`,
+        url: `patrol/guestSupport/${id}`,
         method: 'delete'
     })
 };
@@ -300,7 +300,7 @@ export function guestCancel(id) {
 // 查询信标列表
 export function queryBeaconList(data) {
     return request({
-        url: 'nblink/hospital/beacon/config',
+        url: 'hospital/beacon/config',
         method: 'get',
         params: data
     })
@@ -309,7 +309,7 @@ export function queryBeaconList(data) {
 // 设置信标打开范围
 export function setBeaconConfigRange(data) {
     return request({
-        url: 'nblink/hospital/beacon/configRange',
+        url: 'hospital/beacon/configRange',
         method: 'put',
         data
     })
@@ -318,7 +318,7 @@ export function setBeaconConfigRange(data) {
 // 清空打卡点
 export function clearBeaconRange(data) {
     return request({
-        url: 'nblink/hospital/beacon/clearRange',
+        url: 'hospital/beacon/clearRange',
         method: 'delete',
         params: data
     })
@@ -327,7 +327,7 @@ export function clearBeaconRange(data) {
 // 信标打卡测试
 export function beaconTest(data) {
     return request({
-        url: 'nblink/hospital/beacon/checkInTest',
+        url: 'hospital/beacon/checkInTest',
         method: 'get',
         params: data
     })
