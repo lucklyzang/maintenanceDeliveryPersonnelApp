@@ -173,15 +173,21 @@
 						store.dispatch('resetSecurityPatrolTaskStore');
 						this.$router.push({path: "/"});
 					} else {
-            			this.modalShow = true;
-						this.modalContent = `${res.data.msg}`
+            			this.$dialog.alert({
+							message: res.data.msg,
+							closeOnPopstate: true,
+						})
+						.then(() => {})
 					};
 					this.showLoadingHint = false;
 				})
 				.catch((err) => {
 					this.showLoadingHint = false;
-          			this.modalShow = true;
-					this.modalContent = err.message
+          			this.$dialog.alert({
+						message: err,
+						closeOnPopstate: true,
+					})
+					.then(() => {})
 				})
 			}
 		}
