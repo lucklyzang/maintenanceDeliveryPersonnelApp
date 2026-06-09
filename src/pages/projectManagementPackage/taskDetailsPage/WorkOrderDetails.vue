@@ -552,7 +552,6 @@
         this.showLoadingHint = true;
         this.overlayShow = true;
         Promise.all([this.getOneRepairsProjectPhoto()]).then((values) => {
-          console.log('图片信息',values);
           this.showLoadingHint = false;
           this.overlayShow = false;
           if (values.length > 0) {
@@ -624,7 +623,6 @@
           if(res && res.data.code == 200) {
             if (res.data.data.length > 0) {
               this.consumableMsgList = [];
-              console.log('使用物料',res.data.data);
               this.consumableMsgList = res.data.data;
               this.originalConsumableMsgList = deepClone(res.data.data);
             } else {
