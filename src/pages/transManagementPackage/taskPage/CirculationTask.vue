@@ -325,7 +325,9 @@
       let catch_components = store.state.catchComponent.catch_components;
       let i = catch_components.indexOf('circulationTask');
       i === -1 && catch_components.push('circulationTask');
-      next();
+      next((el) => {
+        el.changeCatchComponent(catch_components)
+      })
     },
 
     beforeRouteLeave(to, from, next) {

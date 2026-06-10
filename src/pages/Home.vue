@@ -118,11 +118,11 @@
 					}
 				],
 				hasAuthCostManagementSystemsList: [
-					{
-						text: '物资管理',
-						value: 'supplies',
-						url: require('@/common/images/home/supplies-management-icon.png')
-					}
+					// {
+					// 	text: '物资管理',
+					// 	value: 'supplies',
+					// 	url: require('@/common/images/home/supplies-management-icon.png')
+					// }
 				]
 			}
 		},

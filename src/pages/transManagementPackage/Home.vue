@@ -1333,8 +1333,9 @@
       next(vm => {
         if (vm.isMedicalMan) {
           let catch_components = store.state.catchComponent.catch_components;
-          let i = catch_components.indexOf('home');
-          i === -1 && catch_components.push('home')
+          let i = catch_components.indexOf('TransHome');
+          i === -1 && catch_components.push('TransHome');
+          vm.changeCatchComponent(catch_components)
         }
       })
     },
