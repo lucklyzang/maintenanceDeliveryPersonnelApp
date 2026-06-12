@@ -61,7 +61,8 @@
 	import _ from 'lodash'
 	import store from '@/store'
 	import {
-		removeAllLocalStorage
+		removeAllLocalStorage,
+		setStore
 	} from '@/common/js/utils'
 	import { userSignOut } from '@/api/login.js'
 	import NavBar from "@/components/NavBar";
@@ -113,7 +114,8 @@
 		},
 		methods: {
 			...mapMutations([
-				'changeUserBasicInfo'
+				'changeUserBasicInfo',
+				'changeOverDueWay'
 			]),
 			
 			// 修改密码事件
@@ -141,6 +143,8 @@
 			userSignOutEvent () {
 				this.showLoadingHint = true;
 				this.infoText = '退出登录中...';
+				this.changeOverDueWay(true);
+        		setStore('storeOverDueWay',true);
 				userSignOut(this.proId,this.workerId).then((res) => {
 					if ( res && res.data.code == 200) {
 						// 清空store和localStorage
@@ -180,8 +184,12 @@
 						.then(() => {})
 					};
 					this.showLoadingHint = false;
+					this.changeOverDueWay(false);
+        			setStore('storeOverDueWay',false);
 				})
 				.catch((err) => {
+					this.changeOverDueWay(false);
+        			setStore('storeOverDueWay',false);
 					this.showLoadingHint = false;
           			this.$dialog.alert({
 						message: err,

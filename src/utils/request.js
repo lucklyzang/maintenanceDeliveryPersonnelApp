@@ -67,6 +67,10 @@ service.interceptors.response.use(
         if (Object.prototype.toString.call(error.response) === '[object Object]') {
             if (error.response.hasOwnProperty('status')) {
                 if (error.response.status === 401) {
+                    if(store.getters.globalTimer) {window.clearInterval(store.getters.globalTimer)};
+                    if(store.getters.projectGlobalTimer) {window.clearInterval(store.getters.projectGlobalTimer)};
+                    if(store.getters.equipmentPatrolGlobalTimer) {window.clearInterval(store.getters.equipmentPatrolGlobalTime)};
+                    if(store.getters.securityPatrolGlobalTimer) {window.clearInterval(store.getters.securityPatrolGlobalTimer)};
                     store.dispatch('resetAutoRepairTaskStore');
                     store.dispatch('resetLoginState');
                     store.dispatch('resetCleanManagementStore');
@@ -85,16 +89,11 @@ service.interceptors.response.use(
                     store.dispatch('resetTransMedicalTaskStateEvent');
                     store.dispatch('resetTransTaskSchedulingStateEvent');
                     store.dispatch('resetTransTransLoginStateEvent');
-                    store.dispatch('resetLoginState');
                     store.dispatch('resetRegisterStore');
                     store.dispatch('resetGuestbookStore');
                     store.dispatch('resetSecurityPatrolLoginState');
                     store.dispatch('resetSecurityPatrolTaskStore');
                     removeAllLocalStorage();
-                    if(store.getters.globalTimer) {window.clearInterval(store.getters.globalTimer)};
-                    if(store.getters.projectGlobalTimer) {window.clearInterval(store.getters.projectGlobalTimer)};
-                    if(store.getters.equipmentPatrolGlobalTimer) {window.clearInterval(store.getters.equipmentPatrolGlobalTime)};
-                    if(store.getters.securityPatrolGlobalTimer) {window.clearInterval(store.getters.securityPatrolGlobalTimer)};
                     if (!store.getters.overDueWay) { 
                         Toast({
                             message: 'token已过期,请重新登录',

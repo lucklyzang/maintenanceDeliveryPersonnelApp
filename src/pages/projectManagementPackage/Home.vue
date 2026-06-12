@@ -231,7 +231,11 @@
         getNewWork(proId,workerId).then((res) => {
           // token过期,清除定时器
           if (!res['headers']['token']) {
-            if(windowTimer) {window.clearInterval(windowTimer)}
+            if(windowTimer) {
+              window.clearInterval(windowTimer);
+              windowTimer = null
+            };
+            return;
           };
           if (res && res.data.code == 200) {
             this.isTimeoutContinue = true;
@@ -251,6 +255,8 @@
                 }
               }
             })
+          } else {
+            this.$toast(`${res.data.msg}`)
           }
         })
         .catch((err) => {
@@ -258,7 +264,7 @@
             message: `${err.message}`,
             closeOnPopstate: true
           }).then(() => {
-          });
+          })
         })
       },
 

@@ -1542,7 +1542,8 @@
             if(windowTimer) {
               window.clearInterval(windowTimer);
               windowTimer = null
-            }
+            };
+            return;
           };
           if (res && res.data.code == 200) {
             this.isTimeoutContinue = true;
