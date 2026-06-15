@@ -363,7 +363,7 @@ export default {
             }
           })
           .catch((err) => {
-            reject(err.message)
+            reject(err)
           })
         })
       },

@@ -637,7 +637,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           })
@@ -663,7 +663,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           })
@@ -716,7 +716,7 @@
         .catch((err) => {
           this.toolShow = false;
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           })
@@ -745,7 +745,7 @@
             }
           })
           .catch((err) => {
-            reject(err.message)
+            reject(err)
           })
         })
       },
@@ -975,7 +975,7 @@
             }
           })
           .catch((err) => {
-            reject(err.message)
+            reject(err)
           })
         })  
       },
@@ -1040,7 +1040,7 @@
           this.showLoadingHint = false;
           this.overlayShow = false;
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           })
@@ -1084,7 +1084,7 @@
               }
             })
           .catch((err) => {
-            reject(err.message)
+            reject(err)
           })
         })
       },

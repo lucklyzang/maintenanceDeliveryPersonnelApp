@@ -433,7 +433,7 @@ export default {
           this.changeOverDueWay(false);
           setStore('storeOverDueWay',false);
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });

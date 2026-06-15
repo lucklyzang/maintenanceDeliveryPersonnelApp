@@ -244,7 +244,7 @@ export default {
           this.showLoadingHint = false;
           this.isRefresh = false;
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: false
           }).then(() => {
           })

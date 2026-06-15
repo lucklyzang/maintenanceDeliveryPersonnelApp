@@ -477,7 +477,7 @@ export default {
         this.overlayShow = false;
         this.$toast({
           type: 'fail',
-          message: err.message
+          message: err
         })
       })
     },
@@ -541,7 +541,7 @@ export default {
         };
         this.$toast({
           type: 'fail',
-          message: err.message
+          message: err
         })
       })
     },
@@ -678,7 +678,7 @@ export default {
           }
         })
         .catch((err) => {
-          reject(err.message)
+          reject(err)
         })
       })
     },
@@ -693,7 +693,7 @@ export default {
           }
         })
         .catch((err) => {
-          reject(err.message)
+          reject(err)
         })
       })
     },
@@ -708,7 +708,7 @@ export default {
           }
         })
         .catch((err) => {
-          reject(err.message)
+          reject(err)
         })
       })
     },
@@ -723,7 +723,7 @@ export default {
           }
         })
         .catch((err) => {
-          reject(err.message)
+          reject(err)
         })
       })
     },
@@ -1288,7 +1288,7 @@ export default {
           this.changeOverDueWay(false);
           setStore('storeOverDueWay',false);
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });

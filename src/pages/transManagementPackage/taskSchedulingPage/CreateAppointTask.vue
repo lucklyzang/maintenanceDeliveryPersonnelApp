@@ -436,7 +436,7 @@ export default {
           }
         })
         .catch((err) => {
-          reject(err.message)
+          reject(err)
         })
       })
     },
@@ -525,7 +525,7 @@ export default {
             }
           })
           .catch((err) => {
-            reject(err.message)
+            reject(err)
           })
         })
       },
@@ -540,7 +540,7 @@ export default {
           }
         })
         .catch((err) => {
-          reject(err.message)
+          reject(err)
         })
       })
     },
@@ -555,7 +555,7 @@ export default {
           }
         })
         .catch((err) => {
-          reject(err.message)
+          reject(err)
         })
       })
     },
@@ -792,7 +792,7 @@ export default {
           this.changeOverDueWay(false);
           setStore('storeOverDueWay',false);
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });
@@ -836,7 +836,7 @@ export default {
       })
       .catch((err) => {
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         });
@@ -917,7 +917,7 @@ export default {
       })
       .catch((err) => {
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         });

@@ -231,7 +231,7 @@ export default {
       })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: false
           }).then(() => {
           })
@@ -275,7 +275,7 @@ export default {
       })
       .catch((err) => {
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: false
         }).then(() => {
         })
@@ -322,7 +322,7 @@ export default {
       })
       .catch((err) => {
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
         }).then(() => {
         })
       })

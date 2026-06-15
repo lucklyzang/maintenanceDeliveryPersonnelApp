@@ -147,7 +147,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });
@@ -190,7 +190,7 @@
           this.showLoadingHint = false;
           this.overlayShow = false;
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           })

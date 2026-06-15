@@ -692,7 +692,7 @@ export default {
         .catch((err) => {
           this.showLoadingHint = false;
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
             this.circulationTaskListShow = false;

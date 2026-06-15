@@ -269,7 +269,7 @@ export default {
         this.backTo();
         this.showLoadingHint = false
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         });

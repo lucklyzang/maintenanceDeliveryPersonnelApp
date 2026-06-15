@@ -255,7 +255,7 @@ export default {
         this.backTo();
         this.showLoadingHint = false;
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         })
@@ -290,7 +290,7 @@ export default {
         this.backTo();
         this.showLoadingHint = false;
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         })
@@ -318,7 +318,7 @@ export default {
         this.showLoadingHint = false;
         this.backTo();
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         })

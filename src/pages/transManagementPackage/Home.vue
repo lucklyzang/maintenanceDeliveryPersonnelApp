@@ -1574,7 +1574,7 @@
         .catch((err) => {
           if (err.hasOwnProperty('message')) {
             this.$dialog.alert({
-              message: `${err.message}`,
+              message: `${err}`,
               closeOnPopstate: true
             }).then(() => {
             })
@@ -1604,7 +1604,7 @@
           })
           .catch((err) => {
             this.$dialog.alert({
-              message: `${err.message}`,
+              message: `${err}`,
               closeOnPopstate: true
             }).then(() => {
             });
@@ -1711,7 +1711,7 @@
           this.changeOverDueWay(false);
           setStore('storeOverDueWay',false);
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });
@@ -1734,7 +1734,7 @@
             }
           })
           .catch((err) => {
-            reject(err.message)
+            reject(err)
           })
         })
       },
@@ -1753,7 +1753,7 @@
             }
           })
           .catch((err) => {
-            reject(err.message)
+            reject(err)
           })
         })
       },
@@ -1937,7 +1937,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });
@@ -1975,7 +1975,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });
@@ -2077,7 +2077,7 @@
 				})
 				.catch((err) => {
 				this.$dialog.alert({
-              message: `${err.message}`,
+              message: `${err}`,
               closeOnPopstate: true
             }).then(() => {
             });
@@ -2428,7 +2428,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });
@@ -2460,7 +2460,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
           });
@@ -2513,7 +2513,7 @@
           })
           .catch((err) => {
             this.noDataShow = true;
-            reject(err.message)
+            reject(err)
           })
         })
       },
@@ -2595,7 +2595,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
             this.noDataShow = true;
@@ -2659,7 +2659,7 @@
         })
         .catch((err) => {
           this.$dialog.alert({
-            message: `${err.message}`,
+            message: `${err}`,
             closeOnPopstate: true
           }).then(() => {
             this.noDataShow = true;
@@ -2714,7 +2714,7 @@
         })
           .catch((err) => {
             this.$dialog.alert({
-              message: `${err.message}`,
+              message: `${err}`,
               closeOnPopstate: true
             }).then(() => {
               this.noDataShow = true;

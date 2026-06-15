@@ -61,7 +61,7 @@ service.interceptors.response.use(
         if (response.headers['token']) {
             store.commit('changeToken', response.headers['token'])
         };
-        return response
+        return response;
     },
     (error) => {
         if (Object.prototype.toString.call(error.response) === '[object Object]') {

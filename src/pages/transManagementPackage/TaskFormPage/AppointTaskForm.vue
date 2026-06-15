@@ -183,7 +183,7 @@ export default {
       })
       .catch((err) => {
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         });

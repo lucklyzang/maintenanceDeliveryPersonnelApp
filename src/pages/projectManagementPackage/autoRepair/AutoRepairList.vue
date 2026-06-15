@@ -260,7 +260,7 @@ export default {
         };
         this.$toast({
           type: 'fail',
-          message: err.message
+          message: err
         })
       })
     },

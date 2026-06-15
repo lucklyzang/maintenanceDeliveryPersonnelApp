@@ -539,7 +539,7 @@ export default {
         this.overlayShow = false;
         this.loadingShow = false;
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         });
@@ -695,7 +695,7 @@ export default {
       })
       .catch((err) => {
         this.$dialog.alert({
-          message: `${err.message}`,
+          message: `${err}`,
           closeOnPopstate: true
         }).then(() => {
         });
