@@ -203,7 +203,7 @@
           if (echoIndex == -1) { return };
           this.currentDepartmentId = this.isCurrentDepartmentServiceVerifySweepCode[echoIndex]['number'];
           // 获取科室名称
-          this.currentDepartmentName = Dictionary(JSON.parse(getStore('departmentMessage')),this.currentDepartmentId)
+          this.currentDepartmentName = Dictionary(JSON.parse(getStore('departmentMessage')),this.departmentServiceOfficeId);
         } catch (err) {
           this.$toast(`${err}`)
         }
