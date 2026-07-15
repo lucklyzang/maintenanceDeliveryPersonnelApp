@@ -154,6 +154,8 @@ const EditSpotTask = () =>
     import ('@/pages/equipmentPatrolManagementPackage/spotTaskDispatchingManagement/EditSpotTask')
 const EquipmentList = () =>
     import ('@/pages/equipmentPatrolManagementPackage/equipmentStatusManagement/EquipmentList')
+const EquipmentPatrolScanRepairsRepairsList = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/scanRepairs/repairsList')
 // 安全巡更
 const SecurityPatrolHome = () =>
     import ('@/pages/securityPatrolManagementPackage/Home')
@@ -831,7 +833,12 @@ let baseRoute = [{
       component: EquipmentList,
       meta: { index: 4 }
   },
-
+  {
+    path: '/equipmentPatrolScanRepairsRepairsList',
+    name: 'equipmentPatrolScanRepairsRepairsList',
+    component: EquipmentPatrolScanRepairsRepairsList,
+    meta: { index: 4 }
+  },
   // 安全巡更
   {
     path: '/securityPatrolHome',

@@ -76,6 +76,31 @@
       <div class="new-increase-btn" @click="newAddRecordEvent">新增</div>
       <div class="back-btn" @click="backEvent">返回</div>
     </div>
+    <!-- 删除异常事件列表弹框	 -->
+    <div class="revocation-delivery-order-modal">
+        <van-dialog v-model="deleteOrderModalShow" :showConfirmButton="false">
+            <div class="evaluate-model-content">
+                <div class="evaluate-modal-top">
+                    <span>确定删除</span>
+                    <van-icon name="cross" color="#101010" size="20" @click="deleteOrderModalShow = false" />
+                </div>
+                <div class="evaluate-modal-center">
+                  <img :src="revocationInfoImage"  />
+                  <div class="modal-center-content">请再次确认是否要删除？</div>
+                </div>
+                <div class="evaluate-modal-bottom">
+                    <div class="evaluate-modal-btn">
+                        <div class="cancel-left" @click.stop="deleteOrderModalShowCancelEvent">
+                            <span>取消</span>
+                        </div>
+                        <div class="submit-right" @click.stop="deleteOrderModalShowSureEvent">
+                            <span>确认</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </van-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -110,6 +135,9 @@ export default {
       temporaryStorageCurrentCheckItemEventList: [],
       loadText: '加载中',
       existOnlineImgPath: [],
+      deleteOrderModalShow: false,
+      storeId: '',
+      revocationInfoImage: require('@/common/images/home/revocation-info-icon.png'),
       checkCheckboxPng: require("@/common/images/home/check-checkbox-circle.png"),
       checkboxPng: require("@/common/images/home/checkbox-circle.png"),
       closeCirclePng: require("@/common/images/home/close-circle.png"),
@@ -193,16 +221,18 @@ export default {
 
     // 删除异常记录列表事件
     deleteEventListEvent (itemValue) {
-      let temporaryPatrolTaskAbnormalRecordList = this.patrolTaskAbnormalRecordList;
-      temporaryPatrolTaskAbnormalRecordList = temporaryPatrolTaskAbnormalRecordList.filter((item) => {
-        return item.storeId != itemValue.storeId
-        // return item.storeId != itemValue.storeId &&
-        // item.showDate ==  this.devicePatrolDetailsSelectMessage.showDate && item.collect == this.devicePatrolDetailsSelectMessage.selectTaskSetId && item.selectTime == this.devicePatrolDetailsSelectMessage.selectTime &&
-        // item.taskSite == this.devicePatrolDetailsSelectMessage.taskSite && item.extendData.deviceId == this.patrolTaskDeviceChecklist.deviceId && item.extendData.checkTypeId == this.patrolTaskAbnormalCheckItemEventList.typeId && 
-        // item.extendData.checkItemId == this.patrolTaskAbnormalCheckItemEventList.itemId && item.checkResultId == this.patrolTaskAbnormalCheckItemEventList.resultId
-      });
-      this.changePatrolTaskAbnormalRecordList(temporaryPatrolTaskAbnormalRecordList);
-      this.getData()
+      this.storeId = itemValue.storeId;
+      this.deleteOrderModalShow = true;
+      // let temporaryPatrolTaskAbnormalRecordList = this.patrolTaskAbnormalRecordList;
+      // temporaryPatrolTaskAbnormalRecordList = temporaryPatrolTaskAbnormalRecordList.filter((item) => {
+      //   return item.storeId != itemValue.storeId
+      //   // return item.storeId != itemValue.storeId &&
+      //   // item.showDate ==  this.devicePatrolDetailsSelectMessage.showDate && item.collect == this.devicePatrolDetailsSelectMessage.selectTaskSetId && item.selectTime == this.devicePatrolDetailsSelectMessage.selectTime &&
+      //   // item.taskSite == this.devicePatrolDetailsSelectMessage.taskSite && item.extendData.deviceId == this.patrolTaskDeviceChecklist.deviceId && item.extendData.checkTypeId == this.patrolTaskAbnormalCheckItemEventList.typeId && 
+      //   // item.extendData.checkItemId == this.patrolTaskAbnormalCheckItemEventList.itemId && item.checkResultId == this.patrolTaskAbnormalCheckItemEventList.resultId
+      // });
+      // this.changePatrolTaskAbnormalRecordList(temporaryPatrolTaskAbnormalRecordList);
+      // this.getData()
       // this.loadingShow = true;
       // this.overlayShow = true;
       // this.loadText = '删除中';
@@ -330,6 +360,51 @@ export default {
     newAddRecordEvent () {
       this.changeEnterPatrolAbnormalRecordPageSource('/patrolAbnormalCheckItemEventList');
       this.$router.push({path: '/patrolAbnormalRecord'})
+    },
+
+    // 确定删除弹框取消事件
+    deleteOrderModalShowCancelEvent () {
+      this.deleteOrderModalShow = false;
+    },
+
+    // 确定删除弹框确认事件
+    deleteOrderModalShowSureEvent () {
+      this.deleteOrderModalShow = false;
+      let temporaryPatrolTaskAbnormalRecordList = this.patrolTaskAbnormalRecordList;
+      temporaryPatrolTaskAbnormalRecordList = temporaryPatrolTaskAbnormalRecordList.filter((item) => {
+        return item.storeId != this.storeId
+        // return item.storeId != itemValue.storeId &&
+        // item.showDate ==  this.devicePatrolDetailsSelectMessage.showDate && item.collect == this.devicePatrolDetailsSelectMessage.selectTaskSetId && item.selectTime == this.devicePatrolDetailsSelectMessage.selectTime &&
+        // item.taskSite == this.devicePatrolDetailsSelectMessage.taskSite && item.extendData.deviceId == this.patrolTaskDeviceChecklist.deviceId && item.extendData.checkTypeId == this.patrolTaskAbnormalCheckItemEventList.typeId && 
+        // item.extendData.checkItemId == this.patrolTaskAbnormalCheckItemEventList.itemId && item.checkResultId == this.patrolTaskAbnormalCheckItemEventList.resultId
+      });
+      this.changePatrolTaskAbnormalRecordList(temporaryPatrolTaskAbnormalRecordList);
+      this.getData()
+      // this.loadingShow = true;
+      // this.overlayShow = true;
+      // this.loadText = '删除中';
+      // deleteDeviceAbnormalRecord()
+      // .then((res) => {
+      //   this.loadingShow = false;
+      //   this.overlayShow = false;
+      //   this.loadText = '';
+      //   if (res && res.data.code == 200) {
+      //   } else {
+      //     this.$toast({
+      //       type: 'fail',
+      //       message: res.data.msg
+      //     })
+      //   }
+      // })
+      // .catch((err) => {
+      //   this.loadingShow = false;
+      //   this.overlayShow = false;
+      //   this.loadText = '';
+      //   this.$toast({
+      //     type: 'fail',
+      //     message: err
+      //   })
+      // })
     }
   }
 };
@@ -340,7 +415,89 @@ export default {
 @import "~@/common/stylus/modifyUi.less";
 .page-box {
   .content-wrapper();
-   .event-type-box {
+  .revocation-delivery-order-modal {
+      /deep/ .van-dialog {
+          border-top-left-radius: 4px !important;
+          border-top-right-radius: 4px !important;
+          border-bottom-left-radius: 4px !important;
+          border-bottom-right-radius: 4px !important;
+          .van-dialog__content {
+              .evaluate-model-content {
+                  width: 100%;
+                  .evaluate-modal-top {
+                      height: 37px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      padding: 0 10px;
+                      box-sizing: border-box;
+                      background: #F6F9FB;
+                      >span {
+                          font-size: 14px;
+                          color: #101010;
+                      }
+                  };
+                  .evaluate-modal-center {
+                      padding: 20px 40px;
+                      box-sizing: border-box;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;
+                      align-items: center;
+                      >img {
+                        width: 70px;
+                        height: 70px;
+                      };
+                     .modal-center-content {
+                       margin-top: 20px;
+                       font-size: 14px;
+                       color: #101010;
+                     }
+                  };
+                  .evaluate-modal-bottom {
+                      padding: 15px 70px;
+                      box-sizing: border-box;
+                      display: flex;
+                      align-items: center;
+                      .evaluate-modal-btn {
+                          width: 100%;
+                          display: flex;
+                          align-items: center;
+                          justify-content: space-between;
+                          .cancel-left {
+                              width: 74px;
+                              height: 28px;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              border: 1px solid #BBBBBB;
+                              box-sizing: border-box;
+                              border-radius: 5px;
+                              >span {
+                                  font-size: 12px;
+                                  color: #BBBBBB;
+                              }
+                          };
+                          .submit-right {
+                              width: 74px;
+                              height: 28px;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                              background: #3B9DF9;
+                              border-radius: 5px;
+                              >span {
+                                  font-size: 12px;
+                                  color: #fff
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  };
+  .event-type-box {
     /deep/ .van-dialog {
       top: auto !important;
       left: 0 !important;

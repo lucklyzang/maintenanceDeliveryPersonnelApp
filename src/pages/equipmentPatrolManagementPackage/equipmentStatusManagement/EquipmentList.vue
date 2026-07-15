@@ -8,7 +8,7 @@
     </div>
     <div class="content">
         <div class="content-top-area">
-          <img :src="statusBackgroundPng" />a
+          <img :src="statusBackgroundPng" />
         </div>
         <div class="content-box">
             <div class="content-top">

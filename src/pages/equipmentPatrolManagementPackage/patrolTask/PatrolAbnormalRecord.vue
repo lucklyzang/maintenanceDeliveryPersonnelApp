@@ -108,9 +108,13 @@
     <div class="transport-rice-box" v-if="showEquipmentStatus">
       <ScrollSelection :columns="equipmentStatusOption" title="设备状态" @sure="equipmentStatusSureEvent" @cancel="equipmentStatusCancelEvent" @close="equipmentStatusCloseEvent" />
     </div>
+     <!-- 维修人 -->
+    <div class="transport-rice-box" v-if="showMaintenancePerson">
+      <ScrollSelection :columns="maintenancePersonOption" title="维修人" @sure="maintenancePersonSureEvent" @cancel="maintenancePersonCancelEvent" @close="maintenancePersonCloseEvent" />
+    </div>
     <div class="nav">
        <van-nav-bar
-        title="异常记录"
+        title="报修"
         left-text="返回"
         :left-arrow="true"
         :placeholder="true"
@@ -137,9 +141,41 @@
               <span>{{ patrolTaskAbnormalCheckItemEventList.taskNumber }}</span>
             </div>
         </div> -->
+        <div class="basic-message">基本信息</div>
+         <div class="select-box event-type">
+          <div class="select-box-left">
+            <span>任务类型</span>
+          </div>
+          <div class="select-box-right">
+            <span>{{ patrolTaskAbnormalCheckItemEventList.typeName }}</span>
+          </div>
+        </div>
         <div class="select-box event-type">
           <div class="select-box-left">
-            <span>*</span>
+            <span>设备名称</span>
+          </div>
+          <div class="select-box-right">
+            <span>{{ patrolTaskAbnormalCheckItemEventList.typeName }}</span>
+          </div>
+        </div>
+        <div class="select-box event-type">
+          <div class="select-box-left">
+            <span>所属科室</span>
+          </div>
+          <div class="select-box-right">
+            <span>{{ patrolTaskAbnormalCheckItemEventList.typeName }}</span>
+          </div>
+        </div>
+        <div class="select-box event-type">
+          <div class="select-box-left">
+            <span>所属空间</span>
+          </div>
+          <div class="select-box-right">
+            <span>{{ patrolTaskAbnormalCheckItemEventList.typeName }}</span>
+          </div>
+        </div>
+        <div class="select-box event-type">
+          <div class="select-box-left">
             <span>检查项类型</span>
           </div>
           <div class="select-box-right">
@@ -148,14 +184,13 @@
         </div>
         <div class="select-box event-type">
           <div class="select-box-left">
-            <span>*</span>
             <span>检查项</span>
           </div>
           <div class="select-box-right">
             <span>{{ patrolTaskAbnormalCheckItemEventList.itemName }}</span>
           </div>
         </div>
-        <div class="select-box end-select-box">
+        <!-- <div class="select-box end-select-box">
           <div class="select-box-left">
             <span>*</span>
             <span>记录时间</span>
@@ -164,8 +199,8 @@
             <span>{{ getNowFormatDate(currentFindTime) }}</span>
             <van-icon name="arrow" color="#989999" size="20" />
           </div>
-        </div>
-        <div class="select-box end-select-box end-select-box-room">
+        </div> -->
+        <!-- <div class="select-box end-select-box end-select-box-room">
           <div class="select-box-left">
             <span>*</span>
             <span>异常类型</span>
@@ -174,7 +209,8 @@
             <span>{{ currentAbnormalType  }}</span>
             <van-icon name="arrow" color="#989999" size="20" />
           </div>
-        </div>
+        </div> -->
+        <div class="basic-message issue-message">问题信息</div>
         <div class="select-box end-select-box end-select-box-room">
           <div class="select-box-left">
             <span>*</span>
@@ -195,23 +231,11 @@
             <van-icon name="arrow" color="#989999" size="20" />
           </div>
         </div>
-        <div class="transport-type problem-overview">
-            <div class="transport-type-left">
-              <span>异常情况说明</span>
+        <div class="result-picture">
+            <div class="title-picture">
+              <span>*</span>
+              <span>问题图片</span>
             </div>
-            <div class="transport-type-right">
-              <van-field
-                v-model="problemOverview"
-                rows="2"
-                maxlength="500"
-                show-word-limit
-                type="textarea"
-                placeholder="请输入"
-              />
-            </div>
-          </div>
-          <div class="result-picture">
-            <div class="title-picture">图片</div>
             <div class="image-list">
                 <div v-for="(item, index) in problemPicturesList" :key='index'>
                     <img :src="item" @click="enlareEvent(item)" />
@@ -227,7 +251,35 @@
                 </div>
             </div>
          </div>
-         <div class="result-picture">
+        <div class="transport-type problem-overview">
+            <div class="transport-type-left">
+              <span>问题描述</span>
+            </div>
+            <div class="transport-type-right">
+              <van-field
+                v-model="problemOverview"
+                rows="2"
+                maxlength="500"
+                show-word-limit
+                type="textarea"
+                placeholder="请输入"
+              />
+            </div>
+          </div>
+          <div class="select-box end-select-box end-select-box-room maintenance-person">
+            <div class="select-box-left">
+              <span>维修人</span>
+            </div>
+            <div class="select-box-right" @click="maintenancePersonClickEvent">
+              <span>{{ currentMaintenancePerson }}</span>
+              <van-icon name="arrow" color="#989999" size="20" />
+            </div>
+          </div>
+          <div class="additional-notes">
+            <van-icon name="info-o" size="16" color="#E86F50" />
+            <span>非必输，只能选择自己，选择自己后，在工程维修模块生成任务。</span>
+          </div>
+         <!-- <div class="result-picture">
             <div class="title-picture">视频</div>
             <div class="image-list">
                 <div v-for="(item, index) in problemVideosList" :key='index' @click="enlareVideoEvent(item)">
@@ -248,8 +300,8 @@
                     <van-icon name="plus" size="30" color="#101010" />
                 </div>
             </div>
-         </div>
-          <div class="transport-type">
+         </div> -->
+          <!-- <div class="transport-type">
             <div class="transport-type-left">
               <span>意见或建议</span>
             </div>
@@ -263,11 +315,11 @@
                 placeholder="请输入"
               />
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="btn-box">
-          <span class="operate-one" @click="quitEvent">退出</span>
-          <span class="operate-two" @click="temporaryStorageEvent">保存</span>
+          <span class="operate-one" @click="quitEvent">取消</span>
+          <span class="operate-two" @click="temporaryStorageEvent">提交</span>
         </div>
       </div>
     </div>
@@ -377,12 +429,23 @@ export default {
       showEquipmentStatus: false,
       currentEquipmentStatus: '停机待修',
 
+      currentMaintenancePerson: '请选择',
+      showMaintenancePerson: false,
+      maintenancePersonOption: [],
+
       overlayShow: false,
       statusBackgroundPng: require("@/common/images/home/status-background.png")
     }
   },
 
   mounted() {
+    this.maintenancePersonOption.push(
+      {
+        id: 0,
+        value: this.workerId,
+        text: this.userName
+      }
+    );
     // 控制设备物理返回按键
     if (!IsPC()) {
       let that = this;
@@ -850,6 +913,31 @@ export default {
     // 设备状态下拉选择框关闭事件
     equipmentStatusCloseEvent () {
       this.showEquipmentStatus = false
+    },
+
+    // 维修人列点击事件
+    maintenancePersonClickEvent () {
+      this.showMaintenancePerson = true
+    },
+
+    // 维修人下拉选择框确认事件
+    maintenancePersonSureEvent (val) {
+      if (val.length > 0) {
+        this.currentMaintenancePerson = val
+      } else {
+        this.currentMaintenancePerson = '请选择'
+      };
+      this.showMaintenancePerson = false
+    },
+
+    // 维修人下拉选择框取消事件
+    maintenancePersonCancelEvent () {
+      this.showMaintenancePerson = false
+    },
+
+    // 维修人下拉选择框关闭事件
+    maintenancePersonCloseEvent () {
+      this.showMaintenancePerson = false
     },
 
     // 退出事件
@@ -1403,33 +1491,38 @@ export default {
           flex: 1;
           width: 100%;
           overflow: scroll;
+          .basic-message {
+            font-size: 16px;
+            color: #101010;
+            height: 36px;
+            line-height: 36px;
+            padding-left: 10px;
+            box-sizing: border-box;
+          };
           .event-type {
+            padding: 10px 10px;
+            box-sizing: border-box;
             .select-box-left {
-              padding-right: 10px;
+              padding-right: 0 10px;
               box-sizing: border-box;
               >span {
                 &:nth-child(1) {
-                  color: red
-                };
-                &:nth-child(2) {
-                  color: #9E9E9A;
+                  color: #9E9E9A !important;
                   font-size: 14px;
-                  padding-right: 6px;
-                  box-sizing: border-box
                 }
               }
             }
           };
           .select-box {
             width: 100%;
-            padding: 8px 6px;
+            padding: 10px 10px;
             box-sizing: border-box;
             background: #fff;
             display: flex;
             align-items: center;
             justify-content: space-between;
             font-size: 14px;
-            margin-top: 6px;
+            margin-bottom: 6px;
             .select-box-left {
               padding-right: 10px;
               box-sizing: border-box;
@@ -1490,6 +1583,36 @@ export default {
               }
             }
           };
+          .maintenance-person {
+            margin-top: 10px;
+            padding: 10px 10px 10px 20px !important;
+            box-sizing: border-box;
+            .select-box-left {
+              padding-right: 0 10px;
+              box-sizing: border-box;
+              >span {
+                &:nth-child(1) {
+                  color: #9E9E9A !important;
+                  font-size: 14px;
+                }
+              }
+            }
+          };
+          .additional-notes {
+            margin-top: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /deep/ .van-icon {
+              vertical-align: middle;
+            };
+            >span {
+              font-size: 10px;
+              color: #919197;
+              margin-left: 4px;
+              vertical-align: middle;
+            }
+          };
           .problem-overview {
             align-items: center
           };
@@ -1526,7 +1649,7 @@ export default {
           };
           .transport-type {
             width: 100%;
-            padding: 10px 6px;
+            padding: 10px 10px 10px 20px;
             box-sizing: border-box;
             background: #fff;
             display: flex;
@@ -1556,7 +1679,7 @@ export default {
             }
           };
           .result-picture {
-            padding: 0 8px 14px 8px;
+            padding: 0 10px 14px 10px;
             margin-top: 6px;
             box-sizing: border-box;
             display: flex;
@@ -1567,12 +1690,24 @@ export default {
               font-size: 14px;
               height: 30px;
               line-height: 30px;
-              color: #9E9E9A
+              color: #9E9E9A;
+              padding-right: 10px;
+              box-sizing: border-box;
+              >span {
+                &:nth-child(1) {
+                  color: red
+                };
+                &:nth-child(2) {
+                  color: #9E9E9A;
+                  font-size: 14px;
+                }
+              }
             };
             .image-list {
               width: 100%;
               flex-wrap: wrap;
               display: flex;
+              margin-left: 10px;
               >div {
                   width: 23.5%;
                   height: 70px;
@@ -1640,28 +1775,21 @@ export default {
           align-items: center;
           justify-content: space-between;
           >span {
-            width: 40%;
+            width: 45%;
             display: inline-block;
-            height: 45px;
-            font-size: 18px;
-            line-height: 45px;
-            background: #fff;
+            height: 32px;
+            font-size: 12px;
+            line-height: 32px;
             text-align: center;
-            border-radius: 30px;
+            border-radius: 4px;
             &:nth-child(1) {
-              color: #E86F50;
-              border: 1px solid #E86F50;
-              margin-right: 30px
-            };
-            &:nth-child(2) {
               color: #3B9DF9;
               border: 1px solid #3B9DF9;
-              margin-right: 30px
+              margin-right: 20px
             };
-            &:last-child {
+            &:nth-child(2) {
               color: #fff;
-              background: linear-gradient(to right, #6cd2f8, #2390fe);
-              box-shadow: 0px 2px 6px 0 rgba(36, 149, 213, 1);
+              background: #3B9DF9;
             }
           }
         }

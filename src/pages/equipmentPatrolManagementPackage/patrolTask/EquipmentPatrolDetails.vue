@@ -124,7 +124,7 @@ export default {
   },
 
   mounted() {
-    console.log('整体数据',formatTime('YYYY-MM-DD HH:mm:ss'));
+    console.log('整体数据',this.currentTaskList);
     // 控制设备物理返回按键
     if (!IsPC()) {
       let that = this;
@@ -760,7 +760,43 @@ export default {
 
     // 扫描二维码方法
     scanQRCode () {
-        window.android.scanQRcode()
+        // window.android.scanQRcode()
+        try {
+                    // 判断当前扫码科室是否为任务科室
+                    if (2472 == this.currentTaskItemMessage['taskContentList'][0]['depId']) {
+                        let temporaryData = {
+                            taskId: this.currentTaskItemMessage['taskContentList'][0]['checkTaskId'],
+                            workerId: this.workerId,
+                            workerName: this.userName,
+                            startTime: formatTime('YYYY-MM-DD HH:mm:ss'),
+                            taskSite: this.currentTaskItemMessage['taskSite'],
+                            deviceList: []
+                        };
+                        for (let item of this.currentTaskItemMessage['taskContentList']) {
+                            temporaryData['deviceList'].push({
+                                id: item.deviceId,
+                                name: item.deviceName,
+                                depId: item.depId,
+                                depName: item.depName,
+                                structId: item.structId,
+                                structName: item.structName,
+                                norms: item.norms
+                            })
+                        };
+                        this.patrolTaskPunchCardEvent(temporaryData)
+                    } else {
+                        this.$dialog.alert({
+                            message: '巡检区域与打卡区域不一致!'
+                        }).then(() => {
+                            this.scanQRCode()
+                        })
+                    }
+                } catch (err) {
+                    this.$toast({
+                        message: `${err}`,
+                        type: 'fail'
+                    })
+                }  
     },
 
     // 摄像头扫码后的回调

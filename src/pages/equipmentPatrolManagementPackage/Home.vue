@@ -75,12 +75,20 @@
                     // },
                     {
                         name: '设备管理',
-                        imgUrl: require("@/common/images/home/workforce-management.png")
-                    }
+                        imgUrl: require("@/common/images/home/equipment-patrol-home-management.png")
+                    },
                     // {
                     //     name: '调度管理',
                     //     imgUrl: require("@/common/images/home/guest-book.png")
                     // }
+                    {
+                        name: '扫码报修',
+                        imgUrl: require("@/common/images/home/equipment-patrol-home-scan.png")
+                    },
+                    {
+                        name: '报修列表',
+                        imgUrl: require("@/common/images/home/equipment-patrol-home-repairs-list.png")
+                    }
                 ],
                 defaultPersonPng: require("@/common/images/home/equipment-patrol-default-person.png"),
                 statusBackgroundPng: require("@/common/images/home/status-background.png")
@@ -171,6 +179,8 @@
                     this.$router.push({path: '/equipmentList'})
                 } else if (item.name == '调度管理') {
                     this.$router.push({path: '/equipmentSpotList'}) 
+                } else if (item.name == '报修列表') {
+                    this.$router.push({path: '/equipmentPatrolScanRepairsRepairsList'}) 
                 }
             },
 
