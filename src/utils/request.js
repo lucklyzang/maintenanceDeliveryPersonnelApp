@@ -93,6 +93,7 @@ service.interceptors.response.use(
                     store.dispatch('resetGuestbookStore');
                     store.dispatch('resetSecurityPatrolLoginState');
                     store.dispatch('resetSecurityPatrolTaskStore');
+                    store.dispatch('resetScanRepairsStateStore')
                     removeAllLocalStorage();
                     if (!store.getters.overDueWay) { 
                         Toast({

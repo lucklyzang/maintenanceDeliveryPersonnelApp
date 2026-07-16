@@ -175,6 +175,7 @@
 						store.dispatch('resetGuestbookStore');
 						store.dispatch('resetSecurityPatrolLoginState');
 						store.dispatch('resetSecurityPatrolTaskStore');
+						store.dispatch('resetScanRepairsStateStore');
 						this.$router.push({path: "/"});
 					} else {
             			this.$dialog.alert({

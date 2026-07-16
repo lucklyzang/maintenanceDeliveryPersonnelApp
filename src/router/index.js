@@ -156,6 +156,8 @@ const EquipmentList = () =>
     import ('@/pages/equipmentPatrolManagementPackage/equipmentStatusManagement/EquipmentList')
 const EquipmentPatrolScanRepairsRepairsList = () =>
     import ('@/pages/equipmentPatrolManagementPackage/scanRepairs/repairsList')
+const EquipmentPatrolSacnRepairsOrder = () =>
+    import ('@/pages/equipmentPatrolManagementPackage/scanRepairs/sacnRepairsOrder')
 // 安全巡更
 const SecurityPatrolHome = () =>
     import ('@/pages/securityPatrolManagementPackage/Home')
@@ -837,6 +839,12 @@ let baseRoute = [{
     path: '/equipmentPatrolScanRepairsRepairsList',
     name: 'equipmentPatrolScanRepairsRepairsList',
     component: EquipmentPatrolScanRepairsRepairsList,
+    meta: { index: 4 }
+  },
+  {
+    path: '/equipmentPatrolSacnRepairsOrder',
+    name: 'equipmentPatrolSacnRepairsOrder',
+    component: EquipmentPatrolSacnRepairsOrder,
     meta: { index: 4 }
   },
   // 安全巡更

@@ -291,6 +291,13 @@ export function getSpotCheckTaskState() {
     }
 }
 
+// 扫码报修任务模块store的初始值
+export function getScanRepairsState() {
+    return {
+        scanRepairsMessage: {} // 扫码信息
+    }
+}
+
 // 点检任务调度管理模块store的初始值
 export function getSpotTaskDispatchingManagementState() {
     return {

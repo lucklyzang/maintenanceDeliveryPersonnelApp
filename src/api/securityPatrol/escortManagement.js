@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import qs from 'qs'
 
 // 巡更任务
 
@@ -134,7 +135,10 @@ export function getEventList(data) {
     return request({
         url: 'patrol/eventregister/listForApp',
         method: 'get',
-        params: data
+        params: data,
+        paramsSerializer: function (params) {
+			return qs.stringify(params, { arrayFormat: 'repeat' })
+		}
     })
 }
 

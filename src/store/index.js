@@ -21,6 +21,7 @@ import environmentManagement from './clean/environmentManagement.js'
 // 设备巡检
 import equipmentPatrolLogin from './equipmentPatrol/equipmentPatrolLogin.js';
 import patrolTask from './equipmentPatrol/patrolTask.js';
+import scanRepairs from './equipmentPatrol/scanRepairs.js';
 import spotCheckTask from './equipmentPatrol/spotCheckTask.js';
 import spotTaskDispatchingManagement from './equipmentPatrol/spotTaskDispatchingManagement.js';
 // 安全巡更
@@ -48,6 +49,7 @@ export default new Vuex.Store({
     environmentManagement,
     equipmentPatrolLogin,
     patrolTask,
+    scanRepairs,
     spotCheckTask,
     spotTaskDispatchingManagement,
     securityPatrolLogin,

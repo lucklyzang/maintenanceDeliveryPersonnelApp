@@ -150,7 +150,8 @@
                 "changeChooseProject",
                 'changeIsEnterGuestBookPageFromHomePage',
                 'changeLastMessageNumber',
-                'changeOverDueWay'
+                'changeOverDueWay',
+                'changeScanRepairsMessage'
             ]),
 
             // 跳转到首页
@@ -166,7 +167,14 @@
             
             // 扫描二维码方法
             scanQRCode () {
-                window.android.scanQRcode()
+                try {
+                    window.android.scanQRcode()
+                } catch (err) {
+                    this.$dialog.alert({
+                    message: err
+                    }).then(() => {
+                    })
+                }
             },
 
             // 巡查任务点击事件
@@ -181,6 +189,9 @@
                     this.$router.push({path: '/equipmentSpotList'}) 
                 } else if (item.name == '报修列表') {
                     this.$router.push({path: '/equipmentPatrolScanRepairsRepairsList'}) 
+                } else if (item.name == '扫码报修') {
+                    // this.scanQRCode()
+                    this.$router.push({path: '/equipmentPatrolSacnRepairsOrder'})
                 }
             },
 
@@ -189,7 +200,8 @@
                 if (code) {
                     let codeData = code.split('|');
                     try {
-                
+                        this.changeScanRepairsMessage();
+                        this.$router.push({path: '/equipmentPatrolSacnRepairsOrder'})
                     } catch (err) {
                         this.$toast({
                             message: `${err}`,

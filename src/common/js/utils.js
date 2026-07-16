@@ -160,6 +160,31 @@ export const scanCode = (callback) => {
   }
 }
 
+/* 
+  * 节流函数
+  * @param{Function} func
+  * @param{Number} wait
+*/
+export const throttle = (func, wait) => {
+  let timeout = null;
+  let previous = 0; // 记录上次执行的时间戳
+  return function (...args) {
+    const now = Date.now();
+    // 如果距离上次执行超过了 wait 时间，则立即执行
+    if (now - previous > wait) {
+      func.apply(this, args);
+      previous = now; // 更新上次执行的时间戳
+    } else {
+      // 否则，设置一个定时器，在剩余时间内执行
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func.apply(this, args);
+        previous = Date.now(); // 执行后也要更新时间戳
+      }, wait - (now - previous));
+    }
+  };
+}
+
 /*
  * 验证输入重量是否合法正则
 */

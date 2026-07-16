@@ -62,23 +62,6 @@
       @confirm="sureDeleteVideoEvent"
       >
     </van-dialog>
-    <!-- 退出提示框   -->
-    <div class="quit-info-box">
-       <van-dialog v-model="quitInfoShow"  show-cancel-button width="85%"
-          @confirm="quitSure" @cancel="quitCancel" confirm-button-text="是"
-          cancel-button-text="否"
-        >
-          <div class="delete-icon">
-            <van-icon name="cross" size="24" @click="quitInfoShow = false" />
-          </div>
-          <div class="dialog-title">
-            退出前是否保存?
-          </div>
-          <div class="dialog-center">
-            保存的记录可再次点击×进行查看
-          </div>
-      </van-dialog>
-    </div>
     <div class="img-dislog-box">
         <van-dialog v-model="imgBoxShow" width="98%" :close-on-click-overlay="true" confirm-button-text="关闭">
             <img :src="currentImgUrl" />
@@ -147,7 +130,7 @@
             <span>任务类型</span>
           </div>
           <div class="select-box-right">
-            <span>{{ taskType }}</span>
+            <span>设备类</span>
           </div>
         </div>
         <div class="select-box event-type">
@@ -155,7 +138,7 @@
             <span>设备名称</span>
           </div>
           <div class="select-box-right">
-            <span>{{ patrolTaskDeviceChecklist.deviceName }}</span>
+            <span></span>
           </div>
         </div>
         <div class="select-box event-type">
@@ -163,7 +146,7 @@
             <span>所属科室</span>
           </div>
           <div class="select-box-right">
-            <span>{{ patrolTaskDeviceChecklist.depName }}</span>
+            <span></span>
           </div>
         </div>
         <div class="select-box event-type">
@@ -171,23 +154,7 @@
             <span>所属空间</span>
           </div>
           <div class="select-box-right">
-            <span>{{ patrolTaskDeviceChecklist.depName }}</span>
-          </div>
-        </div>
-        <div class="select-box event-type">
-          <div class="select-box-left">
-            <span>检查项类型</span>
-          </div>
-          <div class="select-box-right">
-            <span>{{ patrolTaskAbnormalCheckItemEventList.typeName }}</span>
-          </div>
-        </div>
-        <div class="select-box event-type">
-          <div class="select-box-left">
-            <span>检查项</span>
-          </div>
-          <div class="select-box-right">
-            <span>{{ patrolTaskAbnormalCheckItemEventList.itemName }}</span>
+            <span></span>
           </div>
         </div>
         <!-- <div class="select-box end-select-box">
@@ -318,8 +285,8 @@
           </div> -->
         </div>
         <div class="btn-box">
-          <span class="operate-one" @click="quitEvent">取消</span>
-          <span class="operate-two" @click="temporaryStorageEvent">提交</span>
+          <span class="operate-one" @click="onClickLeft">取消</span>
+          <span class="operate-two" @click="repairsEvent">提交</span>
         </div>
       </div>
     </div>
@@ -329,10 +296,8 @@
 import { mapGetters, mapMutations } from "vuex";
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 import {getAliyunSign} from '@/api/equipmentPatrol/login.js'
-import { saveDeviceAbnormalRecord } from '@/api/equipmentPatrol/escortManagement.js'
 import { compress, base64ImgtoFile } from '@/common/js/utils'
 import axios from 'axios'
-import { v4 as uuidv4 } from 'uuid'
 import _ from 'lodash'
 import ScrollSelection from "@/components/ScrollSelection";
 import BottomSelect from "@/components/BottomSelect";
@@ -355,6 +320,7 @@ export default {
       minDate: new Date(2010, 0, 1),
       maxDate: new Date(2050, 10, 1),
       currentFindTime: new Date(),
+      sourcePath: '',
       currentImgUrl: '',
       currentVideoUrl: '',
       photoBox: false,
@@ -372,6 +338,12 @@ export default {
       deleteInfoDialogShow: false,
       deleteVideoInfoDialogShow: false,
       loadingText: '加载中...',
+      depId: '',
+      depName: '',
+      deviceName: '',
+      deviceId: '',
+      spaceId: '',
+      spaceName: '',
       problemOverview: '',
       taskDescribe: '',
       transportNumberValue: '',
@@ -393,7 +365,7 @@ export default {
         }
       ],
       showAbnormalType: false,
-      currentAbnormalType: '设备损坏',
+      currentAbnormalType: '请选择',
 
       severityLevelOption: [
         {
@@ -433,8 +405,6 @@ export default {
       showMaintenancePerson: false,
       maintenancePersonOption: [],
 
-      taskType: '设备类',
-
       overlayShow: false,
       statusBackgroundPng: require("@/common/images/home/status-background.png")
     }
@@ -454,24 +424,15 @@ export default {
       pushHistory();
       that.gotoURL(() => {
         pushHistory();
-        that.$router.push({path: `${this.enterPatrolAbnormalRecordPageSource}`})
+        that.$router.push({path: this.sourcePath})
       })
-    };
-    console.log('检查项信息',this.patrolTaskAbnormalCheckItemEventList,this.patrolTaskDeviceChecklist,this.patrolTaskListMessage,this.devicePatrolDetailsSelectMessage);
-    let casuallyTemporaryStoragePatrolTaskAbnormalRecordList = this.patrolTaskAbnormalRecordList;
-    let temporaryIndex = casuallyTemporaryStoragePatrolTaskAbnormalRecordList.findIndex((item) => { return item.storeId == this.$route.query.eventId &&
-    item.showDate ==  this.devicePatrolDetailsSelectMessage.showDate && item.collect == this.devicePatrolDetailsSelectMessage.selectTaskSetId && item.selectTime == this.devicePatrolDetailsSelectMessage.selectTime &&
-    item.taskSite == this.devicePatrolDetailsSelectMessage.taskSite && item.extendData.deviceId == this.patrolTaskDeviceChecklist.deviceId && item.extendData.checkTypeId == this.patrolTaskAbnormalCheckItemEventList.typeId && 
-    item.extendData.checkItemId == this.patrolTaskAbnormalCheckItemEventList.itemId && item.checkResultId == this.patrolTaskAbnormalCheckItemEventList.resultId
-    });
-    if (temporaryIndex != -1) {
-      this.echoTemporaryStorageMessage(temporaryIndex)
     }
   },
 
   beforeRouteEnter(to, from, next) {
     next(vm=>{
-	  });
+        vm.sourcePath = from.path
+    });
     next() 
   },
 
@@ -479,7 +440,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["userInfo","chooseHospitalArea","ossMessage","timeMessage","patrolTaskAbnormalRecordList","enterPatrolAbnormalRecordPageSource","patrolTaskAbnormalCheckItemEventList","patrolTaskDeviceChecklist","patrolTaskListMessage","devicePatrolDetailsSelectMessage"]),
+    ...mapGetters(["userInfo","chooseHospitalArea","ossMessage","timeMessage","scanRepairsMessage"]),
     userName() {
         return this.userInfo['worker']['name']
     },
@@ -492,12 +453,6 @@ export default {
     proId() {
         return this.chooseHospitalArea['value']
     },
-    depId() {
-        return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['id']
-    },
-    depName() {
-        return this.userInfo['worker']['departments'].length == 0 ? '' : this.userInfo['worker']['departments'][0]['name']
-    },
     userAccount() {
         return this.userInfo['worker']['account']
     }
@@ -507,11 +462,11 @@ export default {
     ...mapMutations(["changeOverDueWay","changeTimeMessage","changeOssMessage","changePatrolTaskAbnormalRecordList"]),
 
     onClickLeft() {
-      this.$router.push({path: `${this.enterPatrolAbnormalRecordPageSource}`})
+      this.$router.push({path: this.sourcePath})
     },
 
     // 任务开始事件弹框确认事件
-     onConDayFirm() {
+    onConDayFirm() {
       this.showFindTime = false
     },
 
@@ -529,8 +484,8 @@ export default {
 
     // 拍照点击
     issueClickEvent () {
-      if (this.problemPicturesList.length + this.problemVideosList.length >= 9) {
-        this.$toast('至多总共只能上传9张图片或视频!');
+      if (this.problemPicturesList.length) {
+        this.$toast('至多总共只能上传5张图片');
         return
       };
       this.photoBox = true;
@@ -576,19 +531,6 @@ export default {
       this.deleteVideoInfoDialogShow = true;
       this.videoIndex = index;
       this.videoDeleteUrl = item
-    },
-
-    // 回显暂存的信息
-    echoTemporaryStorageMessage (temporaryIndex) {
-      let casuallyTemporaryStoragePatrolTaskAbnormalRecordList = this.patrolTaskAbnormalRecordList;
-      this.currentAbnormalType = casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['eventType'] === '' ? '请选择' : this.abnormalTypeOption.filter((item) => { return item.value == casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['eventType']})[0]['text'];
-      this.currentSeverityLevel = casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerSeverity'] === '' ? '请选择' : this.severityLevelOption.filter((item) => { return item.id == casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerSeverity']})[0]['text'];
-      this.currentEquipmentStatus = casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerState'] === '' ? '请选择' : this.equipmentStatusOption.filter((item) => { return item.id == casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerState']})[0]['text'];
-      this.problemOverview = casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['description'];
-      this.currentFindTime = new Date(casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['findTime']);
-      this.taskDescribe = casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['remark'];
-      this.problemPicturesList = casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['images'];
-      this.problemVideosList = casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['videos']
     },
 
     // 处理维修任务参与者
@@ -948,10 +890,20 @@ export default {
       this.quitInfoShow = true
     },
 
-    // 异常记录提交事件
-    async abnormalRecordEvent () {
-      if (this.currentAbnormalType == '请选择') {
-        this.$toast('异常类型不能为空');
+    // 报修事件
+    //   deviceName: '',
+    //   deviceId: '',
+    async repairsEvent () {
+      if (!this.deviceName) {
+        this.$toast('设备名称不能为空');
+        return
+      };
+      if (!this.depName) {
+        this.$toast('所属科室不能为空');
+        return
+      };
+      if (!this.spaceName) {
+        this.$toast('所属空间不能为空');
         return
       };
       if (this.currentSeverityLevel == '请选择') {
@@ -962,8 +914,8 @@ export default {
         this.$toast('设备状态不能为空');
         return
       };
-      if (!this.currentFindTime) {
-        this.$toast('记录时间不能为空');
+      if (this.problemPicturesList.length == 0) {
+        this.$toast('问题图片不能为空');
         return
       };
       // 上传图片到阿里云服务器
@@ -985,45 +937,47 @@ export default {
           await this.uploadImageToOss(imgI)
           }
       };
-      // 新增设备巡检项异常记录
+      // 创建报修任务
       let temporaryMessage = {
-        eventType: this.abnormalTypeOption.filter((item) => { return item.text == this.currentAbnormalType })[0]['value'],
-        registerSeverity: this.severityLevelOption.filter((item) => { return item.text == this.currentSeverityLevel })[0]['id'],
-        registerState: this.equipmentStatusOption.filter((item) => { return item.text == this.currentEquipmentStatus })[0]['id'],
-        checkResultId: this.patrolTaskAbnormalCheckItemEventList.resultId,
-        depId: this.patrolTaskDeviceChecklist.deviceId,
-        depName: this.patrolTaskDeviceChecklist.deviceName,
-        findTime: this.getNowFormatDate(this.currentFindTime),
+        eventType: 1,
+        registerType: 1, //1-巡查,2-其他
+        checkResultId: '',
+        findTime: this.getNowFormatDate(new Date()),
+        structureId: '',
+        structureName: '',
+        depId: this.depId,
+        depName: this.depName,
+        roomId: this.spaceId,
+        roomName: this.spaceName,
+        address: '',
+        registerSeverity: this.currentSeverityLevel,
+        registerState: this.currentEquipmentStatus,
         description: this.problemOverview,
         remark: this.taskDescribe,
-        extendData: {
-          colName: this.patrolTaskDeviceChecklist.configName,
-          deviceId: this.patrolTaskDeviceChecklist.deviceId,
-          deviceName: this.patrolTaskDeviceChecklist.deviceName,
-          checkItemId: this.patrolTaskAbnormalCheckItemEventList.itemId,
-          checkTypeId: this.patrolTaskAbnormalCheckItemEventList.typeId,
-          deviceNorms: this.patrolTaskDeviceChecklist.norms,
-          checkItemName: this.patrolTaskAbnormalCheckItemEventList.itemName,
-          checkTypeName: this.patrolTaskAbnormalCheckItemEventList.typeName
-        },
-        images: this.imgOnlinePathArr.concat(this.problemPicturesList.filter((item) => { return item.indexOf('https://') != -1})),
-        collect: this.devicePatrolDetailsSelectMessage.selectTaskSetId,
+        images: this.imgOnlinePathArr,
+        system: 6,
         proId: this.proId,
-        system: 9,
         createName: this.userName,
-        taskNumber: this.patrolTaskAbnormalCheckItemEventList.taskNumber
+        createTime: this.getNowFormatDate(new Date()),
+        createId: this.workerId,
+        extendData: {
+            deviceId: '',//设备ID, 
+            deviceName: '', //设备名称,
+            deviceNorms: '' //设备规格
+        }
       };
       this.postGenerateRepairsTask(temporaryMessage)
     },
 
-    // 新增设备巡检项异常记录
+    // 生成报修任务
     postGenerateRepairsTask (data) {
-      this.loadingText = '登记中...';
+      this.loadingText = '提交中...';
       this.loadingShow = true;
       this.overlayShow = true;
-      saveDeviceAbnormalRecord(data).then((res) => {
+      eventregister(data).then((res) => {
         if (res && res.data.code == 200) {
-          this.$Alert({message:"新增成功",duration:3000,type:'success'});
+          this.$Alert({message:"提交成功",duration:3000,type:'success'});
+          this.$router.push({path: this.sourcePath})
         } else {
           // 防止任务生成失败后，再次生成时造成同一图片重复上传
           this.imgOnlinePathArr = [];
@@ -1048,133 +1002,6 @@ export default {
         this.loadingShow = false;
         this.overlayShow = false
       })
-    },
-
-    // 确定退出(暂存)
-    quitSure () {
-      this.temporaryStorageEvent()
-    },
-
-    // 取消退出(不暂存)
-    quitCancel () {
-      this.$router.push({path: `${this.enterPatrolAbnormalRecordPageSource}`})
-    },
-
-    // 暂存事件
-    temporaryStorageEvent () {
-      if (this.currentAbnormalType == '请选择') {
-        this.$toast('异常类型不能为空');
-        return
-      };
-      if (this.currentSeverityLevel == '请选择') {
-        this.$toast('严重程度不能为空');
-        return
-      };
-      if (this.currentEquipmentStatus == '请选择') {
-        this.$toast('设备状态不能为空');
-        return
-      };
-      try {
-        let casuallyTemporaryStoragePatrolTaskAbnormalRecordList = this.patrolTaskAbnormalRecordList;
-        if (casuallyTemporaryStoragePatrolTaskAbnormalRecordList.length > 0 ) {
-            let temporaryIndex = casuallyTemporaryStoragePatrolTaskAbnormalRecordList.findIndex((item) => { return item.storeId == this.$route.query.eventId &&
-            item.showDate ==  this.devicePatrolDetailsSelectMessage.showDate && item.collect == this.devicePatrolDetailsSelectMessage.selectTaskSetId && item.selectTime == this.devicePatrolDetailsSelectMessage.selectTime &&
-            item.taskSite == this.devicePatrolDetailsSelectMessage.taskSite && item.extendData.deviceId == this.patrolTaskDeviceChecklist.deviceId && item.extendData.checkTypeId == this.patrolTaskAbnormalCheckItemEventList.typeId && 
-            item.extendData.checkItemId == this.patrolTaskAbnormalCheckItemEventList.itemId && item.checkResultId == this.patrolTaskAbnormalCheckItemEventList.resultId
-            });
-            if (temporaryIndex != -1) {
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['eventType'] = this.currentAbnormalType == '请选择' ? '' : this.abnormalTypeOption.filter((item) => { return item.text == this.currentAbnormalType })[0]['value'];
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerSeverity'] = this.currentSeverityLevel == '请选择' ? '' : this.severityLevelOption.filter((item) => { return item.text == this.currentSeverityLevel })[0]['id'];
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerState'] = this.currentEquipmentStatus == '请选择' ? '' : this.equipmentStatusOption.filter((item) => { return item.text == this.currentEquipmentStatus })[0]['id'];
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['description'] = this.problemOverview;
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['findTime'] = this.getNowFormatDate(this.currentFindTime);
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['remark'] = this.taskDescribe;
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['images'] = this.problemPicturesList;
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['videos'] = this.problemVideosList
-            } else {
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList.push({
-                storeId: uuidv4(), 
-                eventType: this.currentAbnormalType == '请选择' ? '' : this.abnormalTypeOption.filter((item) => { return item.text == this.currentAbnormalType })[0]['value'],
-                registerSeverity: this.currentSeverityLevel == '请选择' ? '' : this.severityLevelOption.filter((item) => { return item.text == this.currentSeverityLevel })[0]['id'],
-                registerSeverityName: this.currentSeverityLevel,
-                registerState: this.currentEquipmentStatus == '请选择' ? '' : this.equipmentStatusOption.filter((item) => { return item.text == this.currentEquipmentStatus })[0]['id'],
-                registerStateName : this.currentEquipmentStatus,
-                checkResultId: this.patrolTaskAbnormalCheckItemEventList.resultId,
-                depId: this.patrolTaskDeviceChecklist.depId,
-                depName: this.patrolTaskDeviceChecklist.depName,
-                findTime: this.getNowFormatDate(this.currentFindTime),
-                description: this.problemOverview,
-                remark: this.taskDescribe,
-                selectTime: this.devicePatrolDetailsSelectMessage.selectTime,
-                showDate: this.devicePatrolDetailsSelectMessage.showDate,
-                taskSite: this.devicePatrolDetailsSelectMessage.taskSite,
-                taskType: this.taskType,
-                extendData: {
-                  colName: this.patrolTaskDeviceChecklist.configName,
-                  deviceId: this.patrolTaskDeviceChecklist.deviceId,
-                  deviceName: this.patrolTaskDeviceChecklist.deviceName,
-                  checkItemId: this.patrolTaskAbnormalCheckItemEventList.itemId,
-                  checkTypeId: this.patrolTaskAbnormalCheckItemEventList.typeId,
-                  deviceNorms: this.patrolTaskDeviceChecklist.norms,
-                  checkItemName: this.patrolTaskAbnormalCheckItemEventList.itemName,
-                  checkTypeName: this.patrolTaskAbnormalCheckItemEventList.typeName
-                },
-                images: this.problemPicturesList,
-                videos: this.problemVideosList,
-                collect: this.devicePatrolDetailsSelectMessage.selectTaskSetId,
-                proId: this.proId,
-                system: 9,
-                createName: this.userName,
-                taskNumber: this.patrolTaskAbnormalCheckItemEventList.taskNumber
-              })
-            }
-          } else {
-            casuallyTemporaryStoragePatrolTaskAbnormalRecordList.push({
-              storeId: uuidv4(),
-              eventType: this.currentAbnormalType == '请选择' ? '' : this.abnormalTypeOption.filter((item) => { return item.text == this.currentAbnormalType })[0]['value'],
-              registerSeverity: this.currentSeverityLevel == '请选择' ? '' : this.severityLevelOption.filter((item) => { return item.text == this.currentSeverityLevel })[0]['id'],
-              registerSeverityName: this.currentSeverityLevel,
-              registerState: this.currentEquipmentStatus == '请选择' ? '' : this.equipmentStatusOption.filter((item) => { return item.text == this.currentEquipmentStatus })[0]['id'],
-              registerStateName : this.currentEquipmentStatus,
-              checkResultId: this.patrolTaskAbnormalCheckItemEventList.resultId,
-              depId: this.patrolTaskDeviceChecklist.depId,
-              depName: this.patrolTaskDeviceChecklist.depName,
-              findTime: this.getNowFormatDate(this.currentFindTime),
-              description: this.problemOverview,
-              remark: this.taskDescribe,
-              selectTime: this.devicePatrolDetailsSelectMessage.selectTime,
-              showDate: this.devicePatrolDetailsSelectMessage.showDate,
-              taskSite: this.devicePatrolDetailsSelectMessage.taskSite,
-              taskType: this.taskType,
-              extendData: {
-                colName: this.patrolTaskDeviceChecklist.configName,
-                deviceId: this.patrolTaskDeviceChecklist.deviceId,
-                deviceName: this.patrolTaskDeviceChecklist.deviceName,
-                checkItemId: this.patrolTaskAbnormalCheckItemEventList.itemId,
-                checkTypeId: this.patrolTaskAbnormalCheckItemEventList.typeId,
-                deviceNorms: this.patrolTaskDeviceChecklist.norms,
-                checkItemName: this.patrolTaskAbnormalCheckItemEventList.itemName,
-                checkTypeName: this.patrolTaskAbnormalCheckItemEventList.typeName
-              },
-              images: this.problemPicturesList,
-              videos: this.problemVideosList,
-              collect: this.devicePatrolDetailsSelectMessage.selectTaskSetId,
-              proId: this.proId,
-              system: 9,
-              createName: this.userName,
-              taskNumber: this.patrolTaskAbnormalCheckItemEventList.taskNumber
-            })
-        };
-        this.changePatrolTaskAbnormalRecordList(casuallyTemporaryStoragePatrolTaskAbnormalRecordList);
-        this.$Alert({message:"暂存成功",duration:3000,type:'success'});
-        this.$router.push({path: `${this.enterPatrolAbnormalRecordPageSource}`})
-      } catch (err) {
-        this.$dialog.alert({
-          message: `${err}`,
-          closeOnPopstate: true
-        }).then(() => {
-        })
-      }  
     }
   }
 };

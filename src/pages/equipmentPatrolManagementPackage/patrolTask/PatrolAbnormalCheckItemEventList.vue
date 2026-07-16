@@ -41,31 +41,65 @@
             </div>
           </div>
           <div class="backlog-task-list-box" ref="scrollBacklogTask">
-              <div class="backlog-task-list" v-for="(item,index) in eventList" :key="index">
-                  <div class="backlog-task-top">
-                      <div class="backlog-task-top-left">
-                          <!-- <span>编号:</span>
-                          <span>{{ item.storeId }}</span> -->
-                      </div>
-                      <div class="backlog-task-top-right" @click="deleteEventListEvent(item)">
-                        <img :src="deletePng" alt="">
-                      </div>
+              <div class="order-list" v-for="(item,index) in eventList" :key="index">
+                <div class="order-list-top">
+                  <div class="order-type">
+                    <span></span>
+                    <span></span>
                   </div>
-                  <div class="backlog-task-content" >
-                      <div class="taskset-create-time-type taskset-create-time-other-type">
-                          <span>记录时间:</span>
-                          <span>{{ item.findTime }}</span>
-                      </div>
+                  <div class="order-status"
+                  :class="{
+                    'staySureStyle ' : item.status == 20, 
+                    'stayDeliveryStyle' : item.status == 30,
+                    'hasDeliveryStyle' : item.status == 40
+                    }"
+                  >
+                    <span>待分配</span>
                   </div>
-                  <div class="backlog-task-content">
-                      <div class="taskset-create-time-type">
-                          <span>情况说明:</span>
-                          <span>{{ item.description }}</span>
-                      </div>
+                </div>
+                <div class="order-list-center">
+                  <div class="create-delivery-date">
+                    <div class="create-delivery-date-left">
+                      <span>任务类型:</span>
+                      <span>{{ item.taskType }}</span>
+                    </div>
+                    <div class="create-delivery-date-left">
+                      <span>设备名称:</span>
+                      <span>{{ item['extendData']['deviceName'] }}</span>
+                    </div>
                   </div>
-                  <div class="right-arrow-box" @click="enterRecordDetailsEvent(item)">
-                    <van-icon name="arrow" color="#1684FC" size="24" />
+                  <div class="create-delivery-date delivery-address">
+                    <div class="create-delivery-date-left">
+                      <span>所属科室:</span>
+                      <span>{{ item.depName }}</span>
+                    </div>
+                    <div class="create-delivery-date-left">
+                      <span>所属空间:</span>
+                      <span>{{ item.taskType }}</span>
+                    </div>
                   </div>
+                  <div class="create-delivery-date">
+                    <div class="create-delivery-date-left">
+                      <span>严重程度:</span>
+                      <span>{{ item.registerSeverityName }}</span>
+                    </div>
+                    <div class="create-delivery-date-left">
+                      <span>设备状态:</span>
+                      <span>{{ item.registerStateName }}</span>
+                    </div>
+                  </div>
+                  <div class="remark-box">
+                    <span>问题描述:</span>
+                    <span>{{ item.description }}</span>
+                  </div>
+                </div>
+                <div class="order-list-bottom">
+                  <div class="order-list-btn">
+                    <div class="delete-left" @click.stop="deleteEventListEvent(item)">
+                      <span>删除</span>
+                    </div>
+                  </div>
+                </div>
               </div>
               <van-empty description="暂无异常记录数据" v-show="eventList == 0" />
               <div class="no-more-data" v-show="isShowBacklogTaskNoMoreData">没有更多数据了</div>
@@ -709,81 +743,164 @@ export default {
             left: 50%;
             transform: translate(-50%,-50%)
           };
-          .backlog-task-list {
-              padding: 0 8px 4px 8px;
-              box-sizing: border-box;
-              border-radius: 6px;
-              position: relative;
-              background: #fff;
-              box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.23);
-              margin-bottom: 10px;
-              .backlog-task-top {
-                  height: 35px;
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  font-size: 14px;
-                  color: #1684FC;
-                  .backlog-task-top-left {
-                      flex: 1;
-                      .no-wrap()
-                  };
-                  .backlog-task-top-right {
-                    width: 24px;
-                    height: 24px;
-                    img {
-                      width: 24px
-                    }
-                  }
-              };
-              .backlog-task-content {
-                  >div {
-                  line-height: 28px;
-                  word-break: break-all;
-                  font-size: 14px;
-                  color: #8E9397  
-                  };
-                  .taskset-create-time-type {
+          .order-list {
+                padding: 0 6px 16px 6px;
+                box-sizing: border-box;
+                background-color: rgba(255,255,255,1);
+                box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.23);
+                border-radius: 7px;
+                margin-bottom: 10px;
+                &:nth-child(1) {
+                    margin-top: 10px;
+                };
+                .order-list-top {
                     display: flex;
-                    flex-direction: column;
-                    max-height: 70px;
-                    padding-right: 30px;
+                    height: 50px;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0 6px;
                     box-sizing: border-box;
-                    overflow: auto;
-                  };
-                  .taskset-create-time-other-type {
-                    flex-direction: row;
-                    >span {
-                      &:first-child {
-                        margin-right: 6px
-                      }
+                    border-bottom: 1px solid rgba(0,0,0,0.23);
+                    .order-type {
+                        flex: 1;
+                        margin-right: 10px;
+                        .no-wrap();
+                        >span {
+                            font-size: 16px;
+                            color: #3B9DF9;
+                        }
+                    };
+                    .order-status {
+                        display: flex;
+                        height: 40px;
+                        align-items: center;
+                        justify-content: center;
+                        width: 67px;
+                        height: 25px;
+                        border-radius: 4px;
+                        >span {
+                            font-size: 14px;
+                        }
+                    };
+                    .staySureStyle {
+                        background: rgba(232,203,81,0.16) !important;
+                        color: #E8CB51 !important;
+                    };
+                    .stayDeliveryStyle {
+                        background: #E7F3FE !important;
+                        color: #3B9DF9 !important;
+                    };
+                    .hasDeliveryStyle {
+                        background: #E6E9FA !important;
+                        color: #8D97E7 !important;
                     }
-                  };
-                  .complete-patrol-area {
-                      >span {
-                          &:nth-child(2) {
-                              color: #1684FC
-                          }
-                      }
-                  };
-                  .unfinished-patrol-area {
-                      >span {
-                          &:nth-child(2) {
-                              color: #1684FC
-                          }
-                      }
-                  }
-              };
-              .right-arrow-box {
-                position: absolute;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                right: 8px;
-                top: 55%;
-                transform: translateY(-50%)
-            }
-          };
+                };
+                .order-list-center {
+                    margin: 10px 0;
+                    padding: 0 6px;
+                    box-sizing: border-box;
+                    .product-list {
+                        display: flex;
+                        >span {
+                            display: inline-block;
+                            font-size: 12px;
+                            &:nth-child(1) {
+                                color: #9E9E9A;
+                                margin-right: 6px;
+                            };
+                            &:nth-child(2) {
+                                .no-wrap();
+                                flex: 1;
+                                color: #101010;
+                            }
+                        }
+                    };
+                    .create-delivery-date {
+                        display: flex;
+                        margin-top: 10px;
+                        .create-delivery-date-left {
+                            flex: 1;
+                            width: 0;
+                            display: flex;
+                            margin-right: 4px;
+                            >span {
+                                display: inline-block;
+                                font-size: 12px;
+                                &:nth-child(1) {
+                                    color: #9E9E9A;
+                                    margin-right: 6px;
+                                };
+                                &:nth-child(2) {
+                                    word-break: break-all;
+                                    flex: 1;
+                                    color: #101010;
+                                }
+                            }
+                        };
+                        .create-delivery-date-right {
+                            flex: 1;
+                            width: 0;
+                            display: flex;
+                            align-items: center;
+                            >span {
+                                display: inline-block;
+                                font-size: 12px;
+                                &:nth-child(1) {
+                                    color: #9E9E9A;
+                                    margin-right: 6px;
+                                };
+                                &:nth-child(2) {
+                                    .no-wrap();
+                                    flex: 1;
+                                    color: #101010;
+                                }
+                            }
+                        }
+                    };
+                    .delivery-address {
+                        margin-top: 10px;
+                    };
+                    .remark-box {
+                        display: flex;
+                        margin-top: 10px;
+                        >span {
+                            display: inline-block;
+                            font-size: 12px;
+                            &:nth-child(1) {
+                                color: #9E9E9A;
+                                margin-right: 6px;
+                            };
+                            &:nth-child(2) {
+                                flex: 1;
+                                word-break: break-all;
+                                color: #9E9E9A;
+                            }
+                        }
+                    }
+                };
+                .order-list-bottom {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    .order-list-btn {
+                        display: flex;
+                        align-items: center;
+                        .delete-left {
+                            width: 66px;
+                            height: 25px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: #E86F50;
+                            border-radius: 4px;
+                            >span {
+                                font-size: 12px;
+                                color: #fff
+                            }
+                        }
+                    }
+                }
+            };
           .no-more-data {
               font-size: 12px;
               color: #BEC7D1;

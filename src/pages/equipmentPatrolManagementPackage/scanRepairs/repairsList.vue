@@ -1,7 +1,6 @@
 <template>
   <div class="page-box" ref="wrapper">
     <van-loading size="35px" vertical color="#e6e6e6" v-show="loadingShow">{{ loadText }}</van-loading>
-    <van-overlay :show="overlayShow" />
     <div class="nav">
       <van-nav-bar title="报修列表" left-text="返回" left-arrow @click-left="onClickLeft" @click-right="scanCodeEvent" :border="false">
         <template #right>
@@ -140,7 +139,9 @@
 <script>
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
-import {} from '@/api/equipmentPatrol/escortManagement.js';
+import { throttle } from '@/common/js/utils'
+import { getEventList } from '@/api/securityPatrol/escortManagement.js'
+import { queryRepairsTaskCancelReason } from '@/api/project/taskScheduling.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
 export default {
   name: "EquipmentList",
@@ -150,8 +151,8 @@ export default {
   mixins:[mixinsDeviceReturn],
   data() {
     return {
-      overlayShow: false,
-      repairsList: [{id:1},{id:2},{id:3}],
+      repairsList: [],
+      fullRepairsList: [],
       loadingShow: false,
       isShowNoData: false,
       bottomLoadingShow: false,
@@ -165,6 +166,13 @@ export default {
       currentCancelReasonalue: '',
       cancelReasonList: [],
       remarkValue: '',
+      eventTime: 0,
+      scrollTop: 0,
+      totalCount: '',
+      currentPage: 1,
+      pageSize: 10,
+      continueQuest: true,
+      throttledScrollHandler: null,
       statusBackgroundPng: require("@/common/images/home/status-background.png"),
     }
   },
@@ -172,6 +180,25 @@ export default {
   mounted() {
     // 控制设备物理返回按键
     this.deviceReturn("/equipmentPatrolHome");
+    this.$nextTick(()=> {
+      this.initScrollChange()
+    });
+    // 二维码回调方法绑定到window下面,提供给外部调用
+    let me = this;
+    window['scanQRcodeCallback'] = (code) => {
+      me.scanQRcodeCallback(code);
+    };
+    window['scanQRcodeCallbackCanceled'] = () => {
+      me.scanQRcodeCallbackCanceled();
+    };
+    // 查询取消原因列表
+    this.getCancelReason();
+    // 查询报修列表
+    this.queryEventList({
+        proId: this.proId, system: 6, 
+        workerId: this.workerId,page: this.currentPage, limit: this.pageSize, name: this.userName,
+        startDate: '',endDate: '',eventType: [1],registerType: [1]
+    },true)
   },
 
   beforeRouteEnter(to, from, next) {
@@ -179,6 +206,13 @@ export default {
 	  });
     next() 
   },
+
+  beforeRouteLeave(to,from,next) {
+    // 移除滚动监听器
+    this.removeScrollListener();
+    next()
+  },
+
 
   watch: {},
 
@@ -208,15 +242,218 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["changePatrolTaskListMessage"]),
+    ...mapMutations(["changePatrolTaskListMessage","changeScanRepairsMessage"]),
 
     // 顶部导航左边点击事件
     onClickLeft () {
       this.$router.push({path: '/equipmentPatrolHome'})
     },
 
-    // 扫码事件
-    scanCodeEvent () {},
+     /**
+     * 滚动事件的原始处理逻辑
+     * 检查是否滚动到底部并决定是否加载更多
+     */
+    _rawEventListLoadMore() {
+      const boxBackScroll = this.$refs.scrollBacklogTask;
+      if (!boxBackScroll) {
+        return;
+      };
+      // 更新滚动位置
+      this.scrollTop = boxBackScroll.scrollTop;
+      // 判断是否滚动到底部
+      const isAtBottom = Math.ceil(boxBackScroll.scrollTop) + boxBackScroll.offsetHeight >= boxBackScroll.scrollHeight;
+      if (isAtBottom) {
+        // 检查是否允许继续请求
+        if (!this.continueQuest) {
+            return;
+        };
+        // 检查是否还有更多页可以加载
+        const totalPage = Math.ceil(this.totalCount / this.pageSize);
+        if (this.currentPageNum >= totalPage) {
+            // 已经是最后一页
+            this.isShowNoMoreData = true;
+        } else {
+            // 还有更多页，加载下一页
+            this.isShowNoMoreData = false;
+            this.currentPageNum++;
+            this.queryEventList({
+                proId: this.proId, system: 6, 
+                workerId: this.workerId,page: this.currentPage, limit: this.pageSize, name: this.userName,
+                startDate: '',endDate: '',eventType: [1],registerType: [1]
+            },false)
+        }
+      }
+    },
+
+    /**
+     * 初始化滚动事件监听器
+     * 使用节流函数优化性能
+     */
+    initScrollChange() {
+        const boxBackScroll = this.$refs.scrollBacklogTask;
+        if (!boxBackScroll) {
+            return;
+        };
+        // 创建一个节流后的事件处理函数
+        // 将滚动检查逻辑限制在 200ms 内最多执行一次
+        this.throttledScrollHandler = throttle(this._rawEventListLoadMore, 200);
+        // 添加事件监听器
+        boxBackScroll.addEventListener('scroll', this.throttledScrollHandler, true);
+    },
+
+    /**
+     * 移除滚动事件监听器
+     * 在组件销毁前必须执行，防止内存泄漏
+    */
+    removeScrollListener() {
+      const boxBackScroll = this.$refs.scrollBacklogTask;
+      if (boxBackScroll && this.throttledScrollHandler) {
+        boxBackScroll.removeEventListener('scroll', this.throttledScrollHandler, true)
+        this.throttledScrollHandler = null;
+      }
+    },
+
+    // 获取取消原因列表
+    getCancelReason () {
+        this.loadingShow = true;
+        this.infoText = '查询中···';
+        this.cancelReasonList = [{
+            name: '请选择取消原因',
+            value: null
+        }];
+        queryRepairsTaskCancelReason({proId: this.proId,state: 0,reason: ''})
+        .then((res) => {
+          this.loadingShow = false;
+          this.infoText = '';
+          if (res && res.data.code == 200) {
+            for (let i = 0, len = res.data.data.length; i < len; i++) {
+                this.cancelReasonList.push({
+                  name: res.data.data[i]['cancelName'],
+                  value: res.data.data[i]['id']
+                })
+            }
+          } else {
+            this.$dialog.alert({
+                message: `${res.data.msg}`,
+                closeOnPopstate: true
+            }).then(() => {})
+          }
+        })
+        .catch((err) => {
+            this.loadingShow = false;
+            this.infoText = '';
+            this.$dialog.alert({
+                message: `${err}`,
+                closeOnPopstate: true
+            }).then(() => {})
+        })
+    },
+
+    // 查询事件列表
+    queryEventList(data,flag) {
+        this.repairsList = [];
+        this.isShowNoData = false;
+        if (flag) {
+            this.fullRepairsList = [];
+            this.loadingShow = true;
+            this.infoText = '加载中···';
+            this.bottomLoadingShow = false;
+        } else {
+            this.loadingShow = false;
+            this.infoText = '';
+            this.bottomLoadingShow = true;
+        };
+        getEventList(data).then((res) => {
+            this.continueQuest = true;
+            if ( res && res.data.code == 200) {
+                this.repairsList = res.data.data.list;
+                this.totalCount = res.data.data.total;
+                this.fullRepairsList = this.fullRepairsList.concat(this.repairsList);
+                if (this.fullRepairsList.length == 0) {
+                    this.isShowNoData = true
+                } else {
+                    this.isShowNoData = false
+                }
+            } else {
+                this.$dialog.alert({
+                    message: `${res.data.msg}`,
+                    closeOnPopstate: true
+                }).then(() => {})
+            };
+            if (flag) {
+                this.loadingShow = false;
+                this.isShowNoMoreData = true;
+                this.infoText = '';
+            } else {
+                this.bottomLoadingShow = false;
+                let totalPage = Math.ceil(this.totalCount/this.pageSize);
+                if (this.currentPageNum >= totalPage) {
+                    this.isShowNoMoreData = true;
+                } else {
+                    this.isShowNoMoreData = false;
+                }
+            }
+        })
+        .catch((err) => {
+            this.continueQuest = true;
+            if (flag) {
+                this.loadingShow = false;
+                this.isShowNoMoreData = false;
+                this.infoText = '';
+            } else {
+                this.bottomLoadingShow = false;
+            };
+            this.$dialog.alert({
+                message: `${err}`,
+                closeOnPopstate: true
+            }).then(() => {})
+        })
+    },
+
+    // 扫码图标点击事件
+    scanCodeEvent () {
+        // this.scanQRCode();
+        this.$router.push({path: '/equipmentPatrolSacnRepairsOrder'})
+    },
+
+    // 扫描二维码方法
+    scanQRCode () {
+      try {
+        window.android.scanQRcode()
+      } catch (err) {
+        this.$dialog.alert({
+          message: err
+        }).then(() => {
+        })
+      }
+    },
+
+    // 摄像头扫码后的回调
+    scanQRcodeCallback(code) {
+      if (code) {
+        let codeData = code.split('|');  
+        try {
+            this.changeScanRepairsMessage();
+            this.$router.push({path: '/equipmentPatrolSacnRepairsOrder'})
+        } catch (err) {
+          this.$toast({
+            message: `${err}`,
+            type: 'fail'
+          })
+        }  
+      } else {
+        this.$dialog.alert({
+          message: '当前没有扫描到任何信息,请重新扫描'
+        }).then(() => {
+          this.scanQRCode()
+        })
+      }
+    },
+
+    // 摄像头取消扫码后的回调
+    scanQRcodeCallbackCanceled () {
+    },
+
 
      //任务状态转换
     stateTransfer (num) {
