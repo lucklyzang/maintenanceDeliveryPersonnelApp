@@ -736,7 +736,8 @@ let baseRoute = [{
   {
       path: '/patrolAbnormalCheckItemEventList',
       name: 'patrolAbnormalCheckItemEventList',
-      component: PatrolAbnormalCheckItemEventList
+      component: PatrolAbnormalCheckItemEventList,
+      meta: { index: 6 }
   },
   {
       path: '/historyEquipmPatroLTaskList',
@@ -767,7 +768,8 @@ let baseRoute = [{
   {
       path: '/patrolAbnormalRecord',
       name: 'patrolAbnormalRecord',
-      component: PatrolAbnormalRecord
+      component: PatrolAbnormalRecord,
+      meta: { index: 6 }
   },
   {
       path: '/editPatrolAbnormalRecord',

@@ -126,7 +126,7 @@
                         <div class="cancel-left" @click.stop="cancelReasonModalCancelEvent">
                             <span>取消</span>
                         </div>
-                        <div class="submit-right" @click.stop="cancelReasonModalSubmitEvent">
+                        <div class="submit-right" @click.stop="cancelReasonModalSubmitEvent(item,index)">
                             <span>提交</span>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
 import NavBar from "@/components/NavBar";
 import { mapGetters, mapMutations } from "vuex";
 import { throttle } from '@/common/js/utils'
-import { getEventList } from '@/api/securityPatrol/escortManagement.js'
+import { getEventList, eventRegisterCancel } from '@/api/securityPatrol/escortManagement.js'
 import { queryRepairsTaskCancelReason } from '@/api/project/taskScheduling.js'
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction';
 export default {
@@ -162,6 +162,7 @@ export default {
       cancelReasonListShow: false,
       currentCancelReason: '请选择',
       currentOrderId: '',
+      currentOrderIndex: '',
       currentCancelReasonIndex: '',
       currentCancelReasonalue: '',
       cancelReasonList: [],
@@ -410,6 +411,37 @@ export default {
         })
     },
 
+    // 取消登记事件
+    eventRegisterCancelEvent(data) {
+        this.loadingShow = true;
+        this.infoText = '取消中···';
+        eventRegisterCancel(data)
+        .then((res) => {
+          this.loadingShow = false;
+          this.infoText = '';
+          if (res && res.data.code == 200) {
+            this.$toast({
+                message: '取消成功',
+                type: 'success'
+            });
+            this.fullRepairsList.splice(this.currentOrderIndex,1)
+          } else {
+            this.$dialog.alert({
+                message: `${res.data.msg}`,
+                closeOnPopstate: true
+            }).then(() => {})
+          }
+        })
+        .catch((err) => {
+            this.loadingShow = false;
+            this.infoText = '';
+            this.$dialog.alert({
+                message: `${err}`,
+                closeOnPopstate: true
+            }).then(() => {})
+        })
+    },
+
     // 扫码图标点击事件
     scanCodeEvent () {
         // this.scanQRCode();
@@ -514,6 +546,7 @@ export default {
     // 报修列表订单取消事件
     cancelOrderEvent (item,index) {
         this.currentOrderId = item.id;
+        this.currentOrderIndex = index;
         this.currentCancelReason = '请选择';
         this.currentCancelReasonIndex = '';
         this.currentCancelReasonalue = '';
@@ -535,7 +568,7 @@ export default {
     },
     
     // 取消弹框提交事件
-    cancelReasonModalSubmitEvent () {
+    cancelReasonModalSubmitEvent (item) {
         if (this.currentCancelReason === '请选择') {
              this.$toast({
                 type: 'fail',
@@ -543,7 +576,13 @@ export default {
             });
             return
         };
-        this.cancelReasonShow = false
+        this.currentOrderId = item.id;
+        this.cancelReasonShow = false;
+        this.eventRegisterCancelEvent({
+            id: this.currentOrderId,
+            reason: this.currentCancelReason,
+            remark: this.remarkValue
+        })
     }
   }
 };

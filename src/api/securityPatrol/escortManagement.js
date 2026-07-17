@@ -142,6 +142,15 @@ export function getEventList(data) {
     })
 }
 
+// 取消登记事件
+export function eventRegisterCancel(data) {
+    return request({
+        url: 'patrol/eventregister/cancel',
+        method: 'put',
+        data
+    })
+}
+
 // 获取事件详情
 export function getEventDetails(id) {
     return request({

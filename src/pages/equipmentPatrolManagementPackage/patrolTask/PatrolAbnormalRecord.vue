@@ -102,15 +102,15 @@
     </div>
     <!-- 严重程度 -->
     <div class="transport-rice-box" v-if="showSeverityLevel">
-      <ScrollSelection :columns="severityLevelOption" title="严重程度" @sure="severityLevelSureEvent" @cancel="severityLevelCancelEvent" @close="severityLevelCloseEvent" />
+      <ScrollSelection :columns="severityLevelOption" :pickerValues="severityLevelDefaultIndex" title="严重程度" @sure="severityLevelSureEvent" @cancel="severityLevelCancelEvent" @close="severityLevelCloseEvent" />
     </div>
     <!-- 设备状态 -->
     <div class="transport-rice-box" v-if="showEquipmentStatus">
-      <ScrollSelection :columns="equipmentStatusOption" title="设备状态" @sure="equipmentStatusSureEvent" @cancel="equipmentStatusCancelEvent" @close="equipmentStatusCloseEvent" />
+      <ScrollSelection :columns="equipmentStatusOption" :pickerValues="equipmentStatusDefaultIndex" title="设备状态" @sure="equipmentStatusSureEvent" @cancel="equipmentStatusCancelEvent" @close="equipmentStatusCloseEvent" />
     </div>
      <!-- 维修人 -->
     <div class="transport-rice-box" v-if="showMaintenancePerson">
-      <ScrollSelection :columns="maintenancePersonOption" title="维修人" @sure="maintenancePersonSureEvent" @cancel="maintenancePersonCancelEvent" @close="maintenancePersonCloseEvent" />
+      <ScrollSelection :columns="maintenancePersonOption" :pickerValues="maintenancePersonDefaultIndex" title="维修人" @sure="maintenancePersonSureEvent" @cancel="maintenancePersonCancelEvent" @close="maintenancePersonCloseEvent" />
     </div>
     <div class="nav">
        <van-nav-bar
@@ -398,40 +398,50 @@ export default {
       severityLevelOption: [
         {
           id: 0,
+          value: 0,
           text: '普通'
         },
         {
           id: 1,
+          value: 1,
           text: '严重'
-        },
+        }
       ],
       showSeverityLevel: false,
+      severityLevelDefaultIndex: 0,
       currentSeverityLevel: '请选择',
 
       equipmentStatusOption: [
         {
           id: 0,
+          value: 0,
           text: '正常使用'
         },
         {
           id: 1,
+          value: 1,
           text: '停机待修'
         },
         {
           id: 2,
+          value: 2,
           text: '停用'
         },
         {
           id: 3,
+          value: 3,
           text: '报废'
         }
       ],
       showEquipmentStatus: false,
       currentEquipmentStatus: '请选择',
+      equipmentStatusDefaultIndex: 0,
 
       currentMaintenancePerson: '请选择',
+      currentMaintenancePersonValue: '',
       showMaintenancePerson: false,
       maintenancePersonOption: [],
+      maintenancePersonDefaultIndex: 0,
 
       taskType: '设备类',
 
@@ -874,11 +884,13 @@ export default {
     },
 
     // 严重程度下拉选择框确认事件
-    severityLevelSureEvent (val) {
-      if (val.length > 0) {
-        this.currentSeverityLevel = val
+    severityLevelSureEvent (val,value,id) {
+      if (val) {
+        this.currentSeverityLevel = val;
+        this.severityLevelDefaultIndex = id;
       } else {
-        this.currentSeverityLevel = '请选择'
+        this.currentSeverityLevel = '请选择';
+        this.severityLevelDefaultIndex = 0;
       };
       this.showSeverityLevel = false
     },
@@ -899,11 +911,13 @@ export default {
     },
 
     // 设备状态下拉选择框确认事件
-    equipmentStatusSureEvent (val) {
-      if (val.length > 0) {
-        this.currentEquipmentStatus = val
+    equipmentStatusSureEvent (val,value,id) {
+      if (val) {
+        this.currentEquipmentStatus = val;
+        this.equipmentStatusDefaultIndex = id;
       } else {
-        this.currentEquipmentStatus = '请选择'
+        this.currentEquipmentStatus = '请选择';
+        this.equipmentStatusDefaultIndex = 0;
       };
       this.showEquipmentStatus = false
     },
@@ -924,11 +938,15 @@ export default {
     },
 
     // 维修人下拉选择框确认事件
-    maintenancePersonSureEvent (val) {
-      if (val.length > 0) {
-        this.currentMaintenancePerson = val
+    maintenancePersonSureEvent (val,value,id) {
+      if (val) {
+        this.currentMaintenancePerson = val;
+        this.currentMaintenancePersonValue = value;
+        this.maintenancePersonDefaultIndex = id;
       } else {
-        this.currentMaintenancePerson = '请选择'
+        this.currentMaintenancePerson = '请选择';
+        this.currentMaintenancePersonValue = 0;
+        this.maintenancePersonDefaultIndex = 0
       };
       this.showMaintenancePerson = false
     },
@@ -1084,8 +1102,8 @@ export default {
             });
             if (temporaryIndex != -1) {
               casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['eventType'] = this.currentAbnormalType == '请选择' ? '' : this.abnormalTypeOption.filter((item) => { return item.text == this.currentAbnormalType })[0]['value'];
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerSeverity'] = this.currentSeverityLevel == '请选择' ? '' : this.severityLevelOption.filter((item) => { return item.text == this.currentSeverityLevel })[0]['id'];
-              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerState'] = this.currentEquipmentStatus == '请选择' ? '' : this.equipmentStatusOption.filter((item) => { return item.text == this.currentEquipmentStatus })[0]['id'];
+              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerSeverity'] = this.currentSeverityLevel == '请选择' ? '' : this.severityLevelOption.filter((item) => { return item.text == this.currentSeverityLevel })[0]['value'];
+              casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['registerState'] = this.currentEquipmentStatus == '请选择' ? '' : this.equipmentStatusOption.filter((item) => { return item.text == this.currentEquipmentStatus })[0]['value'];
               casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['description'] = this.problemOverview;
               casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['findTime'] = this.getNowFormatDate(this.currentFindTime);
               casuallyTemporaryStoragePatrolTaskAbnormalRecordList[temporaryIndex]['remark'] = this.taskDescribe;

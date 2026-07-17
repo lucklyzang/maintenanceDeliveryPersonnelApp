@@ -70,11 +70,11 @@
     </div>
     <!-- 严重程度 -->
     <div class="transport-rice-box" v-if="showSeverityLevel">
-      <ScrollSelection :columns="severityLevelOption" title="严重程度" @sure="severityLevelSureEvent" @cancel="severityLevelCancelEvent" @close="severityLevelCloseEvent" />
+      <ScrollSelection :columns="severityLevelOption" :pickerValues="severityLevelDefaultIndex" title="严重程度" @sure="severityLevelSureEvent" @cancel="severityLevelCancelEvent" @close="severityLevelCloseEvent" />
     </div>
     <!-- 设备状态 -->
     <div class="transport-rice-box" v-if="showEquipmentStatus">
-      <ScrollSelection :columns="equipmentStatusOption" title="设备状态" @sure="equipmentStatusSureEvent" @cancel="equipmentStatusCancelEvent" @close="equipmentStatusCloseEvent" />
+      <ScrollSelection :columns="equipmentStatusOption" :pickerValues="equipmentStatusDefaultIndex" title="设备状态" @sure="equipmentStatusSureEvent" @cancel="equipmentStatusCancelEvent" @close="equipmentStatusCloseEvent" />
     </div>
     <div class="nav">
        <van-nav-bar
@@ -262,10 +262,12 @@ export default {
       severityLevelOption: [],
       showSeverityLevel: false,
       currentSeverityLevel: '请选择',
+      severityLevelDefaultIndex: 0,
 
       equipmentStatusOption: [],
       showEquipmentStatus: false,
       currentEquipmentStatus: '请选择',
+      equipmentStatusDefaultIndex: 0,
 
       overlayShow: false,
       statusBackgroundPng: require("@/common/images/home/status-background.png")
