@@ -138,6 +138,15 @@ export function getdevicesList(data) {
     })
 }
 
+
+// 查询设备信息(根据设备id)
+export function getdevicesById(id) {
+    return request({
+        url: `patrol/device/getById/${id}`,
+        method: 'get'
+    })
+}
+
 // 设备操作记录添加
 export function addDeviceOperateRecord(data) {
     return request({

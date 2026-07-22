@@ -346,7 +346,6 @@
 									removeStore('userPassword');
 								};
 								// 登录用户信息存入store
-								this.changeIsLogin(true);
 								this.storeUserInfo(res.data.data);
 								// 存入用户角色列表
 								this.changeRoleNameList(res.data.data.roleNameList);
@@ -397,8 +396,9 @@
 						// 保存模板类型
 						if (res.data.data) {
 							this.changeTemplateType(res.data.data);
-						}
-					   this.$router.push({ path: "/home" })
+						};
+						this.changeIsLogin(true);
+					    this.$router.push({ path: "/home" })
 					} else {
 						this.modalShow = true;
 						this.modalContent = `${res.data.msg}`

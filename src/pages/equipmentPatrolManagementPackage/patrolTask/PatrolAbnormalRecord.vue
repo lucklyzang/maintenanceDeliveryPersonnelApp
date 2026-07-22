@@ -171,7 +171,7 @@
             <span>所属空间</span>
           </div>
           <div class="select-box-right">
-            <span>{{ patrolTaskDeviceChecklist.depName }}</span>
+            <span>{{ patrolTaskDeviceChecklist.space ? patrolTaskDeviceChecklist.space : '无' }}</span>
           </div>
         </div>
         <div class="select-box event-type">
@@ -1143,6 +1143,7 @@ export default {
                 proId: this.proId,
                 system: 9,
                 createName: this.userName,
+                bxWorkerName: this.currentMaintenancePerson,
                 taskNumber: this.patrolTaskAbnormalCheckItemEventList.taskNumber
               })
             }
@@ -1180,6 +1181,7 @@ export default {
               proId: this.proId,
               system: 9,
               createName: this.userName,
+              bxWorkerName: this.currentMaintenancePerson,
               taskNumber: this.patrolTaskAbnormalCheckItemEventList.taskNumber
             })
         };

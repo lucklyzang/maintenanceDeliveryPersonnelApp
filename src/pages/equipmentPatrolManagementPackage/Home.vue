@@ -198,9 +198,9 @@
             // 摄像头扫码后的回调
             scanQRcodeCallback(code) {
                 if (code) {
-                    let codeData = code.split('|');
+                    let codeData = code;
                     try {
-                        this.changeScanRepairsMessage();
+                        this.changeScanRepairsMessage({deviceId: codeData});
                         this.$router.push({path: '/equipmentPatrolSacnRepairsOrder'})
                     } catch (err) {
                         this.$toast({

@@ -138,7 +138,7 @@
             <span>设备名称</span>
           </div>
           <div class="select-box-right">
-            <span></span>
+            <span>{{ deviceMessage['name'] ?  deviceMessage['name'] : '无'}}</span>
           </div>
         </div>
         <div class="select-box event-type">
@@ -146,7 +146,7 @@
             <span>所属科室</span>
           </div>
           <div class="select-box-right">
-            <span></span>
+            <span>{{ deviceMessage['depName'] ?  deviceMessage['depName'] : '无'}}</span>
           </div>
         </div>
         <div class="select-box event-type">
@@ -154,7 +154,7 @@
             <span>所属空间</span>
           </div>
           <div class="select-box-right">
-            <span></span>
+            <span>{{ deviceMessage['address'] ?  deviceMessage['address'] : '无'}}</span>
           </div>
         </div>
         <!-- <div class="select-box end-select-box">
@@ -296,6 +296,7 @@
 import { mapGetters, mapMutations } from "vuex";
 import {mixinsDeviceReturn} from '@/mixins/deviceReturnFunction'
 import {getAliyunSign} from '@/api/equipmentPatrol/login.js'
+import {getdevicesById} from '@/api/equipmentPatrol/escortManagement.js'
 import { compress, base64ImgtoFile } from '@/common/js/utils'
 import axios from 'axios'
 import _ from 'lodash'
@@ -338,12 +339,6 @@ export default {
       deleteInfoDialogShow: false,
       deleteVideoInfoDialogShow: false,
       loadingText: '加载中...',
-      depId: '',
-      depName: '',
-      deviceName: '',
-      deviceId: '',
-      spaceId: '',
-      spaceName: '',
       problemOverview: '',
       taskDescribe: '',
       transportNumberValue: '',
@@ -418,11 +413,25 @@ export default {
       maintenancePersonOption: [],
 
       overlayShow: false,
-      statusBackgroundPng: require("@/common/images/home/status-background.png")
+      statusBackgroundPng: require("@/common/images/home/status-background.png"),
+      deviceMessage: {
+        name: '',
+        depName: '',
+        adress: ''
+      }
     }
   },
 
   mounted() {
+    this.getdevicesByIdEvent(98);
+    if (this.scanRepairsMessage['deviceId']) {
+      this.getdevicesByIdEvent(this.scanRepairsMessage['deviceId']);
+    } else {
+      this.$dialog.alert({
+        message: '未扫描出设备id',
+        closeOnPopstate: true
+      }).then(() => {})
+    };
     this.maintenancePersonOption.push(
       {
         id: 0,
@@ -553,6 +562,39 @@ export default {
         temporaryArray.push(innerItem.text)
       };
       return temporaryArray.join('、')
+    },
+
+    // 根据设备id查询设备信息
+    getdevicesByIdEvent (id) {
+      this.loadingShow = true;
+      this.loadingText = '加载中···';
+      getdevicesById(id).then((res) => {
+        this.loadingShow = false;
+        this.loadingText = '';
+        if ( res && res.data.code == 200) {
+          if (res.data.data) {
+            this.deviceMessage = res.data.data;
+          } else {
+            this.$dialog.alert({
+              message: '设备信息为空',
+              closeOnPopstate: true
+            }).then(() => {})
+          }
+        } else {
+          this.$dialog.alert({
+            message: `${res.data.msg}`,
+            closeOnPopstate: true
+          }).then(() => {})
+        }
+      })
+      .catch((err) => {
+        this.loadingShow = false;
+        this.loadingText = '';
+        this.$dialog.alert({
+          message: `${err}`,
+          closeOnPopstate: true
+        }).then(() => {})
+      })
     },
 
     // 获取阿里云签名接口
@@ -915,18 +957,16 @@ export default {
     },
 
     // 报修事件
-    //   deviceName: '',
-    //   deviceId: '',
     async repairsEvent () {
-      if (!this.deviceName) {
+      if (!this.deviceMessage['name']) {
         this.$toast('设备名称不能为空');
         return
       };
-      if (!this.depName) {
+      if (!this.deviceMessage['depName']) {
         this.$toast('所属科室不能为空');
         return
       };
-      if (!this.spaceName) {
+      if (!this.deviceMessage['address']) {
         this.$toast('所属空间不能为空');
         return
       };
@@ -967,13 +1007,13 @@ export default {
         registerType: 1, //1-巡查,2-其他
         checkResultId: '',
         findTime: this.getNowFormatDate(new Date()),
-        structureId: '',
-        structureName: '',
-        depId: this.depId,
-        depName: this.depName,
-        roomId: this.spaceId,
-        roomName: this.spaceName,
-        address: '',
+        structureId: this.deviceMessage[' structId '] ? this.deviceMessage[' structId '] : '',
+        structureName: this.deviceMessage['structName'] ? this.deviceMessage['structName'] : '',
+        depId: this.deviceMessage['depId'] ? this.deviceMessage['depId'] : '',
+        depName: this.deviceMessage['name'],
+        roomId: '',
+        roomName: '',
+        address: this.deviceMessage['address'],
         registerSeverity: this.currentSeverityLevelValue,
         registerState: this.currentEquipmentStatusValue,
         description: this.problemOverview,
@@ -985,9 +1025,9 @@ export default {
         createName: this.currentMaintenancePerson,
         createTime: this.getNowFormatDate(new Date()),
         extendData: {
-          deviceId: '',//设备ID, 
-          deviceName: '', //设备名称,
-          deviceNorms: '' //设备规格
+          deviceId: this.deviceMessage['id'] ? this.deviceMessage['id'] : '',//设备ID, 
+          deviceName: this.deviceMessage['name'], //设备名称,
+          deviceNorms: this.deviceMessage['norms'] ? this.deviceMessage['norms'] : '' //设备规格
         }
       };
       this.postGenerateRepairsTask(temporaryMessage)
