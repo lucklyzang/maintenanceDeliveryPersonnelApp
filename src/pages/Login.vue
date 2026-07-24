@@ -565,8 +565,8 @@
 						removeStore('completeDepartmentMessage')
 					};
 					// 工程维修
-					const resultTwo = await this.queryProjectDepartmentMsg(this.chooseHospitalArea['value']);
-					setStore('departmentMessage', resultTwo);
+					// const resultTwo = await this.queryProjectDepartmentMsg(this.chooseHospitalArea['value']);
+					// setStore('departmentMessage', resultTwo);
 					// 查询模板类型
 					this.queryTemplateType(this.chooseHospitalArea['value']);
 				} catch (err) {

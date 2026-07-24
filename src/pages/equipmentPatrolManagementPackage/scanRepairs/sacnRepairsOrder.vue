@@ -423,9 +423,9 @@ export default {
   },
 
   mounted() {
-    this.getdevicesByIdEvent(98);
+    this.getdevicesByIdEvent({id:98});
     if (this.scanRepairsMessage['deviceId']) {
-      this.getdevicesByIdEvent(this.scanRepairsMessage['deviceId']);
+      this.getdevicesByIdEvent({id: this.scanRepairsMessage['deviceId']});
     } else {
       this.$dialog.alert({
         message: '未扫描出设备id',
@@ -565,10 +565,10 @@ export default {
     },
 
     // 根据设备id查询设备信息
-    getdevicesByIdEvent (id) {
+    getdevicesByIdEvent (data) {
       this.loadingShow = true;
       this.loadingText = '加载中···';
-      getdevicesById(id).then((res) => {
+      getdevicesById(data).then((res) => {
         this.loadingShow = false;
         this.loadingText = '';
         if ( res && res.data.code == 200) {

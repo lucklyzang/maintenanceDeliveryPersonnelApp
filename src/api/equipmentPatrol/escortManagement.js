@@ -140,10 +140,11 @@ export function getdevicesList(data) {
 
 
 // 查询设备信息(根据设备id)
-export function getdevicesById(id) {
+export function getdevicesById(data) {
     return request({
-        url: `patrol/device/getById/${id}`,
-        method: 'get'
+        url: 'patrol/device/getById',
+        method: 'get',
+        params: data
     })
 }
 

@@ -27,7 +27,7 @@
                             'hasDeliveryStyle' : item.status == 40
 							}"
 						>
-							<span>{{ stateTransfer(20) }}</span>
+							<span>{{ taskStatusTransition(item.state,item.eventType) }}</span>
 						</div>
 					</div>
 					<div class="order-list-center">
@@ -248,6 +248,53 @@ export default {
     // 顶部导航左边点击事件
     onClickLeft () {
       this.$router.push({path: '/equipmentPatrolHome'})
+    },
+
+    // 任务状态转换
+    taskStatusTransition (num,eventType) {
+      if (eventType == 1) {
+        switch(num) {
+          case -1 :
+              return '已暂存'
+              break;
+          case 0 :
+              return '已报修'
+              break;
+          case 3 :
+              return '已完成'
+              break;
+          case 6 :
+              return '已取消'
+              break
+        }
+      } else if (eventType == 2) {
+        switch(num) {
+          case -1 :
+              return '已暂存'
+              break;
+          case 0 :
+              return '已登记'
+              break;
+          case 1 :
+              return '已交接'
+              break;
+          case 2 :
+            return '已联系'
+            break;
+          case 3 :
+              return '已领取'
+              break
+        }
+      } else if (eventType == 3) {
+        switch(num) {
+          case -1 :
+              return '已暂存'
+              break;
+          case 0 :
+              return '已登记'
+              break
+        }
+      }
     },
 
      /**
@@ -855,21 +902,16 @@ export default {
                         width: 67px;
                         height: 25px;
                         border-radius: 4px;
+                        color: #101010;
                         >span {
                             font-size: 14px;
                         }
                     };
-                    .staySureStyle {
-                        background: rgba(232,203,81,0.16) !important;
-                        color: #E8CB51 !important;
+                    .spanNoStartStyle {
+                        color: #174E97;
                     };
-                    .stayDeliveryStyle {
-                        background: #E7F3FE !important;
-                        color: #3B9DF9 !important;
-                    };
-                    .hasDeliveryStyle {
-                        background: #E6E9FA !important;
-                        color: #8D97E7 !important;
+                    .spanCompletedStyle {
+                        color: #101010;
                     }
                 };
                 .order-list-center {

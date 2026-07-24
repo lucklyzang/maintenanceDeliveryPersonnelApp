@@ -21,12 +21,16 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
     config => {
+        console.log('地址',config['url']);
         if (config.method === 'get') {
             config.data = {unused: 0}
         };
         config.headers['HTTP_REQUEST_TYPE'] = 'new';
         if (config['url'] == 'nblink/auth/login') {
             config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        };
+        if (config['url'] == 'patrol/device/getById') {
+            config.headers['tenantId'] = 98
         };
         // 请求头添加token
         if (store.getters.token) {

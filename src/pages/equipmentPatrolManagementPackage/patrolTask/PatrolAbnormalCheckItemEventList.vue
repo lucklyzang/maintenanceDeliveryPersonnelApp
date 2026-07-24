@@ -75,7 +75,7 @@
                     </div>
                     <div class="create-delivery-date-left">
                       <span>所属空间:</span>
-                      <span>{{ item.taskType }}</span>
+                      <span>{{ item.spaceName }}</span>
                     </div>
                   </div>
                   <div class="create-delivery-date">
